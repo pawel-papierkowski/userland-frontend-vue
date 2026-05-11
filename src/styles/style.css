@@ -1,0 +1,89 @@
+/********************************
+ * Styles specific to this app. *
+ ********************************/
+
+/* Settings for globally used elements. */
+
+body {
+  display: flex;
+  justify-content: center; /* Horizontal */
+  align-items: start;      /* Vertical */
+  /* Other stuff. */
+  color-scheme: var(--color-scheme);
+
+  color: var(--body-color);
+  background: var(--body-background);
+}
+
+a {
+  color: var(--link-color);
+}
+
+/*** Common elements used on multiple pages. ***/
+
+h1 {
+  color: var(--h1-color);
+
+  font-size: 54px;
+  font-family: var(--font-family-header);
+
+  text-align: center;
+  text-shadow: var(--h1-text-shadow);
+}
+
+h2 {
+  color: var(--h2-color);
+
+  font-size: 28px;
+  font-family: var(--font-family-header);
+
+  text-align: left;
+  text-shadow: var(--h2-text-shadow);
+}
+
+h3 {
+  color: var(--h3-color);
+
+  font-size: 24px;
+  font-family: var(--font-family-header);
+
+  text-align: left;
+  text-shadow: var(--h3-text-shadow);
+}
+
+/**/
+
+header {
+  font-size: var(--header-font-size);
+  text-align: center;
+
+  margin: var(--header-margin);
+  padding: var(--header-padding);
+
+  border: var(--header-border);
+  border-radius: var(--header-border-radius);
+  background: var(--header-background);
+  box-shadow: var(--header-box-shadow);
+}
+
+footer {
+  font-size: var(--footer-font-size);
+  text-align: center;
+
+  margin: var(--footer-margin);
+  padding: var(--footer-padding);
+
+  border: var(--footer-border);
+  border-radius: var(--footer-border-radius);
+  background: var(--footer-background);
+  box-shadow: var(--footer-box-shadow);
+}
+
+.menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 4px;
+  padding-bottom: 10px;
+}

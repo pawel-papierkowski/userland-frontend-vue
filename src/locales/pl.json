@@ -1,0 +1,19 @@
+{
+  "app": {
+    "title": "UserLand"
+  },
+
+  "header": {
+    "placeholder": "TYMCZASOWY NAGŁÓWEK"
+  },
+
+  "footer": {
+    "frontendRepository": "Repozytorium frontendu",
+    "backendRepository": "Repozytorium backendu"
+  },
+
+  "languages": {
+    "pl": "Polski",
+    "en": "Angielski"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "app": {
+    "title": "UserLand"
+  },
+
+  "header": {
+    "placeholder": "PLACEHOLDER HEADER"
+  },
+
+  "footer": {
+    "frontendRepository": "Frontend repository",
+    "backendRepository": "Backend repository"
+  },
+
+  "languages": {
+    "pl": "Polish",
+    "en": "English"
+  }
+}

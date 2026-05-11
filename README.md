@@ -47,8 +47,14 @@ Frontend is split into two parts: **user website** and **admin panel**. Each one
     - Editing some of related data of selected user.
     - Special options for user like lock/unlock.
 - **Other features**
-  - Multiple language support
+  - Multiple languages support
   - Nice error messages from backend endpoints leveraging Problem Details
+
+## Environment
+
+### Local storage
+
+- `app-language`: Language code. Resolved from browser or user settings, if logged in. Missing or unknown language means fallback to `en` (English).
 
 ## Local startup
 
