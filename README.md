@@ -1,70 +1,69 @@
-# userland-frontend-vue
+# UserLand Frontend Vue
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is *frontend* part of **UserLand system**, designed to work with backend project `userland-backend-java`.
 
-## Recommended IDE Setup
+Project is in development.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Description below sums up intended state when project is completed: functionality, features etc.
 
-## Recommended Browser Setup
+## Basic info
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+Author: Paweł Papierkowski
 
-## Type Support for `.vue` Imports in TS
+Date: 2026
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Link to webpage:
+  - User website: https://pawelpapierkowski.net.pl/userland-frontend-vue
+  - Admin panel: https://pawelpapierkowski.net.pl/userland-frontend-vue/panel
+- Link to source code: https://github.com/pawel-papierkowski/userland-frontend-vue
 
-## Customize configuration
+Used IDE: **Visual Studio Code**
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Functionality
 
-## Project Setup
+This project fully manages user on frontend side.
 
-```sh
-npm install
-```
+### Features
 
-### Compile and Hot-Reload for Development
+Frontend is split into two parts: **user website** and **admin panel**. Each one is separate Single Page Application (SPA).
 
-```sh
-npm run dev
-```
+- **User website**: Available to everyone.
+  - **Main page**: This is what you see when you enter website. Looks differently depending on if you are logged in or not.
+  - **Registration**: Fields needed for registering user and registration button.
+  - **Login**: Two fields where you enter email and password plus login button. Will redirect back to main page.
+  - **Password reset**: From link in mail. Shows two fields to enter new password and button to confirm change.
+  - **Account deletion**: From link in mail. Shows warning about irreversibility of this action and button to confirm account deletion.
+  - **Email change**: From link in mail. Shows info about new email and button to confirm change.
+  - **Members-only area**: Available only after logging in, though you do not need any special permissions. If you are unlogged, redirects to main page.
+  - **Test area**: Contains various buttons that generate messages based on various things. Many of them calls `/api/check` endpoints.
+- **Administration panel**: If unlogged, only page available is Login page. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
+  - **Login**: works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
+  - **Main page**.
+  - **User manager**:
+    - Viewing list of users in table.
+    - Viewing details of selected users.
+    - Viewing related data in separate tabs like history or permissions.
+    - Editing data of selected user.
+    - Editing some of related data of selected user.
+    - Special options for user like lock/unlock.
 
-### Type-Check, Compile and Minify for Production
+## Local startup
+[TODO]
 
-```sh
-npm run build
-```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Testing
+[TODO]
 
-```sh
-npm run test:unit
-```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+## Deployment
+[TODO]
 
-```sh
-npm run test:e2e:dev
-```
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
+## Tech stack
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+- **Vue** 3.22.3
 
-```sh
-npm run build
-npm run test:e2e
-```
+### Additional packages
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- **vueuse/core**
+- **vue-i18n**
