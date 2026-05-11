@@ -1,0 +1,56 @@
+# Remember to configure repository in GitHub to enable GitHub Actions.
+name: Deploy UserLand frontend project to GitHub Pages
+
+on: # When to run this action?
+  #push: # run automatically when push
+  #  branches: [ main ]
+  workflow_dispatch: # run manually
+
+permissions: # Minimal permissions needed for Pages deploy. Without them action will fail.
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency: # How to act if someone runs two deploys at same time.
+  group: "pages"
+  cancel-in-progress: true # cancels previous deploy, ensuring only one runs at same time
+
+jobs: # Define jobs to run. They will be executed in parallel by default unless 'needs:' is specified.
+  build: # First job to run.
+    runs-on: ubuntu-latest # uses a fresh Ubuntu VM
+    steps:
+      - name: Checkout # clone entire repo to the VM
+        uses: actions/checkout@v6
+
+      - name: Setup Node  # install Node.js + npm, cache dependencies
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/* # Installs latest LTS Node.js
+          cache: npm          # Caches node_modules for speed
+
+      - name: Install dependencies # Installs exact package-lock.json versions
+        run: npm ci                # (faster/more reliable than npm install).
+
+      - name: Build # Runs your Vite build: Creates ./dist/ folder with optimized static files.
+        run: npm run build
+
+      - name: Setup Pages # Configures Pages environment (handles base path, etc.).
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact # Packages dist/ as a secure artifact (temporary zip file) for the next job.
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+  deploy: # Second job to run.
+    environment: # Targets Pages environment (protection rules + publishes the final URL).
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest # New VM, but only starts after build succeeds.
+    needs: build # Must wait for build job to finish.
+    # Deploys the artifact from build job to your GitHub Pages site.
+    # id: deployment lets previous steps reference its output (the live URL).
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

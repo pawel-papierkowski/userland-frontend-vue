@@ -46,24 +46,40 @@ Frontend is split into two parts: **user website** and **admin panel**. Each one
     - Editing data of selected user.
     - Editing some of related data of selected user.
     - Special options for user like lock/unlock.
+- **Other features**
+  - Multiple language support
+  - Nice error messages from backend endpoints leveraging Problem Details
 
 ## Local startup
-[TODO]
 
+To run project locally in development mode, execute in terminal:
+`npm run dev`
+
+If you want to check production version:
+```
+npm run build
+npm run preview
+```
+
+Stop server via `Ctrl+C`.
 
 ## Testing
 [TODO]
 
 
 ## Deployment
-[TODO]
+
+Done using GitHub actions.
 
 
 ## Tech stack
 
-- **Vue** 3.22.3
+- Language: HTML, CSS, JavaScript/TypeScript
+- Framework: **Vue** 3.22.3
 
 ### Additional packages
 
-- **vueuse/core**
-- **vue-i18n**
+- **Cypress** as end-to-end testing package.
+- General libraries
+  - **vueuse/core**
+  - **vue-i18n**
