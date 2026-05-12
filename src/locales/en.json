@@ -4,7 +4,9 @@
   },
 
   "header": {
-    "placeholder": "PLACEHOLDER HEADER"
+    "home": "Homepage",
+    "test": "Test zone",
+    "member": "Member area"
   },
 
   "footer": {
@@ -13,7 +15,25 @@
   },
 
   "languages": {
-    "pl": "Polish",
-    "en": "English"
+    "pl": {
+      "name": "Polish",
+      "flag": "🇵🇱"
+    },
+    "en": {
+      "name": "English",
+      "flag": "🇬🇧"
+    }
+  },
+
+  "user": {
+    "registration": {
+      "link": "Registration"
+    },
+    "login": {
+      "link": "Login"
+    },
+    "profile": {
+      "link": "Profile"
+    }
   }
 }

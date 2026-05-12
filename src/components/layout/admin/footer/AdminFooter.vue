@@ -1,4 +1,6 @@
 <script setup lang="ts">
+/** Simple footer. */
+
 import { useI18n } from 'vue-i18n';
 import { projectProp } from '@/code/data/app/const.ts';
 

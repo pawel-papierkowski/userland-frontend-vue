@@ -1,6 +1,6 @@
 {
   "name": "userland-frontend-vue",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "prepare": "cypress install",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
-    "build-only": "vite build",
+    "build-only": "vite build && cp dist/index.html dist/404.html",
     "type-check": "vue-tsc --build",
     "lint": "run-s lint:*",
     "lint:oxlint": "oxlint . --fix",

@@ -43,12 +43,15 @@
   --h3-color: #484848;
   --h3-text-shadow: 0 0 0px currentColor;
 
+  --main-margin: 0;
+  --main-padding: 0.2rem;
+
   --header-font-size: 12px;
-  --header-margin: 14px;
+  --header-margin: 0;
   --header-padding: 10px;
   --header-border: none;
-  --header-border-radius: 10px;
-  --header-background: #f8f8f8;
+  --header-border-radius: 0;
+  --header-background: #ffeebb;
   --header-box-shadow: none;
 
   --footer-font-size: 12px;

@@ -4,7 +4,9 @@
   },
 
   "header": {
-    "placeholder": "TYMCZASOWY NAGŁÓWEK"
+    "home": "Strona główna",
+    "test": "Strefa testów",
+    "member": "Strona członków"
   },
 
   "footer": {
@@ -13,7 +15,25 @@
   },
 
   "languages": {
-    "pl": "Polski",
-    "en": "Angielski"
+    "pl": {
+      "name": "Polski",
+      "flag": "🇵🇱"
+    },
+    "en": {
+      "name": "Angielski",
+      "flag": "🇬🇧"
+    }
+  },
+
+  "user": {
+    "registration": {
+      "link": "Rejestracja"
+    },
+    "login": {
+      "link": "Logowanie"
+    },
+    "profile": {
+      "link": "Profil"
+    }
   }
 }

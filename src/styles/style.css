@@ -6,13 +6,22 @@
 
 body {
   display: flex;
-  justify-content: center; /* Horizontal */
-  align-items: start;      /* Vertical */
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: start;
   /* Other stuff. */
   color-scheme: var(--color-scheme);
 
   color: var(--body-color);
   background: var(--body-background);
+}
+
+/* Vue convention: mounting point where the entire application is injected into the HTML in index.html. */
+#app {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 a {
@@ -53,6 +62,11 @@ h3 {
 
 /**/
 
+main {
+  margin: var(--main-margin);
+  padding: var(--main-padding);
+}
+
 header {
   font-size: var(--header-font-size);
   text-align: center;
@@ -70,6 +84,10 @@ footer {
   font-size: var(--footer-font-size);
   text-align: center;
 
+  align-self: center;
+  width: fit-content;
+  min-width: 40%;
+
   margin: var(--footer-margin);
   padding: var(--footer-padding);
 
@@ -77,13 +95,4 @@ footer {
   border-radius: var(--footer-border-radius);
   background: var(--footer-background);
   box-shadow: var(--footer-box-shadow);
-}
-
-.menu {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  margin: 4px;
-  padding-bottom: 10px;
 }
