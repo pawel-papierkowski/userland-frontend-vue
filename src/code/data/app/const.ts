@@ -9,6 +9,12 @@ export const projectProp: ProjectProp = {
   build: import.meta.env.DEV ? 'DEV' : 'PROD',
 };
 
+const apiAddressDev = 'http://localhost:8080/api';
+const apiAddressProd = 'https://userland-backend-java-299988087135.europe-central2.run.app/api';
+
+/* Determines appropriate API base address depending on the current build environment. */
+export const apiAddress = projectProp.build === 'PROD' ? apiAddressProd : apiAddressDev;
+
 /** Fallback language. */
 export const fallbackLang = 'en';
 

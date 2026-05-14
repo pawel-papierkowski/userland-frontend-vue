@@ -1,0 +1,25 @@
+/*** Styles specific to this application. ***/
+
+/* Forms. */
+.form-all {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.form-group {
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.form-entry {
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.form-text-error {
+  color: red;
+  font-size: 0.85em;
+  margin-top: 5px;
+}

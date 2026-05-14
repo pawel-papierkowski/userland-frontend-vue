@@ -30,38 +30,6 @@ a {
 
 /*** Common elements used on multiple pages. ***/
 
-h1 {
-  color: var(--h1-color);
-
-  font-size: 54px;
-  font-family: var(--font-family-header);
-
-  text-align: center;
-  text-shadow: var(--h1-text-shadow);
-}
-
-h2 {
-  color: var(--h2-color);
-
-  font-size: 28px;
-  font-family: var(--font-family-header);
-
-  text-align: left;
-  text-shadow: var(--h2-text-shadow);
-}
-
-h3 {
-  color: var(--h3-color);
-
-  font-size: 24px;
-  font-family: var(--font-family-header);
-
-  text-align: left;
-  text-shadow: var(--h3-text-shadow);
-}
-
-/**/
-
 main {
   margin: var(--main-margin);
   padding: var(--main-padding);
@@ -95,4 +63,77 @@ footer {
   border-radius: var(--footer-border-radius);
   background: var(--footer-background);
   box-shadow: var(--footer-box-shadow);
+}
+
+/**/
+
+h1 {
+  color: var(--h1-color);
+
+  font-size: 54px;
+  font-family: var(--font-family-header);
+
+  text-align: var(--h1-text-align);
+  text-shadow: var(--h1-text-shadow);
+}
+
+h2 {
+  color: var(--h2-color);
+
+  font-size: 28px;
+  font-family: var(--font-family-header);
+
+  text-align: var(--h2-text-align);
+  text-shadow: var(--h2-text-shadow);
+}
+
+h3 {
+  color: var(--h3-color);
+
+  font-size: 24px;
+  font-family: var(--font-family-header);
+
+  text-align: var(--h3-text-align);
+  text-shadow: var(--h3-text-shadow);
+}
+
+/**/
+
+input {
+  padding: 2px;
+  margin-top: 5px;
+
+  color: var(--input-color);
+  background: var(--input-background);
+  border: var(--input-border);
+  border-radius: var(--input-border-radius);
+}
+input.err {
+  color: var(--input-err-color);
+  background: var(--input-err-background);
+  border: var(--input-err-border);
+}
+
+button {
+  width: 100%;
+
+  margin: var(--button-margin);
+  padding: var(--button-padding);
+
+  color: var(--button-color);
+  background: var(--button-background);
+  border: var(--button-border);
+  border-radius: var(--button-border-radius);
+
+  cursor: pointer;
+}
+button:hover {
+  color: var(--button-hover-color);
+  background-color: var(--button-hover-background);
+}
+button:disabled {
+  color: var(--button-disabled-color);
+  background-color: var(--button-disabled-background);
+
+  cursor: not-allowed;
 }

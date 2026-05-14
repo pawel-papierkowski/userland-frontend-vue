@@ -25,15 +25,130 @@
     }
   },
 
+  "form": {
+    "errFieldEmpty": "Pole nie może być puste.",
+    "errEmailBad": "Należy wprowadzić poprawny email.",
+    "errPasswordTooShort": "Hasło jest za krótkie. Musi mieć co najmniej {count} znaków.",
+    "errPasswordTooLong": "Hasło jest za długie. Musi mieć co najwyżej {count} znaków.",
+    "errPasswordWeak": "Hasło musi zawierać co najmniej jedną małą literę, jedną dużą literę, jedną cyfrę oraz jeden znak specjalny.",
+    "errPasswordMatch": "Hasła muszą być takie same."
+  },
+
   "user": {
     "registration": {
-      "link": "Rejestracja"
+      "link": "Rejestracja",
+      "form": {
+        "title": "Utwórz konto",
+        "username": "Nazwa użytkownika",
+        "email": "Email",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "button": "Utwórz",
+        "buttonSubmitting": "Tworzenie konta..."
+      },
+      "msg": {
+        "success": {
+          "title": "Użytkownik pomyślnie zarejestrowany",
+          "content": "Proszę sprawdzić skrzynkę email. Będzie trzeba potwierdzić rejestrację poprzez kliknięcie na łącze w emailu."
+        }
+      }
     },
     "login": {
       "link": "Logowanie"
     },
     "profile": {
       "link": "Profil"
+    }
+  },
+
+  "msgs": {
+    "errorCode": "Kod błędu",
+    
+    "networkError": {
+      "title": "Błąd sieci",
+      "content": "Nie można się połączyć z serwerem. Upewnij się, że masz połączenie z Internetem."
+    },
+    "400": {
+      "title": "Nieprawidłowe żądanie",
+      "content": "Żądanie ma niepoprawne dane lub są braki."
+    },
+    "401": {
+      "title": "Brak autoryzacji",
+      "content": "Musisz się zalogować."
+    },
+    "403": {
+      "title": "Dostęp wzbroniony",
+      "content": "Musisz mieć odpowiednie uprawnienia."
+    },
+    "404": {
+      "title": "Nie znaleziono",
+      "content": "Zasób nie istnieje."
+    },
+    "409": {
+      "title": "Konflikt",
+      "content": "Żądanie jest w konflikcie z aktualnym stanem na serwerze."
+    },
+    "423": {
+      "title": "Zablokowane",
+      "content": "Zasób jest zablokowany."
+    },
+    "429": {
+      "title": "Za dużo żądań",
+      "content": "Wysłałeś za dużo żądań w danym okresie czasu."
+    },
+    "500": {
+      "title": "Wewnętrzny błąd serwera",
+      "content": "Serwer napotkał sytuację, której nie był w stanie obsłużyć."
+    },
+
+    "lock_0001": {
+      "title": "Blokada systemowa",
+      "content": "System jest w stanie blokady. Spróbuj ponownie później."
+    },
+    "lock_0002": {
+      "title": "Blokada systemowa",
+      "content": "System jest w stanie blokady. Spróbuj ponownie później."
+    },
+    "jwt_0001": {
+      "title": "Problem z JWT",
+      "content": "Token JWT jest niepoprawny lub nieważny."
+    },
+
+    "user_0001": {
+      "title": "Niepowodzenie",
+      "content": "Użytkownik nie został odnaleziony."
+    },
+    "user_0011": {
+      "title": "Niepowodzenie",
+      "content": "Token jest nieaktualny."
+    },
+    "user_0012": {
+      "title": "Niepowodzenie",
+      "content": "Token nie istnieje."
+    },
+    "user_0013": {
+      "title": "Niepowodzenie",
+      "content": "Token już istnieje."
+    },
+    "user_0111": {
+      "title": "Niepowodzenie",
+      "content": "Email już istnieje."
+    },
+    "user_0121": {
+      "title": "Niepowodzenie",
+      "content": "Użytkownik ma niepoprawny status."
+    },
+    "user_0122": {
+      "title": "Niepowodzenie",
+      "content": "Użytkownik jest zablokowany."
+    },
+    "user_0201": {
+      "title": "Niepowodzenie",
+      "content": "Rejestracja użytkownika nieudana."
+    },
+    "user_0202": {
+      "title": "Niepowodzenie",
+      "content": "Niewłaściwe hasło lub konto."
     }
   }
 }

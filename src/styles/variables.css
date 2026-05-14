@@ -34,17 +34,8 @@
   --body-color: #111111;
   --link-color: #2563eb;
 
-  --h1-color: #484848;
-  --h1-text-shadow: 0 0 0px currentColor;
-
-  --h2-color: #484848;
-  --h2-text-shadow: 0 0 0px currentColor;
-
-  --h3-color: #484848;
-  --h3-text-shadow: 0 0 0px currentColor;
-
   --main-margin: 0;
-  --main-padding: 0.2rem;
+  --main-padding: 1rem;
 
   --header-font-size: 12px;
   --header-margin: 0;
@@ -61,6 +52,40 @@
   --footer-border-radius: 10px;
   --footer-background: #f8f8f8;
   --footer-box-shadow: none;
+
+  /* Text headers. */
+  --h1-color: #484848;
+  --h1-text-shadow: 0 0 2px currentColor;
+  --h1-text-align: center;
+
+  --h2-color: #484848;
+  --h2-text-shadow: 0 0 1px currentColor;
+  --h2-text-align: center;
+
+  --h3-color: #484848;
+  --h3-text-shadow: 0 0 1px currentColor;
+  --h3-text-align: center;
+
+  /* Input specific vars. */
+  --input-color: #000000;
+  --input-background: #f8f8f8;
+  --input-border: 1px solid #444444;
+  --input-border-radius: 2px;
+  --input-err-color: #000000;
+  --input-err-background: #ffe8e8;
+  --input-err-border: 1px solid #aa4444;
+
+  /* Button specific vars. */
+  --button-margin: 0;
+  --button-padding: 10px;
+  --button-color: #000000;
+  --button-background: #ffdd66;
+  --button-border: none;
+  --button-border-radius: 0;
+  --button-hover-color: #000000;
+  --button-hover-background: #ffe588;
+  --button-disabled-color: #000000;
+  --button-disabled-background: #ddcc55;
 
   /* ComboBox specific vars. */
   --combobox-border: 1px solid #d1d5db;

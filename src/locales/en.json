@@ -25,15 +25,130 @@
     }
   },
 
+  "form": {
+    "errFieldEmpty": "Field cannot be empty.",
+    "errEmailBad": "Need to enter correct email.",
+    "errPasswordTooShort": "Password is too short. It must have at least {count} characters.",
+    "errPasswordTooLong": "Password is too long. It must have at most {count} characters.",
+    "errPasswordWeak": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+    "errPasswordMatch": "Passwords do not match."
+  },
+
   "user": {
     "registration": {
-      "link": "Registration"
+      "link": "Registration",
+      "form": {
+        "title": "Create an account",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "button": "Create",
+        "buttonSubmitting": "Creating account..."
+      },
+      "msg": {
+        "success": {
+          "title": "User registered successfully",
+          "content": "Please check your mailbox. You will need to confirm registration by clicking on link in email."
+        }
+      }
     },
     "login": {
       "link": "Login"
     },
     "profile": {
       "link": "Profile"
+    }
+  },
+
+  "msgs": {
+    "errorCode": "Error code",
+
+    "networkError": {
+      "title": "Network error",
+      "content": "Cannot connect with server. Make sure your Internet connection is not down."
+    },
+    "400": {
+      "title": "Bad request",
+      "content": "Request has invalid or missing data."
+    },
+    "401": {
+      "title": "Unauthorized",
+      "content": "You need authorization to access this."
+    },
+    "403": {
+      "title": "Forbidden",
+      "content": "You need proper permissions to access this."
+    },
+    "404": {
+      "title": "Not found",
+      "content": "Resource does not exist."
+    },
+    "409": {
+      "title": "Conflict",
+      "content": "A request conflicts with the current state of the server."
+    },
+    "423": {
+      "title": "Locked",
+      "content": "You tried to access resource that is locked."
+    },
+    "429": {
+      "title": "Too many requests",
+      "content": "You sent too many requests in a given amount of time."
+    },
+    "500": {
+      "title": "Internal server error",
+      "content": "The server has encountered a situation it does not know how to handle."
+    },
+
+    "lock_0001": {
+      "title": "Lockdown",
+      "content": "System is in lockdown state. Try again later."
+    },
+    "lock_0002": {
+      "title": "Lockdown",
+      "content": "System is in lockdown state. Try again later."
+    },
+    "jwt_0001": {
+      "title": "JWT issue",
+      "content": "JWT token is malformed or expired."
+    },
+
+    "user_0001": {
+      "title": "Failure",
+      "content": "User not found."
+    },
+    "user_0011": {
+      "title": "Failure",
+      "content": "Token is expired."
+    },
+    "user_0012": {
+      "title": "Failure",
+      "content": "Token is missing."
+    },
+    "user_0013": {
+      "title": "Failure",
+      "content": "Token already exists."
+    },
+    "user_0111": {
+      "title": "Failure",
+      "content": "Email already exists."
+    },
+    "user_0121": {
+      "title": "Failure",
+      "content": "User has invalid status."
+    },
+    "user_0122": {
+      "title": "Failure",
+      "content": "User is locked."
+    },
+    "user_0201": {
+      "title": "Failure",
+      "content": "User registration failed."
+    },
+    "user_0202": {
+      "title": "Failure",
+      "content": "Invalid password or account."
     }
   }
 }

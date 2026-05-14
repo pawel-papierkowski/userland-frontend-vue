@@ -28,11 +28,11 @@ const routes = [
     { name:'home', path: '/', component: UserLandHome },
     { name:'testArea', path: '/testArea', component: UserLandTestArea },
     { name:'member', path: '/member', component: UserLandMember, meta: meta4logged },
+    { name:'user-registration', path: '/registration', component: UserRegistration },
+    { name:'user-login', path: '/login', component: UserLogin },
 
     // User-related pages.
 
-    { name:'user-registration', path: '/user/registration', component: UserRegistration },
-    { name:'user-login', path: '/user/login', component: UserLogin },
     { name:'user-profile', path: '/user/profile', component: UserProfile, meta: meta4logged },
 
     { name:'user-activate', path: '/user/activate', component: UserActivate },

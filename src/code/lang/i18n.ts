@@ -2,8 +2,12 @@ import { createI18n } from 'vue-i18n';
 
 import en from '@/locales/en.json';
 import pl from '@/locales/pl.json';
+// Add other languages here as needed...
 
-/** Vue plugin, needs to be installed in main.ts: app.use(i18n); */
+/** Vue i18n plugin.
+ *
+ * Needs to be installed in `main.ts`: `app.use(i18n);`
+ */
 const i18n = createI18n({
   legacy: false,
   locale: 'en',

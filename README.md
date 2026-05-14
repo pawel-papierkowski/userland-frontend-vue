@@ -87,5 +87,6 @@ Done using GitHub actions.
 
 - **Cypress** as end-to-end testing package.
 - General libraries
-  - **vueuse/core**
-  - **vue-i18n**
+  - **vueuse/core** for useful utilities
+  - **vue-i18n** for translations
+  - **axios** for HTTP client
