@@ -1,6 +1,11 @@
 <script setup lang="ts">
 /**
  * Message container that can show many message boxes.
+ * To add new messages, use AppMessage (@/code/messages/message.ts).
+ *
+ * Example of use:
+ * import { AppMessage } from '@/code/messages/message.ts';
+ * AppMessage.info('user.registration.msg.success.title', 'user.registration.msg.success.content');
  */
 import { useMessageStore } from '@/stores/messages';
 import MessageBox from '@/components/layout/messages/MessageBox.vue';
@@ -9,7 +14,7 @@ const messageStore = useMessageStore();
 </script>
 
 <template>
-  <div class="message-wrapper">
+  <div class="message-wrapper" data-testid="msgContainer">
     <div class="messages">
       <MessageBox
         v-for="msg in messageStore.messages" :key="msg.id" :msg="msg"

@@ -3,9 +3,13 @@ import { ref } from 'vue';
 import type { Message } from '@/code/messages/types';
 import { EnMessageLevel } from '@/code/messages/types';
 
+/**
+ * Stores global message queue. Shown in MessageContainer component. Use AppMessager to add messages.
+ */
 export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
   const messages = ref<Message[]>([]);
+  let lastNo : number = 0;
 
   /**
    * Adds a message to the global queue.
@@ -17,22 +21,28 @@ export const useMessageStore = defineStore('messages', () => {
    */
   function addMessage(level: EnMessageLevel, title: string = '', content: string, errCode: string = '', duration = 15) {
     const id = crypto.randomUUID();
-    messages.value.push({ id, level, title, content, errCode });
+    messages.value.push({ id, no: lastNo, level, title, content, errCode });
     if (duration > 0)
       setTimeout(() => {
         removeMessage(id);
       }, duration * 1000);
+    lastNo++;
   }
 
+  /**
+   * Remove message with given id from global queue.
+   * @param id Identificator of message.
+   */
   function removeMessage(id: string) {
     messages.value = messages.value.filter((m) => m.id !== id);
   }
 
-  // Convenience helpers
+  // Convenience helpers.
   const info = (title: string, content: string) => addMessage(EnMessageLevel.Info, title, content);
+  const success = (title: string, content: string) => addMessage(EnMessageLevel.Success, title, content);
   const warn = (title: string, content: string) => addMessage(EnMessageLevel.Warning, title, content);
-  const error = (title: string, content: string, errCode: string = '') =>
-    addMessage(EnMessageLevel.Error, title, content, errCode);
+  const failure = (title: string, content: string) => addMessage(EnMessageLevel.Failure, title, content);
+  const error = (title: string, content: string, errCode: string = '') => addMessage(EnMessageLevel.Error, title, content, errCode);
 
-  return { messages, addMessage, removeMessage, info, warn, error };
+  return { messages, addMessage, removeMessage, info, success, warn, failure, error };
 });

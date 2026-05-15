@@ -1,13 +1,16 @@
 <script setup lang="ts">
 /**
- * Single message in box.
+ * Single message in a box. Can be removed by clicking on it.
  *
  * Properties:
  * - msg: Message data.
  */
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { EnMessageLevel } from '@/code/messages/types';
 import type { Message } from '@/code/messages/types';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   msg: Message;
@@ -17,10 +20,14 @@ const messageClass = computed(() => {
   switch (props.msg.level) {
     case EnMessageLevel.Info:
       return 'message-info';
+    case EnMessageLevel.Success:
+      return 'message-success';
     case EnMessageLevel.Warning:
-      return 'message-warn';
+      return 'message-warning';
+    case EnMessageLevel.Failure:
+      return 'message-failure';
     case EnMessageLevel.Error:
-      return 'message-err';
+      return 'message-error';
     default:
       return '';
   }
@@ -30,10 +37,14 @@ const icon = computed(() => {
   switch (props.msg.level) {
     case EnMessageLevel.Info:
       return 'ℹ️';
+    case EnMessageLevel.Success:
+      return '✅';
     case EnMessageLevel.Warning:
       return '⚠️';
-    case EnMessageLevel.Error:
+    case EnMessageLevel.Failure:
       return '❌';
+    case EnMessageLevel.Error:
+      return '🛑';
     default:
       return '';
   }
@@ -41,7 +52,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <div class="message-box" :class="messageClass">
+  <div class="message-box" :class="messageClass" :data-testid="'msgBox_'+msg.no">
     <div class="message-header">
       <div class="message-icon">{{ icon }}</div>
       <div class="message-title">{{ msg.title }}</div>
@@ -49,7 +60,7 @@ const icon = computed(() => {
     <div class="message-body">
       <div class="message-content">{{ msg.content }}</div>
     </div>
-    <div v-if="msg.errCode" class="message-errCode">{{ msg.errCode }}</div>
+    <div v-if="msg.errCode" class="message-errCode">{{t('msgs.errorCode')}}: <b>{{ msg.errCode }}</b></div>
   </div>
 </template>
 
@@ -76,13 +87,25 @@ const icon = computed(() => {
   color: #0d47a1;
 }
 
-.message-warn {
+.message-success {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #1b5e20;
+}
+
+.message-warning {
   background-color: #fffde7;
   border-color: #fbc02d;
   color: #664d03;
 }
 
-.message-err {
+.message-failure {
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+  color: #842029;
+}
+
+.message-error {
   background-color: #f8d7da;
   border-color: #f5c2c7;
   color: #842029;

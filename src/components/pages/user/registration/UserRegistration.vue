@@ -6,16 +6,16 @@ import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 
-import { AppMessage } from '@/code/messages/message.ts';
-import { logAxiosError } from '@/services/api-error.ts';
-import { useMessageStore } from '@/stores/messages';
+import backendApi from '@/services/api-common.ts';
+import backendApiUser from '@/services/features/api-users.ts';
+
+import { AppMessager } from '@/code/messages/AppMessager.ts';
 import type { UserRegisterForm } from '@/code/data/features/user.ts';
-import apiUser from '@/services/features/api-users.ts';
 
 const log = useLogger();
-const messageStore = useMessageStore();
 const router = useRouter();
 const { t, locale } = useI18n();
+
 const form: UserRegisterForm = reactive({
   username: '',
   email: '',
@@ -23,7 +23,9 @@ const form: UserRegisterForm = reactive({
   confirmPassword: '',
   lang: '',
 });
+/** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
+/** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isSubmitting: Ref<boolean> = ref(false);
 
 // field verifers
@@ -63,22 +65,22 @@ const passwordConfirmError: ComputedRef<string | null> = computed(() => {
 const handleRegister = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable button to prevent multiple submissions in row.
+  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
-    form.lang = locale.value; // user could change language after entering registration page
+    form.lang = locale.value; // User could change language after entering registration page.
+    await backendApiUser.register({ ...form }); // API CALL
 
-    await apiUser.register(form); // API CALL
-    log.debug('Registered user from form data:', form);
+    log.debug('Registered user using form data:', { ...form });
+    AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
 
     clearForm();
-    messageStore.info(t('user.registration.msg.success.title'), t('user.registration.msg.success.content'));
     redirect();
   } catch (error) {
-    AppMessage.show(error, 'msgs.user_0201.title', 'msgs.user_0201.content');
-    logAxiosError(error, 'Registration failed!');
+    AppMessager.error(error, 'msgs.user_0201.title', 'msgs.user_0201.content');
+    backendApi.logError(error, 'Registration failed!');
   } finally {
-    isSubmitting.value = false; // Enable button.
+    isSubmitting.value = false; // Enable submit button.
   }
 };
 
@@ -103,9 +105,10 @@ const clearForm = () => {
 
 /** After successful registration we redirect user to login page. */
 const redirect = () => {
-  router.push({ name: 'user-login' });
+  router.push({ name: 'home' });
 };
 
+/** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
   if (msgError !== null) return 'err';
   return '';
@@ -123,7 +126,7 @@ const getInputClass = (msgError: string | null): string => {
           <label for="username">{{ t('user.registration.form.username') }}:</label>
           <input
             :class="getInputClass(usernameError)"
-            id="username"
+            id="username" data-testid="username"
             type="text"
             v-model="form.username"
             required
@@ -136,7 +139,7 @@ const getInputClass = (msgError: string | null): string => {
           <label for="email">{{ t('user.registration.form.email') }}:</label>
           <input
             :class="getInputClass(emailError)"
-            id="email"
+            id="email" data-testid="email"
             type="email"
             v-model="form.email"
             required
@@ -149,7 +152,7 @@ const getInputClass = (msgError: string | null): string => {
           <label for="password">{{ t('user.registration.form.password') }}:</label>
           <input
             :class="getInputClass(passwordError)"
-            id="password"
+            id="password" data-testid="password"
             type="password"
             v-model="form.password"
             required
@@ -162,7 +165,7 @@ const getInputClass = (msgError: string | null): string => {
           <label for="confirmPassword">{{ t('user.registration.form.confirmPassword') }}:</label>
           <input
             :class="getInputClass(passwordConfirmError)"
-            id="confirmPassword"
+            id="confirmPassword" data-testid="confirmPassword"
             type="password"
             v-model="form.confirmPassword"
             required
