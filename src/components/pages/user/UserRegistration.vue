@@ -2,9 +2,9 @@
 /** Page where you can register new user. */
 import { reactive, ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
+import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
@@ -75,14 +75,14 @@ const handleRegister = async () => {
     AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
 
     clearForm();
-    redirect();
+    router.push({ name: 'home' });
   } catch (error) {
-    AppMessager.error(error, 'msgs.user_0201.title', 'msgs.user_0201.content');
+    AppMessager.error(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
     backendApi.logError(error, 'Registration failed!');
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
-};
+}
 
 /** Check if form has any errors. */
 const isFormError = () => {
@@ -92,7 +92,7 @@ const isFormError = () => {
   if (passwordError.value !== null) return true;
   if (passwordConfirmError.value !== null) return true;
   return false;
-};
+}
 
 /** Clear entire form. */
 const clearForm = () => {
@@ -101,18 +101,13 @@ const clearForm = () => {
   form.password = '';
   form.confirmPassword = '';
   form.lang = '';
-};
-
-/** After successful registration we redirect user to login page. */
-const redirect = () => {
-  router.push({ name: 'home' });
-};
+}
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
   if (msgError !== null) return 'err';
   return '';
-};
+}
 </script>
 
 <template>

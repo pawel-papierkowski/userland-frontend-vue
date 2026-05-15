@@ -9,7 +9,7 @@ import { useMessageStore } from '@/stores/messages';
 import backendApiUser from '@/services/features/api-users';
 
 import { EnMessageLevel } from '@/code/messages/types';
-import UserRegistration from '@/components/pages/user/registration/UserRegistration.vue';
+import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({

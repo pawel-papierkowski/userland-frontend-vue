@@ -7,9 +7,20 @@ const apiClient = backendApi.create('/users');
 
 export default {
   /** Register user.
-   * @param form Form data.
+   * @param payload Form data.
+   * @returns Result of call.
    */
-  register(form : UserRegisterForm) {
-    return apiClient.post('/register', form);
+  register(payload: UserRegisterForm) {
+    return apiClient.post('/register', payload);
+  },
+
+  /**
+   * Activate user based on given token.
+   * @param tokenStr Token string.
+   * @returns Result of call.
+   */
+  activate(tokenStr: string) {
+    const payload = { token: tokenStr, frontend: 'VUE' };
+    return apiClient.post('/activate', payload);
   }
 }
