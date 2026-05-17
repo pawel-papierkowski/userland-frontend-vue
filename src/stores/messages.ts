@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { Message } from '@/code/messages/types';
-import { EnMessageLevel } from '@/code/messages/types';
+import type { Message } from '@/code/messages/types.ts';
+import { EnMessageLevel } from '@/code/messages/types.ts';
 
 /**
  * Stores global message queue. Shown in MessageContainer component. Use AppMessager to add messages.
@@ -40,9 +40,9 @@ export const useMessageStore = defineStore('messages', () => {
   // Convenience helpers.
   const info = (title: string, content: string) => addMessage(EnMessageLevel.Info, title, content);
   const success = (title: string, content: string) => addMessage(EnMessageLevel.Success, title, content);
-  const warn = (title: string, content: string) => addMessage(EnMessageLevel.Warning, title, content);
+  const warning = (title: string, content: string) => addMessage(EnMessageLevel.Warning, title, content);
   const failure = (title: string, content: string) => addMessage(EnMessageLevel.Failure, title, content);
   const error = (title: string, content: string, errCode: string = '') => addMessage(EnMessageLevel.Error, title, content, errCode);
 
-  return { messages, addMessage, removeMessage, info, success, warn, failure, error };
+  return { messages, addMessage, removeMessage, info, success, warning, failure, error };
 });

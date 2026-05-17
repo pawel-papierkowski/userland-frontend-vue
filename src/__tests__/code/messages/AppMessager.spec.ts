@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 
-import { useMessageStore } from '@/stores/messages';
-import { AppMessager } from '@/code/messages/AppMessager';
-import { EnMessageLevel } from '@/code/messages/types';
+import { useMessageStore } from '@/stores/messages.ts';
+import { AppMessager } from '@/code/messages/AppMessager.ts';
+import { EnMessageLevel } from '@/code/messages/types.ts';
 
 /** Tests AppMessager class. */
 describe('AppMessager', () => {

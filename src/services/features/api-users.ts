@@ -1,26 +1,25 @@
 /** Handles calling user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
-import type { UserRegisterForm } from '@/code/data/features/user.ts';
+import type { UserRegisterReq, TokenActivationReq } from '@/code/data/features/user.ts';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
 
 export default {
   /** Register user.
-   * @param payload Form data.
+   * @param payload User registration request.
    * @returns Result of call.
    */
-  register(payload: UserRegisterForm) {
+  register(payload: UserRegisterReq) {
     return apiClient.post('/register', payload);
   },
 
   /**
    * Activate user based on given token.
-   * @param tokenStr Token string.
+   * @param payload Activation token request.
    * @returns Result of call.
    */
-  activate(tokenStr: string) {
-    const payload = { token: tokenStr, frontend: 'VUE' };
+  activate(payload: TokenActivationReq) {
     return apiClient.post('/activate', payload);
   }
 }

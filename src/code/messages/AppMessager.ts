@@ -9,34 +9,78 @@ const { t } = i18n.global;
  */
 export class AppMessager {
   /**
-   * Generates info message.
+   * Generates info message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   */
+  public static infoT(title: string, content: string) {
+    this.info(t(title), t(content));
+  }
+
+  /**
+   * Generates info message.
+   * @param title Title as a string.
+   * @param content Content as a string.
    */
   public static info(title: string, content: string) {
     this.showInfo(title, content);
   }
+
+  //
+
   /**
-   * Generates success message.
+   * Generates success message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   */
+  public static successT(title: string, content: string) {
+    this.success(t(title), t(content));
+  }
+
+  /**
+   * Generates success message.
+   * @param title Title as a string.
+   * @param content Content as a string.
    */
   public static success(title: string, content: string) {
     this.showSuccess(title, content);
   }
 
+  //
+
   /**
-   * Generates warning message.
+   * Generates warning message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
    */
-  public static warn(title: string, content: string) {
-    this.showWarn(title, content);
+  public static warningT(title: string, content: string) {
+    this.warning(t(title), t(content));
   }
+
   /**
-   * Generates failure message.
+   * Generates warning message.
+   * @param title Title as a string.
+   * @param content Content as a string.
+   */
+  public static warning(title: string, content: string) {
+    this.showWarning(title, content);
+  }
+
+  //
+
+  /**
+   * Generates failure message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   */
+  public static failureT(title: string, content: string) {
+    this.failure(t(title), t(content));
+  }
+
+  /**
+   * Generates failure message.
+   * @param title Title as a string.
+   * @param content Content as a string.
    */
   public static failure(title: string, content: string) {
     this.showFailure(title, content);
@@ -45,10 +89,21 @@ export class AppMessager {
   //
 
   /**
+   * Generates error message to show as user feedback on error from provided translation keys.
+   * @param error Error object.
+   * @param fallbackTitle Title to use if cannot process error as i18n key.
+   * @param fallbackContent Content to use if cannot process error as i18n key.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public static errorT(error: any, fallbackTitle: string, fallbackContent: string) {
+    this.error(error, t(fallbackTitle), t(fallbackContent))
+  }
+
+  /**
    * Generates error message to show as user feedback on error.
    * @param error Error object.
-   * @param fallbackTitle Title to use if cannot process error (i18n key).
-   * @param fallbackContent Content to use if cannot process error (i18n key).
+   * @param fallbackTitle Title string to use if cannot process error.
+   * @param fallbackContent Content string to use if cannot process error.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static error(error: any, fallbackTitle: string, fallbackContent: string) {
@@ -82,14 +137,14 @@ export class AppMessager {
     // First, check if error code is present in response.
     const errCodeTitleKey = `msgs.${errCode}.title`;
     if (errCode && i18n.global.te(errCodeTitleKey)) {
-      this.showError(errCodeTitleKey, `msgs.${errCode}.content`, errCode);
+      this.showError(t(errCodeTitleKey), t(`msgs.${errCode}.content`), errCode);
       return;
     }
 
     // Second, check if we can tell something based on HTTP status.
     const errCodeHttpKey = `msgs.${error.response.status}.title`; // will ignore status if lang key does not exist
     if (i18n.global.te(errCodeHttpKey)) {
-      this.showError(errCodeHttpKey, `msgs.${error.response.status}.content`);
+      this.showError(t(errCodeHttpKey), t(`msgs.${error.response.status}.content`));
       return;
     }
 
@@ -101,59 +156,59 @@ export class AppMessager {
    * Process error without response from server (network issue).
    */
   private static processRequestError() {
-    this.showError('msgs.networkError.title', 'msgs.networkError.content');
+    this.showError(t('msgs.networkError.title'), t('msgs.networkError.content'));
   }
 
   //
 
   /**
    * Helper to show info message using store.
-   * @param title I18n key for title.
-   * @param content I18n key for content.
+   * @param title Title string.
+   * @param content Content string.
    */
   private static showInfo(title: string, content: string) {
     const messageStore = useMessageStore();
-    messageStore.info(t(title), t(content));
+    messageStore.info(title, content);
   }
 
   /**
    * Helper to show success message using store.
-   * @param title I18n key for title.
-   * @param content I18n key for content.
+   * @param title Title string.
+   * @param content Content string.
    */
   private static showSuccess(title: string, content: string) {
     const messageStore = useMessageStore();
-    messageStore.success(t(title), t(content));
+    messageStore.success(title, content);
   }
 
   /**
    * Helper to show warning message using store.
-   * @param title I18n key for title.
-   * @param content I18n key for content.
+   * @param title Title string.
+   * @param content Content string.
    */
-  private static showWarn(title: string, content: string) {
+  private static showWarning(title: string, content: string) {
     const messageStore = useMessageStore();
-    messageStore.warn(t(title), t(content));
+    messageStore.warning(title, content);
   }
 
   /**
    * Helper to show failure message using store.
-   * @param title I18n key for title.
-   * @param content I18n key for content.
+   * @param title Title string.
+   * @param content Content string.
    */
   private static showFailure(title: string, content: string) {
     const messageStore = useMessageStore();
-    messageStore.failure(t(title), t(content));
+    messageStore.failure(title, content);
   }
 
   /**
    * Helper to show error message using store.
-   * @param title I18n key for title.
-   * @param content I18n key for content.
+   * @param title Title string.
+   * @param content Content string.
    * @param errCode Optional error code.
    */
   private static showError(title: string, content: string, errCode: string = '') {
     const messageStore = useMessageStore();
-    messageStore.error(t(title), t(content), errCode);
+    messageStore.error(title, content, errCode);
   }
 }

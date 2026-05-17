@@ -82,6 +82,37 @@
     }
   },
 
+  "testArea": {
+    "msgButtons": {
+      "legend": "Przyciski do testowania podsystemu AppMessager",
+      "info": {
+        "label": "Wygeneruj wiadomość informacyjną",
+        "title": "Informacja",
+        "content": "To jest wiadomość informacyjna. Numer: {count}."
+      },
+      "success": {
+        "label": "Wygeneruj wiadomość o sukcesie",
+        "title": "Sukces",
+        "content": "To jest wiadomość o sukcesie. Numer: {count}."
+      },
+      "warning": {
+        "label": "Wygeneruj ostrzeżenie",
+        "title": "Ostrzeżenie",
+        "content": "To jest wiadomość - ostrzeżenie. Numer: {count}."
+      },
+      "failure": {
+        "label": "Wygeneruj wiadomość o niepowodzeniu",
+        "title": "Niepowodzenie",
+        "content": "To jest wiadomość o niepowodzeniu. Numer: {count}."
+      },
+      "error": {
+        "label": "Wygeneruj wiadomość o błędzie",
+        "title": "Błąd",
+        "content": "To jest wiadomość o błędzie. Numer: {count}."
+      }
+    }
+  },
+
   "msgs": {
     "errorCode": "Kod błędu",
     

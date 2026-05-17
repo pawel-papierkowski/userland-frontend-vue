@@ -82,6 +82,37 @@
     }
   },
 
+  "testArea": {
+    "msgButtons": {
+      "legend": "Buttons to test AppMessager subsystem",
+      "info": {
+        "label": "Generate info message",
+        "title": "Info",
+        "content": "This is informational message. Number: {count}."
+      },
+      "success": {
+        "label": "Generate success message",
+        "title": "Success",
+        "content": "This is success message. Number: {count}."
+      },
+      "warning": {
+        "label": "Generate warning message",
+        "title": "Warning",
+        "content": "This is warning message. Number: {count}."
+      },
+      "failure": {
+        "label": "Generate failure message",
+        "title": "Failure",
+        "content": "This is failure message. Number: {count}."
+      },
+      "error": {
+        "label": "Generate error message",
+        "title": "Error",
+        "content": "This is error message. Number: {count}."
+      }
+    }
+  },
+
   "msgs": {
     "errorCode": "Error code",
 

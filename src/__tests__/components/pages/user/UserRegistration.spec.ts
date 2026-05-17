@@ -3,12 +3,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 
-import i18n from '@/code/lang/i18n';
-import { logger } from '@/code/utils/logger';
-import { useMessageStore } from '@/stores/messages';
-import backendApiUser from '@/services/features/api-users';
+import i18n from '@/code/lang/i18n.ts';
+import { logger } from '@/code/utils/logger.ts';
+import { useMessageStore } from '@/stores/messages.ts';
+import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/messages/types';
+import { EnMessageLevel } from '@/code/messages/types.ts';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
 // Mocking dependencies.
@@ -20,9 +20,7 @@ vi.mock('@/services/features/api-users', () => ({
 
 const mockPush = vi.fn<(to: any) => void>();
 vi.mock('vue-router', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
+  useRouter: () => ({ push: mockPush, }),
 }));
 
 /** Boilerplate code. */
@@ -49,7 +47,7 @@ describe('UserRegistration', () => {
     // Mock successful API response.
     vi.mocked(backendApiUser.register).mockResolvedValue({ data: {} } as any);
 
-    // Fill form fields
+    // Fill form fields correctly.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');
@@ -57,8 +55,7 @@ describe('UserRegistration', () => {
     // Click on registration button.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
-    // Wait for all promises (API call) to resolve.
-    await flushPromises();
+    await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Verify API call.
     expect(backendApiUser.register).toHaveBeenCalledWith(expect.objectContaining({
@@ -66,20 +63,19 @@ describe('UserRegistration', () => {
       email: 'test@example.com',
       password: 'Password123!',
       confirmPassword: 'Password123!',
+      lang: 'en',
+      frontend: 'VUE'
     }));
 
     // Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
 
-    // Verify redirection to login page.
+    // Verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 
   it('shows error message when server returns 500 error', async () => {
-    const userRegistration = createWrapper();
-    const messageStore = useMessageStore();
-
     // Mock API returning 500 error.
     const errorResponse = {
       isAxiosError: true,
@@ -90,7 +86,10 @@ describe('UserRegistration', () => {
     };
     vi.mocked(backendApiUser.register).mockRejectedValue(errorResponse);
 
-    // Fill form fields properly.
+    const userRegistration = createWrapper();
+    const messageStore = useMessageStore();
+
+    // Fill form fields correctly.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');

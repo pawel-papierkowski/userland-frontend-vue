@@ -10,7 +10,7 @@ import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { AppMessager } from '@/code/messages/AppMessager.ts';
-import type { UserRegisterForm } from '@/code/data/features/user.ts';
+import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user.ts';
 
 const log = useLogger();
 const router = useRouter();
@@ -20,8 +20,7 @@ const form: UserRegisterForm = reactive({
   username: '',
   email: '',
   password: '',
-  confirmPassword: '',
-  lang: '',
+  confirmPassword: ''
 });
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
@@ -68,16 +67,16 @@ const handleRegister = async () => {
   isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
-    form.lang = locale.value; // User could change language after entering registration page.
-    await backendApiUser.register({ ...form }); // API CALL
+    const registerReq: UserRegisterReq = convertToReq(form);
+    await backendApiUser.register(registerReq); // API CALL
 
     log.debug('Registered user using form data:', { ...form });
-    AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
+    AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content');
 
     clearForm();
     router.push({ name: 'home' });
   } catch (error) {
-    AppMessager.error(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
+    AppMessager.errorT(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
     backendApi.logError(error, 'Registration failed!');
   } finally {
     isSubmitting.value = false; // Enable submit button.
@@ -94,13 +93,25 @@ const isFormError = () => {
   return false;
 }
 
+/**
+ * Convert user registration form data to user registration request data.
+ * @param form User registration form.
+ * @returns User registration request.
+ */
+const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
+  return {
+    ...form,
+    lang: locale.value,
+    frontend: 'VUE'
+  }
+}
+
 /** Clear entire form. */
 const clearForm = () => {
   form.username = '';
   form.email = '';
   form.password = '';
   form.confirmPassword = '';
-  form.lang = '';
 }
 
 /** We can highlight fields that contain errors. */

@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 
-import i18n from '@/code/lang/i18n'
+import i18n from '@/code/lang/i18n.ts'
 
-import type { Message } from '@/code/messages/types';
-import { EnMessageLevel } from '@/code/messages/types';
+import type { Message } from '@/code/messages/types.ts';
+import { EnMessageLevel } from '@/code/messages/types.ts';
 import MessageBox from '@/components/layout/messages/MessageBox.vue';
 
 /** Boilerplate code. */

@@ -9,6 +9,7 @@ import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { AppMessager } from '@/code/messages/AppMessager.ts';
+import type { TokenActivationReq } from '@/code/data/features/user.ts';
 
 const log = useLogger();
 const route = useRoute();
@@ -23,20 +24,21 @@ const callActivationApi = async () => {
   const tokenStr: string = (Array.isArray(route.query.token) ? route.query.token[0] : route.query.token) ?? '';
 
   if (tokenStr === '') {// verify token existence
-    AppMessager.failure('user.activation.msg.noToken.title', 'user.activation.msg.noToken.content');
+    AppMessager.failureT('user.activation.msg.noToken.title', 'user.activation.msg.noToken.content');
     router.push({ name: 'home' });
     return;
   }
 
   try {
-    await backendApiUser.activate(tokenStr);
+    const payload: TokenActivationReq = { token: tokenStr, frontend: 'VUE' };
+    await backendApiUser.activate(payload);
 
     log.debug('Activated user using token:', tokenStr);
-    AppMessager.success('user.activation.msg.success.title', 'user.activation.msg.success.content');
+    AppMessager.successT('user.activation.msg.success.title', 'user.activation.msg.success.content');
 
     router.push({ name: 'user-login' }); // go straight to login page
   } catch (error) {
-    AppMessager.error(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
+    AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
     backendApi.logError(error, 'Activation failed!');
     router.push({ name: 'home' }); // kick user out of this page
   }
