@@ -58,7 +58,7 @@
       }
     },
     "activation": {
-      "title": "Aktywacja konta",
+      "title": "Aktywowanie konta...",
       "msg": {
         "noToken": {
           "title": "Brak tokenu",
@@ -75,7 +75,24 @@
       }
     },
     "login": {
-      "link": "Logowanie"
+      "link": "Logowanie",
+      "form": {
+        "title": "Logowanie",
+        "email": "Email",
+        "password": "Hasło",
+        "button": "Zaloguj się",
+        "buttonSubmitting": "Logowanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Użytkownik pomyślnie zalogowany",
+          "content": ""
+        },
+        "error": {
+          "title": "Niepowodzenie logowania",
+          "content": "Logowanie użytkownika nieudane."
+        }
+      }
     },
     "profile": {
       "link": "Profil"
@@ -84,7 +101,7 @@
 
   "testArea": {
     "msgButtons": {
-      "legend": "Przyciski do testowania podsystemu AppMessager",
+      "legend": "Testy AppMessager",
       "info": {
         "label": "Wygeneruj wiadomość informacyjną",
         "title": "Informacja",

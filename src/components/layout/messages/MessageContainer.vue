@@ -15,6 +15,7 @@ const messageStore = useMessageStore();
 
 <template>
   <div class="message-wrapper" data-testid="msgContainer">
+
     <TransitionGroup name="msg-list" tag="div" class="messages">
       <div v-for="msg in messageStore.messages" :key="msg.id" class="msg-item">
         <MessageBox :msg="msg"
@@ -34,11 +35,10 @@ const messageStore = useMessageStore();
   right: 0;
 
   overflow-y: auto; /* Scrollable if content is long */
+  overflow-x: hidden;
   z-index: 1000; /* Ensure it's above other content */
 
-  /*width: 600px;*/
-  min-width: 200px;
-  max-width: 800px;
+  width: 300px; /* Constant width needed, otherwise last message will glitch out when removed. */
 
   scrollbar-width: none; /* Hide scrollbar in Firefox. */
   -ms-overflow-style: none; /* Hide scrollbar in older IE/Edge. */
@@ -60,6 +60,7 @@ const messageStore = useMessageStore();
 
   width: 100%;
   padding: 0.5rem;
+  position: relative; /* Needed for absolute positioning of leaving items */
 }
 
 /* Individual message wrapper to handle animations better than component root. */
@@ -70,25 +71,22 @@ const messageStore = useMessageStore();
 
 /* Animations for message boxes handled by <<TransitionGroup>. */
 .msg-list-enter-from {
-  opacity: 0;
+  opacity: 0.5;
   transform: translateX(100%);
 }
 
 .msg-list-enter-active {
   transition: all 0.4s ease-out;
 }
-/*
+
 .msg-list-leave-to {
-  opacity: 0;
+  opacity: 0.5;
   transform: translateX(100%);
 }
 
 .msg-list-leave-active {
   transition: all 0.3s ease-in;
-  position: absolute;
-  width: calc(100% - 1rem);
-  z-index: 1;
-}*/
+}
 
 .msg-list-move {
   transition: transform 0.4s ease;

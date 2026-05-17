@@ -60,7 +60,10 @@ const icon = computed(() => {
     <div class="message-body">
       <div class="message-content">{{ msg.content }}</div>
     </div>
-    <div v-if="msg.errCode" class="message-errCode">{{t('msgs.errorCode')}}: <b>{{ msg.errCode }}</b></div>
+    <div v-if="msg.errCode" class="message-errCode">
+      <div class="message-divider"></div>
+      {{ t('msgs.errorCode') }}: <b>{{ msg.errCode }}</b>
+    </div>
   </div>
 </template>
 
@@ -72,6 +75,7 @@ const icon = computed(() => {
   padding: var(--spacing-sm, 8px);
 
   width: 100%;
+  font-size: 13px;
 
   border-radius: 4px;
   border-width: 1px;
@@ -137,5 +141,18 @@ const icon = computed(() => {
 .message-content {
   font-size: 0.95em;
   word-break: break-word;
+}
+
+.message-divider {
+  border-top: 1px solid currentColor;
+  opacity: 0.2;
+  margin-bottom: 4px;
+  width: 100%;
+}
+
+.message-errCode {
+  width: 100%;
+  text-align: center;
+  margin-top: 4px;
 }
 </style>

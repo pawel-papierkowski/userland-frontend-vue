@@ -7,9 +7,10 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import type { TokenActivationReq } from '@/code/data/features/user.ts';
 
 import { AppMessager } from '@/code/messages/AppMessager.ts';
-import type { TokenActivationReq } from '@/code/data/features/user.ts';
+import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const log = useLogger();
 const route = useRoute();
@@ -52,8 +53,17 @@ onMounted(() => {
 <template>
   <div>
     <h2>{{ t('user.activation.title') }}</h2>
-    <!-- TODO: insert nice spinner here -->
+    <div class="spinner-container">
+      <SpinnerTorus display="block" size="100px" />
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
+}
+</style>

@@ -6,3 +6,20 @@ export type ProjectProp = {
   version: string;
   build: string;
 };
+
+/** Login state. */
+export type LoginState = {
+  /** True if logged in, otherwise false. */
+  isLogged: boolean;
+  /** Raw token from /api/users/login endpoint. */
+  token: string;
+
+  /** Email. */
+  email: string;
+  /** Issued at. */
+  issuedAt: Date;
+  /** Expires at. */
+  expiresAt: Date;
+  /** Permissions. Example: ["ROLE_ADMIN", "USER_EDIT"] */
+  permissions: string[];
+}

@@ -3,12 +3,16 @@ import { ref } from 'vue';
 import type { Message } from '@/code/messages/types.ts';
 import { EnMessageLevel } from '@/code/messages/types.ts';
 
+/** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
+const maxMessages = 20;
+
 /**
  * Stores global message queue. Shown in MessageContainer component. Use AppMessager to add messages.
  */
 export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
   const messages = ref<Message[]>([]);
+  /** Number of message. */
   let lastNo : number = 0;
 
   /**
@@ -20,6 +24,12 @@ export const useMessageStore = defineStore('messages', () => {
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   function addMessage(level: EnMessageLevel, title: string = '', content: string, errCode: string = '', duration = 15) {
+    if (messages.value.length >= maxMessages) {
+      // Remove oldest message.
+      const id = messages.value[0]?.id ?? '';
+      removeMessage(id);
+    }
+
     const id = crypto.randomUUID();
     messages.value.push({ id, no: lastNo, level, title, content, errCode });
     if (duration > 0)

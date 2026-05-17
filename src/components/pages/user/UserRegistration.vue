@@ -16,12 +16,14 @@ const log = useLogger();
 const router = useRouter();
 const { t, locale } = useI18n();
 
+/** User registration form data. */
 const form: UserRegisterForm = reactive({
   username: '',
   email: '',
   password: '',
   confirmPassword: ''
 });
+
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */

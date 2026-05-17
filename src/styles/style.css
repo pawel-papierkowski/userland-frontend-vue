@@ -116,6 +116,10 @@ input.err {
 
 button {
   width: 100%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   margin: var(--button-margin);
   padding: var(--button-padding);
@@ -124,16 +128,28 @@ button {
   background: var(--button-background);
   border: var(--button-border);
   border-radius: var(--button-border-radius);
+  box-shadow: var(--button-box-shadow);
+  transition: var(--button-transition);
 
-  cursor: pointer;
 }
+
 button:hover {
   color: var(--button-hover-color);
-  background-color: var(--button-hover-background);
+  background: var(--button-hover-background);
+  border: var(--button-hover-border);
+  box-shadow: var(--button-hover-box-shadow);
 }
-button:disabled {
-  color: var(--button-disabled-color);
-  background-color: var(--button-disabled-background);
 
+button:active {
+  transform: var(--button-active-transform);
+  box-shadow: var(--button-active-box-shadow);
+}
+
+button:disabled {
   cursor: not-allowed;
+
+  color: var(--button-disabled-color);
+  background: var(--button-disabled-background);
+  border: var(--button-disabled-border);
+  box-shadow: var(--button-disabled-box-shadow);
 }

@@ -58,7 +58,7 @@
       }
     },
     "activation": {
-      "title": "Account activation",
+      "title": "Activating account...",
       "msg": {
         "noToken": {
           "title": "No token",
@@ -75,7 +75,24 @@
       }
     },
     "login": {
-      "link": "Login"
+      "link": "Login",
+      "form": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "button": "Log in",
+        "buttonSubmitting": "Logging in..."
+      },
+      "msg": {
+        "success": {
+          "title": "User logged in successfully",
+          "content": ""
+        },
+        "error": {
+          "title": "Login failure",
+          "content": "User login failed."
+        }
+      }
     },
     "profile": {
       "link": "Profile"
@@ -84,7 +101,7 @@
 
   "testArea": {
     "msgButtons": {
-      "legend": "Buttons to test AppMessager subsystem",
+      "legend": "AppMessager tests",
       "info": {
         "label": "Generate info message",
         "title": "Info",
