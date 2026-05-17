@@ -79,57 +79,59 @@ const icon = computed(() => {
   line-height: 1.4;
 
   pointer-events: all;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .message-info {
-  background-color: #e3f2fd;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
   border-color: #2196f3;
   color: #0d47a1;
 }
 
 .message-success {
-  background-color: #e8f5e9;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
   border-color: #4caf50;
   color: #1b5e20;
 }
 
 .message-warning {
-  background-color: #fffde7;
+  background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
   border-color: #fbc02d;
   color: #664d03;
 }
 
 .message-failure {
-  background-color: #f8d7da;
-  border-color: #f5c2c7;
-  color: #842029;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffccbc 100%);
+  border-color: #ffab91;
+  color: #bf360c;
 }
 
 .message-error {
-  background-color: #f8d7da;
+  background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
   border-color: #f5c2c7;
   color: #842029;
 }
 
 .message-icon {
   margin-right: var(--spacing-sm, 8px);
-  font-size: 1em;
+  font-size: 1.1em;
   flex-shrink: 0;
   user-select: none;
 }
 
 .message-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  width: 100%;
 }
 
 .message-body {
   flex-grow: 1;
+  margin-left: 1.8rem; /* align content with title text */
 }
 
 .message-title {
   font-weight: bold;
-  margin-bottom: 2px;
 }
 
 .message-content {
