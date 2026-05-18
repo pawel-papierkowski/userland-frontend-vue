@@ -20,3 +20,6 @@ export const fallbackLang = 'en';
 
 /** List of known languages. */
 export const languages: string[] = [ 'en', 'pl' ];
+
+/** List of permission prefixes. */
+export const permissions: string[] = [ 'role', 'user' ];

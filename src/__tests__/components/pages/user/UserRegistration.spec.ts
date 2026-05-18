@@ -8,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/messages/types.ts';
+import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
 // Mocking dependencies.
@@ -70,6 +70,9 @@ describe('UserRegistration', () => {
     // Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0].title).toBe("User registered successfully");
+    expect(messageStore.messages[0].content).toBe("Please check your mailbox. You will need to confirm registration by clicking on link in email.");
+
 
     // Verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

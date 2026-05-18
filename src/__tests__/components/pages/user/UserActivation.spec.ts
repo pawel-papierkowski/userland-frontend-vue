@@ -8,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/messages/types.ts';
+import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserActivation from '@/components/pages/user/UserActivation.vue';
 
 // Mocking dependencies.
@@ -68,7 +68,7 @@ describe('UserActivation', () => {
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
 
     // Verify redirection to login page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'user-login' });
+    expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
   });
 
   it('fails when no token is provided', async () => {

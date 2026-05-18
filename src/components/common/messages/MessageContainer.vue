@@ -8,7 +8,7 @@
  * AppMessager.info('user.registration.msg.success.title', 'user.registration.msg.success.content');
  */
 import { useMessageStore } from '@/stores/messages.ts';
-import MessageBox from '@/components/layout/messages/MessageBox.vue';
+import MessageBox from '@/components/common/messages/MessageBox.vue';
 
 const messageStore = useMessageStore();
 </script>

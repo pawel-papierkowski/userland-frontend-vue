@@ -7,8 +7,8 @@
  */
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EnMessageLevel } from '@/code/messages/types';
-import type { Message } from '@/code/messages/types';
+import { EnMessageLevel } from '@/code/stores/messages/types';
+import type { Message } from '@/code/stores/messages/types';
 
 const { t } = useI18n();
 
@@ -52,7 +52,7 @@ const icon = computed(() => {
 </script>
 
 <template>
-  <div class="message-box" :class="messageClass" :data-testid="'msgBox_'+msg.no">
+  <div class="message-box" :class="messageClass" :data-testid="'msgBox_' + msg.no">
     <div class="message-header">
       <div class="message-icon">{{ icon }}</div>
       <div class="message-title">{{ msg.title }}</div>

@@ -5,8 +5,8 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
-import { AppMessager } from '@/code/messages/AppMessager.ts';
-import MessageContainer from '@/components/layout/messages/MessageContainer.vue';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import MessageContainer from '@/components/common/messages/MessageContainer.vue';
 
 /** Boilerplate code. */
 function createWrapper() {

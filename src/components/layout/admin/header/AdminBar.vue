@@ -1,15 +1,17 @@
 <script setup lang="ts">
 /** Admin panel bar in middle of header. */
-
 import { useI18n } from 'vue-i18n';
+
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 const { t } = useI18n();
 </script>
 
 <template>
-  <router-link :to="{ name: 'home' }">{{ t('header.home') }}</router-link>
-  <router-link :to="{ name: 'member' }">{{ t('header.member') }}</router-link>
-  <router-link :to="{ name: 'testArea' }">{{ t('header.test') }}</router-link>
+  <template v-if="AppLoginer.isLogged()">
+    <router-link class="nav-link" :to="{ name: 'admin-main' }">{{ t('header.admin.main') }}</router-link>
+    <router-link class="nav-link" :to="{ name: 'admin-user' }">{{ t('header.admin.user') }}</router-link>
+  </template>
 </template>
 
 <style scoped></style>

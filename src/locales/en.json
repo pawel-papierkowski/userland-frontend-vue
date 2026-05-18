@@ -4,9 +4,22 @@
   },
 
   "header": {
-    "home": "Homepage",
-    "test": "Test zone",
-    "member": "Member area"
+    "general": {
+      "home": "Homepage",
+      "test": "Test zone",
+      "member": "Member area"
+    },
+    "user": {
+      "options": "Options",
+      "registration": "Registration",
+      "login": "Login",
+      "profile": "Profile",
+      "logout": "Logout"
+    },
+    "admin": {
+      "main": "Main page",
+      "user": "Users"
+    }
   },
 
   "footer": {
@@ -36,7 +49,6 @@
 
   "user": {
     "registration": {
-      "link": "Registration",
       "form": {
         "title": "Create an account",
         "username": "Username",
@@ -75,7 +87,6 @@
       }
     },
     "login": {
-      "link": "Login",
       "form": {
         "title": "Login",
         "email": "Email",
@@ -88,6 +99,10 @@
           "title": "User logged in successfully",
           "content": ""
         },
+        "successAdmin": {
+          "title": "Admin panel user logged in successfully",
+          "content": ""
+        },
         "error": {
           "title": "Login failure",
           "content": "User login failed."
@@ -95,7 +110,9 @@
       }
     },
     "profile": {
-      "link": "Profile"
+      "form": {
+        "title": "User profile"
+      }
     }
   },
 
@@ -214,6 +231,15 @@
     "user_0122": {
       "title": "Failure",
       "content": "User is locked."
+    }
+  },
+
+  "test": {
+    "msg": {
+      "fallback": {
+        "title": "Fallback title",
+        "content": "Fallback content."
+      }
     }
   }
 }

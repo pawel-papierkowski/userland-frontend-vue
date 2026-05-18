@@ -39,7 +39,7 @@
 
   --header-font-size: 12px;
   --header-margin: 0;
-  --header-padding: 10px;
+  --header-padding: 5px;
   --header-border: none;
   --header-border-radius: 0;
   --header-background: #ffeebb;
@@ -108,4 +108,19 @@
   --combobox-option-background: #f8f8f8;
   --combobox-option-background-hover: #e8e8e8;
   --combobox-option-text-hover: #111827;
+
+  /* Navigation link specific vars. */
+  --nav-color: #484848;
+  --nav-font-size: 16px;
+  --nav-font-weight: normal;
+  --nav-text-align: left;
+  --nav-text-shadow: none;
+
+  --nav-hover-color: #000000;
+  --nav-hover-text-shadow: 1px 1px 1px #cdcdcd;;
+
+  --nav-active-color: #484848;
+  --nav-active-font-weight: bold;
+  --nav-active-text-shadow: none;
+
 }

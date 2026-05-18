@@ -1,6 +1,7 @@
 /** Common code for API handling. */
 import axios from 'axios';
 import { isAxiosError } from 'axios';
+
 import { logger } from '@/code/utils/logger.ts';
 
 import { apiAddress } from '@/code/data/app/const.ts';

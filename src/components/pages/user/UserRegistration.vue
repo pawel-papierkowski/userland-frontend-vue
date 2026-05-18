@@ -9,7 +9,7 @@ import { useI18n } from 'vue-i18n';
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { AppMessager } from '@/code/messages/AppMessager.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user.ts';
 
 const log = useLogger();
@@ -21,7 +21,7 @@ const form: UserRegisterForm = reactive({
   username: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 });
 
 /** True if submit button was clicked at least once. */
@@ -83,7 +83,7 @@ const handleRegister = async () => {
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
-}
+};
 
 /** Check if form has any errors. */
 const isFormError = () => {
@@ -93,7 +93,7 @@ const isFormError = () => {
   if (passwordError.value !== null) return true;
   if (passwordConfirmError.value !== null) return true;
   return false;
-}
+};
 
 /**
  * Convert user registration form data to user registration request data.
@@ -104,9 +104,9 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
   return {
     ...form,
     lang: locale.value,
-    frontend: 'VUE'
-  }
-}
+    frontend: 'VUE',
+  };
+};
 
 /** Clear entire form. */
 const clearForm = () => {
@@ -114,13 +114,13 @@ const clearForm = () => {
   form.email = '';
   form.password = '';
   form.confirmPassword = '';
-}
+};
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
   if (msgError !== null) return 'err';
   return '';
-}
+};
 </script>
 
 <template>
@@ -134,7 +134,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="username">{{ t('user.registration.form.username') }}:</label>
           <input
             :class="getInputClass(usernameError)"
-            id="username" data-testid="username"
+            id="username"
+            data-testid="username"
             type="text"
             v-model="form.username"
             required
@@ -147,7 +148,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="email">{{ t('user.registration.form.email') }}:</label>
           <input
             :class="getInputClass(emailError)"
-            id="email" data-testid="email"
+            id="email"
+            data-testid="email"
             type="email"
             v-model="form.email"
             required
@@ -160,7 +162,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="password">{{ t('user.registration.form.password') }}:</label>
           <input
             :class="getInputClass(passwordError)"
-            id="password" data-testid="password"
+            id="password"
+            data-testid="password"
             type="password"
             v-model="form.password"
             required
@@ -173,7 +176,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="confirmPassword">{{ t('user.registration.form.confirmPassword') }}:</label>
           <input
             :class="getInputClass(passwordConfirmError)"
-            id="confirmPassword" data-testid="confirmPassword"
+            id="confirmPassword"
+            data-testid="confirmPassword"
             type="password"
             v-model="form.confirmPassword"
             required

@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { Message } from '@/code/messages/types.ts';
-import { EnMessageLevel } from '@/code/messages/types.ts';
+
+import type { Message } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 
 /** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
 const maxMessages = 20;
@@ -13,7 +14,7 @@ export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
   const messages = ref<Message[]>([]);
   /** Number of message. */
-  let lastNo : number = 0;
+  let lastNo: number = 0;
 
   /**
    * Adds a message to the global queue.
@@ -52,7 +53,8 @@ export const useMessageStore = defineStore('messages', () => {
   const success = (title: string, content: string) => addMessage(EnMessageLevel.Success, title, content);
   const warning = (title: string, content: string) => addMessage(EnMessageLevel.Warning, title, content);
   const failure = (title: string, content: string) => addMessage(EnMessageLevel.Failure, title, content);
-  const error = (title: string, content: string, errCode: string = '') => addMessage(EnMessageLevel.Error, title, content, errCode);
+  const error = (title: string, content: string, errCode: string = '') =>
+    addMessage(EnMessageLevel.Error, title, content, errCode);
 
   return { messages, addMessage, removeMessage, info, success, warning, failure, error };
 });

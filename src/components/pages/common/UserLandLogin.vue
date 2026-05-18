@@ -1,28 +1,29 @@
 <script setup lang="ts">
-/** Login page where you can log in. */
+/** Login page where you can log in. Same for standard and admin login pages. */
 import { reactive, ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { AppMessager } from '@/code/messages/AppMessager.ts';
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user.ts';
-
-import { useLoginStore } from '@/stores/login.ts';
 
 const log = useLogger();
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
-const loginStore = useLoginStore();
+
+const isAdminPanel = route.name === 'admin-login';
 
 /** User registration form data. */
 const form: UserLoginForm = reactive({
   email: '',
-  password: ''
+  password: '',
 });
 
 /** True if submit button was clicked at least once. */
@@ -58,21 +59,41 @@ const handleLogin = async () => {
   try {
     const loginReq: UserLoginReq = convertToReq(form);
     const response = await backendApiUser.login(loginReq); // API CALL.
+    AppLoginer.login(response.data.jwtToken);
 
-    log.debug('Successfully logged in as user "', form.email, '".');
-    AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
-
-    const token = response.data.token;
-    loginStore.applyToken(token);
-
+    showMessage();
     clearForm();
-    router.push({ name: 'home' });
+    handleRedirection();
   } catch (error) {
     AppMessager.errorT(error, 'user.login.msg.error.title', 'user.login.msg.error.content');
     backendApi.logError(error, 'Login failed!');
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
+};
+
+const showMessage = () => {
+  if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
+    log.debug('Successfully logged in as admin user "', form.email, '".');
+    AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
+    return;
+  }
+
+  log.debug('Successfully logged in as user "', form.email, '".');
+  AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
+}
+
+const handleRedirection = () => {
+    if (isAdminPanel) {
+      if (AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
+        router.push({ name: 'admin-main' });
+        return;
+      }
+      // If we are here, it means standard user tried to login to admin panel, ouch.
+      // We do not logout them, we just kick out them to normal webpage.
+    }
+
+    router.push({ name: 'home' });
 }
 
 /** Check if form has any errors. */
@@ -81,7 +102,7 @@ const isFormError = () => {
   if (emailError.value !== null) return true;
   if (passwordError.value !== null) return true;
   return false;
-}
+};
 
 /**
  * Convert user login form data to user login request data.
@@ -90,21 +111,21 @@ const isFormError = () => {
  */
 const convertToReq = (form: UserLoginForm): UserLoginReq => {
   return {
-    ...form
-  }
-}
+    ...form,
+  };
+};
 
 /** Clear entire form. */
 const clearForm = () => {
   form.email = '';
   form.password = '';
-}
+};
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
   if (msgError !== null) return 'err';
   return '';
-}
+};
 </script>
 
 <template>
@@ -117,7 +138,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="email">{{ t('user.login.form.email') }}:</label>
           <input
             :class="getInputClass(emailError)"
-            id="email" data-testid="email"
+            id="email"
+            data-testid="email"
             type="email"
             v-model="form.email"
             required
@@ -130,7 +152,8 @@ const getInputClass = (msgError: string | null): string => {
           <label for="password">{{ t('user.login.form.password') }}:</label>
           <input
             :class="getInputClass(passwordError)"
-            id="password" data-testid="password"
+            id="password"
+            data-testid="password"
             type="password"
             v-model="form.password"
             required

@@ -4,9 +4,22 @@
   },
 
   "header": {
-    "home": "Strona główna",
-    "test": "Strefa testów",
-    "member": "Strona członków"
+    "general": {
+      "home": "Strona główna",
+      "test": "Strefa testów",
+      "member": "Strona członków"
+    },
+    "user": {
+      "options": "Opcje",
+      "registration": "Rejestracja",
+      "login": "Logowanie",
+      "profile": "Profil",
+      "logout": "Wylogowanie"
+    },
+    "admin": {
+      "main": "Strona główna",
+      "user": "Użytkownicy"
+    }
   },
 
   "footer": {
@@ -36,7 +49,6 @@
 
   "user": {
     "registration": {
-      "link": "Rejestracja",
       "form": {
         "title": "Utwórz konto",
         "username": "Nazwa użytkownika",
@@ -75,7 +87,6 @@
       }
     },
     "login": {
-      "link": "Logowanie",
       "form": {
         "title": "Logowanie",
         "email": "Email",
@@ -88,6 +99,10 @@
           "title": "Użytkownik pomyślnie zalogowany",
           "content": ""
         },
+        "successAdmin": {
+          "title": "Użytkownik panelu administracyjnego pomyślnie zalogowany",
+          "content": ""
+        },
         "error": {
           "title": "Niepowodzenie logowania",
           "content": "Logowanie użytkownika nieudane."
@@ -95,7 +110,9 @@
       }
     },
     "profile": {
-      "link": "Profil"
+      "form": {
+        "title": "Profil użytkownika"
+      }
     }
   },
 
@@ -214,6 +231,15 @@
     "user_0122": {
       "title": "Niepowodzenie",
       "content": "Użytkownik jest zablokowany."
+    }
+  },
+
+  "test": {
+    "msg": {
+      "fallback": {
+        "title": "Fallback title",
+        "content": "Fallback content."
+      }
     }
   }
 }

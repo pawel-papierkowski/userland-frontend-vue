@@ -153,3 +153,45 @@ button:disabled {
   border: var(--button-disabled-border);
   box-shadow: var(--button-disabled-box-shadow);
 }
+
+/* Vue-specific elements. */
+
+.nav-link {
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+
+  color: var(--nav-color);
+
+  font-family: var(--font-family-ui);
+  font-size: var(--nav-font-size);
+  font-weight: var(--nav-font-weight);
+
+  text-align: var(--nav-text-align);
+  text-shadow: var(--nav-text-shadow);
+}
+
+.nav-link:hover {
+  color: var(--nav-hover-color);
+  text-shadow: var(--nav-hover-text-shadow);
+}
+
+.nav-link.router-link-active {
+  color: var(--nav-active-color);
+
+  font-family: var(--font-family-ui);
+  font-weight: var(--nav-active-font-weight);
+
+  text-shadow: var(--nav-active-text-shadow);
+}
+
+.nav-link:hover.router-link-active {
+  color: var(--nav-hover-color);
+  text-shadow: var(--nav-hover-text-shadow);
+}
+
+.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 1px 4px;
+}

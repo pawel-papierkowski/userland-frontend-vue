@@ -9,7 +9,7 @@ import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { TokenActivationReq } from '@/code/data/features/user.ts';
 
-import { AppMessager } from '@/code/messages/AppMessager.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const log = useLogger();
@@ -24,7 +24,8 @@ const callActivationApi = async () => {
   // Ensure token is string, even if the URL query is missing or duplicated.
   const tokenStr: string = (Array.isArray(route.query.token) ? route.query.token[0] : route.query.token) ?? '';
 
-  if (tokenStr === '') {// verify token existence
+  if (tokenStr === '') {
+    // verify token existence
     AppMessager.failureT('user.activation.msg.noToken.title', 'user.activation.msg.noToken.content');
     router.push({ name: 'home' });
     return;
@@ -37,13 +38,13 @@ const callActivationApi = async () => {
     log.debug('Activated user using token:', tokenStr);
     AppMessager.successT('user.activation.msg.success.title', 'user.activation.msg.success.content');
 
-    router.push({ name: 'user-login' }); // go straight to login page
+    router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
     backendApi.logError(error, 'Activation failed!');
     router.push({ name: 'home' }); // kick user out of this page
   }
-}
+};
 
 onMounted(() => {
   callActivationApi(); // automatically call once user enters page

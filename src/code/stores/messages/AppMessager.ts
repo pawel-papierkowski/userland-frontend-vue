@@ -1,11 +1,12 @@
 import { isAxiosError } from 'axios';
-import { useMessageStore } from '@/stores/messages';
+import { useMessageStore } from '@/stores/messages.ts';
 import i18n from '@/code/lang/i18n.ts';
 
 const { t } = i18n.global;
 
 /**
  * Class for generating user feedback messages, including error messages with special handling that depends on error object.
+ * Essentially it is wrapper for message store.
  */
 export class AppMessager {
   /**

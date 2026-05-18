@@ -3,9 +3,9 @@ import { mount } from '@vue/test-utils';
 
 import i18n from '@/code/lang/i18n.ts'
 
-import type { Message } from '@/code/messages/types.ts';
-import { EnMessageLevel } from '@/code/messages/types.ts';
-import MessageBox from '@/components/layout/messages/MessageBox.vue';
+import type { Message } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import MessageBox from '@/components/common/messages/MessageBox.vue';
 
 /** Boilerplate code. */
 function createWrapper(message : Message) {
