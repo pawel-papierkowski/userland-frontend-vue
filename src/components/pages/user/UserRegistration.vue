@@ -116,6 +116,11 @@ const clearForm = () => {
   form.confirmPassword = '';
 };
 
+/** Go to login page. */
+const goLogin = () => {
+  router.push({ name: 'login' });
+}
+
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
   if (msgError !== null) return 'err';
@@ -190,6 +195,10 @@ const getInputClass = (msgError: string | null): string => {
       <button type="submit" :disabled="isSubmitting">
         {{ isSubmitting ? t('user.registration.form.buttonSubmitting') : t('user.registration.form.button') }}
       </button>
+
+      <div class="underForm-1">
+        <div class="nav-minor underForm-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
+      </div>
     </form>
   </div>
 </template>

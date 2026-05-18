@@ -18,8 +18,8 @@ const handleLogout = () => {
 
 <template>
   <template v-if="!AppLoginer.isLogged()">
-    <router-link class="nav-link" :to="{ name: 'login' }">{{ t('header.user.login') }}</router-link>
-    <router-link class="nav-link" :to="{ name: 'registration' }">{{ t('header.user.registration') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'login' }">{{ t('header.user.login') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'registration' }">{{ t('header.user.registration') }}</router-link>
   </template>
   <DropdownMenu v-if="AppLoginer.isLogged()">
     <template #trigger>
@@ -28,9 +28,9 @@ const handleLogout = () => {
 
     <template #content>
       <div class="dropdown-menu">
-        <router-link class="nav-link" :to="{ name: 'user-profile' }">{{ t('header.user.profile') }}</router-link>
+        <router-link class="nav-major" :to="{ name: 'user-profile' }">{{ t('header.user.profile') }}</router-link>
         <hr />
-        <div class="nav-link" @click="handleLogout()">{{ t('header.user.logout') }}</div>
+        <div class="nav-major" @click="handleLogout()">{{ t('header.user.logout') }}</div>
       </div>
     </template>
   </DropdownMenu>

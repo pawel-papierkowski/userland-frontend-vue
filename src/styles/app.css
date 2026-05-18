@@ -1,6 +1,68 @@
 /*** Styles specific to this application. ***/
 
+/* Navigation. */
+
+.nav-major {
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+
+  color: var(--nav-major-color);
+
+  font-family: var(--font-family-ui);
+  font-size: var(--nav-major-font-size);
+  font-weight: var(--nav-major-font-weight);
+
+  text-align: var(--nav-major-text-align);
+  text-shadow: var(--nav-major-text-shadow);
+}
+
+.nav-major:hover {
+  color: var(--nav-major-hover-color);
+  text-shadow: var(--nav-major-hover-text-shadow);
+}
+
+.nav-major.router-link-active {
+  color: var(--nav-major-active-color);
+
+  font-family: var(--font-family-ui);
+  font-weight: var(--nav-major-active-font-weight);
+
+  text-shadow: var(--nav-major-active-text-shadow);
+}
+
+.nav-major:hover.router-link-active {
+  color: var(--nav-major-hover-color);
+  text-shadow: var(--nav-major-hover-text-shadow);
+}
+
+.nav-minor {
+  text-decoration: none;
+  cursor: pointer;
+
+  color: var(--nav-minor-color);
+
+  font-family: var(--font-family-ui);
+  font-size: var(--nav-minor-font-size);
+  font-weight: var(--nav-minor-font-weight);
+
+  text-align: var(--nav-minor-text-align);
+  text-shadow: var(--nav-minor-text-shadow);
+}
+
+.nav-minor:hover {
+  color: var(--nav-minor-hover-color);
+  text-shadow: var(--nav-minor-hover-text-shadow);
+}
+
+.dropdown-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 1px 4px;
+}
+
 /* Forms. */
+
 .form-all {
   max-width: 400px;
   margin: 0 auto;
@@ -22,4 +84,38 @@
   color: red;
   font-size: 0.85em;
   margin-top: 5px;
+}
+
+.underForm-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 5px;
+}
+.underForm-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 5px;
+}
+.underForm-3 {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 5px;
+}
+.underForm-left {
+  display: flex;
+  justify-self: start;
+}
+.underForm-center {
+  display: flex;
+  justify-self: center;
+}
+.underForm-right {
+  display: flex;
+  justify-self: end;
 }

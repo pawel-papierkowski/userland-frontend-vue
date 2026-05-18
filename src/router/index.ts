@@ -12,8 +12,10 @@ import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 import UserProfile from '@/components/pages/user/UserProfile.vue';
 
 import UserActivation from '@/components/pages/user/UserActivation.vue';
+import UserPasswordResetReq from '@/components/pages/user/UserPasswordResetReq.vue';
 import UserPasswordReset from '@/components/pages/user/UserPasswordReset.vue';
 import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
+import UserAccountDeletionReq from '@/components/pages/user/UserAccountDeletionReq.vue';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
 import AdminProfile from '@/components/pages/admin/general/AdminProfile.vue';
@@ -42,6 +44,10 @@ const routes = [
     // User-related pages.
     { name:'user-profile', path: '/user/profile', component: UserProfile, meta: meta4logged },
     { name:'user-activate', path: '/user/activate', component: UserActivation, meta: meta4unlogged },
+    { name:'user-passwordReset-req', path: '/user/passwordResetReq', component: UserPasswordResetReq, meta: meta4unlogged },
+    { name:'user-accountDel-req', path: '/user/accountDelReq', component: UserAccountDeletionReq, meta: meta4unlogged },
+
+    // These pages are accessible only via links in email with token.
     { name:'user-passwordReset', path: '/user/passwordReset', component: UserPasswordReset, meta: meta4unlogged },
     { name:'user-emailChange', path: '/user/emailChange', component: UserEmailChange, meta: meta4unlogged },
     { name:'user-accountDel', path: '/user/accountDel', component: UserAccountDeletion, meta: meta4unlogged },

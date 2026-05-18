@@ -24,9 +24,9 @@ const handleLogout = () => {
 
     <template #content>
       <div class="dropdown-menu">
-        <router-link class="nav-link" :to="{ name: 'admin-profile' }">{{ t('header.user.profile') }}</router-link>
+        <router-link class="nav-major" :to="{ name: 'admin-profile' }">{{ t('header.user.profile') }}</router-link>
         <hr />
-        <div class="nav-link" @click="handleLogout()">{{ t('header.user.logout') }}</div>
+        <div class="nav-major" @click="handleLogout()">{{ t('header.user.logout') }}</div>
       </div>
     </template>
   </DropdownMenu>

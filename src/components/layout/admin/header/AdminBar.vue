@@ -9,8 +9,8 @@ const { t } = useI18n();
 
 <template>
   <template v-if="AppLoginer.isLogged()">
-    <router-link class="nav-link" :to="{ name: 'admin-main' }">{{ t('header.admin.main') }}</router-link>
-    <router-link class="nav-link" :to="{ name: 'admin-user' }">{{ t('header.admin.user') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'admin-main' }">{{ t('header.admin.main') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'admin-user' }">{{ t('header.admin.user') }}</router-link>
   </template>
 </template>
 

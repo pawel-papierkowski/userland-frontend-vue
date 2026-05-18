@@ -72,30 +72,6 @@ const handleLogin = async () => {
   }
 };
 
-const showMessage = () => {
-  if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
-    log.debug('Successfully logged in as admin user "', form.email, '".');
-    AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
-    return;
-  }
-
-  log.debug('Successfully logged in as user "', form.email, '".');
-  AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
-}
-
-const handleRedirection = () => {
-    if (isAdminPanel) {
-      if (AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
-        router.push({ name: 'admin-main' });
-        return;
-      }
-      // If we are here, it means standard user tried to login to admin panel, ouch.
-      // We do not logout them, we just kick out them to normal webpage.
-    }
-
-    router.push({ name: 'home' });
-}
-
 /** Check if form has any errors. */
 const isFormError = () => {
   if (!form.email || !form.password) return true;
@@ -115,11 +91,47 @@ const convertToReq = (form: UserLoginForm): UserLoginReq => {
   };
 };
 
+const showMessage = () => {
+  if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
+    log.debug('Successfully logged in as admin user "', form.email, '".');
+    AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
+    return;
+  }
+
+  log.debug('Successfully logged in as user "', form.email, '".');
+  AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
+}
+
 /** Clear entire form. */
 const clearForm = () => {
   form.email = '';
   form.password = '';
 };
+
+const handleRedirection = () => {
+  if (isAdminPanel) {
+    if (AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
+      router.push({ name: 'admin-main' });
+      return;
+    }
+    // If we are here, it means standard user tried to login to admin panel, ouch.
+    // We do not logout them, we just kick out them to normal webpage.
+  }
+
+  router.push({ name: 'home' });
+}
+
+//
+
+/** Go to registration page. */
+const goRegistration = () => {
+  router.push({ name: 'registration' });
+}
+
+/** Go to password reset request page. */
+const goPasswordReset = () => {
+  router.push({ name: 'user-passwordReset-req' });
+}
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
@@ -166,6 +178,11 @@ const getInputClass = (msgError: string | null): string => {
       <button type="submit" :disabled="isSubmitting">
         {{ isSubmitting ? t('user.login.form.buttonSubmitting') : t('user.login.form.button') }}
       </button>
+
+      <div class="underForm-2">
+        <div class="nav-minor underForm-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
+        <div class="nav-minor underForm-right" @click="goPasswordReset()">{{ t('user.login.form.passwordReset') }}</div>
+      </div>
     </form>
   </div>
 </template>

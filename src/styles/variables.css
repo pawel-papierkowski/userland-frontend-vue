@@ -110,17 +110,25 @@
   --combobox-option-text-hover: #111827;
 
   /* Navigation link specific vars. */
-  --nav-color: #484848;
-  --nav-font-size: 16px;
-  --nav-font-weight: normal;
-  --nav-text-align: left;
-  --nav-text-shadow: none;
+  --nav-major-color: #484848;
+  --nav-major-font-size: 16px;
+  --nav-major-font-weight: normal;
+  --nav-major-text-align: left;
+  --nav-major-text-shadow: none;
 
-  --nav-hover-color: #000000;
-  --nav-hover-text-shadow: 1px 1px 1px #cdcdcd;;
+  --nav-major-hover-color: #000000;
+  --nav-major-hover-text-shadow: 1px 1px 1px #cdcdcd;
 
-  --nav-active-color: #484848;
-  --nav-active-font-weight: bold;
-  --nav-active-text-shadow: none;
+  --nav-major-active-color: #484848;
+  --nav-major-active-font-weight: bold;
+  --nav-major-active-text-shadow: none;
 
+  --nav-minor-color: #484848;
+  --nav-minor-font-size: 12px;
+  --nav-minor-font-weight: normal;
+  --nav-minor-text-align: left;
+  --nav-minor-text-shadow: none;
+
+  --nav-minor-hover-color: #000000;
+  --nav-minor-hover-text-shadow: none;
 }

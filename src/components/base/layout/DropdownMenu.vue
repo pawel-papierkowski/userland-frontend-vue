@@ -10,7 +10,7 @@
 
 <template>
   <div class="dropdown" ref="dropdown">
-    <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="nav-link">
+    <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="nav-major">
       <slot name="trigger" />
     </div>
 
