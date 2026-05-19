@@ -21,7 +21,7 @@ vi.mock('@/services/features/api-users', () => ({
 const mockPush = vi.fn<(to: any) => void>();
 const mockRoute = {
   query: {
-    token: 'EXAMPLE_TOKEN'
+    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
   },
 };
 
@@ -45,21 +45,22 @@ function createWrapper() {
 describe('UserActivation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockRoute.query.token = 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs';
   });
 
   it('activates user successfully', async () => {
+    // Mock successful API response.
+    vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
+
     // oxlint-disable-next-line no-unused-vars
     const userActivation = createWrapper();
     const messageStore = useMessageStore();
-
-    // Mock successful API response.
-    vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Verify API call.
     expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'EXAMPLE_TOKEN',
+      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       frontend: 'VUE'
     }));
 
@@ -87,8 +88,8 @@ describe('UserActivation', () => {
     // Verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe("No token");
-    expect(messageStore.messages[0].content).toBe("No token provided.");
+    expect(messageStore.messages[0].title).toBe("Invalid token");
+    expect(messageStore.messages[0].content).toBe("No token provided or it is malformed.");
 
     // Verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -104,7 +105,7 @@ describe('UserActivation', () => {
       response: {
         status: 404,
         data: {
-          detail: "Token '639KfBbNGSXyfeYQ99T6gO3EMbtOsuNR' does not exist.",
+          detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
           instance: "/api/users/activate",
           status: 404,
           title: "User token is missing.",
@@ -123,7 +124,7 @@ describe('UserActivation', () => {
 
     // Verify API call.
     expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'EXAMPLE_TOKEN',
+      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       frontend: 'VUE'
     }));
 
