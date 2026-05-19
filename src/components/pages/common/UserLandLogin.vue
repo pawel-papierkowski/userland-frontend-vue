@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n';
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
+import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user.ts';
@@ -20,7 +21,7 @@ const { t } = useI18n();
 
 const isAdminPanel = route.name === 'admin-login';
 
-/** User registration form data. */
+/** User login form data. */
 const form: UserLoginForm = reactive({
   email: '',
   password: '',
@@ -32,11 +33,7 @@ const usedButton: Ref<boolean> = ref(false);
 const isSubmitting: Ref<boolean> = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
-  if (!form.email) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.email === '') return t('form.errFieldEmpty');
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(form.email)) return t('form.errEmailBad');
-  return null;
+  return Verifier.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
   if (!form.password) return usedButton.value ? t('form.errFieldEmpty') : null;
@@ -57,7 +54,7 @@ const handleLogin = async () => {
   isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
-    const loginReq: UserLoginReq = convertToReq(form);
+    const loginReq = convertToReq(form);
     const response = await backendApiUser.login(loginReq); // API CALL.
     AppLoginer.login(response.data.jwtToken);
 
@@ -74,7 +71,7 @@ const handleLogin = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-  if (!form.email || !form.password) return true;
+  if (!form.email || !form.password) return true; // prevent sending empty form
   if (emailError.value !== null) return true;
   if (passwordError.value !== null) return true;
   return false;
@@ -91,16 +88,17 @@ const convertToReq = (form: UserLoginForm): UserLoginReq => {
   };
 };
 
+/** Show success message. */
 const showMessage = () => {
   if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
-    log.debug('Successfully logged in as admin user "', form.email, '".');
     AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
+    log.debug('Successfully logged in as admin user "', form.email, '".');
     return;
   }
 
-  log.debug('Successfully logged in as user "', form.email, '".');
   AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
-}
+  log.debug('Successfully logged in as user "', form.email, '".');
+};
 
 /** Clear entire form. */
 const clearForm = () => {
@@ -108,6 +106,7 @@ const clearForm = () => {
   form.password = '';
 };
 
+/** Properly handle redirection (destination depends on current route). */
 const handleRedirection = () => {
   if (isAdminPanel) {
     if (AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
@@ -117,21 +116,20 @@ const handleRedirection = () => {
     // If we are here, it means standard user tried to login to admin panel, ouch.
     // We do not logout them, we just kick out them to normal webpage.
   }
-
   router.push({ name: 'home' });
-}
+};
 
 //
 
 /** Go to registration page. */
 const goRegistration = () => {
   router.push({ name: 'registration' });
-}
+};
 
 /** Go to password reset request page. */
 const goPasswordReset = () => {
-  router.push({ name: 'user-passwordReset-req' });
-}
+  router.push({ name: 'user-passwordReset-link' });
+};
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
@@ -179,9 +177,11 @@ const getInputClass = (msgError: string | null): string => {
         {{ isSubmitting ? t('user.login.form.buttonSubmitting') : t('user.login.form.button') }}
       </button>
 
-      <div class="underForm-2">
-        <div class="nav-minor underForm-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
-        <div class="nav-minor underForm-right" @click="goPasswordReset()">{{ t('user.login.form.passwordReset') }}</div>
+      <div class="form-under-2">
+        <div class="nav-minor form-under-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
+        <div class="nav-minor form-under-right" @click="goPasswordReset()">
+          {{ t('user.login.form.passwordReset') }}
+        </div>
       </div>
     </form>
   </div>

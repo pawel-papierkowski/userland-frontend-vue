@@ -47,6 +47,13 @@
     "errPasswordMatch": "Passwords do not match."
   },
 
+  "token": {
+    "invalid": {
+      "title": "Invalid token",
+      "content": "No token provided or it is malformed."
+    }
+  },
+
   "user": {
     "registration": {
       "form": {
@@ -73,10 +80,6 @@
     "activation": {
       "title": "Activating account...",
       "msg": {
-        "noToken": {
-          "title": "No token",
-          "content": "No token provided."
-        },
         "success": {
           "title": "User activated successfully",
           "content": "You can now log in."
@@ -109,6 +112,44 @@
         "error": {
           "title": "Login failure",
           "content": "User login failed."
+        }
+      }
+    },
+    "passwordResetLink": {
+      "form": {
+        "title": "I forgot my password",
+        "info": "ℹ️ Email will be sent with link that leads to page where you can set new password.",
+        "email": "Email",
+        "button": "Send email",
+        "buttonSubmitting": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "In few minutes email with password reset link will be sent."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for password reset."
+        }
+      }
+    },
+    "passwordReset": {
+      "form": {
+        "title": "Set new password",
+        "password": "New password",
+        "confirmPassword": "Confirm new password",
+        "button": "Set password",
+        "buttonSubmitting": "Setting..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "New password was set successfully."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to set new password."
         }
       }
     },

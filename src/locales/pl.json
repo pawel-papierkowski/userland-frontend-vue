@@ -47,6 +47,13 @@
     "errPasswordMatch": "Hasła muszą być takie same."
   },
 
+  "token": {
+    "invalid": {
+      "title": "Zły token",
+      "content": "Nie podano tokenu lub jest on niepoprawny."
+    }
+  },
+
   "user": {
     "registration": {
       "form": {
@@ -73,10 +80,6 @@
     "activation": {
       "title": "Aktywowanie konta...",
       "msg": {
-        "noToken": {
-          "title": "Brak tokenu",
-          "content": "Nie podano tokenu."
-        },
         "success": {
           "title": "Aktywacja użytkownika udana",
           "content": "Możesz się teraz zalogować."
@@ -109,6 +112,44 @@
         "error": {
           "title": "Niepowodzenie logowania",
           "content": "Logowanie użytkownika nieudane."
+        }
+      }
+    },
+    "passwordResetLink": {
+      "form": {
+        "title": "Zapomniałem hasła",
+        "info": "ℹ️ Zostanie wysłany email z łączem, po którego kliknięciu wejdziesz na stronę, gdzie można ustawić nowe hasło.",
+        "email": "Email",
+        "button": "Wyślij email",
+        "buttonSubmitting": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Email z łączem prowadzącym do formularza resetu hasła zostanie wysłany w ciągu paru minut."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o reset hasła."
+        }
+      }
+    },
+    "passwordReset": {
+      "form": {
+        "title": "Ustaw nowe hasło",
+        "password": "Nowe hasło",
+        "confirmPassword": "Potwierdź nowe hasło",
+        "button": "Ustaw hasło",
+        "buttonSubmitting": "Ustawianie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Nowe hasło zostało pomyślnie ustawione."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się zresetować hasła."
         }
       }
     },

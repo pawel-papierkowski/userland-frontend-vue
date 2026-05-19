@@ -9,6 +9,7 @@ import { useI18n } from 'vue-i18n';
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
+import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user.ts';
 
@@ -29,35 +30,17 @@ const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isSubmitting: Ref<boolean> = ref(false);
 
-// field verifers
-
 const usernameError: ComputedRef<string | null> = computed(() => {
-  // Prevent printing error message instantly after form loads.
-  if (!form.username) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.username === '') return t('form.errFieldEmpty');
-  return null;
+  return Verifier.verifyField(form.username, usedButton.value);
 });
 const emailError: ComputedRef<string | null> = computed(() => {
-  if (!form.email) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.email === '') return t('form.errFieldEmpty');
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(form.email)) return t('form.errEmailBad');
-  return null;
+  return Verifier.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
-  if (!form.password) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.password === '') return t('form.errFieldEmpty');
-  if (form.password.length < 8) return t('form.errPasswordTooShort', { count: 8 });
-  if (form.password.length > 100) return t('form.errPasswordTooLong', { count: 100 });
-  const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,?!]).*$/;
-  if (!passwordRegex.test(form.password)) return t('form.errPasswordWeak');
-  return null;
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
-  if (!form.confirmPassword) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.confirmPassword === '') return t('form.errFieldEmpty');
-  if (form.password !== form.confirmPassword) return t('form.errPasswordMatch');
-  return null;
+  return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
 //
@@ -69,12 +52,10 @@ const handleRegister = async () => {
   isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
-    const registerReq: UserRegisterReq = convertToReq(form);
+    const registerReq = convertToReq(form);
     await backendApiUser.register(registerReq); // API CALL
 
-    log.debug('Registered user using form data:', { ...form });
-    AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content');
-
+    showMessage();
     clearForm();
     router.push({ name: 'home' });
   } catch (error) {
@@ -87,7 +68,7 @@ const handleRegister = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-  if (!form.username || !form.email || !form.password || !form.confirmPassword) return true;
+  if (!form.username || !form.email || !form.password || !form.confirmPassword) return true; // prevent sending empty form
   if (usernameError.value !== null) return true;
   if (emailError.value !== null) return true;
   if (passwordError.value !== null) return true;
@@ -108,6 +89,12 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
   };
 };
 
+/** Show success message. */
+const showMessage = () => {
+  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content');
+  log.debug('Registered user using form data:', { ...form });
+};
+
 /** Clear entire form. */
 const clearForm = () => {
   form.username = '';
@@ -119,7 +106,7 @@ const clearForm = () => {
 /** Go to login page. */
 const goLogin = () => {
   router.push({ name: 'login' });
-}
+};
 
 /** We can highlight fields that contain errors. */
 const getInputClass = (msgError: string | null): string => {
@@ -132,7 +119,6 @@ const getInputClass = (msgError: string | null): string => {
   <div class="form-all">
     <h2>{{ t('user.registration.form.title') }}</h2>
 
-    <!-- @submit.prevent stops the page reload and calls handleRegister -->
     <form @submit.prevent="handleRegister" novalidate>
       <div class="form-group">
         <div class="form-entry">
@@ -196,8 +182,8 @@ const getInputClass = (msgError: string | null): string => {
         {{ isSubmitting ? t('user.registration.form.buttonSubmitting') : t('user.registration.form.button') }}
       </button>
 
-      <div class="underForm-1">
-        <div class="nav-minor underForm-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
+      <div class="form-under-1">
+        <div class="nav-minor form-under-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
       </div>
     </form>
   </div>

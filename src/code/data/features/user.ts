@@ -27,7 +27,7 @@ export type TokenActivationReq = {
   frontend: string; // Used frontend. Always VUE.
 };
 
-// USER login
+// USER LOGIN
 
 /** User login form. */
 export type UserLoginForm = {
@@ -41,4 +41,30 @@ export type UserLoginReq = {
   password: string;
 };
 
+// USER PASSWORD RESET
+
+/** User password reset link form. */
+export type UserPasswordResetLinkForm = {
+  email: string;
+};
+
+/** User password reset link request. */
+export type UserPasswordResetLinkReq = {
+  email: string;
+  frontend: string; // Used frontend. Always VUE.
+};
+
+/** User password reset confirmation form. */
+export type UserPasswordResetForm = {
+  password: string; // Password.
+  confirmPassword: string; // Second password field to compare with first.
+};
+
+/** User password reset confirmation request. */
+export type UserPasswordResetReq = {
+  token: string;
+  password: string;
+};
+
+// USER ACCOUNT DELETION
 

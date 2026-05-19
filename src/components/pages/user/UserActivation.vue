@@ -9,6 +9,7 @@ import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { TokenActivationReq } from '@/code/data/features/user.ts';
 
+import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
@@ -17,16 +18,12 @@ const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 
-/**
- * Call activation API.
- */
-const callActivationApi = async () => {
-  // Ensure token is string, even if the URL query is missing or duplicated.
-  const tokenStr: string = (Array.isArray(route.query.token) ? route.query.token[0] : route.query.token) ?? '';
+const tokenStr = TokenUtils.resolve(route);
 
-  if (tokenStr === '') {
-    // verify token existence
-    AppMessager.failureT('user.activation.msg.noToken.title', 'user.activation.msg.noToken.content');
+/** Call activation API. */
+const callActivationApi = async () => {
+  if (!TokenUtils.verify(tokenStr)) {
+    AppMessager.failureT('token.invalid.title', 'token.invalid.content');
     router.push({ name: 'home' });
     return;
   }
@@ -44,7 +41,9 @@ const callActivationApi = async () => {
     backendApi.logError(error, 'Activation failed!');
     router.push({ name: 'home' }); // kick user out of this page
   }
-};
+}
+
+//
 
 onMounted(() => {
   callActivationApi(); // automatically call once user enters page

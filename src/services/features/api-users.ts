@@ -1,6 +1,6 @@
 /** Handles calling user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
-import type { UserRegisterReq, TokenActivationReq, UserLoginReq } from '@/code/data/features/user.ts';
+import type { UserRegisterReq, TokenActivationReq, UserLoginReq, UserPasswordResetLinkReq, UserPasswordResetReq } from '@/code/data/features/user.ts';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
@@ -30,5 +30,23 @@ export default {
    */
   login(payload: UserLoginReq) {
     return apiClient.post('/login', payload);
+  },
+
+  /**
+   * Password reset link.
+   * @param payload Password reset link request.
+   * @returns Result of call.
+   */
+  passwordResetLink(payload: UserPasswordResetLinkReq) {
+    return apiClient.post('/password/link', payload);
+  },
+
+  /**
+   * Password reset confirmation.
+   * @param payload Password reset confirmation request.
+   * @returns Result of call.
+   */
+  passwordResetConfirm(payload: UserPasswordResetReq) {
+    return apiClient.patch('/password/confirm', payload);
   }
 }

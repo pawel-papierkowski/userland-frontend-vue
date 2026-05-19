@@ -82,40 +82,45 @@
 }
 .form-text-error {
   color: red;
-  font-size: 0.85em;
+  font-size: 0.8em;
   margin-top: 5px;
 }
 
-.underForm-1 {
+.form-info {
+  margin: 1px 10px;
+  font-size: 0.8em;
+}
+
+.form-under-1 {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
   gap: 1rem;
   padding-top: 5px;
 }
-.underForm-2 {
+.form-under-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 1rem;
   padding-top: 5px;
 }
-.underForm-3 {
+.form-under-3 {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 1rem;
   padding-top: 5px;
 }
-.underForm-left {
+.form-under-left {
   display: flex;
   justify-self: start;
 }
-.underForm-center {
+.form-under-center {
   display: flex;
   justify-self: center;
 }
-.underForm-right {
+.form-under-right {
   display: flex;
   justify-self: end;
 }
