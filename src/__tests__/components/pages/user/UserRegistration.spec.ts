@@ -44,42 +44,41 @@ describe('UserRegistration', () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 
-    // Mock successful API response.
+    // Arrange: mock successful API response.
     vi.mocked(backendApiUser.register).mockResolvedValue({ data: {} } as any);
 
-    // Fill form fields correctly.
+    // Arrange: fill form fields correctly.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');
     await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
-    // Click on registration button.
+
+    // Act: click on registration button.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Verify API call.
+    // Assert: verify API call.
     expect(backendApiUser.register).toHaveBeenCalledWith(expect.objectContaining({
       username: 'testuser',
       email: 'test@example.com',
       password: 'Password123!',
-      confirmPassword: 'Password123!',
       lang: 'en',
       frontend: 'VUE'
     }));
 
-    // Verify success message is present in store.
+    // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
     expect(messageStore.messages[0].title).toBe("User registered successfully");
     expect(messageStore.messages[0].content).toBe("Please check your mailbox. You will need to confirm registration by clicking on link in email.");
 
-
-    // Verify redirection to home page.
+    // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 
   it('shows error message when server returns 500 error', async () => {
-    // Mock API returning 500 error.
+    // Arrange: mock API returning 500 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
@@ -92,28 +91,27 @@ describe('UserRegistration', () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 
-    // Fill form fields correctly.
+    // Arrange: fill form fields correctly.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');
     await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
 
-    // Click on registration button.
+    // Act: click on registration button.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
-    // Wait for all promises to resolve.
     await flushPromises();
 
-    // Verify API was called.
+    // Assert: verify API was called.
     expect(backendApiUser.register).toHaveBeenCalled();
 
-    // Verify error message is present in store.
+    // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0].title).toBe("Internal server error");
     expect(messageStore.messages[0].content).toBe("The server has encountered a situation it does not know how to handle.");
 
-    // Verify no redirection occurred.
+    // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
   });
 
@@ -123,78 +121,83 @@ describe('UserRegistration', () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 
-    // Click on registration button while form is completely empty.
+    // No arrange here - form is untouched.
+
+    // Act: click on registration button while form is completely empty.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
-    // Wait for all promises to resolve.
     await flushPromises();
 
-    // Verify that error messages properly shown up for all fields.
+    // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(4);
     errorMessages.forEach(msg => {
       expect(msg.text()).not.toBe('');
     });
 
-    // Verify API was not called.
+    // Assert: verify API was not called.
     expect(backendApiUser.register).not.toHaveBeenCalled();
-    // Verify no messages are present in store.
+    // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
+    // Assert: verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('shows error when passwords do not match', async () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 
-    // Fill form fields with mismatching passwords.
+    // Arrange: fill form fields with mismatching passwords.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');
     await userRegistration.find('[data-testid="confirmPassword"]').setValue('Different123!');
 
-    // Click on registration button.
+    // Act: click on registration button.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
-    // Wait for all promises to resolve.
     await flushPromises();
 
-    // Verify that error message is shown for confirmPassword.
+    // Assert: verify that error message is shown for confirmPassword.
     expect(userRegistration.find('#confirmPassword').classes()).toContain('err');
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     expect(errorMessages[0].text()).not.toBe('');
 
-    // Verify API was not called.
+    // Assert: verify API was not called.
     expect(backendApiUser.register).not.toHaveBeenCalled();
-    // Verify no messages are present in store.
+    // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
+    // Assert: verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('shows error when invalid email is entered', async () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 
-    // Fill form fields with invalid email.
+    // Arrange: fill form fields with invalid email.
     await userRegistration.find('[data-testid="username"]').setValue('testuser');
     await userRegistration.find('[data-testid="email"]').setValue('invalid-email');
     await userRegistration.find('[data-testid="password"]').setValue('Password123!');
     await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
 
-    // Click on registration button.
+    // Act: click on registration button.
     await userRegistration.find('button[type="submit"]').trigger('submit');
 
-    // Wait for all promises to resolve.
     await flushPromises();
 
-    // Verify that error message is shown for email.
+    // Assert: verify that error message is shown for email.
     expect(userRegistration.find('#email').classes()).toContain('err');
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     expect(errorMessages[0].text()).not.toBe('');
 
-    // Verify API was not called.
+    // Assert: verify API was not called.
     expect(backendApiUser.register).not.toHaveBeenCalled();
-    // Verify no messages are present in store.
+    // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
+    // Assert: verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
   });
 });

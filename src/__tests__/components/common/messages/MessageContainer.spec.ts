@@ -31,13 +31,12 @@ describe('MessageContainer', () => {
   it('has single message', async () => {
     const messageContainer = createWrapper();
 
-    // Add one message.
+    // Act: Add one message.
     AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
 
-    // Wait for DOM to update.
-    await nextTick();
+    await nextTick(); // Wait for DOM to update.
 
-    // Check that there is single element with class .message-box .
+    // Assert: check that there is single element with class .message-box .
     expect(messageContainer.findAll('.message-box')).toHaveLength(1);
   });
 });

@@ -126,7 +126,7 @@
       "msg": {
         "success": {
           "title": "Success",
-          "content": "In few minutes email with password reset link will be sent."
+          "content": "In few minutes email with link leading to password reset form will be sent."
         },
         "error": {
           "title": "Failure",

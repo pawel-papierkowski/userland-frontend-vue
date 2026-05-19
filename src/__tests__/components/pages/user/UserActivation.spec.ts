@@ -49,57 +49,58 @@ describe('UserActivation', () => {
   });
 
   it('activates user successfully', async () => {
-    // Mock successful API response.
+    // Arrange: mock successful API response.
     vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
 
+    // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
     const userActivation = createWrapper();
     const messageStore = useMessageStore();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Verify API call.
+    // Assert: verify API call.
     expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
       token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       frontend: 'VUE'
     }));
 
-    // Verify success message is present in store.
+    // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
 
-    // Verify redirection to login page.
+    // Assert: verify redirection to login page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
   });
 
-  it('fails when no token is provided', async () => {
-    // Set token to undefined for this test.
-    mockRoute.query.token = undefined as any;
+  //
 
+  it('fails when no token is provided', async () => {
+    // Arrange: set token to invalid value.
+    mockRoute.query.token = '';
+
+    // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
     const userActivation = createWrapper();
     const messageStore = useMessageStore();
 
     await flushPromises();
 
-    // Verify API call was NOT made.
+    // Assert: verify API call was NOT made.
     expect(backendApiUser.activate).not.toHaveBeenCalled();
 
-    // Verify failure message.
+    // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
     expect(messageStore.messages[0].title).toBe("Invalid token");
     expect(messageStore.messages[0].content).toBe("No token provided or it is malformed.");
 
-    // Verify redirection to home page.
+    // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
-
-    // Restore token for other tests.
-    mockRoute.query.token = 'EXAMPLE_TOKEN';
   });
 
   it('fails when endpoint returns error', async () => {
-    // Mock API returning error about non-existing token.
+    // Arrange: mock API returning error about non-existing token.
     const errorResponse = {
       isAxiosError: true,
       response: {
@@ -116,25 +117,26 @@ describe('UserActivation', () => {
     };
     vi.mocked(backendApiUser.activate).mockRejectedValue(errorResponse);
 
+    // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
     const userActivation = createWrapper();
     const messageStore = useMessageStore();
 
     await flushPromises();
 
-    // Verify API call.
+    // Assert: verify API call.
     expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
       token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       frontend: 'VUE'
     }));
 
-    // Verify failure message.
+    // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0].title).toBe("Failure");
     expect(messageStore.messages[0].content).toBe("Token is missing.");
 
-    // Verify redirection to home page.
+    // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 });

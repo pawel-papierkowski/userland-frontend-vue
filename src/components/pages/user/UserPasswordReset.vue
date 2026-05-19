@@ -48,7 +48,7 @@ const verifyToken = () => {
   }
 };
 
-/** Handle registration of user. */
+/** Handle password reset confirmation. */
 const handlePasswordResetConfirmation = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.

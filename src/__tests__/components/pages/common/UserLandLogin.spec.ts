@@ -216,7 +216,7 @@ describe('UserLandLogin', () => {
     const userLogin = createWrapper();
     const messageStore = useMessageStore();
 
-    // No arrange here -  form is untouched.
+    // No arrange here - form is untouched.
 
     // Act: click on login button while form is completely empty.
     await userLogin.find('button[type="submit"]').trigger('submit');
@@ -234,6 +234,8 @@ describe('UserLandLogin', () => {
     expect(backendApiUser.login).not.toHaveBeenCalled();
     // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
+    // Verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
 
     // Assert: verify that frontend considers you logged out.
     expect(AppLoginer.isLogged()).toBe(false);
@@ -262,6 +264,8 @@ describe('UserLandLogin', () => {
     expect(backendApiUser.login).not.toHaveBeenCalled();
     // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
+    // Verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
 
     // Assert: verify that frontend considers you logged out.
     expect(AppLoginer.isLogged()).toBe(false);

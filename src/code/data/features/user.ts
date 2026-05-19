@@ -68,3 +68,19 @@ export type UserPasswordResetReq = {
 
 // USER ACCOUNT DELETION
 
+/** User account delete link form. */
+export type UserAccountDeleteLinkForm = {
+  email: string;
+};
+
+/** User account delete link request. */
+export type UserAccountDeleteLinkReq = {
+  email: string;
+  frontend: string; // Used frontend. Always VUE.
+};
+
+/** User account delete confirmation request. */
+export type UserAccountDeleteReq = {
+  token: string;
+};
+

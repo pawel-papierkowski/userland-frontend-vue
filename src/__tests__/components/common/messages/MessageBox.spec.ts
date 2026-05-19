@@ -22,6 +22,7 @@ function createWrapper(message : Message) {
 /** Tests of MessageBox component. */
 describe('MessageBox', () => {
   it('renders info message', () => {
+    // Arrange: message data.
     const message : Message = {
       id: crypto.randomUUID(),
       no: 0,
@@ -30,8 +31,11 @@ describe('MessageBox', () => {
       content: 'Info Content',
       errCode: ''
     };
+
+    // Act: create message box.
     const messageBox = createWrapper(message);
 
+    // Assert: message box is in correct state.
     expect(messageBox.classes()).toContain('message-info');
     expect(messageBox.find('.message-icon').text()).toBe('ℹ️');
     expect(messageBox.find('.message-title').text()).toBe('Info Title');
@@ -40,6 +44,7 @@ describe('MessageBox', () => {
   });
 
   it('renders success message', () => {
+    // Arrange: message data.
     const message : Message = {
       id: crypto.randomUUID(),
       no: 1,
@@ -48,8 +53,11 @@ describe('MessageBox', () => {
       content: 'Success Content',
       errCode: ''
     };
+
+    // Act: create message box.
     const messageBox = createWrapper(message);
 
+    // Assert: message box is in correct state.
     expect(messageBox.classes()).toContain('message-success');
     expect(messageBox.find('.message-icon').text()).toBe('✅');
     expect(messageBox.find('.message-title').text()).toBe('Success Title');
@@ -58,6 +66,7 @@ describe('MessageBox', () => {
   });
 
   it('renders warning message', () => {
+    // Arrange: message data.
     const message : Message = {
       id: crypto.randomUUID(),
       no: 2,
@@ -66,8 +75,11 @@ describe('MessageBox', () => {
       content: 'Warning Content',
       errCode: ''
     };
+
+    // Act: create message box.
     const messageBox = createWrapper(message);
 
+    // Assert: message box is in correct state.
     expect(messageBox.classes()).toContain('message-warning');
     expect(messageBox.find('.message-icon').text()).toBe('⚠️');
     expect(messageBox.find('.message-title').text()).toBe('Warning Title');
@@ -76,6 +88,7 @@ describe('MessageBox', () => {
   });
 
   it('renders failure message', () => {
+    // Arrange: message data.
     const message : Message = {
       id: crypto.randomUUID(),
       no: 3,
@@ -84,8 +97,11 @@ describe('MessageBox', () => {
       content: 'Failure Content',
       errCode: ''
     };
+
+    // Act: create message box.
     const messageBox = createWrapper(message);
 
+    // Assert: message box is in correct state.
     expect(messageBox.classes()).toContain('message-failure');
     expect(messageBox.find('.message-icon').text()).toBe('❌');
     expect(messageBox.find('.message-title').text()).toBe('Failure Title');
@@ -94,6 +110,7 @@ describe('MessageBox', () => {
   });
 
   it('renders error message', () => {
+    // Arrange: message data.
     const message : Message = {
       id: crypto.randomUUID(),
       no: 4,
@@ -102,8 +119,11 @@ describe('MessageBox', () => {
       content: 'Error Content',
       errCode: 'ERR_001'
     };
+
+    // Act: create message box.
     const messageBox = createWrapper(message);
 
+    // Assert: message box is in correct state.
     expect(messageBox.classes()).toContain('message-error');
     expect(messageBox.find('.message-icon').text()).toBe('🛑');
     expect(messageBox.find('.message-title').text()).toBe('Error Title');
