@@ -45,8 +45,8 @@ const callActivationApi = async () => {
 
 //
 
-onMounted(() => {
-  callActivationApi(); // automatically call once user enters page
+onMounted(() => { // automatically call once user enters page
+  callActivationApi();
 });
 </script>
 
@@ -59,11 +59,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-.spinner-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 50px;
-}
-</style>
+<style scoped></style>

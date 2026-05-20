@@ -41,6 +41,40 @@ export type UserLoginReq = {
   password: string;
 };
 
+// USER VIEW
+
+/** User view data. */
+export type UserDataResp = {
+  username: string;
+  email: string;
+  lang: string;
+  profile: UserProfileDataResp;
+};
+
+/** User profile view data. */
+export type UserProfileDataResp = {
+  name: string;
+  surname: string;
+};
+
+// USER EDIT
+
+/** User edit form. */
+export type UserEditForm = {
+  username: string;
+  email: string; // we won't be editing it directly, but we can show it
+  name: string;
+  surname: string;
+};
+
+/** User edit request. */
+export type UserEditReq = {
+  username: string;
+  lang: string;
+  name: string;
+  surname: string;
+};
+
 // USER PASSWORD RESET
 
 /** User password reset link form. */
@@ -83,4 +117,3 @@ export type UserAccountDeleteLinkReq = {
 export type UserAccountDeleteReq = {
   token: string;
 };
-

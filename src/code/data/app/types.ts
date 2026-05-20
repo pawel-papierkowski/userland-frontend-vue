@@ -14,6 +14,8 @@ export type LoginState = {
   /** Raw token from /api/users/login endpoint. */
   token: string;
 
+  /** User name. Can be shown on frontend. */
+  name: string;
   /** Email. */
   email: string;
   /** Issued at. */

@@ -19,6 +19,7 @@ export const useLoginStore = defineStore('login', () => {
     return {
       isLogged: false,
       token: '',
+      name: '',
       email: '',
       issuedAt: new Date(0),
       expiresAt: new Date(0),
@@ -29,17 +30,34 @@ export const useLoginStore = defineStore('login', () => {
   /**
    * Apply token to the state and update logged status.
    * @param jwtToken JWT token from server.
+   * @returns True if token was used successfully, otherwise false.
    */
-  function applyToken(jwtToken: string) {
+  function applyToken(jwtToken: string): boolean {
+    loginState.value = resetLoginState();
     loginState.value.isLogged = !!jwtToken;
     loginState.value.token = jwtToken;
+
     if (jwtToken) {
-      const decoded = jwtDecode(jwtToken);
-      logger.debug('Decoded token:', decoded);
-      readToken(decoded);
-    } else {
-      logger.warn('Failed to decode token.');
+      const decodedJwt = jwtDecode(jwtToken);
+      logger.debug('Decoded token:', decodedJwt);
+      if (!verifyToken(decodedJwt)) return false;
+      readToken(decodedJwt);
+      return true;
     }
+
+    logger.warn('Failed to decode token.');
+    return false;
+  }
+
+  /**
+   * Verify token. Note only verification we do is expiration date.
+   * @param decodedJwt Decoded JWT.
+   * @returns True if token is valid, otherwise false.
+   */
+  function verifyToken(decodedJwt: JwtPayload): boolean {
+    const nowAt = new Date();
+    const expiresAt = new Date((decodedJwt?.exp || 0) * 1000);
+    return expiresAt.getTime() > nowAt.getTime();
   }
 
   /**
@@ -52,6 +70,7 @@ export const useLoginStore = defineStore('login', () => {
     loginState.value.expiresAt = new Date((decodedJwt?.exp || 0) * 1000);
 
     // Our custom data.
+    loginState.value.name = getValue(decodedJwt, 'name') || '';
     readPermissions(decodedJwt);
   }
 
@@ -61,9 +80,8 @@ export const useLoginStore = defineStore('login', () => {
    */
   function readPermissions(decodedJwt: JwtPayload) {
     for (const permPrefix of permissions) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const permSuffix = (decodedJwt as Record<string, any>)[permPrefix] as string | undefined; // necessary as decodedJwt[permPrefix] generates IDE error
-      if (permSuffix === undefined) continue;
+      const permSuffix = getValue(decodedJwt, permPrefix);
+      if (permSuffix === null) continue;
 
       // Example: prefix 'role' and suffix 'admin,operator' will be mapped to ['role_admin', 'role_operator'].
       const splitSuffix: string[] = permSuffix.split(',');
@@ -72,6 +90,18 @@ export const useLoginStore = defineStore('login', () => {
         loginState.value.permissions.push(fullPermission);
       }
     }
+  }
+
+  /**
+   * Retrieve custom value from decoded JWT.
+   * @param decodedJwt Decoded JWT.
+   * @param fieldName Name of custom field.
+   * @returns Value of given field or null if field does not exist.
+   */
+  function getValue(decodedJwt: JwtPayload, fieldName: string): string|null {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const value = (decodedJwt as Record<string, any>)[fieldName]; // necessary as decodedJwt[fieldName] generates IDE error
+    return value || null as string|null;
   }
 
   return { loginState, applyToken, resetLoginState };

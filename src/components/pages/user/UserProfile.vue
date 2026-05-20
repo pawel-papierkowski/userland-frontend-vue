@@ -1,9 +1,205 @@
 <script setup lang="ts">
 /** User profile page. */
+import { onMounted, reactive, ref, computed } from 'vue';
+import type { Ref, ComputedRef } from 'vue';
+import { useLogger } from 'vue-logger-plugin';
+import { useI18n } from 'vue-i18n';
+
+import backendApi from '@/services/api-common.ts';
+import backendApiUser from '@/services/features/api-users.ts';
+import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user.ts';
+
+import { Verifier } from '@/code/utils/Verifer.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager';
+import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
+
+const log = useLogger();
+const { t, locale } = useI18n();
+
+/** User data. */
+const form: UserEditForm = reactive({
+  username: '',
+  email: '',
+  name: '',
+  surname: '',
+});
+
+/** True if submit button was clicked at least once. */
+const usedButton: Ref<boolean> = ref(false);
+/** True if submission is in progress, otherwise false. Used to disable submit button. */
+const isSubmitting: Ref<boolean> = ref(false);
+/** True if data load is in progress, otherwise false. Used to hide form. */
+const isLoading: Ref<boolean> = ref(true);
+
+const usernameError: ComputedRef<string | null> = computed(() => {
+  return Verifier.verifyField(form.username, usedButton.value);
+});
+
+//
+
+/** Fill form. */
+const fillForm = async () => {
+  const data = await resolveUserData();
+  if (data === null) return;
+  form.username = data.username;
+  form.email = data.email;
+  form.name = data.profile.name;
+  form.surname = data.profile.surname;
+
+  isLoading.value = false;
+}
+
+/** Retrieve all available data about currently logged user from backend. */
+const resolveUserData = async (): Promise<UserDataResp | null> => {
+  clearForm();
+  try {
+    const response = await backendApiUser.view(); // API CALL
+    return response.data;
+  } catch (error) {
+    AppMessager.errorT(error, 'user.profile.msg.loadError.title', 'user.profile.msg.loadError.content');
+    backendApi.logError(error, 'User view failed!');
+    return null;
+  }
+}
+
+//
+
+const handleUserData = async () => {
+  usedButton.value = true; // Now we can show all errors.
+  if (isFormError()) return; // Prevent submission if there are client-side errors.
+  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+
+  try {
+    const editReq = convertToReq(form);
+    await backendApiUser.edit(editReq); // API CALL
+
+    showMessage();
+  } catch (error) {
+    AppMessager.errorT(error, 'user.profile.msg.error.title', 'user.profile.msg.error.content');
+    backendApi.logError(error, 'Profile update failed!');
+  } finally {
+    isSubmitting.value = false; // Enable submit button.
+  }
+}
+
+/** Check if form has any errors. */
+const isFormError = () => {
+   // prevent sending empty form
+  if (!form.username) return true;
+  if (usernameError.value !== null) return true;
+  return false;
+};
+
+/**
+ * Convert user edit form data to user edit request data.
+ * @param form User edit form.
+ * @returns User edit request.
+ */
+const convertToReq = (form: UserEditForm): UserEditReq => {
+  return {
+    ...form,
+    lang: locale.value,
+  };
+};
+
+//
+
+/** Show success message. */
+const showMessage = () => {
+  AppMessager.successT('user.profile.msg.success.title', 'user.profile.msg.success.content');
+  log.debug('Successfully updated user data.');
+};
+
+/** Clear entire form. */
+const clearForm = () => {
+  form.username = '';
+  form.email = '';
+  form.name = '';
+  form.surname = '';
+};
+
+/** We can highlight fields that contain errors. */
+const getInputClass = (msgError: string | null): string => {
+  if (msgError !== null) return 'err';
+  return '';
+};
+
+//
+
+onMounted(async () => { // automatically call once user enters page
+  await fillForm();
+});
+
 </script>
 
 <template>
-  USER PROFILE PLACEHOLDER
+  <div class="form-all">
+    <h2>{{ t('user.profile.form.title') }}</h2>
+
+    <div class="spinner-container" v-if="isLoading">
+      <SpinnerTorus display="block" size="100px" />
+    </div>
+
+    <form @submit.prevent="handleUserData" novalidate v-if="!isLoading">
+      <div class="form-group">
+        <div class="form-entry">
+          <label for="username">{{ t('user.profile.form.username') }}:</label>
+          <input
+            :class="getInputClass(usernameError)"
+            id="username"
+            data-testid="username"
+            type="text"
+            v-model="form.username"
+            required
+            autocomplete="off"
+          />
+          <span v-if="usernameError" class="form-text-error">{{ usernameError }}</span>
+        </div>
+
+        <div class="form-entry">
+          <label for="email">{{ t('user.profile.form.email') }}:</label>
+          <input
+            id="email"
+            data-testid="email"
+            type="email"
+            v-model="form.email"
+            required
+            disabled
+            autocomplete="email"
+          />
+        </div>
+
+        <div class="form-entry">
+          <label for="name">{{ t('user.profile.form.name') }}:</label>
+          <input
+            id="name"
+            data-testid="name"
+            type="text"
+            v-model="form.name"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="form-entry">
+          <label for="surname">{{ t('user.profile.form.surname') }}:</label>
+          <input
+            id="surname"
+            data-testid="surname"
+            type="text"
+            v-model="form.surname"
+            required
+            autocomplete="off"
+          />
+        </div>
+      </div>
+
+      <button type="submit" :disabled="isSubmitting">
+        {{ isSubmitting ? t('user.profile.form.buttonSubmitting') : t('user.profile.form.button') }}
+      </button>
+    </form>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

@@ -11,6 +11,7 @@ const { t } = useI18n();
   <router-link class="nav-major" :to="{ name: 'home' }">{{ t('header.general.home') }}</router-link>
   <router-link class="nav-major" v-if="AppLoginer.isLogged()" :to="{ name: 'member' }">{{ t('header.general.member') }}</router-link>
   <router-link class="nav-major" :to="{ name: 'testArea' }">{{ t('header.general.test') }}</router-link>
+  <router-link class="nav-major" :to="{ name: 'debugArea' }">{{ t('header.general.debug') }}</router-link>
 </template>
 
 <style scoped></style>

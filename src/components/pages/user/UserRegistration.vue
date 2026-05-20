@@ -68,7 +68,8 @@ const handleRegister = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-  if (!form.username || !form.email || !form.password || !form.confirmPassword) return true; // prevent sending empty form
+   // prevent sending empty form
+  if (!form.username || !form.email || !form.password || !form.confirmPassword) return true;
   if (usernameError.value !== null) return true;
   if (emailError.value !== null) return true;
   if (passwordError.value !== null) return true;

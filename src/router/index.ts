@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory, type RouteMeta } from 'vue-router';
 
-import { logger } from '@/code/utils/logger.ts';
+//import { logger } from '@/code/utils/logger.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import UserLandHome from '@/components/pages/home/UserLandHome.vue';
 import UserLandTestArea from '@/components/pages/test/UserLandTestArea.vue';
+import UserLandDebugArea from '@/components/pages/test/UserLandDebugArea.vue';
 import UserLandMember from '@/components/pages/member/UserLandMember.vue';
 
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
@@ -37,6 +38,7 @@ const routes = [
 
     { name:'home', path: '/', component: UserLandHome, meta: meta4unlogged },
     { name:'testArea', path: '/testArea', component: UserLandTestArea, meta: meta4unlogged },
+    { name:'debugArea', path: '/debugArea', component: UserLandDebugArea, meta: meta4unlogged },
     { name:'member', path: '/member', component: UserLandMember, meta: meta4logged },
     { name:'registration', path: '/registration', component: UserRegistration, meta: meta4unlogged },
     { name:'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
@@ -70,7 +72,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const isAuthenticated = AppLoginer.isLogged();
-  logger.debug(`isAuthenticated: ${isAuthenticated}`);
+  //logger.debug(`isAuthenticated: ${isAuthenticated}`);
 
   // If the route requires auth and the user isn't logged in, redirect.
   if (to.meta.requiresAuth && !isAuthenticated) {

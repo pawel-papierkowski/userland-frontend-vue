@@ -1,6 +1,6 @@
 /** Handles calling user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
-import type { UserRegisterReq, TokenActivationReq, UserLoginReq,
+import type { UserRegisterReq, TokenActivationReq, UserLoginReq, UserEditReq,
   UserPasswordResetLinkReq, UserPasswordResetReq, UserAccountDeleteLinkReq, UserAccountDeleteReq } from '@/code/data/features/user.ts';
 
 // Set up a default Axios instance for this feature.
@@ -31,6 +31,38 @@ export default {
    */
   login(payload: UserLoginReq) {
     return apiClient.post('/login', payload);
+  },
+
+  /**
+   * Logout user.
+   * @returns Result of call.
+   */
+  logout() {
+    return apiClient.post('/logout');
+  },
+
+  /**
+   * Prolong user session.
+   * @returns Result of call.
+   */
+  prolong() {
+    return apiClient.post('/prolong');
+  },
+
+  /**
+   * Get all data of currently logged user.
+   * @returns Result of call.
+   */
+  view() {
+    return apiClient.get('/view');
+  },
+
+  /**
+   * Change some or all data of currently logged user.
+   * @returns Result of call.
+   */
+  edit(payload: UserEditReq) {
+    return apiClient.patch('/edit', payload);
   },
 
   /**

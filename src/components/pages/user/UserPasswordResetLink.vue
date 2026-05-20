@@ -56,7 +56,8 @@ const handlePasswordResetLink = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-  if (!form.email) return true; // prevent sending empty form
+   // prevent sending empty form
+  if (!form.email) return true;
   if (emailError.value !== null) return true;
   return false;
 };

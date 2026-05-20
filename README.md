@@ -55,6 +55,7 @@ Frontend is split into two parts: **user website** and **admin panel**. Each one
 ### Local storage
 
 - `app-language`: Language code. Resolved from browser or user settings, if logged in. Missing or unknown language means fallback to `en` (English).
+- `app-jwt`: JWT token. Present after you log in. Used when reloading page (as Pinia state will be lost) to log in again locally (if token is still valid).
 
 ## Local startup
 

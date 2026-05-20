@@ -23,3 +23,10 @@ export const languages: string[] = [ 'en', 'pl' ];
 
 /** List of permission prefixes. */
 export const permissions: string[] = [ 'role', 'user' ];
+
+// LOCAL STORAGE
+
+/** Local storage: currently selected language. */
+export const locstLang = 'app-language';
+/** Local storage: currently used JWT token. */
+export const locstJwt = 'app-jwt';

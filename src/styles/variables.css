@@ -71,6 +71,11 @@
   --input-background: #f8f8f8;
   --input-border: 1px solid #444444;
   --input-border-radius: 2px;
+
+  --input-disabled-color: #555555;
+  --input-disabled-background: #dddddd;
+  --input-disabled-border: 1px solid #444444;
+
   --input-err-color: #000000;
   --input-err-background: #ffe8e8;
   --input-err-border: 1px solid #aa4444;

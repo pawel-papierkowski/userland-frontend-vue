@@ -37,7 +37,7 @@
     background: var(--header-background);
     border: var(--header-border);
 
-    min-width: 150px;
+    min-width: 200px;
     z-index: 100;
   }
 </style>

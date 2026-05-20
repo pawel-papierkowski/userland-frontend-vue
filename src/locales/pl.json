@@ -5,20 +5,21 @@
 
   "header": {
     "general": {
-      "home": "Strona główna",
-      "test": "Strefa testów",
-      "member": "Strona członków"
+      "home": "🏠 Strona główna",
+      "test": "🧪 Strefa testów",
+      "debug": "🐛 Strefa debugu",
+      "member": "⭐ Strona członków"
     },
     "user": {
-      "options": "Opcje",
-      "registration": "Rejestracja",
-      "login": "Logowanie",
-      "profile": "Profil",
-      "logout": "Wylogowanie"
+      "options": "⚙️ Opcje",
+      "registration": "📝 Rejestracja",
+      "login": "🔑 Logowanie",
+      "profile": "👤 Profil",
+      "logout": "🚪 Wylogowanie"
     },
     "admin": {
-      "main": "Strona główna",
-      "user": "Użytkownicy"
+      "main": "🏁 Strona główna",
+      "user": "👤 Użytkownicy"
     }
   },
 
@@ -115,6 +116,14 @@
         }
       }
     },
+    "logout": {
+      "msg": {
+        "success": {
+          "title": "Użytkownik pomyślnie wylogowany",
+          "content": ""
+        }
+      }
+    },
     "passwordResetLink": {
       "form": {
         "title": "Zapomniałem hasła",
@@ -155,7 +164,27 @@
     },
     "profile": {
       "form": {
-        "title": "Profil użytkownika"
+        "title": "Profil użytkownika",
+        "username": "Nazwa",
+        "email": "Email",
+        "name": "Imię",
+        "surname": "Nazwisko",
+        "button": "Zaktualizuj profil",
+        "buttonSubmitting": "Aktualizacja..."
+      },
+      "msg": {
+        "loadError": {
+          "title": "Błąd",
+          "content": "Nie udało się pobrać danych użytkownika."
+        },
+        "success": {
+          "title": "Sukces",
+          "content": "Dane użytkownika zostały pomyślnie zaktualizowane."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się zaktualizować danych użytkownika."
+        }
       }
     }
   },
@@ -188,6 +217,18 @@
         "title": "Błąd",
         "content": "To jest wiadomość o błędzie. Numer: {count}."
       }
+    }
+  },
+
+  "debugArea": {
+    "login": {
+      "legend": "Dane loginu (JWT)",
+      "logged": "Zalogowany",
+      "name": "Nazwa",
+      "email": "Email",
+      "issuedAt": "Wystawiony",
+      "expiresAt": "Ważny do",
+      "permissions": "Uprawnienia"
     }
   },
 
@@ -276,6 +317,11 @@
       "title": "Niepowodzenie",
       "content": "Użytkownik jest zablokowany."
     }
+  },
+
+  "state": {
+    "true": "tak",
+    "false": "nie"
   },
 
   "test": {

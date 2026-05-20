@@ -5,20 +5,21 @@
 
   "header": {
     "general": {
-      "home": "Homepage",
-      "test": "Test zone",
-      "member": "Member area"
+      "home": "🏠 Homepage",
+      "test": "🧪 Test zone",
+      "debug": "🐛 Debug zone",
+      "member": "⭐ Member area"
     },
     "user": {
-      "options": "Options",
-      "registration": "Registration",
-      "login": "Login",
-      "profile": "Profile",
-      "logout": "Logout"
+      "options": "⚙️ Options",
+      "registration": "📝 Registration",
+      "login": "🔑 Login",
+      "profile": "👤 Profile",
+      "logout": "🚪 Logout"
     },
     "admin": {
-      "main": "Main page",
-      "user": "Users"
+      "main": "🏁 Main page",
+      "user": "👤 Users"
     }
   },
 
@@ -115,6 +116,14 @@
         }
       }
     },
+    "logout": {
+      "msg": {
+        "success": {
+          "title": "User logged out successfully",
+          "content": ""
+        }
+      }
+    },
     "passwordResetLink": {
       "form": {
         "title": "I forgot my password",
@@ -155,7 +164,27 @@
     },
     "profile": {
       "form": {
-        "title": "User profile"
+        "title": "User profile",
+        "username": "Username",
+        "email": "Email",
+        "name": "Name",
+        "surname": "Surname",
+        "button": "Update profile",
+        "buttonSubmitting": "Updating..."
+      },
+      "msg": {
+        "loadError": {
+          "title": "Error",
+          "content": "Failed to load user data."
+        },
+        "success": {
+          "title": "Success",
+          "content": "User data updated successfully."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to update user data."
+        }
       }
     }
   },
@@ -188,6 +217,18 @@
         "title": "Error",
         "content": "This is error message. Number: {count}."
       }
+    }
+  },
+
+  "debugArea": {
+    "login": {
+      "legend": "Login data (JWT)",
+      "logged": "Logged",
+      "name": "Name",
+      "email": "Email",
+      "issuedAt": "Issued",
+      "expiresAt": "Valid until",
+      "permissions": "Permissions"
     }
   },
 
@@ -276,6 +317,11 @@
       "title": "Failure",
       "content": "User is locked."
     }
+  },
+
+  "state": {
+    "true": "true",
+    "false": "false"
   },
 
   "test": {

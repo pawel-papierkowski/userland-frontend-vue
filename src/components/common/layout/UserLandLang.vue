@@ -3,14 +3,14 @@
 
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { languages, fallbackLang } from '@/code/data/app/const.ts';
+import { languages, fallbackLang, locstLang } from '@/code/data/app/const.ts';
 
 const currentLanguage = ref(fallbackLang);
 const systemLanguage = navigator.language.split('-')[0] || fallbackLang;
 const { t, locale } = useI18n();
 
 onMounted(() => { // Triggered on beginning.
-  const savedLang = localStorage.getItem('app-language') || systemLanguage;
+  const savedLang = localStorage.getItem(locstLang) || systemLanguage;
   setLanguage(savedLang);
 });
 
@@ -27,7 +27,7 @@ const setLanguage = (langKey: string) => {
 
 // Apply given language. Saves language code to storage and updates all texts on page to new language.
 const applyLanguage = (langKey: string) => {
-  localStorage.setItem('app-language', langKey); // preserve between browser sessions
+  localStorage.setItem(locstLang, langKey); // preserve between browser sessions
   locale.value = langKey;
 };
 </script>

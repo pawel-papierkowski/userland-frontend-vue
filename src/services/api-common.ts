@@ -3,8 +3,9 @@ import axios from 'axios';
 import { isAxiosError } from 'axios';
 
 import { logger } from '@/code/utils/logger.ts';
-
 import { apiAddress } from '@/code/data/app/const.ts';
+
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 export default {
   /**
@@ -13,10 +14,20 @@ export default {
    * @returns Axios instance.
    */
   create(endpointBase : string) {
-    return axios.create({
+    const instance = axios.create({
       baseURL: apiAddress + endpointBase,
       timeout: 5000,
     });
+
+    // Add authentication token, if it is present.
+    instance.interceptors.request.use((config) => {
+      const token = AppLoginer.getJwt();
+      //logger.debug(`Token: ${token}`);
+      if (token !== null) config.headers.Authorization = `Bearer ${token}`;
+      return config;
+    });
+
+    return instance;
   },
 
   /**

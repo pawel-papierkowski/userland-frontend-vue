@@ -71,7 +71,8 @@ const handlePasswordResetConfirmation = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-  if (!form.password || !form.confirmPassword) return true; // prevent sending empty form
+   // prevent sending empty form
+  if (!form.password || !form.confirmPassword) return true;
   if (passwordError.value !== null) return true;
   if (passwordConfirmError.value !== null) return true;
   return false;
@@ -111,8 +112,8 @@ const getInputClass = (msgError: string | null): string => {
 
 //
 
-onMounted(() => {
-  verifyToken(); // automatically call once user enters page
+onMounted(() => { // automatically call once user enters page
+  verifyToken();
 });
 </script>
 
