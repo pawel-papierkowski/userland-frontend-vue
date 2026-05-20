@@ -129,10 +129,10 @@ const getInputClass = (msgError: string | null): string => {
 onMounted(async () => { // automatically call once user enters page
   await fillForm();
 });
-
 </script>
 
 <template>
+  <!-- TODO: email change button, account deletion button -->
   <div class="form-all">
     <h2>{{ t('user.profile.form.title') }}</h2>
 

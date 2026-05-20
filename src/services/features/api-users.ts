@@ -84,8 +84,8 @@ export default {
   },
 
   /**
-   * Password reset link.
-   * @param payload Password reset link request.
+   * Account delete link.
+   * @param payload Account delete link request.
    * @returns Result of call.
    */
   accountDeleteLink(payload: UserAccountDeleteLinkReq) {
@@ -93,8 +93,8 @@ export default {
   },
 
   /**
-   * Password reset confirmation.
-   * @param payload Password reset confirmation request.
+   * Account delete confirmation.
+   * @param payload Account delete confirmation request.
    * @returns Result of call.
    */
   accountDeleteConfirm(payload: UserAccountDeleteReq) {

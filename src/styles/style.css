@@ -108,11 +108,13 @@ input {
   border: var(--input-border);
   border-radius: var(--input-border-radius);
 }
+
 input:disabled {
   color: var(--input-disabled-color);
   background: var(--input-disabled-background);
   border: var(--input-disabled-border);
 }
+
 input.err {
   color: var(--input-err-color);
   background: var(--input-err-background);
@@ -135,7 +137,6 @@ button {
   border-radius: var(--button-border-radius);
   box-shadow: var(--button-box-shadow);
   transition: var(--button-transition);
-
 }
 
 button:hover {
