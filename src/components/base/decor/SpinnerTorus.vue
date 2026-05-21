@@ -3,13 +3,21 @@
  * Torus-shaped spinner for loading states.
  *
  * Properties:
+ * - canSpin: True if can spin, false if it cannot spin.
+ * - display: You can set CSS display property directly.
  * - size: Size of the spinner (e.g., "1rem", "100px").
+ *
+ * Examples:
+ * - Standalone big spinner: <SpinnerTorus display="block" size="100px" />
+ * - Spinner in text: <SpinnerTorus display="inline-block" size="1em" />
  */
-withDefaults(defineProps<{
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = withDefaults(defineProps<{
+  canSpin?: boolean,
   display?: string,
   size?: string;
 }>(), {
-  // default values allow spinner in text
+  canSpin: true,
   display: 'inline-block',
   size: '1rem'
 });
@@ -17,7 +25,8 @@ withDefaults(defineProps<{
 
 <template>
   <div class="spinner-wrapper" :style="{ display: display, width: size, height: size }">
-    <svg class="spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155 155" fill="none">
+    <svg class="spinner spins" :class="{'paused': !canSpin}"
+      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155 155" fill="none">
       <g stroke="currentColor" stroke-width="35" stroke-linecap="round">
         <circle cx="77.5" cy="77.5" r="60" stroke-opacity=".55" />
         <path d="M90.305 18.882A60.003 60.003 0 0 1 137.5 77.5" />
@@ -34,23 +43,23 @@ withDefaults(defineProps<{
 
 .spinner {
   color: #ff8e3c;
+}
+
+.spins {
   animation: spin 1500ms linear infinite;
+  animation-play-state: running;
+}
+
+.paused {
+  animation-play-state: paused;
 }
 
 @keyframes spin {
-  /* Spin the spinner with CSS. */
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  /* Spin the spinner using CSS. */
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
   0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+  100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 </style>

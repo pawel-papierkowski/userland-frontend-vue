@@ -136,7 +136,7 @@ describe('UserActivation', () => {
     expect(messageStore.messages[0].title).toBe("Failure");
     expect(messageStore.messages[0].content).toBe("Token is missing.");
 
-    // Assert: verify redirection to home page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+    // Assert: Verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
   });
 });

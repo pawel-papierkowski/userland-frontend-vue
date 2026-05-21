@@ -282,7 +282,7 @@ describe('UserLandLogin', () => {
     expect(backendApiUser.login).not.toHaveBeenCalled();
     // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
-    // Verify no redirection occurred.
+    // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
     // Assert: verify that frontend considers you logged out.
@@ -312,7 +312,7 @@ describe('UserLandLogin', () => {
     expect(backendApiUser.login).not.toHaveBeenCalled();
     // Assert: verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
-    // Verify no redirection occurred.
+    // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
     // Assert: verify that frontend considers you logged out.

@@ -30,6 +30,8 @@ const usedButton: Ref<boolean> = ref(false);
 const isSubmitting: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
 const isLoading: Ref<boolean> = ref(true);
+/** Can spinner spin? */
+const canSpin: Ref<boolean> = ref(true);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyField(form.username, usedButton.value);
@@ -40,7 +42,8 @@ const usernameError: ComputedRef<string | null> = computed(() => {
 /** Fill form. */
 const fillForm = async () => {
   const data = await resolveUserData();
-  if (data === null) return;
+  if (data === null) return; // failed to load data
+
   form.username = data.username;
   form.email = data.email;
   form.name = data.profile.name;
@@ -57,7 +60,8 @@ const resolveUserData = async (): Promise<UserDataResp | null> => {
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'user.profile.msg.loadError.title', 'user.profile.msg.loadError.content');
-    backendApi.logError(error, 'User view failed!');
+    backendApi.logError(error, 'Loading user data for profile failed!');
+    canSpin.value = false;
     return null;
   }
 }
@@ -137,7 +141,7 @@ onMounted(async () => { // automatically call once user enters page
     <h2>{{ t('user.profile.form.title') }}</h2>
 
     <div class="spinner-container" v-if="isLoading">
-      <SpinnerTorus display="block" size="100px" />
+      <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
     </div>
 
     <form @submit.prevent="handleUserData" novalidate v-if="!isLoading">

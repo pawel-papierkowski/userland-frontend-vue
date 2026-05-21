@@ -5,10 +5,16 @@ import { useI18n } from 'vue-i18n';
 
 import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
+import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const { t } = useI18n();
 const count: Ref<number> = ref(0);
+const canSpin: Ref<boolean> = ref(true);
 
+/**
+ * Generate message.
+ * @param level Level of message.
+ */
 const genMessage = (level: EnMessageLevel) => {
   count.value++;
   const titleKey = 'testArea.msgButtons.' + messageLevelStr(level) + '.title';
@@ -32,6 +38,16 @@ const genMessage = (level: EnMessageLevel) => {
       break;
   }
 };
+
+/** Starts spinner. */
+const startSpinner = () => {
+  canSpin.value = true;
+}
+
+/** Stops spinner. */
+const stopSpinner = () => {
+  canSpin.value = false;
+}
 </script>
 
 <template>
@@ -48,6 +64,13 @@ const genMessage = (level: EnMessageLevel) => {
     </fieldset>
     <fieldset>
       <legend>{{ t('testArea.spinner.legend') }}</legend>
+      <div class="spinner-container">
+        <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
+        <div class="testArea-spinnerButtons">
+          <button @click="startSpinner()">{{ t('testArea.spinner.start') }}</button>
+          <button @click="stopSpinner()">{{ t('testArea.spinner.stop') }}</button>
+        </div>
+      </div>
     </fieldset>
   </div>
 </template>
@@ -61,6 +84,15 @@ const genMessage = (level: EnMessageLevel) => {
 }
 
 .testArea-msgButtons {
+  display: flex;
+  flex-direction: column; /* Stacks children horizontally */
+  align-items: center; /* Centers the items horizontally */
+  gap: 1rem; /* Adds consistent spacing between items without margins */
+
+  padding: 10px;
+}
+
+.testArea-spinnerButtons {
   display: flex;
   flex-direction: column; /* Stacks children horizontally */
   align-items: center; /* Centers the items horizontally */

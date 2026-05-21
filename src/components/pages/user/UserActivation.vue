@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /** Standalone page for activating account. Accessed via link from email. */
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+import type { Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -17,6 +18,9 @@ const log = useLogger();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
+
+/** Can spinner spin? */
+const canSpin: Ref<boolean> = ref(true);
 
 const tokenStr = TokenUtils.resolve(route);
 
@@ -39,7 +43,7 @@ const callActivationApi = async () => {
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
     backendApi.logError(error, 'Activation failed!');
-    router.push({ name: 'home' }); // kick user out of this page
+    canSpin.value = false;
   }
 }
 
@@ -54,7 +58,7 @@ onMounted(() => { // automatically call once user enters page
   <div>
     <h2>{{ t('user.activation.title') }}</h2>
     <div class="spinner-container">
-      <SpinnerTorus display="block" size="100px" />
+      <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
     </div>
   </div>
 </template>
