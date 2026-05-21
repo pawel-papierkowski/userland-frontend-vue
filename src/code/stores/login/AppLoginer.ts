@@ -16,9 +16,11 @@ export class AppLoginer {
   /**
    * Log in user. You can get token from /api/users/login or /api/users/prolong endpoints or from local storage.
    * Can be safely called when already logged in.
+   * Note: there is no API call.
    * @param jwtToken JWT token.
+   * @returns True if login was successful, otherwise false.
    */
-  public static login(jwtToken: string) {
+  public static login(jwtToken: string): boolean {
     const loginStore = useLoginStore();
 
     // Failure can happen when token is already expired.
@@ -27,7 +29,8 @@ export class AppLoginer {
     else localStorage.removeItem(locstJwt);
 
     if (result) logger.debug("Logged in successfully.");
-    else logger.debug("Failed to log in.");
+    else logger.warn("Failed to log in.");
+    return result;
   }
 
   /**
@@ -35,6 +38,7 @@ export class AppLoginer {
    */
   public static async logout() {
     const loginStore = useLoginStore();
+    if (!loginStore.loginState.isLogged) return; // already not logged in
 
     await backendApiUser.logout(); // API CALL. We don't care if this call fails.
 
@@ -57,8 +61,13 @@ export class AppLoginer {
 
       // Prolong call will revoke current token, we need to replace it with new token.
       const result = loginStore.applyToken(jwtToken);
-      if (result) localStorage.setItem(locstJwt, jwtToken);
-      else localStorage.removeItem(locstJwt);
+      if (result) {
+        localStorage.setItem(locstJwt, jwtToken);
+        logger.debug('Prolong successful.');
+      } else {
+        localStorage.removeItem(locstJwt);
+        logger.error('Prolong failed!');
+      }
     } catch (error) {
       backendApi.logError(error, 'Prolong failed!');
     }

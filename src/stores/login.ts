@@ -34,18 +34,22 @@ export const useLoginStore = defineStore('login', () => {
    */
   function applyToken(jwtToken: string): boolean {
     loginState.value = resetLoginState();
-    loginState.value.isLogged = !!jwtToken;
-    loginState.value.token = jwtToken;
 
     if (jwtToken) {
       const decodedJwt = jwtDecode(jwtToken);
-      logger.debug('Decoded token:', decodedJwt);
-      if (!verifyToken(decodedJwt)) return false;
+      logger.debug('Decoded JWT:', decodedJwt);
+      if (!verifyToken(decodedJwt)) {
+        loginState.value.isLogged = false;
+        logger.warn('Failed to use JWT: it is expired.');
+        return false;
+      }
+      loginState.value.isLogged = true;
+      loginState.value.token = jwtToken;
       readToken(decodedJwt);
       return true;
     }
 
-    logger.warn('Failed to decode token.');
+    logger.warn('Failed to decode JWT.');
     return false;
   }
 

@@ -125,7 +125,7 @@ describe('UserPasswordReset', () => {
 
   //
 
-  it('is empty', async () => {
+  it('form is empty', async () => {
     const userPasswordReset = createWrapper();
     const messageStore = useMessageStore();
 

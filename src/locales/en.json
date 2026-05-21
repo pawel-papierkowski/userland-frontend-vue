@@ -217,6 +217,11 @@
         "title": "Error",
         "content": "This is error message. Number: {count}."
       }
+    },
+    "spinner": {
+      "legend": "Spinner",
+      "start": "Start",
+      "stop": "Stop"
     }
   },
 

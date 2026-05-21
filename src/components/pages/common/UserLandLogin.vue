@@ -58,9 +58,14 @@ const handleLogin = async () => {
     const response = await backendApiUser.login(loginReq); // API CALL.
     AppLoginer.login(response.data.jwtToken);
 
-    showMessage();
-    clearForm();
-    handleRedirection();
+    if (AppLoginer.isLogged()) { // token was accepted
+      showMessage(true);
+      clearForm();
+      handleRedirection();
+    } else { // token was rejected for some reason
+      showMessage(false);
+      clearForm();
+    }
   } catch (error) {
     AppMessager.errorT(error, 'user.login.msg.error.title', 'user.login.msg.error.content');
     backendApi.logError(error, 'Login failed!');
@@ -89,15 +94,21 @@ const convertToReq = (form: UserLoginForm): UserLoginReq => {
 };
 
 /** Show success message. */
-const showMessage = () => {
-  if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
-    AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
-    log.debug('Successfully logged in as admin user "', form.email, '".');
+const showMessage = (success: boolean) => {
+  if (success) {
+    if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
+      AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
+      log.debug('Successfully logged in as admin user "', form.email, '".');
+      return;
+    }
+
+    AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
+    log.debug('Successfully logged in as user "', form.email, '".');
     return;
   }
 
-  AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
-  log.debug('Successfully logged in as user "', form.email, '".');
+  AppMessager.failureT('user.login.msg.error.title', 'user.login.msg.error.content');
+  log.error('Login failed!');
 };
 
 /** Clear entire form. */

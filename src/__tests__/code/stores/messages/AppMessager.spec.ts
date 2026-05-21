@@ -8,7 +8,6 @@ import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 /** Tests AppMessager class. */
 describe('AppMessager', () => {
   beforeEach(() => {
-    // Crucial for testing code that uses Pinia stores outside components.
     setActivePinia(createPinia());
   });
 

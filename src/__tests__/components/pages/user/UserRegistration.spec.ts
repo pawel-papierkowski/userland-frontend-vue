@@ -117,7 +117,7 @@ describe('UserRegistration', () => {
 
   //
 
-  it('is empty', async () => {
+  it('form is empty', async () => {
     const userRegistration = createWrapper();
     const messageStore = useMessageStore();
 

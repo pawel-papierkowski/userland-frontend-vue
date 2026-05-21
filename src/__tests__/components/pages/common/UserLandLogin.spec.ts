@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 
@@ -41,18 +41,24 @@ function createWrapper() {
 describe('UserLandLogin', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useFakeTimers();
     mockRoute.name = 'login'; // Reset to default
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   //
 
   it('logged in successfully', async () => {
+    vi.setSystemTime(new Date('2026-05-21T16:00:00Z'));
     const userLogin = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({ data: {
-      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWRlci5sZXZhcEBnbWFpbC5jb20iLCJpYXQiOjE3NzkwMzYwNTIsImV4cCI6MTc3OTA1NzY1Mn0.RV0mYMnyhQGLBDnDybK6CM0gA_AV48tGY21Xoxdj6Hk"
+      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkzNjkyMjMsImV4cCI6MTc3OTM5MDgyM30.03Ymh3s3KcPSGCxCKFpPENOYzoAtV9cicW_KLg7P21U"
     } } as any);
 
     // Arrange: fill form fields correctly.
@@ -84,13 +90,14 @@ describe('UserLandLogin', () => {
   });
 
   it('logged in successfully on admin panel', async () => {
+    vi.setSystemTime(new Date('2026-05-21T16:00:00Z'));
     mockRoute.name = 'admin-login';
     const userLogin = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({ data: {
-      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJ1c2VyIjoiZWRpdCIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkxMDk1NDgsImV4cCI6MTc3OTEzMTE0OH0.bhyXaanaGw1-8DT2hTp4n_buXGlQc4ssFXkFdLyq77w"
+      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0LHZpZXciLCJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MzY4ODUwLCJleHAiOjE3NzkzOTA0NTB9.bvQhFKdcmXYHIt1Y7f0ivTIYsMtik0gWA3SIyWWxH2A"
     } } as any);
 
     // Arrange: fill form fields correctly.
@@ -122,13 +129,14 @@ describe('UserLandLogin', () => {
   });
 
   it('logged in successfully on admin panel but no permissions', async () => {
+    vi.setSystemTime(new Date('2026-05-21T16:00:00Z'));
     mockRoute.name = 'admin-login';
     const userLogin = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({ data: {
-      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWRlci5sZXZhcEBnbWFpbC5jb20iLCJpYXQiOjE3NzkwMzYwNTIsImV4cCI6MTc3OTA1NzY1Mn0.RV0mYMnyhQGLBDnDybK6CM0gA_AV48tGY21Xoxdj6Hk"
+      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkzNjkyMjMsImV4cCI6MTc3OTM5MDgyM30.03Ymh3s3KcPSGCxCKFpPENOYzoAtV9cicW_KLg7P21U"
     } } as any);
 
     // Arrange: fill form fields correctly.
@@ -163,6 +171,46 @@ describe('UserLandLogin', () => {
   });
 
   //
+
+  it('failed to login despite getting token from backend', async () => {
+    // We somehow got expired token from backend. Maybe user's computer has wrong date&time set?
+    // Either way we need to handle it gracefully.
+    vi.setSystemTime(new Date('2026-05-21T16:00:00Z'));
+    const userLogin = createWrapper();
+    const messageStore = useMessageStore();
+
+    // Arrange: mock successful API response, but with expired token.
+    vi.mocked(backendApiUser.login).mockResolvedValue({ data: {
+      "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWRlci5sZXZhcEBnbWFpbC5jb20iLCJpYXQiOjE3NzkwMzYwNTIsImV4cCI6MTc3OTA1NzY1Mn0.RV0mYMnyhQGLBDnDybK6CM0gA_AV48tGY21Xoxdj6Hk"
+    } } as any);
+
+    // Arrange: fill form fields correctly.
+    await userLogin.find('[data-testid="email"]').setValue('test@example.com');
+    await userLogin.find('[data-testid="password"]').setValue('Password123!');
+
+    // Act: click on login button.
+    await userLogin.find('button[type="submit"]').trigger('submit');
+
+    await flushPromises(); // Wait for all promises (API call) to resolve.
+
+    // Assert: verify API call.
+    expect(backendApiUser.login).toHaveBeenCalledWith(expect.objectContaining({
+      email: 'test@example.com',
+      password: 'Password123!'
+    }));
+
+    // Assert: verify failure message is present in store.
+    expect(messageStore.messages).toHaveLength(1);
+    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0].title).toBe("Login failure");
+    expect(messageStore.messages[0].content).toBe("User login failed.");
+
+    // Assert: verify no redirection occurred.
+    expect(mockPush).not.toHaveBeenCalled();
+
+    // Assert: verify that frontend considers you NOT logged in.
+    expect(AppLoginer.isLogged()).toBe(false);
+  });
 
   it('shows error message when server returns 409 error', async () => {
     // Arrange: mock API returning 409 error (wrong password or account).
@@ -212,7 +260,7 @@ describe('UserLandLogin', () => {
 
   //
 
-  it('is empty', async () => {
+  it('form is empty', async () => {
     const userLogin = createWrapper();
     const messageStore = useMessageStore();
 

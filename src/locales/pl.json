@@ -217,6 +217,11 @@
         "title": "Błąd",
         "content": "To jest wiadomość o błędzie. Numer: {count}."
       }
+    },
+    "spinner": {
+      "legend": "Kręciołek",
+      "start": "Start",
+      "stop": "Stop"
     }
   },
 

@@ -46,6 +46,9 @@ const genMessage = (level: EnMessageLevel) => {
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.msgButtons.error.label') }}</button>
       </div>
     </fieldset>
+    <fieldset>
+      <legend>{{ t('testArea.spinner.legend') }}</legend>
+    </fieldset>
   </div>
 </template>
 
