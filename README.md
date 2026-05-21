@@ -12,9 +12,12 @@ Author: Paweł Papierkowski
 
 Date: 2026
 
-- Link to webpage:
+- Webpage address:
   - User website: https://pawelpapierkowski.net.pl/userland-frontend-vue
   - Admin panel: https://pawelpapierkowski.net.pl/userland-frontend-vue/panel
+- Locally run Vue server:
+  - User website: http://localhost:5173/
+  - Admin panel: http://localhost:5173/panel
 - Link to source code: https://github.com/pawel-papierkowski/userland-frontend-vue
 
 Used IDE: **Visual Studio Code**

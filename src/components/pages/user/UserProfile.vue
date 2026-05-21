@@ -2,6 +2,7 @@
 /** User profile page. */
 import { onMounted, reactive, ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
+import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
@@ -14,6 +15,7 @@ import { AppMessager } from '@/code/stores/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const log = useLogger();
+const router = useRouter();
 const { t, locale } = useI18n();
 
 /** User data. */
@@ -108,6 +110,18 @@ const convertToReq = (form: UserEditForm): UserEditReq => {
 
 //
 
+/** Sends user to dedicated email change page. */
+const handleEmailChange = async () => {
+    router.push({ name: 'user-emailChange-start' });
+}
+
+/** Sends user to dedicated account deletion page. */
+const handleAccountDelete = async () => {
+    router.push({ name: 'user-accountDel-start' });
+}
+
+//
+
 /** Show success message. */
 const showMessage = () => {
   AppMessager.successT('user.profile.msg.success.title', 'user.profile.msg.success.content');
@@ -136,15 +150,14 @@ onMounted(async () => { // automatically call once user enters page
 </script>
 
 <template>
-  <!-- TODO: email change button, account deletion button -->
   <div class="form-all">
     <h2>{{ t('user.profile.form.title') }}</h2>
 
     <div class="spinner-container" v-if="isLoading">
-      <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
+      <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
 
-    <form @submit.prevent="handleUserData" novalidate v-if="!isLoading">
+    <form @submit.prevent="handleUserData" novalidate v-if="!isLoading" data-testid="form">
       <div class="form-group">
         <div class="form-entry">
           <label for="username">{{ t('user.profile.form.username') }}:</label>
@@ -198,9 +211,17 @@ onMounted(async () => { // automatically call once user enters page
         </div>
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.profile.form.buttonSubmitting') : t('user.profile.form.button') }}
+      <button data-testid="btn-submit" type="submit" :disabled="isSubmitting">
+        {{ isSubmitting ? t('user.profile.button.updateSubmitting') : t('user.profile.button.update') }}
       </button>
+      <div class="buttons-horizontal">
+        <button data-testid="btn-emailChange" :disabled="isSubmitting" @click="handleEmailChange()">
+          {{ t('user.profile.button.emailChange') }}
+        </button>
+        <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDelete()">
+          {{ t('user.profile.button.deleteAccount') }}
+        </button>
+      </div>
     </form>
   </div>
 </template>

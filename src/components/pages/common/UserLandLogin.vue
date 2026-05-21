@@ -139,7 +139,7 @@ const goRegistration = () => {
 
 /** Go to password reset request page. */
 const goPasswordReset = () => {
-  router.push({ name: 'user-passwordReset-link' });
+  router.push({ name: 'user-passwordReset-start' });
 };
 
 /** We can highlight fields that contain errors. */

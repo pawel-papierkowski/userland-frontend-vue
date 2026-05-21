@@ -35,17 +35,24 @@ export class AppLoginer {
 
   /**
    * Log out user. Contains API call.
+   * @package onBackend: If true, call also backend.
    */
-  public static async logout() {
+  public static async logout(onBackend: boolean = true) {
     const loginStore = useLoginStore();
     if (!loginStore.loginState.isLogged) return; // already not logged in
 
-    await backendApiUser.logout(); // API CALL. We don't care if this call fails.
+    if (onBackend) {
+      try {
+        await backendApiUser.logout(); // API CALL. We don't care if this call fails.
+      } catch (error) {
+        backendApi.logError(error, 'Logout failed on backend!');
+      }
+    }
 
     loginStore.loginState = loginStore.resetLoginState();
     localStorage.removeItem(locstJwt);
 
-    AppMessager.successT('user.logout.msg.success.title', 'user.logout.msg.success.content');
+    AppMessager.infoT('user.logout.msg.info.title', 'user.logout.msg.info.content');
     logger.debug("Logged out successfully.");
   }
 
@@ -63,6 +70,7 @@ export class AppLoginer {
       const result = loginStore.applyToken(jwtToken);
       if (result) {
         localStorage.setItem(locstJwt, jwtToken);
+        AppMessager.infoT('user.prolong.msg.info.title', 'user.prolong.msg.info.content');
         logger.debug('Prolong successful.');
       } else {
         localStorage.removeItem(locstJwt);

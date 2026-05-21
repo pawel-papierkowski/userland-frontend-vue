@@ -21,7 +21,7 @@ const { t } = useI18n();
 
 /** Can spinner spin? */
 const canSpin: Ref<boolean> = ref(true);
-
+/** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 
 /** Call activation API. */
@@ -42,7 +42,7 @@ const callActivationApi = async () => {
     router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
-    backendApi.logError(error, 'Activation failed!');
+    backendApi.logError(error, 'Activation failed! Token: '+tokenStr);
     canSpin.value = false;
   }
 }
@@ -58,7 +58,7 @@ onMounted(() => { // automatically call once user enters page
   <div>
     <h2>{{ t('user.activation.title') }}</h2>
     <div class="spinner-container">
-      <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
+      <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
   </div>
 </template>

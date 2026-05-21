@@ -100,6 +100,26 @@ export type UserPasswordResetReq = {
   password: string;
 };
 
+// USER EMAIL CHANGE
+
+/** User email change link form. */
+export type UserEmailChangeLinkForm = {
+  newEmail: string;
+  password: string;
+};
+
+/** User email change link request. */
+export type UserEmailChangeLinkReq = {
+  newEmail: string;
+  password: string;
+  frontend: string; // Used frontend. Always VUE.
+};
+
+/** User email change confirmation request. */
+export type UserEmailChangeReq = {
+  token: string;
+};
+
 // USER ACCOUNT DELETION
 
 /** User account delete link form. */

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia } from 'pinia';
+import { createPinia, setActivePinia, getActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -9,7 +9,7 @@ import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-import UserPasswordResetLink from '@/components/pages/user/UserPasswordResetLink.vue';
+import UserPasswordResetStart from '@/components/pages/user/UserPasswordResetStart.vue';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -25,33 +25,32 @@ vi.mock('vue-router', () => ({
 
 /** Boilerplate code. */
 function createWrapper() {
-  const pinia = createPinia();
-  setActivePinia(pinia);
-  return mount(UserPasswordResetLink, {
+  return mount(UserPasswordResetStart, {
     global: {
-      plugins: [logger, pinia, i18n],
+      plugins: [logger, getActivePinia(), i18n],
     },
   });
 }
 
-/** Tests of UserPasswordResetLink component. */
-describe('UserPasswordResetLink', () => {
+/** Tests of UserPasswordResetStart component. */
+describe('UserPasswordResetStart', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
   });
 
   it('is correctly filled and submits successfully', async () => {
-    const userPasswordResetLink = createWrapper();
+    const userPasswordResetStart = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
     vi.mocked(backendApiUser.passwordResetLink).mockResolvedValue({ data: {} } as any);
 
     // Arrange: fill form fields correctly.
-    await userPasswordResetLink.find('[data-testid="email"]').setValue('test@example.com');
+    await userPasswordResetStart.find('[data-testid="email"]').setValue('test@example.com');
 
     // Act: click on password reset link button.
-    await userPasswordResetLink.find('button[type="submit"]').trigger('submit');
+    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
@@ -88,14 +87,14 @@ describe('UserPasswordResetLink', () => {
     };
     vi.mocked(backendApiUser.passwordResetLink).mockRejectedValue(errorResponse);
 
-    const userPasswordResetLink = createWrapper();
+    const userPasswordResetStart = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields correctly.
-    await userPasswordResetLink.find('[data-testid="email"]').setValue('test@example.com');
+    await userPasswordResetStart.find('[data-testid="email"]').setValue('test@example.com');
 
     // Act: click on password reset button.
-    await userPasswordResetLink.find('button[type="submit"]').trigger('submit');
+    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
@@ -115,18 +114,18 @@ describe('UserPasswordResetLink', () => {
   //
 
   it('form is empty', async () => {
-    const userPasswordResetLink = createWrapper();
+    const userPasswordResetStart = createWrapper();
     const messageStore = useMessageStore();
 
     // No arrange here - form is untouched.
 
     // Act: click on password reset link button while form is completely empty.
-    await userPasswordResetLink.find('button[type="submit"]').trigger('submit');
+    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
     // Assert: verify that error messages properly shown up for all fields.
-    const errorMessages = userPasswordResetLink.findAll('.form-text-error');
+    const errorMessages = userPasswordResetStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     errorMessages.forEach(msg => {
       expect(msg.text()).not.toBe('');
@@ -141,20 +140,20 @@ describe('UserPasswordResetLink', () => {
   });
 
   it('shows error when invalid email is entered', async () => {
-    const userPasswordResetLink = createWrapper();
+    const userPasswordResetStart = createWrapper();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields with invalid email.
-    await userPasswordResetLink.find('[data-testid="email"]').setValue('invalid-email');
+    await userPasswordResetStart.find('[data-testid="email"]').setValue('invalid-email');
 
     // Act: click on password reset link button.
-    await userPasswordResetLink.find('button[type="submit"]').trigger('submit');
+    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
     // Assert: verify that error message is shown for email.
-    expect(userPasswordResetLink.find('#email').classes()).toContain('err');
-    const errorMessages = userPasswordResetLink.findAll('.form-text-error');
+    expect(userPasswordResetStart.find('#email').classes()).toContain('err');
+    const errorMessages = userPasswordResetStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     expect(errorMessages[0].text()).not.toBe('');
 

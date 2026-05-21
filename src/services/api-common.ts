@@ -1,4 +1,8 @@
-/** Common code for API handling. */
+/**
+ * Common code for API handling.
+ * Remember to always surround api calls with try-catch, even if you do not care about results. See AppLoginer.logout()
+ * for example of such case.
+ */
 import axios from 'axios';
 import { isAxiosError } from 'axios';
 

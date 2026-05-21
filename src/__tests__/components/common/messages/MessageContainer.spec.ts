@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { createPinia, setActivePinia } from 'pinia';
+import { createPinia, setActivePinia, getActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
@@ -10,17 +10,19 @@ import MessageContainer from '@/components/common/messages/MessageContainer.vue'
 
 /** Boilerplate code. */
 function createWrapper() {
-  const pinia = createPinia();
-  setActivePinia(pinia);
   return mount(MessageContainer, {
       global: {
-        plugins: [pinia, i18n]
+        plugins: [getActivePinia(), i18n]
       }
     });
 }
 
 /** Tests of MessageContainer component. */
 describe('MessageContainer', () => {
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
+
   it('is empty', () => {
     const messageContainer = createWrapper();
 

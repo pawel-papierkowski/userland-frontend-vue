@@ -13,10 +13,11 @@ import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 import UserProfile from '@/components/pages/user/UserProfile.vue';
 
 import UserActivation from '@/components/pages/user/UserActivation.vue';
-import UserPasswordResetLink from '@/components/pages/user/UserPasswordResetLink.vue';
+import UserPasswordResetStart from '@/components/pages/user/UserPasswordResetStart.vue';
 import UserPasswordReset from '@/components/pages/user/UserPasswordReset.vue';
+import UserEmailChangeStart from '@/components/pages/user/UserEmailChangeStart.vue';
 import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
-import UserAccountDeletionLink from '@/components/pages/user/UserAccountDeletionLink.vue';
+import UserAccountDeletionStart from '@/components/pages/user/UserAccountDeletionStart.vue';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
 import AdminProfile from '@/components/pages/admin/general/AdminProfile.vue';
@@ -44,12 +45,15 @@ const routes = [
     { name:'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
 
     // User-related pages.
-    { name:'user-profile', path: '/user/profile', component: UserProfile, meta: meta4logged },
     { name:'user-activate', path: '/user/activate', component: UserActivation, meta: meta4unlogged },
-    { name:'user-passwordReset-link', path: '/user/passwordResetLink', component: UserPasswordResetLink, meta: meta4unlogged },
-    { name:'user-accountDel-link', path: '/user/accountDelLink', component: UserAccountDeletionLink, meta: meta4unlogged },
+    { name:'user-profile', path: '/user/profile', component: UserProfile, meta: meta4logged },
 
-    // These pages are accessible only via links in email with token.
+    // Starting point for user actions that require additional security.
+    { name:'user-passwordReset-start', path: '/user/passwordResetStart', component: UserPasswordResetStart, meta: meta4unlogged },
+    { name:'user-emailChange-start', path: '/user/emailChangeStart', component: UserEmailChangeStart, meta: meta4unlogged },
+    { name:'user-accountDel-start', path: '/user/accountDelStart', component: UserAccountDeletionStart, meta: meta4unlogged },
+
+    // These pages are accessible only via email: link with token.
     { name:'user-passwordReset', path: '/user/passwordReset', component: UserPasswordReset, meta: meta4unlogged },
     { name:'user-emailChange', path: '/user/emailChange', component: UserEmailChange, meta: meta4unlogged },
     { name:'user-accountDel', path: '/user/accountDel', component: UserAccountDeletion, meta: meta4unlogged },

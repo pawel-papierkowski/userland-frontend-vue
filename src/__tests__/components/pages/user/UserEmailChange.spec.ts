@@ -7,14 +7,17 @@ import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-import UserActivation from '@/components/pages/user/UserActivation.vue';
+import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
+
+const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
   default: {
-    activate: vi.fn<typeof backendApiUser.activate>(),
+    emailChangeConfirm: vi.fn<typeof backendApiUser.emailChangeConfirm>(),
   },
 }));
 
@@ -32,24 +35,28 @@ vi.mock('vue-router', () => ({
 
 /** Boilerplate code. */
 function createWrapper() {
-  return mount(UserActivation, {
+  return mount(UserEmailChange, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
     },
   });
 }
 
-/** Tests of UserActivation component. */
-describe('UserActivation', () => {
+/** Tests of UserEmailChange component. */
+describe('UserEmailChange', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
     mockRoute.query.token = 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs';
   });
 
-  it('activates user successfully', async () => {
+  it('changes email successfully', async () => {
+    // Arrange: login user.
+    vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+    AppLoginer.login(jwt);
+
     // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
+    vi.mocked(backendApiUser.emailChangeConfirm).mockResolvedValue({ data: {} } as any);
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
@@ -59,24 +66,56 @@ describe('UserActivation', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
-      frontend: 'VUE'
+    expect(backendApiUser.emailChangeConfirm).toHaveBeenCalledWith(expect.objectContaining({
+      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
     }));
 
     // Assert: verify success message is present in store.
-    expect(messageStore.messages).toHaveLength(1);
+    expect(messageStore.messages).toHaveLength(2);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("User activated successfully");
-    expect(messageStore.messages[0].content).toBe("You can now log in.");
+    expect(messageStore.messages[0].title).toBe("Success");
+    expect(messageStore.messages[0].content).toBe("New email address was set successfully. You need to log in again.");
+    expect(messageStore.messages[1].level).toBe(EnMessageLevel.Info);
+    expect(messageStore.messages[1].title).toBe("User logged out successfully");
+    expect(messageStore.messages[1].content).toBe("");
 
-    // Assert: verify redirection to login page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
+    // Assert: verify redirection to home page.
+    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+
+    // Assert: verify that frontend considers you NOT logged in.
+    expect(AppLoginer.isLogged()).toBe(false);
   });
 
   //
 
+  it('fails when not logged in', async () => {
+    // No arrange here.
+
+    // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
+    // oxlint-disable-next-line no-unused-vars
+    const userActivation = createWrapper();
+    const messageStore = useMessageStore();
+
+    await flushPromises();
+
+    // Assert: verify API call was NOT made.
+    expect(backendApiUser.emailChangeConfirm).not.toHaveBeenCalled();
+
+    // Assert: verify failure message.
+    expect(messageStore.messages).toHaveLength(1);
+    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0].title).toBe("Failure");
+    expect(messageStore.messages[0].content).toBe("You must be logged in to change email address.");
+
+    // Assert: verify redirection to home page.
+    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+  });
+
   it('fails when no token is provided', async () => {
+    // Arrange: login user.
+    vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+    AppLoginer.login(jwt);
+
     // Arrange: set token to invalid value.
     mockRoute.query.token = '';
 
@@ -88,7 +127,7 @@ describe('UserActivation', () => {
     await flushPromises();
 
     // Assert: verify API call was NOT made.
-    expect(backendApiUser.activate).not.toHaveBeenCalled();
+    expect(backendApiUser.emailChangeConfirm).not.toHaveBeenCalled();
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
@@ -101,6 +140,10 @@ describe('UserActivation', () => {
   });
 
   it('fails when endpoint returns error', async () => {
+    // Arrange: login user.
+    vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+    AppLoginer.login(jwt);
+
     // Arrange: mock API returning error about non-existing token.
     const errorResponse = {
       isAxiosError: true,
@@ -116,7 +159,7 @@ describe('UserActivation', () => {
         }
       }
     };
-    vi.mocked(backendApiUser.activate).mockRejectedValue(errorResponse);
+    vi.mocked(backendApiUser.emailChangeConfirm).mockRejectedValue(errorResponse);
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
@@ -126,9 +169,8 @@ describe('UserActivation', () => {
     await flushPromises();
 
     // Assert: verify API call.
-    expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
-      frontend: 'VUE'
+    expect(backendApiUser.emailChangeConfirm).toHaveBeenCalledWith(expect.objectContaining({
+      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
     }));
 
     // Assert: verify failure message.

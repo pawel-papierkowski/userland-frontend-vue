@@ -53,8 +53,18 @@ const stopSpinner = () => {
 <template>
   <div class="testArea-wrapper">
     <fieldset>
+      <legend>{{ t('testArea.generalButtons.legend') }}</legend>
+      <div class="buttons-horizontal">
+        <button>{{ t('testArea.generalButtons.standard') }}</button>
+        <button class="danger">{{ t('testArea.generalButtons.danger') }}</button>
+        <button disabled>{{ t('testArea.generalButtons.disabled') }}</button>
+      </div>
+    </fieldset>
+  </div>
+  <div class="testArea-wrapper">
+    <fieldset>
       <legend>{{ t('testArea.msgButtons.legend') }}</legend>
-      <div class="testArea-msgButtons">
+      <div class="buttons-vertical">
         <button @click="genMessage(EnMessageLevel.Info)">{{ t('testArea.msgButtons.info.label') }}</button>
         <button @click="genMessage(EnMessageLevel.Success)">{{ t('testArea.msgButtons.success.label') }}</button>
         <button @click="genMessage(EnMessageLevel.Warning)">{{ t('testArea.msgButtons.warning.label') }}</button>
@@ -66,7 +76,7 @@ const stopSpinner = () => {
       <legend>{{ t('testArea.spinner.legend') }}</legend>
       <div class="spinner-container">
         <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
-        <div class="testArea-spinnerButtons">
+        <div class="buttons-vertical">
           <button @click="startSpinner()">{{ t('testArea.spinner.start') }}</button>
           <button @click="stopSpinner()">{{ t('testArea.spinner.stop') }}</button>
         </div>
@@ -83,21 +93,4 @@ const stopSpinner = () => {
   gap: 1rem; /* Adds consistent spacing between items without margins */
 }
 
-.testArea-msgButtons {
-  display: flex;
-  flex-direction: column; /* Stacks children horizontally */
-  align-items: center; /* Centers the items horizontally */
-  gap: 1rem; /* Adds consistent spacing between items without margins */
-
-  padding: 10px;
-}
-
-.testArea-spinnerButtons {
-  display: flex;
-  flex-direction: column; /* Stacks children horizontally */
-  align-items: center; /* Centers the items horizontally */
-  gap: 1rem; /* Adds consistent spacing between items without margins */
-
-  padding: 10px;
-}
 </style>

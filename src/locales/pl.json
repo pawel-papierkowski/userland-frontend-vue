@@ -118,13 +118,21 @@
     },
     "logout": {
       "msg": {
-        "success": {
+        "info": {
           "title": "Użytkownik pomyślnie wylogowany",
           "content": ""
         }
       }
     },
-    "passwordResetLink": {
+    "prolong": {
+      "msg": {
+        "info": {
+          "title": "Sesja użytkownika pomyślnie przedłużona",
+          "content": ""
+        }
+      }
+    },
+    "passwordResetStart": {
       "form": {
         "title": "Zapomniałem hasła",
         "info": "ℹ️ Zostanie wysłany email z łączem, po którego kliknięciu wejdziesz na stronę, gdzie można ustawić nowe hasło.",
@@ -162,15 +170,56 @@
         }
       }
     },
+    "emailChangeStart": {
+      "form": {
+        "title": "Zmień adres email",
+        "newEmail": "Nowy email",
+        "password": "Hasło",
+        "button": "Wyślij email",
+        "buttonSubmitting": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Email z łączem prowadzącym do formularza potwierdzenia zmiany emaila zostanie wysłany w ciągu paru minut."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o zmianę adresu email."
+        }
+      }
+    },
+    "emailChange": {
+      "title": "Zapisywanie nowego adresu email...",
+      "email": "Nowy adres email",
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Nowy adres email został pomyślnie ustawiony. Musisz się ponownie zalogować."
+        },
+        "mustBeLogged": {
+          "title": "Niepowodzenie",
+          "content": "Musisz być zalogowany, by zmienić adres email."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się ustawić nowego adresu email."
+        }
+      }
+    },
     "profile": {
       "form": {
         "title": "Profil użytkownika",
         "username": "Nazwa",
         "email": "Email",
         "name": "Imię",
-        "surname": "Nazwisko",
-        "button": "Zaktualizuj profil",
-        "buttonSubmitting": "Aktualizacja..."
+        "surname": "Nazwisko"
+      },
+      "button": {
+        "update": "Zaktualizuj profil",
+        "updateSubmitting": "Aktualizacja profilu...",
+        "emailChange": "Zmień adres email",
+        "deleteAccount": "Usuń konto"
       },
       "msg": {
         "loadError": {
@@ -190,6 +239,12 @@
   },
 
   "testArea": {
+    "generalButtons": {
+      "legend": "Wygląd przycisków",
+      "standard": "Standardowy",
+      "danger": "Niebezpieczny",
+      "disabled": "Zablokowany"
+    },
     "msgButtons": {
       "legend": "Testy AppMessager",
       "info": {

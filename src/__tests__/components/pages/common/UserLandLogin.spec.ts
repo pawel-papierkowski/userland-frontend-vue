@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia } from 'pinia';
+import { createPinia, setActivePinia, getActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -28,11 +28,9 @@ vi.mock('vue-router', () => ({
 
 /** Boilerplate code. */
 function createWrapper() {
-  const pinia = createPinia();
-  setActivePinia(pinia);
   return mount(UserLandLogin, {
     global: {
-      plugins: [logger, pinia, i18n],
+      plugins: [logger, getActivePinia(), i18n],
     },
   });
 }
@@ -40,6 +38,7 @@ function createWrapper() {
 /** Tests of UserLandLogin component. */
 describe('UserLandLogin', () => {
   beforeEach(() => {
+    setActivePinia(createPinia());
     vi.clearAllMocks();
     vi.useFakeTimers();
     mockRoute.name = 'login'; // Reset to default

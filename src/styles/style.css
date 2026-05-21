@@ -159,3 +159,21 @@ button:disabled {
   border: var(--button-disabled-border);
   box-shadow: var(--button-disabled-box-shadow);
 }
+
+button.danger {
+  color: var(--button-danger-color);
+  background: var(--button-danger-background);
+  border: var(--button-danger-border);
+}
+
+button:hover.danger {
+  color: var(--button-hover-danger-color);
+  background: var(--button-hover-danger-background);
+  border: var(--button-hover-danger-border);
+}
+
+button:disabled.danger {
+  color: var(--button-disabled-color);
+  background: var(--button-disabled-background);
+  border: var(--button-disabled-border);
+}

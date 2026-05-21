@@ -47,7 +47,7 @@ const handlePasswordResetLink = async () => {
     clearForm();
     router.push({ name: 'home' });
   } catch (error) {
-    AppMessager.errorT(error, 'user.passwordResetLink.msg.error.title', 'user.passwordResetLink.msg.error.content');
+    AppMessager.errorT(error, 'user.passwordResetStart.msg.error.title', 'user.passwordResetStart.msg.error.content');
     backendApi.logError(error, 'Password reset request failed!');
   } finally {
     isSubmitting.value = false; // Enable submit button.
@@ -63,9 +63,9 @@ const isFormError = () => {
 };
 
 /**
- * Convert user login form data to user login request data.
- * @param form User login form.
- * @returns User login request.
+ * Convert user password reset form data to user password reset request data.
+ * @param form User password reset form.
+ * @returns User password reset request.
  */
 const convertToReq = (form: UserPasswordResetLinkForm): UserPasswordResetLinkReq => {
   return {
@@ -76,7 +76,7 @@ const convertToReq = (form: UserPasswordResetLinkForm): UserPasswordResetLinkReq
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.passwordResetLink.msg.success.title', 'user.passwordResetLink.msg.success.content');
+  AppMessager.successT('user.passwordResetStart.msg.success.title', 'user.passwordResetStart.msg.success.content');
   log.debug('Successfully sent password reset request as user "', form.email, '".');
 };
 
@@ -96,13 +96,13 @@ const getInputClass = (msgError: string | null): string => {
 
 <template>
   <div class="form-all">
-    <h2>{{ t('user.passwordResetLink.form.title') }}</h2>
+    <h2>{{ t('user.passwordResetStart.form.title') }}</h2>
 
     <form @submit.prevent="handlePasswordResetLink" novalidate>
       <div class="form-group">
-        <div class="form-info">{{ t('user.passwordResetLink.form.info') }}</div>
+        <div class="form-info">{{ t('user.passwordResetStart.form.info') }}</div>
         <div class="form-entry">
-          <label for="email">{{ t('user.passwordResetLink.form.email') }}:</label>
+          <label for="email">{{ t('user.passwordResetStart.form.email') }}:</label>
           <input
             :class="getInputClass(emailError)"
             id="email"
@@ -117,7 +117,7 @@ const getInputClass = (msgError: string | null): string => {
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.passwordResetLink.form.buttonSubmitting') : t('user.passwordResetLink.form.button') }}
+        {{ isSubmitting ? t('user.passwordResetStart.form.buttonSubmitting') : t('user.passwordResetStart.form.button') }}
       </button>
     </form>
   </div>

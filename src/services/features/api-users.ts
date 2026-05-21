@@ -1,7 +1,9 @@
 /** Handles calling user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
 import type { UserRegisterReq, TokenActivationReq, UserLoginReq, UserEditReq,
-  UserPasswordResetLinkReq, UserPasswordResetReq, UserAccountDeleteLinkReq, UserAccountDeleteReq } from '@/code/data/features/user.ts';
+  UserPasswordResetLinkReq, UserPasswordResetReq,
+  UserEmailChangeLinkReq, UserEmailChangeReq,
+  UserAccountDeleteLinkReq, UserAccountDeleteReq } from '@/code/data/features/user.ts';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
@@ -65,6 +67,8 @@ export default {
     return apiClient.patch('/edit', payload);
   },
 
+  //
+
   /**
    * Password reset link.
    * @param payload Password reset link request.
@@ -84,6 +88,24 @@ export default {
   },
 
   /**
+   * Email change link.
+   * @param payload Email change link request.
+   * @returns Result of call.
+   */
+  emailChangeLink(payload: UserEmailChangeLinkReq) {
+    return apiClient.post('/email/link', payload);
+  },
+
+  /**
+   * Email change confirmation based on given token.
+   * @param payload Email change confirmation request.
+   * @returns Result of call.
+   */
+  emailChangeConfirm(payload: UserEmailChangeReq) {
+    return apiClient.patch('/email/confirm', payload);
+  },
+
+  /**
    * Account delete link.
    * @param payload Account delete link request.
    * @returns Result of call.
@@ -93,7 +115,7 @@ export default {
   },
 
   /**
-   * Account delete confirmation.
+   * Account delete confirmation based on given token.
    * @param payload Account delete confirmation request.
    * @returns Result of call.
    */

@@ -24,6 +24,7 @@ const form: UserPasswordResetForm = reactive({
   password: '',
   confirmPassword: '',
 });
+/** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 
 /** True if submit button was clicked at least once. */
@@ -63,7 +64,7 @@ const handlePasswordResetConfirmation = async () => {
     router.push({ name: 'home' });
   } catch (error) {
     AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
-    backendApi.logError(error, 'Password reset confirmation failed!');
+    backendApi.logError(error, 'Password reset confirmation failed! Token: '+tokenStr);
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }

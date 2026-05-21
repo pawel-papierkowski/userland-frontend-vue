@@ -128,6 +128,23 @@
 }
 
 /* Other. */
+.buttons-vertical {
+  display: flex;
+  flex-direction: column; /* Stacks children vertically */
+  align-items: center; /* Centers the items horizontally */
+  gap: 1rem; /* Adds consistent spacing between items without margins */
+
+  padding: 10px;
+}
+.buttons-horizontal {
+  display: flex;
+  flex-direction: row; /* Stacks children horizontally */
+  align-items: center; /* Centers the items horizontally */
+  gap: 1rem; /* Adds consistent spacing between items without margins */
+
+  padding: 10px;
+}
+
 .spinner-container {
   display: flex;
   justify-content: center;

@@ -118,13 +118,21 @@
     },
     "logout": {
       "msg": {
-        "success": {
+        "info": {
           "title": "User logged out successfully",
           "content": ""
         }
       }
     },
-    "passwordResetLink": {
+    "prolong": {
+      "msg": {
+        "info": {
+          "title": "User session prolonged successfully",
+          "content": ""
+        }
+      }
+    },
+    "passwordResetStart": {
       "form": {
         "title": "I forgot my password",
         "info": "ℹ️ Email will be sent with link that leads to page where you can set new password.",
@@ -162,15 +170,56 @@
         }
       }
     },
+    "emailChangeStart": {
+      "form": {
+        "title": "Change email address",
+        "newEmail": "New email",
+        "password": "Password",
+        "button": "Send email",
+        "buttonSubmitting": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "In few minutes email with link leading to email change confirmation form will be sent."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for email change."
+        }
+      }
+    },
+    "emailChange": {
+      "title": "Setting up new email address...",
+      "email": "New email address",
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "New email address was set successfully. You need to log in again."
+        },
+        "mustBeLogged": {
+          "title": "Failure",
+          "content": "You must be logged in to change email address."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to set new email address."
+        }
+      }
+    },
     "profile": {
       "form": {
         "title": "User profile",
         "username": "Username",
         "email": "Email",
         "name": "Name",
-        "surname": "Surname",
-        "button": "Update profile",
-        "buttonSubmitting": "Updating..."
+        "surname": "Surname"
+      },
+      "button": {
+        "update": "Update profile",
+        "updateSubmitting": "Updating profile...",
+        "emailChange": "Change email address",
+        "deleteAccount": "Delete account"
       },
       "msg": {
         "loadError": {
@@ -190,6 +239,12 @@
   },
 
   "testArea": {
+    "generalButtons": {
+      "legend": "Button visuals",
+      "standard": "Standard",
+      "danger": "Danger",
+      "disabled": "Disabled"
+    },
     "msgButtons": {
       "legend": "AppMessager tests",
       "info": {

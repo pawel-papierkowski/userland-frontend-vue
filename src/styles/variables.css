@@ -68,7 +68,7 @@
 
   /* Input specific vars. */
   --input-color: #000000;
-  --input-background: #f8f8f8;
+  --input-background: #fdfdfd;
   --input-border: 1px solid #444444;
   --input-border-radius: 2px;
 
@@ -99,9 +99,17 @@
   --button-active-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 3px rgba(0, 0, 0, 0.1);
 
   --button-disabled-color: #7f8c8d;
-  --button-disabled-background: #f1f3f4;
+  --button-disabled-background: linear-gradient(to bottom, #f1f3f4 0%, #e7e7e7 100%);
   --button-disabled-border: 1px solid #dcdfe3;
   --button-disabled-box-shadow: none;
+
+  --button-danger-color: #320000;
+  --button-danger-background: linear-gradient(to bottom, #ffa9a9 0%, #ff7777 100%);
+  --button-danger-border: 1px solid #7b0000;
+
+  --button-hover-danger-color: #320000;
+  --button-hover-danger-background: linear-gradient(to bottom, #ffb9b9 0%, #ff8686 100%);
+  --button-hover-danger-border: 1px solid #7b0000;
 
   /* ComboBox specific vars. */
   --combobox-border: 1px solid #d1d5db;
