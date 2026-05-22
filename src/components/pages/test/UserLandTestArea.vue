@@ -88,8 +88,12 @@ const stopSpinner = () => {
 <style scoped>
 .testArea-wrapper {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row; /* Stacks children horizontally */
+
   align-items: center; /* Centers the items horizontally */
+  justify-content: center;
+
   gap: 1rem; /* Adds consistent spacing between items without margins */
 }
 

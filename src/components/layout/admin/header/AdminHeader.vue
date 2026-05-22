@@ -42,6 +42,8 @@ import UserLandLang from '@/components/common/layout/UserLandLang.vue';
 
 .header-menu-center {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 1rem;
 }
@@ -51,5 +53,27 @@ import UserLandLang from '@/components/common/layout/UserLandLang.vue';
   align-items: center;
   gap: 0.5rem;
   justify-self: end;
+}
+
+@media (max-width: 800px) {
+  .header-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .header-menu-right {
+    order: 1;
+    justify-self: center;
+  }
+
+  .header-menu-center {
+    order: 2;
+  }
+
+  .header-menu-left {
+    order: 3;
+    justify-self: center;
+  }
 }
 </style>
