@@ -13,6 +13,7 @@ import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 vi.mock('@/services/features/api-users.ts', () => ({
   default: {
     logout: vi.fn<typeof backendApiUser.logout>(() => Promise.resolve()), // Return a resolved promise
+    prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve()), // Return a resolved promise
   }
 }));
 
@@ -34,7 +35,7 @@ describe('AppLoginer', () => {
   describe('logs in', () => {
     it('not at all', () => {
       const loginStore = useLoginStore();
-      vi.setSystemTime(new Date('2026-05-20T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
 
       // No arrange or act: this is default state of login store.
 
@@ -45,6 +46,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -53,11 +55,11 @@ describe('AppLoginer', () => {
 
 
     it('as standard user', () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
 
       // Arrange: create valid token for user without any permissions.
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
 
       // Act: log in user using given token.
       AppLoginer.login(token);
@@ -69,18 +71,19 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
+      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779108592000));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779130192000));
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464175000));
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779485775000));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
     });
 
     it('as user with many permissions', () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
       const loginStore = useLoginStore();
 
       // Arrange: create valid token for user with many permissions.
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJ1c2VyIjoiZWRpdCIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkxMDk1NDgsImV4cCI6MTc3OTEzMTE0OH0.bhyXaanaGw1-8DT2hTp4n_buXGlQc4ssFXkFdLyq77w';
+      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0Iiwic3ViIjoicGF3ZWwucGFwaWVya293c2tpQGdtYWlsLmNvbSIsImlhdCI6MTc3OTQ2NDkxOCwiZXhwIjoxNzc5NDg2NTE4fQ.tSJ_l785hoinpYkzezJtLRx2ldBb0XQ6DKvKGZvLdw0';
 
       // Act: log in user using given token.
       AppLoginer.login(token);
@@ -92,9 +95,10 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
+      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779109548000));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779131148000));
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464918000));
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486518000));
       expect(loginStore.loginState.permissions).toStrictEqual(['role_admin', 'role_operator', 'user_edit']);
     });
 
@@ -115,6 +119,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -122,7 +127,7 @@ describe('AppLoginer', () => {
     });
 
     it('with invalid token', () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
 
       // Arrange: create invalid token.
@@ -138,6 +143,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -149,7 +155,7 @@ describe('AppLoginer', () => {
 
   describe('logs out', () => {
     it('normally', async () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
@@ -158,7 +164,8 @@ describe('AppLoginer', () => {
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.name = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779108592000);
       loginStore.loginState.expiresAt = new Date(1779130192000);
@@ -177,12 +184,13 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
 
-      // Assert: verify success message is present in store.
+      // Assert: verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
       expect(messageStore.messages[0].title).toBe("User logged out successfully");
@@ -190,7 +198,7 @@ describe('AppLoginer', () => {
     });
 
     it('when already not logged in', async () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
@@ -209,6 +217,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -219,7 +228,7 @@ describe('AppLoginer', () => {
     });
 
     it('when endpoint returns failure', async () => {
-      vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
@@ -235,10 +244,11 @@ describe('AppLoginer', () => {
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.name = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
-      loginStore.loginState.issuedAt = new Date(1779108592000);
-      loginStore.loginState.expiresAt = new Date(1779130192000);
+      loginStore.loginState.issuedAt = new Date(1779464175000);
+      loginStore.loginState.expiresAt = new Date(1779485775000);
       loginStore.loginState.permissions = [];
 
       // Act: log out user.
@@ -254,16 +264,70 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
+      expect(loginStore.loginState.name).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
 
-      // Assert: verify success message is present in store.
+      // Assert: verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
       expect(messageStore.messages[0].title).toBe("User logged out successfully");
       expect(messageStore.messages[0].content).toBe("");
+    });
+  });
+
+  //
+
+  describe('prolongs user session', () => {
+    it('successfully', async () => {
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+      const loginStore = useLoginStore();
+      const messageStore = useMessageStore();
+
+      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+      // Arrange: mock successful API response.
+      vi.mocked(backendApiUser.prolong).mockResolvedValue({ data: {
+        "jwtToken": newToken
+      } } as any);
+
+      // Arrange: set loginStore to logged in state.
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.name = 'Paweł Papierkowski';
+      loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
+      loginStore.loginState.issuedAt = new Date(1779464175000);
+      loginStore.loginState.expiresAt = new Date(1779485775000);
+      loginStore.loginState.permissions = [];
+
+      // Act: prolong user session.
+      await AppLoginer.prolong();
+
+      // Assert: prolong endpoint was called.
+      expect(backendApiUser.prolong).toHaveBeenCalled();
+
+      // Assert: AppLoginer returns correct results (still logged in, but time of expiration updated).
+      expect(AppLoginer.isLogged()).toBe(true);
+      expect(AppLoginer.hasPermission('role_operator')).toBe(false);
+
+      // Assert: verify content of login store.
+      expect(loginStore.loginState.isLogged).toBe(true);
+      expect(loginStore.loginState.token).toBe(newToken);
+      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
+      expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464665000)); // different issued and expired
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486265000));
+      expect(loginStore.loginState.permissions).toStrictEqual([]);
+
+      // Assert: verify info message is present in store.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
+      expect(messageStore.messages[0].title).toBe("User session prolonged successfully");
+      expect(messageStore.messages[0].content).toBe("");
+    });
+
+    it('unsuccessfully', async () => {
     });
   });
 });
