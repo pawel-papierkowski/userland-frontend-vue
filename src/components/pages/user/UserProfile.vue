@@ -6,12 +6,15 @@ import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { useLoginStore } from '@/stores/login.ts';
+
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const log = useLogger();
@@ -79,12 +82,26 @@ const handleUserData = async () => {
     const editReq = convertToReq(form);
     await backendApiUser.edit(editReq); // API CALL
 
+    updateLocalState(editReq);
     showMessage();
   } catch (error) {
     AppMessager.errorT(error, 'user.profile.msg.error.title', 'user.profile.msg.error.content');
     backendApi.logError(error, 'Profile update failed!');
   } finally {
     isSubmitting.value = false; // Enable submit button.
+  }
+}
+
+/** Update local state if needed (name of user). */
+const updateLocalState = async (editReq: UserEditReq) => {
+  const loginStore = useLoginStore();
+  if (loginStore.loginState.username !== editReq.username) {
+    try {
+      log.debug(`Profile update: prolong for local state update. Name in form: ${editReq.username}, name in store: ${loginStore.loginState.username}.`);
+      await AppLoginer.prolongSilently();
+    } catch (error) {
+      log.error(error, 'Failed to prolong.');
+    }
   }
 }
 

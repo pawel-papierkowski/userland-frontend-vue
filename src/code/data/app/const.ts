@@ -24,6 +24,9 @@ export const languages: string[] = [ 'en', 'pl' ];
 /** List of permission prefixes. */
 export const permissions: string[] = [ 'role', 'user' ];
 
+/** How close to expiration we should be before automatic prolongation in minutes. */
+export const prolongExpiration = 15;
+
 // LOCAL STORAGE
 
 /** Local storage: currently selected language. */

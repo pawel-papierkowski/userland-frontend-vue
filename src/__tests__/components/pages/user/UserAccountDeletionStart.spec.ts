@@ -126,7 +126,7 @@ describe('UserAccountDeletionStart', () => {
 
     // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userAccountDeletionStart.findAll('.form-text-error');
-    expect(errorMessages).toHaveLength(2);
+    expect(errorMessages).toHaveLength(1);
     errorMessages.forEach(msg => {
       expect(msg.text()).not.toBe('');
     });

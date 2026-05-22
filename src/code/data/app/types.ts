@@ -15,7 +15,7 @@ export type LoginState = {
   token: string;
 
   /** User name. Can be shown on frontend. */
-  name: string;
+  username: string;
   /** Email. */
   email: string;
   /** Issued at. */

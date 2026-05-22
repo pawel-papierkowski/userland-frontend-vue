@@ -334,7 +334,7 @@
     "login": {
       "legend": "Login data (JWT)",
       "logged": "Logged",
-      "name": "Name",
+      "username": "Username",
       "email": "Email",
       "issuedAt": "Issued",
       "expiresAt": "Valid until",

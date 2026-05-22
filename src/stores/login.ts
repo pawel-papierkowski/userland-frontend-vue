@@ -19,7 +19,7 @@ export const useLoginStore = defineStore('login', () => {
     return {
       isLogged: false,
       token: '',
-      name: '',
+      username: '',
       email: '',
       issuedAt: new Date(0),
       expiresAt: new Date(0),
@@ -74,7 +74,7 @@ export const useLoginStore = defineStore('login', () => {
     loginState.value.expiresAt = new Date((decodedJwt?.exp || 0) * 1000);
 
     // Our custom data.
-    loginState.value.name = getValue(decodedJwt, 'name') || '';
+    loginState.value.username = getValue(decodedJwt, 'name') || '';
     readPermissions(decodedJwt);
   }
 

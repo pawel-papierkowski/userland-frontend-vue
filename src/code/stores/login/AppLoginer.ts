@@ -3,7 +3,7 @@ import { logger } from '@/code/utils/logger.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { useLoginStore } from '@/stores/login.ts';
-import { locstJwt } from '@/code/data/app/const.ts';
+import { locstJwt, prolongExpiration } from '@/code/data/app/const.ts';
 
 import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
@@ -13,6 +13,9 @@ import { AppMessager } from '@/code/stores/messages/AppMessager';
  * Essentially it is wrapper for login store.
  */
 export class AppLoginer {
+  /** Promise for prolongation. Used to avoid multiple concurrent calls. */
+  private static prolongPromise: Promise<{result: boolean, jwt: string}> | null = null;
+
   /**
    * Log in user. You can get token from /api/users/login or /api/users/prolong endpoints or from local storage.
    * Can be safely called when already logged in.
@@ -78,16 +81,26 @@ export class AppLoginer {
    * @returns result: true if successful, otherwise false. jwt: JWT token.
    */
   public static async prolongSilently(): Promise<{result: boolean, jwt: string}> {
-    const loginStore = useLoginStore();
+    if (AppLoginer.prolongPromise) return AppLoginer.prolongPromise;
 
-    const response = await backendApiUser.prolong(); // API CALL.
-    const jwtToken = response.data.jwtToken;
+    AppLoginer.prolongPromise = (async () => {
+      try {
+        const loginStore = useLoginStore();
 
-    // Prolong call revoked current token, we need to replace it with new token.
-    const result = loginStore.applyToken(jwtToken);
-    if (result) localStorage.setItem(locstJwt, jwtToken);
-    else localStorage.removeItem(locstJwt);
-    return {result: result, jwt: jwtToken};
+        const response = await backendApiUser.prolong(); // API CALL.
+        const jwtToken = response.data.jwtToken;
+
+        // Prolong call revoked current token, we need to replace it with new token.
+        const result = loginStore.applyToken(jwtToken);
+        if (result) localStorage.setItem(locstJwt, jwtToken);
+        else localStorage.removeItem(locstJwt);
+        return {result: result, jwt: jwtToken};
+      } finally {
+        AppLoginer.prolongPromise = null;
+      }
+    })();
+
+    return AppLoginer.prolongPromise;
   }
 
   //
@@ -102,12 +115,28 @@ export class AppLoginer {
   }
 
   /**
+   * Check if user session should be prolonged.
+   * @returns True if session should be prolonged, otherwise false.
+   */
+  public static shouldProlong(): boolean {
+    const loginStore = useLoginStore();
+    if (!loginStore.loginState.isLogged) return false;
+
+    const expiresAt = loginStore.loginState.expiresAt.getTime();
+    const nowAt = new Date().getTime();
+    const diff = expiresAt - nowAt;
+
+    // If less than 5 minutes left, prolong.
+    return diff > 0 && diff < prolongExpiration * 60 * 1000;
+  }
+
+  /**
    * Get username.
    * @returns Username or empty string if no username.
    */
   public static getUsername(): string {
     const loginStore = useLoginStore();
-    return loginStore.loginState.name;
+    return loginStore.loginState.username;
   }
 
   /**

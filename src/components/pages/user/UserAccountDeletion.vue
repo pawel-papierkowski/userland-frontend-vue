@@ -79,7 +79,7 @@ onMounted(() => { // automatically call once user enters page
   <div class="form-all">
     <h2>{{ t('user.accountDelete.form.title') }}</h2>
     <div class="form-group">
-      <div class="form-warning">{{ t('user.accountDelete.form.warning') }}</div>
+      <div class="box-warning">{{ t('user.accountDelete.form.warning') }}</div>
     </div>
 
     <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDeletion()">

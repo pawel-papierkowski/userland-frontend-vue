@@ -46,7 +46,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -71,7 +71,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
-      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
+      expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464175000));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779485775000));
@@ -95,7 +95,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
-      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
+      expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464918000));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486518000));
@@ -119,7 +119,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -143,7 +143,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -165,7 +165,7 @@ describe('AppLoginer', () => {
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
-      loginStore.loginState.name = 'Paweł Papierkowski';
+      loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779108592000);
       loginStore.loginState.expiresAt = new Date(1779130192000);
@@ -184,7 +184,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -217,7 +217,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -245,7 +245,7 @@ describe('AppLoginer', () => {
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
-      loginStore.loginState.name = 'Paweł Papierkowski';
+      loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
       loginStore.loginState.expiresAt = new Date(1779485775000);
@@ -264,7 +264,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(false);
       expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.name).toBe('');
+      expect(loginStore.loginState.username).toBe('');
       expect(loginStore.loginState.email).toBe('');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
@@ -286,8 +286,8 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
       // Arrange: mock successful API response.
+      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
       vi.mocked(backendApiUser.prolong).mockResolvedValue({ data: {
         "jwtToken": newToken
       } } as any);
@@ -295,7 +295,7 @@ describe('AppLoginer', () => {
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
-      loginStore.loginState.name = 'Paweł Papierkowski';
+      loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
       loginStore.loginState.expiresAt = new Date(1779485775000);
@@ -314,7 +314,7 @@ describe('AppLoginer', () => {
       // Assert: verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(newToken);
-      expect(loginStore.loginState.name).toBe('Paweł Papierkowski');
+      expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
       expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464665000)); // different issued and expired
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486265000));
@@ -328,6 +328,109 @@ describe('AppLoginer', () => {
     });
 
     it('unsuccessfully', async () => {
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+      const loginStore = useLoginStore();
+      const messageStore = useMessageStore();
+
+      // Arrange: mock API returning 500 error.
+      const errorResponse = {
+        isAxiosError: true,
+        response: {
+          status: 500,
+          data: {}
+        }
+      };
+      vi.mocked(backendApiUser.prolong).mockRejectedValue(errorResponse);
+
+      const oldToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+
+      // Arrange: set loginStore to logged in state.
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.token = oldToken;
+      loginStore.loginState.username = 'Paweł Papierkowski';
+      loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
+      loginStore.loginState.issuedAt = new Date(1779464175000);
+      loginStore.loginState.expiresAt = new Date(1779485775000);
+      loginStore.loginState.permissions = [];
+
+      // Act: prolong user session.
+      await AppLoginer.prolong();
+
+      // Assert: prolong endpoint was called.
+      expect(backendApiUser.prolong).toHaveBeenCalled();
+
+      // Assert: AppLoginer returns correct results (still logged in, but time of expiration updated).
+      expect(AppLoginer.isLogged()).toBe(true);
+      expect(AppLoginer.hasPermission('role_operator')).toBe(false);
+
+      // Assert: verify content of login store.
+      expect(loginStore.loginState.isLogged).toBe(true);
+      expect(loginStore.loginState.token).toBe(oldToken);
+      expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
+      expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464175000)); // same issued and expired
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779485775000));
+      expect(loginStore.loginState.permissions).toStrictEqual([]);
+
+      // Assert: verify no message is present in store. In other words, prolong fails silently.
+      expect(messageStore.messages).toHaveLength(0);
+    });
+  });
+
+  describe('session prolongation logic', () => {
+    it('should NOT prolong when not logged in', () => {
+      expect(AppLoginer.shouldProlong()).toBe(false);
+    });
+
+    it('should NOT prolong when expiration is far away', () => {
+      vi.setSystemTime(new Date('2026-05-22T10:00:00Z'));
+      const loginStore = useLoginStore();
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.expiresAt = new Date('2026-05-22T11:00:00Z');
+
+      expect(AppLoginer.shouldProlong()).toBe(false);
+    });
+
+    it('should prolong when expiration is close (less than 5 min)', () => {
+      vi.setSystemTime(new Date('2026-05-22T10:58:00Z'));
+      const loginStore = useLoginStore();
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.expiresAt = new Date('2026-05-22T11:00:00Z');
+
+      expect(AppLoginer.shouldProlong()).toBe(true);
+    });
+
+    it('should NOT prolong when already expired', () => {
+      vi.setSystemTime(new Date('2026-05-22T11:01:00Z'));
+      const loginStore = useLoginStore();
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.expiresAt = new Date('2026-05-22T11:00:00Z');
+
+      expect(AppLoginer.shouldProlong()).toBe(false);
+    });
+
+    it('should handle concurrent prolong requests with a single promise', async () => {
+      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+
+      // Delay the mock response to ensure concurrency
+      vi.mocked(backendApiUser.prolong).mockImplementation(() => new Promise((resolve) => {
+        setTimeout(() => resolve({ data: { jwtToken: newToken } } as any), 100);
+      }));
+
+      const loginStore = useLoginStore();
+      loginStore.loginState.isLogged = true;
+
+      // Start two prolongations simultaneously
+      const p1 = AppLoginer.prolongSilently();
+      const p2 = AppLoginer.prolongSilently();
+
+      // Fast forward time
+      vi.advanceTimersByTime(200);
+
+      const [r1, r2] = await Promise.all([p1, p2]);
+
+      expect(r1).toBe(r2); // Should be the same result object
+      expect(backendApiUser.prolong).toHaveBeenCalledTimes(1); // Should only call API once
     });
   });
 });

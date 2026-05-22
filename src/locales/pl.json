@@ -70,7 +70,7 @@
       "msg": {
         "success": {
           "title": "Użytkownik pomyślnie zarejestrowany",
-          "content": "Proszę sprawdzić skrzynkę email. Będzie trzeba potwierdzić rejestrację poprzez kliknięcie na link w emailu."
+          "content": "Proszę sprawdzić skrzynkę email. Musisz potwierdzić rejestrację poprzez kliknięcie na link w emailu."
         },
         "user_0201": {
           "title": "Niepowodzenie rejestracji",
@@ -199,7 +199,7 @@
         },
         "mustBeLogged": {
           "title": "Niepowodzenie",
-          "content": "Musisz być zalogowany, by zmienić adres email. Zaloguj się, po czym użyj łącza z emaila jeszcze raz."
+          "content": "Musisz być zalogowany, by zmienić adres email. Zaloguj się, po czym użyj linku z emaila jeszcze raz."
         },
         "error": {
           "title": "Niepowodzenie",
@@ -238,7 +238,7 @@
         },
         "mustBeLogged": {
           "title": "Niepowodzenie",
-          "content": "Musisz być zalogowany, by móc usunąć konto. Zaloguj się, po czym użyj łącza z emaila jeszcze raz."
+          "content": "Musisz być zalogowany, by móc usunąć konto. Zaloguj się, po czym użyj linku z emaila jeszcze raz."
         },
         "error": {
           "title": "Niepowodzenie",
@@ -332,7 +332,7 @@
     "login": {
       "legend": "Dane loginu (JWT)",
       "logged": "Zalogowany",
-      "name": "Nazwa",
+      "username": "Nazwa",
       "email": "Email",
       "issuedAt": "Wystawiony",
       "expiresAt": "Ważny do",

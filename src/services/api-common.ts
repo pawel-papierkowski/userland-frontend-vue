@@ -24,10 +24,26 @@ export default {
     });
 
     // Add authentication token, if it is present.
-    instance.interceptors.request.use((config) => {
+    instance.interceptors.request.use(async (config) => {
       const token = AppLoginer.getJwt();
       //logger.debug(`Token: ${token}`);
-      if (token !== null) config.headers.Authorization = `Bearer ${token}`;
+      if (token === null) return config; // no token present, nothing to do
+
+      // Check if we should prolong session.
+      // We do NOT prolong if we are already in prolong or login/logout/register request.
+      const isAuthRequest = config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
+
+      if (!isAuthRequest && AppLoginer.shouldProlong()) {
+        logger.debug('Session close to expiration, prolonging...');
+        try {
+          await AppLoginer.prolongSilently();
+        } catch (error) {
+          logger.error(error, 'Failed to prolong.');
+        }
+      }
+
+      // Attach authorization header.
+      config.headers.Authorization = `Bearer ${token}`;
       return config;
     });
 

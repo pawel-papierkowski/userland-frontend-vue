@@ -116,8 +116,8 @@ const callProlong = async () => {
       <div class="debugArea-data">
         <div>{{ t('debugArea.login.logged') }}:</div>
         <div>{{ t('state.'+loginStore.loginState.isLogged) }}</div>
-        <div>{{ t('debugArea.login.name') }}:</div>
-        <div>{{ loginStore.loginState.name }}</div>
+        <div>{{ t('debugArea.login.username') }}:</div>
+        <div>{{ loginStore.loginState.username }}</div>
         <div>{{ t('debugArea.login.email') }}:</div>
         <div>{{ loginStore.loginState.email }}</div>
         <div>{{ t('debugArea.login.issuedAt') }}:</div>
