@@ -77,7 +77,7 @@ const icon = computed(() => {
   width: 100%;
   font-size: 13px;
 
-  border-radius: 4px;
+  border-radius: 6px;
   border-width: 1px;
   border-style: solid;
   line-height: 1.4;
@@ -88,31 +88,27 @@ const icon = computed(() => {
 
 .message-info {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border-color: #2196f3;
+  border: 1px solid #2196f3;
   color: #0d47a1;
 }
-
 .message-success {
   background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border-color: #4caf50;
+  border: 1px solid #4caf50;
   color: #1b5e20;
 }
-
 .message-warning {
   background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
-  border-color: #fbc02d;
+  border: 1px solid #fbc02d;
   color: #664d03;
 }
-
 .message-failure {
   background: linear-gradient(135deg, #fff3e0 0%, #ffccbc 100%);
-  border-color: #ffab91;
+  border: 1px solid #ffab91;
   color: #bf360c;
 }
-
 .message-error {
   background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
-  border-color: #f5c2c7;
+  border: 1px solid #f5c2c7;
   color: #842029;
 }
 

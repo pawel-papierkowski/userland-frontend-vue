@@ -41,6 +41,10 @@ const passwordConfirmError: ComputedRef<string | null> = computed(() => {
 
 //
 
+/**
+ * Verifies state: token must be present.
+ * @returns True if verification was successful, otherwise false.
+ */
 const verifyToken = () => {
   if (!TokenUtils.verify(tokenStr)) {
     AppMessager.failureT('token.invalid.title', 'token.invalid.content');

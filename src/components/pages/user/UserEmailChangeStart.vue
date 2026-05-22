@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Page for requesting password reset. */
+/** Page for requesting email address change. */
 import { reactive, ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';
@@ -21,7 +21,6 @@ const { t } = useI18n();
 const form: UserEmailChangeLinkForm = reactive({
   newEmail: '',
   password: '',
-  confirmPassword: '',
 });
 
 /** True if submit button was clicked at least once. */
@@ -107,6 +106,7 @@ const getInputClass = (msgError: string | null): string => {
 
     <form @submit.prevent="handleEmailChangeLink" novalidate>
       <div class="form-group">
+        <div class="form-info">{{ t('user.emailChangeStart.form.info') }}</div>
         <div class="form-entry">
           <label for="newEmail">{{ t('user.emailChangeStart.form.newEmail') }}:</label>
           <input

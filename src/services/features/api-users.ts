@@ -9,7 +9,8 @@ import type { UserRegisterReq, TokenActivationReq, UserLoginReq, UserEditReq,
 const apiClient = backendApi.create('/users');
 
 export default {
-  /** Register user.
+  /**
+   * Register user.
    * @param payload User registration request.
    * @returns Result of call.
    */

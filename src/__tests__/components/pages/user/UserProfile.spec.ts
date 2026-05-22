@@ -121,6 +121,35 @@ describe('UserProfile', () => {
     expect(mockPush).toHaveBeenCalledWith({ name: 'user-emailChange-start' });
   });
 
+  it('clicks on account delete button', async () => {
+    // Arrange: mock successful API response.
+    vi.mocked(backendApiUser.view).mockResolvedValue({ data: {
+      username: 'SomeNick',
+      email: 'some.email@test.com',
+      lang: 'en',
+      profile: {
+        name: null,
+        surname: null
+      }
+    } } as any);
+
+    const userProfile = createWrapper();
+
+    await flushPromises(); // Wait for all promises (API call) to resolve.
+
+    // Act: click on account delete button.
+    await userProfile.find('[data-testid="btn-deleteAccount"]').trigger('click');
+
+    await flushPromises(); // Wait for all promises (API call) to resolve.
+
+    // Assert: verify API calls.
+    expect(backendApiUser.view).toHaveBeenCalled();
+    expect(backendApiUser.edit).not.toHaveBeenCalled();
+
+    // Assert: verify redirection to account delete page.
+    expect(mockPush).toHaveBeenCalledWith({ name: 'user-accountDel-start' });
+  });
+
   //
 
   it('user data loading failed', async () => {

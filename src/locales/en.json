@@ -8,7 +8,7 @@
       "home": "🏠 Homepage",
       "test": "🧪 Test zone",
       "debug": "🐛 Debug zone",
-      "member": "⭐ Member area"
+      "member": "⭐ Member zone"
     },
     "user": {
       "options": "⚙️ Options",
@@ -135,7 +135,7 @@
     "passwordResetStart": {
       "form": {
         "title": "I forgot my password",
-        "info": "ℹ️ Email will be sent with link that leads to page where you can set new password.",
+        "info": "ℹ️ You will receive an email with a link to reset your password.",
         "email": "Email",
         "button": "Send email",
         "buttonSubmitting": "Sending..."
@@ -143,7 +143,7 @@
       "msg": {
         "success": {
           "title": "Success",
-          "content": "In few minutes email with link leading to password reset form will be sent."
+          "content": "Check your inbox in a few minutes for a email with link to password change."
         },
         "error": {
           "title": "Failure",
@@ -173,6 +173,7 @@
     "emailChangeStart": {
       "form": {
         "title": "Change email address",
+        "info": "ℹ️ You will receive an email with a link to change your email address.",
         "newEmail": "New email",
         "password": "Password",
         "button": "Send email",
@@ -181,7 +182,7 @@
       "msg": {
         "success": {
           "title": "Success",
-          "content": "In few minutes email with link leading to email change confirmation form will be sent."
+          "content": "Check your inbox in a few minutes for a email with link to confirm email address change."
         },
         "error": {
           "title": "Failure",
@@ -191,7 +192,6 @@
     },
     "emailChange": {
       "title": "Setting up new email address...",
-      "email": "New email address",
       "msg": {
         "success": {
           "title": "Success",
@@ -199,11 +199,52 @@
         },
         "mustBeLogged": {
           "title": "Failure",
-          "content": "You must be logged in to change email address."
+          "content": "You must be logged in to change email address. Log in, then use link from email again."
         },
         "error": {
           "title": "Failure",
           "content": "Failed to set new email address."
+        }
+      }
+    },
+    "accountDeleteStart": {
+      "form": {
+        "title": "Delete account",
+        "info": "ℹ️ You will receive an email with a link to delete your account.",
+        "password": "Password",
+        "button": "Send email",
+        "buttonSubmitting": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "Check your inbox in a few minutes for a email with link to confirm your account deletion."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for account deletion."
+        }
+      }
+    },
+    "accountDelete": {
+      "form": {
+        "title": "Delete account",
+        "warning": "⚠️ Confirm that you want to delete your account. This action is irreversible.",
+        "button": "Delete",
+        "buttonSubmitting": "Deleting..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "User account was deleted."
+        },
+        "mustBeLogged": {
+          "title": "Failure",
+          "content": "You must be logged in to delete user account. Log in, then use link from email again."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to delete user account."
         }
       }
     },
@@ -234,6 +275,15 @@
           "title": "Failure",
           "content": "Failed to update user data."
         }
+      }
+    }
+  },
+
+  "memberArea": {
+    "msg": {
+      "mustBeLogged": {
+        "title": "Failure",
+        "content": "You must be logged in to access member zone."
       }
     }
   },
@@ -289,6 +339,81 @@
       "issuedAt": "Issued",
       "expiresAt": "Valid until",
       "permissions": "Permissions"
+    },
+    "checks": {
+      "legend": "API for /api/checks",
+      "alive": {
+        "button": "Call /api/checks/alive",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/alive."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/alive."
+          }
+        }
+      },
+      "logged": {
+        "button": "Call /api/checks/must-be-logged",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/must-be-logged."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/must-be-logged."
+          }
+        }
+      },
+      "admin": {
+        "button": "Call /api/checks/must-be-admin",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/must-be-admin."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/must-be-admin."
+          }
+        }
+      },
+      "exception": {
+        "button": "Call /api/checks/exception",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/exception."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/exception."
+          }
+        }
+      }
+    },
+    "options": {
+      "legend": "Options",
+      "prolong": {
+        "button": "Prolong your session",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully prolonged user session."
+          },
+          "failure": {
+            "title": "Failure",
+            "content": "Failed to prolong user session."
+          },
+          "error": {
+            "title": "Error",
+            "content": "Failed to prolong user session."
+          }
+        }
+      }
     }
   },
 

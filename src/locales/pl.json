@@ -8,7 +8,7 @@
       "home": "🏠 Strona główna",
       "test": "🧪 Strefa testów",
       "debug": "🐛 Strefa debugu",
-      "member": "⭐ Strona członków"
+      "member": "⭐ Strefa członków"
     },
     "user": {
       "options": "⚙️ Opcje",
@@ -70,7 +70,7 @@
       "msg": {
         "success": {
           "title": "Użytkownik pomyślnie zarejestrowany",
-          "content": "Proszę sprawdzić skrzynkę email. Będzie trzeba potwierdzić rejestrację poprzez kliknięcie na łącze w emailu."
+          "content": "Proszę sprawdzić skrzynkę email. Będzie trzeba potwierdzić rejestrację poprzez kliknięcie na link w emailu."
         },
         "user_0201": {
           "title": "Niepowodzenie rejestracji",
@@ -135,7 +135,7 @@
     "passwordResetStart": {
       "form": {
         "title": "Zapomniałem hasła",
-        "info": "ℹ️ Zostanie wysłany email z łączem, po którego kliknięciu wejdziesz na stronę, gdzie można ustawić nowe hasło.",
+        "info": "ℹ️ Otrzymasz e-mail z linkiem do zresetowania hasła.",
         "email": "Email",
         "button": "Wyślij email",
         "buttonSubmitting": "Wysyłanie..."
@@ -143,7 +143,7 @@
       "msg": {
         "success": {
           "title": "Sukces",
-          "content": "Email z łączem prowadzącym do formularza resetu hasła zostanie wysłany w ciągu paru minut."
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do zmiany hasła."
         },
         "error": {
           "title": "Niepowodzenie",
@@ -173,6 +173,7 @@
     "emailChangeStart": {
       "form": {
         "title": "Zmień adres email",
+        "info": "ℹ️ Otrzymasz e-mail z linkiem do zmiany adresu email.",
         "newEmail": "Nowy email",
         "password": "Hasło",
         "button": "Wyślij email",
@@ -181,7 +182,7 @@
       "msg": {
         "success": {
           "title": "Sukces",
-          "content": "Email z łączem prowadzącym do formularza potwierdzenia zmiany emaila zostanie wysłany w ciągu paru minut."
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do potwierdzenia zmiany adresu email."
         },
         "error": {
           "title": "Niepowodzenie",
@@ -191,7 +192,6 @@
     },
     "emailChange": {
       "title": "Zapisywanie nowego adresu email...",
-      "email": "Nowy adres email",
       "msg": {
         "success": {
           "title": "Sukces",
@@ -199,11 +199,50 @@
         },
         "mustBeLogged": {
           "title": "Niepowodzenie",
-          "content": "Musisz być zalogowany, by zmienić adres email."
+          "content": "Musisz być zalogowany, by zmienić adres email. Zaloguj się, po czym użyj łącza z emaila jeszcze raz."
         },
         "error": {
           "title": "Niepowodzenie",
           "content": "Nie udało się ustawić nowego adresu email."
+        }
+      }
+    },
+    "accountDeleteStart": {
+      "form": {
+        "title": "Usuń konto",
+        "info": "ℹ️ Otrzymasz e-mail z linkiem do usunięcia swojego konta.",
+        "password": "Hasło",
+        "button": "Wyślij email",
+        "buttonSubmitting": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do potwierdzenia usunięcia konta."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o zmianę adresu email."
+        }
+      }
+    },
+    "accountDelete": {
+      "title": "Usuń konto",
+      "warning": "⚠️ Potwierdź zamiar usunięcia swojego konta. Ta czynność jest nieodwracalna.",
+      "button": "Usuń",
+      "buttonSubmitting": "Usuwanie...",
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Konto użytkownika zostało usunięte."
+        },
+        "mustBeLogged": {
+          "title": "Niepowodzenie",
+          "content": "Musisz być zalogowany, by móc usunąć konto. Zaloguj się, po czym użyj łącza z emaila jeszcze raz."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się usunąć konta."
         }
       }
     },
@@ -234,6 +273,15 @@
           "title": "Niepowodzenie",
           "content": "Nie udało się zaktualizować danych użytkownika."
         }
+      }
+    }
+  },
+
+  "memberArea": {
+    "msg": {
+      "mustBeLogged": {
+        "title": "Niepowodzenie",
+        "content": "Musisz być zalogowany, by mieć dostęp do strefy członków."
       }
     }
   },
@@ -289,6 +337,81 @@
       "issuedAt": "Wystawiony",
       "expiresAt": "Ważny do",
       "permissions": "Uprawnienia"
+    },
+    "checks": {
+      "legend": "API dla /api/checks",
+      "alive": {
+        "button": "Wywołaj /api/checks/alive",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/alive."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/alive."
+          }
+        }
+      },
+      "logged": {
+        "button": "Wywołaj /api/checks/must-be-logged",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/must-be-logged."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/must-be-logged."
+          }
+        }
+      },
+      "admin": {
+        "button": "Wywołaj /api/checks/must-be-admin",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/must-be-admin."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/must-be-admin."
+          }
+        }
+      },
+      "exception": {
+        "button": "Wywołaj /api/checks/exception",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Successfully called /api/checks/exception."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/exception."
+          }
+        }
+      }
+    },
+    "options": {
+      "legend": "Opcje",
+      "prolong": {
+        "button": "Przedłuż swoją sesję",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się przedłużyć sesję użytkownika."
+          },
+          "failure": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się przedłużyć sesji użytkownika."
+          },
+          "error": {
+            "title": "Błąd",
+            "content": "Nie udało się przedłużyć sesji użytkownika."
+          }
+        }
+      }
     }
   },
 

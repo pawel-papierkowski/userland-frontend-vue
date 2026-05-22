@@ -28,19 +28,31 @@ const canSpin: Ref<boolean> = ref(true);
 /** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 
-/** Call email change API. */
-const callEmailChangeApi = async () => {
+//
+
+/**
+ * Verifies state: you need to be logged in and token must be present.
+ * @returns True if verification was successful, otherwise false.
+ */
+const verifyAll = (): boolean => {
   if (!AppLoginer.isLogged()) {
     AppMessager.failureT('user.emailChange.msg.mustBeLogged.title', 'user.emailChange.msg.mustBeLogged.content');
-    router.push({ name: 'home' });
-    return;
+    router.push({ name: 'login' });
+    return false;
   }
 
   if (!TokenUtils.verify(tokenStr)) {
     AppMessager.failureT('token.invalid.title', 'token.invalid.content');
     router.push({ name: 'home' });
-    return;
+    return false;
   }
+
+  return true;
+};
+
+/** Call email change API. Note it is automatically called. */
+const callEmailChangeApi = async () => {
+  if (!verifyAll()) return;
 
   try {
     const payload: UserEmailChangeReq = { token: tokenStr };

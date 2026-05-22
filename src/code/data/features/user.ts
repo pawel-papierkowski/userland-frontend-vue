@@ -124,12 +124,12 @@ export type UserEmailChangeReq = {
 
 /** User account delete link form. */
 export type UserAccountDeleteLinkForm = {
-  email: string;
+  password: string;
 };
 
 /** User account delete link request. */
 export type UserAccountDeleteLinkReq = {
-  email: string;
+  password: string;
   frontend: string; // Used frontend. Always VUE.
 };
 

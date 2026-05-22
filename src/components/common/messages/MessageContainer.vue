@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Message container that can show many message boxes.
+ * Floating message container that can show many message boxes.
  * To add new messages, use AppMessager.
  *
  * Example of use:
@@ -27,7 +27,7 @@ const messageStore = useMessageStore();
 </template>
 
 <style scoped>
-/* Whole message container. */
+/* Whole message container. Causes all messages to appear on top right. */
 .message-wrapper {
   position: fixed;
   top: 0;

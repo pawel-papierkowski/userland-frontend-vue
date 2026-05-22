@@ -63,7 +63,7 @@ describe('UserPasswordResetStart', () => {
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
     expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("In few minutes email with link leading to password reset form will be sent.");
+    expect(messageStore.messages[0].content).toBe("Check your inbox in a few minutes for a email with link to password change.");
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

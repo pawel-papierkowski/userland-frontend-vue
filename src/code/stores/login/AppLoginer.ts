@@ -60,25 +60,34 @@ export class AppLoginer {
    * Prolong user session. Contains API call.
    */
   public static async prolong() {
-    const loginStore = useLoginStore();
-
     try {
-      const response = await backendApiUser.prolong(); // API CALL.
-      const jwtToken = response.data.jwtToken;
-
-      // Prolong call will revoke current token, we need to replace it with new token.
-      const result = loginStore.applyToken(jwtToken);
+      const { result } = await AppLoginer.prolongSilently();
       if (result) {
-        localStorage.setItem(locstJwt, jwtToken);
         AppMessager.infoT('user.prolong.msg.info.title', 'user.prolong.msg.info.content');
         logger.debug('Prolong successful.');
       } else {
-        localStorage.removeItem(locstJwt);
         logger.error('Prolong failed!');
       }
     } catch (error) {
       backendApi.logError(error, 'Prolong failed!');
     }
+  }
+
+  /**
+   * Prolong user session silently. Contains API call. It is up to you to catch exceptions and react to result.
+   * @returns result: true if successful, otherwise false. jwt: JWT token.
+   */
+  public static async prolongSilently(): Promise<{result: boolean, jwt: string}> {
+    const loginStore = useLoginStore();
+
+    const response = await backendApiUser.prolong(); // API CALL.
+    const jwtToken = response.data.jwtToken;
+
+    // Prolong call revoked current token, we need to replace it with new token.
+    const result = loginStore.applyToken(jwtToken);
+    if (result) localStorage.setItem(locstJwt, jwtToken);
+    else localStorage.removeItem(locstJwt);
+    return {result: result, jwt: jwtToken};
   }
 
   //

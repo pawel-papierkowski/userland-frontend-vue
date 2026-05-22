@@ -65,7 +65,7 @@ describe('UserEmailChangeStart', () => {
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
     expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("In few minutes email with link leading to email change confirmation form will be sent.");
+    expect(messageStore.messages[0].content).toBe("Check your inbox in a few minutes for a email with link to confirm email address change.");
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

@@ -105,10 +105,10 @@ describe('UserEmailChange', () => {
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
     expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("You must be logged in to change email address.");
+    expect(messageStore.messages[0].content).toBe("You must be logged in to change email address. Log in, then use link from email again.");
 
     // Assert: verify redirection to home page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+    expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
   });
 
   it('fails when no token is provided', async () => {

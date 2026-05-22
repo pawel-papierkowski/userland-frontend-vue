@@ -14,7 +14,7 @@ import UserPasswordReset from '@/components/pages/user/UserPasswordReset.vue';
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
   default: {
-    passwordResetConfirm: vi.fn<typeof backendApiUser.register>(),
+    passwordResetConfirm: vi.fn<typeof backendApiUser.passwordResetConfirm>(),
   },
 }));
 
