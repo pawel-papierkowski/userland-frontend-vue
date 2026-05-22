@@ -85,7 +85,7 @@
           "title": "Aktywacja użytkownika udana",
           "content": "Możesz się teraz zalogować."
         },
-        "user_0202": {
+        "error": {
           "title": "Niepowodzenie aktywacji",
           "content": "Aktywacja użytkownika nieudana."
         }
@@ -135,7 +135,7 @@
     "passwordResetStart": {
       "form": {
         "title": "Zapomniałem hasła",
-        "info": "ℹ️ Otrzymasz e-mail z linkiem do zresetowania hasła.",
+        "info": "Otrzymasz e-mail z linkiem do zresetowania hasła.",
         "email": "Email",
         "button": "Wyślij email",
         "buttonSubmitting": "Wysyłanie..."
@@ -173,7 +173,7 @@
     "emailChangeStart": {
       "form": {
         "title": "Zmień adres email",
-        "info": "ℹ️ Otrzymasz e-mail z linkiem do zmiany adresu email.",
+        "info": "Otrzymasz e-mail z linkiem do zmiany adresu email.",
         "newEmail": "Nowy email",
         "password": "Hasło",
         "button": "Wyślij email",
@@ -210,7 +210,7 @@
     "accountDeleteStart": {
       "form": {
         "title": "Usuń konto",
-        "info": "ℹ️ Otrzymasz e-mail z linkiem do usunięcia swojego konta.",
+        "info": "Otrzymasz e-mail z linkiem do usunięcia swojego konta.",
         "password": "Hasło",
         "button": "Wyślij email",
         "buttonSubmitting": "Wysyłanie..."
@@ -227,10 +227,12 @@
       }
     },
     "accountDelete": {
-      "title": "Usuń konto",
-      "warning": "⚠️ Potwierdź zamiar usunięcia swojego konta. Ta czynność jest nieodwracalna.",
-      "button": "Usuń",
-      "buttonSubmitting": "Usuwanie...",
+      "form": {
+        "title": "Usuń konto",
+        "warning": "Potwierdź zamiar usunięcia swojego konta. Ta czynność jest nieodwracalna.",
+        "button": "Usuń",
+        "buttonSubmitting": "Usuwanie..."
+      },
       "msg": {
         "success": {
           "title": "Sukces",

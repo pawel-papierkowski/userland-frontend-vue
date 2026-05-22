@@ -133,6 +133,10 @@
   padding: 2px;
   font-size: 0.8em;
 }
+.box-info::before {
+  content: 'ℹ️ ';
+}
+
 .box-success {
   background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
   border: 1px solid #4caf50;
@@ -142,6 +146,10 @@
   margin: 1px 10px;
   padding: 2px;
 }
+.box-success::before {
+  content: '✅ ';
+}
+
 .box-warning {
   background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
   border: 1px solid #fbc02d;
@@ -151,6 +159,10 @@
   margin: 1px 10px;
   padding: 2px;
 }
+.box-warning::before {
+  content: '⚠️ ';
+}
+
 .box-failure {
   background: linear-gradient(135deg, #fff3e0 0%, #ffccbc 100%);
   border: 1px solid #ffab91;
@@ -160,6 +172,10 @@
   margin: 1px 10px;
   padding: 2px;
 }
+.box-failure::before {
+  content: '❌ ';
+}
+
 .box-error {
   background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
   border: 1px solid #f5c2c7;
@@ -168,6 +184,9 @@
 
   margin: 1px 10px;
   padding: 2px;
+}
+.box-error::before {
+  content: '🛑 ';
 }
 
 /* Other. */

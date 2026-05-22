@@ -40,10 +40,10 @@
   --header-font-size: 12px;
   --header-margin: 0;
   --header-padding: 5px;
-  --header-border: none;
+  --header-border: 1px solid rgba(0, 0, 0, 0.05);
   --header-border-radius: 0;
-  --header-background: #ffeebb;
-  --header-box-shadow: none;
+  --header-background: linear-gradient(135deg, #fff3d0 0%, #ffeebb 100%);
+  --header-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   --footer-font-size: 12px;
   --footer-margin: 14px;

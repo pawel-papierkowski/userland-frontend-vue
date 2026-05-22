@@ -135,7 +135,7 @@
     "passwordResetStart": {
       "form": {
         "title": "I forgot my password",
-        "info": "ℹ️ You will receive an email with a link to reset your password.",
+        "info": "You will receive an email with a link to reset your password.",
         "email": "Email",
         "button": "Send email",
         "buttonSubmitting": "Sending..."
@@ -173,7 +173,7 @@
     "emailChangeStart": {
       "form": {
         "title": "Change email address",
-        "info": "ℹ️ You will receive an email with a link to change your email address.",
+        "info": "You will receive an email with a link to change your email address.",
         "newEmail": "New email",
         "password": "Password",
         "button": "Send email",
@@ -210,7 +210,7 @@
     "accountDeleteStart": {
       "form": {
         "title": "Delete account",
-        "info": "ℹ️ You will receive an email with a link to delete your account.",
+        "info": "You will receive an email with a link to delete your account.",
         "password": "Password",
         "button": "Send email",
         "buttonSubmitting": "Sending..."
@@ -229,7 +229,7 @@
     "accountDelete": {
       "form": {
         "title": "Delete account",
-        "warning": "⚠️ Confirm that you want to delete your account. This action is irreversible.",
+        "warning": "Confirm that you want to delete your account. This action is irreversible.",
         "button": "Delete",
         "buttonSubmitting": "Deleting..."
       },

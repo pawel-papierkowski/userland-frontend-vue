@@ -14,7 +14,7 @@
       <slot name="trigger" />
     </div>
 
-    <div v-if="isOpen" class="dropdown-wrap">
+    <div v-if="isOpen" class="dropdown-wrap" @click="isOpen = false">
       <slot name="content" />
     </div>
   </div>
@@ -36,6 +36,7 @@
 
     background: var(--header-background);
     border: var(--header-border);
+    box-shadow: var(--header-box-shadow);
 
     min-width: 200px;
     z-index: 100;
