@@ -59,6 +59,7 @@
     "registration": {
       "form": {
         "title": "Create an account",
+        "warning": "Important note:<br/>Due to nature of portfolio project, any account created here will be <b>removed automatically</b> after 72h from last activity.<br/>Also, all new accounts have <b>admin permissions</b>.",
         "username": "Username",
         "email": "Email",
         "password": "Password",

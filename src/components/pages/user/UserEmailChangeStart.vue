@@ -106,7 +106,7 @@ const getInputClass = (msgError: string | null): string => {
 
     <form @submit.prevent="handleEmailChangeLink" novalidate>
       <div class="form-group">
-        <div class="box-info">{{ t('user.emailChangeStart.form.info') }}</div>
+        <div class="box-info" v-html="t('user.emailChangeStart.form.info')" />
         <div class="form-entry">
           <label for="newEmail">{{ t('user.emailChangeStart.form.newEmail') }}:</label>
           <input

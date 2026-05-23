@@ -100,7 +100,7 @@ const getInputClass = (msgError: string | null): string => {
 
     <form @submit.prevent="handleAccountDeletionLink" novalidate>
       <div class="form-group">
-        <div class="box-info">{{ t('user.accountDeleteStart.form.info') }}</div>
+        <div class="box-info" v-html="t('user.accountDeleteStart.form.info')" />
         <div class="form-entry">
           <label for="password">{{ t('user.accountDeleteStart.form.password') }}:</label>
           <input

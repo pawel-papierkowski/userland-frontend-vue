@@ -122,6 +122,7 @@ const getInputClass = (msgError: string | null): string => {
 
     <form @submit.prevent="handleRegister" novalidate>
       <div class="form-group">
+        <div class="box-warning" v-html="t('user.registration.form.warning')" />
         <div class="form-entry">
           <label for="username">{{ t('user.registration.form.username') }}:</label>
           <input

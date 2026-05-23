@@ -100,7 +100,7 @@ const getInputClass = (msgError: string | null): string => {
 
     <form @submit.prevent="handlePasswordResetLink" novalidate>
       <div class="form-group">
-        <div class="box-info">{{ t('user.passwordResetStart.form.info') }}</div>
+        <div class="box-info" v-html="t('user.passwordResetStart.form.info')" />
         <div class="form-entry">
           <label for="email">{{ t('user.passwordResetStart.form.email') }}:</label>
           <input

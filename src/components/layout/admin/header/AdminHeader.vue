@@ -7,73 +7,18 @@ import UserLandLang from '@/components/common/layout/UserLandLang.vue';
 
 <template>
   <header>
-    <div class="header-menu">
-      <div class="header-menu-left">
+    <div class="header">
+      <div class="header-menu">
         <AdminMenu />
       </div>
-      <div class="header-menu-center">
+      <div class="header-bar">
         <AdminBar />
       </div>
-      <div class="header-menu-right">
+      <div class="header-lang">
         <UserLandLang />
       </div>
     </div>
   </header>
 </template>
 
-<style scoped>
-.header-menu {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 1rem;
-
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
-
-.header-menu-left {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-self: start;
-}
-
-.header-menu-center {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.header-menu-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-self: end;
-}
-
-@media (max-width: 800px) {
-  .header-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .header-menu-right {
-    order: 1;
-    justify-self: center;
-  }
-
-  .header-menu-center {
-    order: 2;
-  }
-
-  .header-menu-left {
-    order: 3;
-    justify-self: center;
-  }
-}
-</style>
+<style scoped></style>
