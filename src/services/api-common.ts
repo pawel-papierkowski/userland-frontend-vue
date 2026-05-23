@@ -25,8 +25,7 @@ export default {
 
     // Add authentication token, if it is present.
     instance.interceptors.request.use(async (config) => {
-      const token = AppLoginer.getJwt();
-      //logger.debug(`Token: ${token}`);
+      let token = AppLoginer.getJwt();
       if (token === null) return config; // no token present, nothing to do
 
       // Check if we should prolong session.
@@ -36,13 +35,15 @@ export default {
       if (!isAuthRequest && AppLoginer.shouldProlong()) {
         logger.debug('Session close to expiration, prolonging...');
         try {
-          await AppLoginer.prolongSilently();
+          const {jwt} = await AppLoginer.prolongSilently();
+          token = jwt; // we need to use new token
         } catch (error) {
           logger.error(error, 'Failed to prolong.');
         }
       }
 
       // Attach authorization header.
+      //logger.debug(`Token: ${token}`);
       config.headers.Authorization = `Bearer ${token}`;
       return config;
     });
