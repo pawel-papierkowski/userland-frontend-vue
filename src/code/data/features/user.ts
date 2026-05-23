@@ -8,6 +8,7 @@ export type UserRegisterForm = {
   email: string; // Email address. Doubles as unique name of account.
   password: string; // Password.
   confirmPassword: string; // Second password field to compare with first.
+  isAdmin: boolean; // If true, will get admin permissions. Portfolio mode only.
 };
 
 /** User registration request. */
@@ -15,6 +16,7 @@ export type UserRegisterReq = {
   username: string; // Name shown on frontend.
   email: string; // Email address. Doubles as unique name of account.
   password: string; // Password.
+  isAdmin: boolean; // If true, will get admin permissions. Portfolio mode only.
   lang: string; // Short language code.
   frontend: string; // Used frontend. Always VUE.
 };

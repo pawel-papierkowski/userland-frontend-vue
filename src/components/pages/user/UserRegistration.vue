@@ -23,6 +23,7 @@ const form: UserRegisterForm = reactive({
   email: '',
   password: '',
   confirmPassword: '',
+  isAdmin: false,
 });
 
 /** True if submit button was clicked at least once. */
@@ -102,6 +103,7 @@ const clearForm = () => {
   form.email = '';
   form.password = '';
   form.confirmPassword = '';
+  form.isAdmin = false;
 };
 
 /** Go to login page. */
@@ -177,6 +179,18 @@ const getInputClass = (msgError: string | null): string => {
             autocomplete="new-password"
           />
           <span v-if="passwordConfirmError" class="form-text-error">{{ passwordConfirmError }}</span>
+        </div>
+
+        <div class="form-entry-inline">
+          <label for="isAdmin">{{ t('user.registration.form.isAdmin') }}:</label>
+          <input
+            id="isAdmin"
+            data-testid="isAdmin"
+            type="checkbox"
+            v-model="form.isAdmin"
+            required
+            autocomplete="new-password"
+          />
         </div>
       </div>
 

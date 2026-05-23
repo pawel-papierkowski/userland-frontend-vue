@@ -59,11 +59,12 @@
     "registration": {
       "form": {
         "title": "Create an account",
-        "warning": "Important note:<br/>Due to nature of portfolio project, any account created here will be <b>removed automatically</b> after 72h from last activity.<br/>Also, all new accounts have <b>admin permissions</b>.",
+        "warning": "Important note:<br/>Due to nature of portfolio project, any account created here will be <b>removed automatically</b> after 72h from last activity.<br/>Also, accounts can get <b>admin permissions</b>.",
         "username": "Username",
         "email": "Email",
         "password": "Password",
         "confirmPassword": "Confirm password",
+        "isAdmin": "I want to be admin",
         "button": "Create",
         "buttonSubmitting": "Creating account...",
         "hasAccount": "Do you already have account?"

@@ -59,11 +59,12 @@
     "registration": {
       "form": {
         "title": "Utwórz konto",
-        "warning": "Ważna informacja:<br/>Ponieważ jest to projekt portfolio, każde utworzone tutaj konto zostanie <b>automatycznie usunięte</b> po 72h od ostatniej aktywności.<br/>Ponadto wszyscy nowi użytkownicy otrzymują <b>uprawnienia administratora</b>.",
+        "warning": "Ważna informacja:<br/>Ponieważ jest to projekt portfolio, każde utworzone tutaj konto zostanie <b>automatycznie usunięte</b> po 72h od ostatniej aktywności.<br/>Ponadto nowe konta mogą otrzymać <b>uprawnienia administratora</b>.",
         "username": "Nazwa użytkownika",
         "email": "Email",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło",
+        "isAdmin": "Chcę być adminem",
         "button": "Utwórz",
         "buttonSubmitting": "Tworzenie konta...",
         "hasAccount": "Już masz konto?"
