@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { TokenActivationReq } from '@/code/data/features/user.ts';
+import type { TokenActivationReq } from '@/code/data/features/user/user';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
@@ -42,14 +42,15 @@ const callActivationApi = async () => {
     router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
-    backendApi.logError(error, 'Activation failed! Token: '+tokenStr);
+    backendApi.logError(error, 'Activation failed! Token: ' + tokenStr);
     canSpin.value = false;
   }
-}
+};
 
 //
 
-onMounted(() => { // automatically call once user enters page
+onMounted(() => {
+  // automatically call once user enters page
   callActivationApi();
 });
 </script>

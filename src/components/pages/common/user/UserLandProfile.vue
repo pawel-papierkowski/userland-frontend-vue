@@ -2,7 +2,7 @@
 /** User profile page. */
 import { onMounted, reactive, ref, computed } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
@@ -10,7 +10,7 @@ import { useLoginStore } from '@/stores/login.ts';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user.ts';
+import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
@@ -19,7 +19,10 @@ import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const log = useLogger();
 const router = useRouter();
+const route = useRoute();
 const { t, locale } = useI18n();
+
+const isAdminPanel = route.name === 'admin-profile';
 
 /** User data. */
 const form: UserEditForm = reactive({
@@ -55,7 +58,7 @@ const fillForm = async () => {
   form.surname = data.profile.surname;
 
   isLoading.value = false;
-}
+};
 
 /** Retrieve all available data about currently logged user from backend. */
 const resolveUserData = async (): Promise<UserDataResp | null> => {
@@ -69,7 +72,7 @@ const resolveUserData = async (): Promise<UserDataResp | null> => {
     canSpin.value = false;
     return null;
   }
-}
+};
 
 //
 
@@ -90,24 +93,26 @@ const handleUserData = async () => {
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
-}
+};
 
 /** Update local state if needed (name of user). */
 const updateLocalState = async (editReq: UserEditReq) => {
   const loginStore = useLoginStore();
   if (loginStore.loginState.username !== editReq.username) {
     try {
-      log.debug(`Profile update: prolong for local state update. Name in form: ${editReq.username}, name in store: ${loginStore.loginState.username}.`);
+      log.debug(
+        `Profile update: prolong for local state update. Name in form: ${editReq.username}, name in store: ${loginStore.loginState.username}.`,
+      );
       await AppLoginer.prolongSilently();
     } catch (error) {
       log.error(error, 'Failed to prolong.');
     }
   }
-}
+};
 
 /** Check if form has any errors. */
 const isFormError = () => {
-   // prevent sending empty form
+  // prevent sending empty form
   if (!form.username) return true;
   if (usernameError.value !== null) return true;
   return false;
@@ -129,13 +134,13 @@ const convertToReq = (form: UserEditForm): UserEditReq => {
 
 /** Sends user to dedicated email change page. */
 const handleEmailChange = async () => {
-    router.push({ name: 'user-emailChange-start' });
-}
+  router.push({ name: 'user-emailChange-start' });
+};
 
 /** Sends user to dedicated account deletion page. */
 const handleAccountDelete = async () => {
-    router.push({ name: 'user-accountDel-start' });
-}
+  router.push({ name: 'user-accountDel-start' });
+};
 
 //
 
@@ -161,14 +166,15 @@ const getInputClass = (msgError: string | null): string => {
 
 //
 
-onMounted(async () => { // automatically call once user enters page
+onMounted(async () => {
+  // automatically call once user enters page
   await fillForm();
 });
 </script>
 
 <template>
   <div class="form-all">
-    <h2>{{ t('user.profile.form.title') }}</h2>
+    <h2>{{ isAdminPanel ? t('user.profile.formAdmin.title') : t('user.profile.form.title') }}</h2>
 
     <div class="spinner-container" v-if="isLoading">
       <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
@@ -205,26 +211,12 @@ onMounted(async () => { // automatically call once user enters page
 
         <div class="form-entry">
           <label for="name">{{ t('user.profile.form.name') }}:</label>
-          <input
-            id="name"
-            data-testid="name"
-            type="text"
-            v-model="form.name"
-            required
-            autocomplete="off"
-          />
+          <input id="name" data-testid="name" type="text" v-model="form.name" required autocomplete="off" />
         </div>
 
         <div class="form-entry">
           <label for="surname">{{ t('user.profile.form.surname') }}:</label>
-          <input
-            id="surname"
-            data-testid="surname"
-            type="text"
-            v-model="form.surname"
-            required
-            autocomplete="off"
-          />
+          <input id="surname" data-testid="surname" type="text" v-model="form.surname" required autocomplete="off" />
         </div>
       </div>
 
@@ -243,5 +235,4 @@ onMounted(async () => { // automatically call once user enters page
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

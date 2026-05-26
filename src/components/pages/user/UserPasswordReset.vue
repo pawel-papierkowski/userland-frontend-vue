@@ -12,7 +12,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user.ts';
+import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user';
 
 const log = useLogger();
 const route = useRoute();
@@ -68,7 +68,7 @@ const handlePasswordResetConfirmation = async () => {
     router.push({ name: 'home' });
   } catch (error) {
     AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
-    backendApi.logError(error, 'Password reset confirmation failed! Token: '+tokenStr);
+    backendApi.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
@@ -76,7 +76,7 @@ const handlePasswordResetConfirmation = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-   // prevent sending empty form
+  // prevent sending empty form
   if (!form.password || !form.confirmPassword) return true;
   if (passwordError.value !== null) return true;
   if (passwordConfirmError.value !== null) return true;
@@ -117,7 +117,8 @@ const getInputClass = (msgError: string | null): string => {
 
 //
 
-onMounted(() => { // automatically call once user enters page
+onMounted(() => {
+  // automatically call once user enters page
   verifyToken();
 });
 </script>
@@ -158,7 +159,7 @@ onMounted(() => { // automatically call once user enters page
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.passwordReset.form.buttonSubmitting') : t('user.passwordReset.form.button') }}
+        {{ isSubmitting ? t('user.passwordReset.form.buttonBusy') : t('user.passwordReset.form.button') }}
       </button>
     </form>
   </div>

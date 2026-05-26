@@ -112,12 +112,12 @@
   --button-hover-danger-border: 1px solid #7b0000;
 
   /* ComboBox specific vars. */
-  --combobox-border: 1px solid #d1d5db;
+  --combobox-border: 1px solid #444444;
   --combobox-background: #ffffff;
   --combobox-text: #111827;
   --combobox-background-hover: #f0f0f0;
   --combobox-text-hover: #111827;
-  --combobox-option-border: 1px solid #d1d5db;
+  --combobox-option-border: 1px solid #444444;
   --combobox-option-background: #f8f8f8;
   --combobox-option-background-hover: #e8e8e8;
   --combobox-option-text-hover: #111827;

@@ -22,6 +22,7 @@ Properties:
 
 Notes:
 - ComboBox is integrated with vue-i18n.
+- Null value is supported as option. Example: const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
 */
 
 import { ref, computed } from 'vue';
@@ -30,9 +31,9 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: [String, null], // null means nothing is selected
   options: {
-    type: Array<string>,
+    type: Array<string|null>,
     default: () => []
   },
   langPrefix: {
@@ -55,7 +56,7 @@ const selectedOption = computed({
   set: (value) => emit('update:modelValue', value)
 });
 
-const selectOption = (option: string) => {
+const selectOption = (option: string|null) => {
   selectedOption.value = option;
   isOpen.value = false;
 }
@@ -64,11 +65,11 @@ const selectOption = (option: string) => {
 <template>
   <div class="combobox" ref="combobox" tabindex="0" @blur="isOpen = false">
     <div class="selected" @click="isOpen = !isOpen">
-      <span class="selected-text">{{ t(langPrefix+'.'+selectedOption) || t(placeholder) }}</span>
+      <span class="selected-text">{{ selectedOption ? t(langPrefix+'.'+selectedOption) : t(placeholder) }}</span>
       <span class="arrow" :class="arrowClass"></span>
     </div>
     <div class="options" v-show="isOpen">
-      <div v-for="option in options" :key="option" class="option"
+      <div v-for="(option, index) in options" :key="index" class="option"
         @click="selectOption(option)">
         {{ t(langPrefix+'.'+option) }}
       </div>
@@ -81,8 +82,8 @@ const selectOption = (option: string) => {
   position: relative;
   display: inline-block;
 
-  margin: 0px 5px;
-  padding: 0px;
+  margin: 0px;
+  padding: 2px;
 
   color: var(--combobox-text);
   background: var(--combobox-background);
@@ -90,6 +91,8 @@ const selectOption = (option: string) => {
   border: var(--combobox-border);
   border-radius: 5px;
   min-width: 125px;
+
+  user-select: none;
 }
 
 .combobox:hover {

@@ -1,9 +1,17 @@
 /** Handles calling user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
-import type { UserRegisterReq, TokenActivationReq, UserLoginReq, UserEditReq,
-  UserPasswordResetLinkReq, UserPasswordResetReq,
-  UserEmailChangeLinkReq, UserEmailChangeReq,
-  UserAccountDeleteLinkReq, UserAccountDeleteReq } from '@/code/data/features/user.ts';
+import type {
+  UserRegisterReq,
+  TokenActivationReq,
+  UserLoginReq,
+  UserEditReq,
+  UserPasswordResetLinkReq,
+  UserPasswordResetReq,
+  UserEmailChangeLinkReq,
+  UserEmailChangeReq,
+  UserAccountDeleteLinkReq,
+  UserAccountDeleteReq,
+} from '@/code/data/features/user/user';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
@@ -122,5 +130,5 @@ export default {
    */
   accountDeleteConfirm(payload: UserAccountDeleteReq) {
     return apiClient.delete('/delete/confirm', { data: payload });
-  }
-}
+  },
+};

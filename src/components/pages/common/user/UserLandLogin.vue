@@ -12,7 +12,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user.ts';
+import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user';
 
 const log = useLogger();
 const router = useRouter();
@@ -58,11 +58,13 @@ const handleLogin = async () => {
     const response = await backendApiUser.login(loginReq); // API CALL.
     AppLoginer.login(response.data.jwtToken);
 
-    if (AppLoginer.isLogged()) { // token was accepted
+    if (AppLoginer.isLogged()) {
+      // token was accepted
       showMessage(true);
       clearForm();
       handleRedirection();
-    } else { // token was rejected for some reason
+    } else {
+      // token was rejected for some reason
       showMessage(false);
       clearForm();
     }
@@ -151,7 +153,7 @@ const getInputClass = (msgError: string | null): string => {
 
 <template>
   <div class="form-all">
-    <h2>{{ t('user.login.form.title') }}</h2>
+    <h2>{{ isAdminPanel ? t('user.login.formAdmin.title') : t('user.login.form.title') }}</h2>
 
     <form @submit.prevent="handleLogin" novalidate>
       <div class="form-group">
@@ -185,10 +187,10 @@ const getInputClass = (msgError: string | null): string => {
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.login.form.buttonSubmitting') : t('user.login.form.button') }}
+        {{ isSubmitting ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}
       </button>
 
-      <div class="form-under-2">
+      <div class="form-under-2" v-if="!isAdminPanel">
         <div class="nav-minor form-under-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
         <div class="nav-minor form-under-right" @click="goPasswordReset()">
           {{ t('user.login.form.passwordReset') }}

@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import type { UserEmailChangeLinkForm, UserEmailChangeLinkReq } from '@/code/data/features/user.ts';
+import type { UserEmailChangeLinkForm, UserEmailChangeLinkReq } from '@/code/data/features/user/user';
 
 const log = useLogger();
 const router = useRouter();
@@ -60,7 +60,7 @@ const handleEmailChangeLink = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-   // prevent sending empty form
+  // prevent sending empty form
   if (!form.newEmail || !form.password) return true;
   if (newEmailError.value !== null) return true;
   if (passwordError.value !== null) return true;
@@ -137,7 +137,7 @@ const getInputClass = (msgError: string | null): string => {
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.emailChangeStart.form.buttonSubmitting') : t('user.emailChangeStart.form.button') }}
+        {{ isSubmitting ? t('user.emailChangeStart.form.buttonBusy') : t('user.emailChangeStart.form.button') }}
       </button>
     </form>
   </div>

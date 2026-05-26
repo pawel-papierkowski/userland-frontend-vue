@@ -10,8 +10,6 @@ import UserLandDebugArea from '@/components/pages/test/UserLandDebugArea.vue';
 import UserLandMember from '@/components/pages/member/UserLandMember.vue';
 
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
-import UserProfile from '@/components/pages/user/UserProfile.vue';
-
 import UserActivation from '@/components/pages/user/UserActivation.vue';
 import UserPasswordResetStart from '@/components/pages/user/UserPasswordResetStart.vue';
 import UserPasswordReset from '@/components/pages/user/UserPasswordReset.vue';
@@ -20,12 +18,12 @@ import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
 import UserAccountDeletionStart from '@/components/pages/user/UserAccountDeletionStart.vue';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
-import AdminProfile from '@/components/pages/admin/general/AdminProfile.vue';
 import AdminMain from '@/components/pages/admin/general/AdminMain.vue';
 import AdminUser from '@/components/pages/admin/user/AdminUser.vue';
 
 import AppNotFound from '@/components/pages/common/AppNotFound.vue';
-import UserLandLogin from '@/components/pages/common/UserLandLogin.vue';
+import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
+import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue';
 
 // Defined metadata sets.
 const meta4unlogged = { layout: 'STANDARD', requiresAuth: false, permissions: [] };
@@ -46,7 +44,7 @@ const routes = [
 
     // User-related pages.
     { name:'user-activate', path: '/user/activate', component: UserActivation, meta: meta4unlogged },
-    { name:'user-profile', path: '/user/profile', component: UserProfile, meta: meta4logged },
+    { name:'user-profile', path: '/user/profile', component: UserLandProfile, meta: meta4logged },
 
     // Starting point for user actions that require additional security.
     { name:'user-passwordReset-start', path: '/user/passwordResetStart', component: UserPasswordResetStart, meta: meta4unlogged },
@@ -62,7 +60,7 @@ const routes = [
 
     { name:'admin-login', path: '/admin', component: UserLandLogin, meta: meta4adminLogin },
     { name:'admin-main', path: '/admin/main', component: AdminMain, meta: meta4admin },
-    { name:'admin-profile', path: '/admin/profile', component: AdminProfile, meta: meta4admin },
+    { name:'admin-profile', path: '/admin/profile', component: UserLandProfile, meta: meta4admin },
     { name:'admin-user', path: '/admin/user', component: AdminUser, meta: meta4admin },
 
     // Catch-all 404 route MUST be at the end

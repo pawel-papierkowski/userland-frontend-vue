@@ -111,14 +111,17 @@
   text-shadow: var(--nav-minor-hover-text-shadow);
 }
 
+/* Dropdown menu. */
+
 .dropdown-menu {
   display: flex;
   flex-direction: column;
   padding: 1px 4px;
 }
 
-/* Forms. */
+/**** Forms. ****/
 
+/* Standalone form. */
 .form-all {
   max-width: 400px;
   margin: 0 auto;
@@ -129,9 +132,9 @@
   border-radius: 8px;
 }
 .form-group {
-  margin-bottom: 6px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 6px;
 }
 .form-entry {
   margin-bottom: 6px;
@@ -143,6 +146,7 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  align-items: center;
 }
 .form-text-error {
   color: red;
@@ -150,6 +154,34 @@
   margin-top: 5px;
 }
 
+/* Filter form. */
+.form-filter {
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px;
+
+  background: linear-gradient(to bottom right, #fdfdfd 0px, #f1f1f1 300px);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.form-divider {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+
+  margin-bottom: 6px;
+}
+.form-pairs {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 0.5rem;
+
+  align-items: center;
+  justify-items: stretch;
+}
+
+/* Other form-related classes. */
 .form-under-1 {
   display: grid;
   grid-template-columns: 1fr;
@@ -182,6 +214,73 @@
 .form-under-right {
   display: flex;
   justify-self: end;
+}
+
+/* TABLE */
+
+/* Table wrapper classes. */
+.table-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'filter editor'
+    'table editor';
+  gap: 1rem;
+  align-items: start;
+}
+.table-filter {
+  grid-area: filter;
+}
+.table-page {
+  grid-area: table;
+}
+.table-entry-editor {
+  grid-area: editor;
+}
+
+@media (max-width: 800px) {
+  .table-wrapper {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'filter'
+      'table'
+      'editor';
+  }
+}
+
+/* Table page classes. */
+.table-container {
+
+}
+
+.table-header {
+
+}
+
+.table-row {
+
+}
+
+ /* Prominent difference in background for selected row using different color. */
+.table-row .selected {
+
+}
+
+ /* Very slight difference in background between odd and even rows. */
+.table-row .odd {
+
+}
+
+.table-cell {
+
+}
+
+.cell-label {
+
+}
+
+.cell-value {
+
 }
 
 /* On-page messages. */

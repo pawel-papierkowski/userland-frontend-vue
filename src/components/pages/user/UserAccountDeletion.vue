@@ -11,7 +11,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserAccountDeleteReq } from '@/code/data/features/user.ts';
+import type { UserAccountDeleteReq } from '@/code/data/features/user/user';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -62,15 +62,16 @@ const handleAccountDeletion = async () => {
     router.push({ name: 'home' }); // go to home page
   } catch (error) {
     AppMessager.errorT(error, 'user.accountDelete.msg.error.title', 'user.accountDelete.msg.error.content');
-    backendApi.logError(error, 'User account deletion failed! Token: '+tokenStr);
+    backendApi.logError(error, 'User account deletion failed! Token: ' + tokenStr);
   } finally {
     isSubmitting.value = false; // Enable submit button.
   }
-}
+};
 
 //
 
-onMounted(() => { // automatically call once user enters page
+onMounted(() => {
+  // automatically call once user enters page
   verifyAll();
 });
 </script>
@@ -83,7 +84,7 @@ onMounted(() => { // automatically call once user enters page
     </div>
 
     <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDeletion()">
-      {{ isSubmitting ? t('user.accountDelete.form.buttonSubmitting') : t('user.accountDelete.form.button') }}
+      {{ isSubmitting ? t('user.accountDelete.form.buttonBusy') : t('user.accountDelete.form.button') }}
     </button>
   </div>
 </template>

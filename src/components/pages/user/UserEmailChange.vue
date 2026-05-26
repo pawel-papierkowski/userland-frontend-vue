@@ -11,7 +11,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserEmailChangeReq } from '@/code/data/features/user.ts';
+import type { UserEmailChangeReq } from '@/code/data/features/user/user';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -67,14 +67,15 @@ const callEmailChangeApi = async () => {
     router.push({ name: 'home' }); // go to home page
   } catch (error) {
     AppMessager.errorT(error, 'user.emailChange.msg.error.title', 'user.emailChange.msg.error.content');
-    backendApi.logError(error, 'Email address change failed! Token: '+tokenStr);
+    backendApi.logError(error, 'Email address change failed! Token: ' + tokenStr);
     canSpin.value = false;
   }
-}
+};
 
 //
 
-onMounted(() => { // automatically call once user enters page
+onMounted(() => {
+  // automatically call once user enters page
   callEmailChangeApi();
 });
 </script>

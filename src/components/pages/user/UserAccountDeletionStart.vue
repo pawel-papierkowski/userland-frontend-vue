@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import type { UserAccountDeleteLinkForm, UserAccountDeleteLinkReq } from '@/code/data/features/user.ts';
+import type { UserAccountDeleteLinkForm, UserAccountDeleteLinkReq } from '@/code/data/features/user/user';
 
 const log = useLogger();
 const router = useRouter();
@@ -56,7 +56,7 @@ const handleAccountDeletionLink = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-   // prevent sending empty form
+  // prevent sending empty form
   if (!form.password) return true;
   if (passwordError.value !== null) return true;
   return false;
@@ -117,7 +117,7 @@ const getInputClass = (msgError: string | null): string => {
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.accountDeleteStart.form.buttonSubmitting') : t('user.accountDeleteStart.form.button') }}
+        {{ isSubmitting ? t('user.accountDeleteStart.form.buttonBusy') : t('user.accountDeleteStart.form.button') }}
       </button>
     </form>
   </div>

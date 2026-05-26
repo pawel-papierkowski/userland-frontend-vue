@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user.ts';
+import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user';
 
 const log = useLogger();
 const router = useRouter();
@@ -69,7 +69,7 @@ const handleRegister = async () => {
 
 /** Check if form has any errors. */
 const isFormError = () => {
-   // prevent sending empty form
+  // prevent sending empty form
   if (!form.username || !form.email || !form.password || !form.confirmPassword) return true;
   if (usernameError.value !== null) return true;
   if (emailError.value !== null) return true;
@@ -195,7 +195,7 @@ const getInputClass = (msgError: string | null): string => {
       </div>
 
       <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.registration.form.buttonSubmitting') : t('user.registration.form.button') }}
+        {{ isSubmitting ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}
       </button>
 
       <div class="form-under-1">
