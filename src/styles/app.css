@@ -140,13 +140,18 @@
   margin-bottom: 6px;
   display: flex;
   flex-direction: column;
+
+  white-space: nowrap;
 }
 .form-entry-inline {
   margin-bottom: 6px;
   display: flex;
   flex-direction: row;
   gap: 1rem;
+
   align-items: center;
+
+  white-space: nowrap;
 }
 .form-text-error {
   color: red;
@@ -176,6 +181,8 @@
   display: grid;
   grid-template-columns: 1fr 3fr;
   gap: 0.5rem;
+
+  white-space: nowrap;
 
   align-items: center;
   justify-items: stretch;
@@ -250,37 +257,89 @@
 
 /* Table page classes. */
 .table-container {
+  display: flex;
+  flex-direction: column;
 
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.table-header {
+.table-header-group {
+  background-color: #dbdbdb;
+}
 
+.table-header-row {
+  display: flex;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
 }
 
 .table-row {
-
+  display: flex;
+  border-bottom: 1px solid #f4f4f4;
+  transition: all 0.2s ease;
 }
 
- /* Prominent difference in background for selected row using different color. */
-.table-row .selected {
-
+.table-row:last-child {
+  border-bottom: none;
 }
 
- /* Very slight difference in background between odd and even rows. */
-.table-row .odd {
-
+.table-row.odd:not(.selected) {
+  background-color: #fafafa;
 }
 
-.table-cell {
-
+.table-row.selected {
+  background-color: #fff7ed !important; /* Very light orange */
+  color: #9a3412;
+  box-shadow: inset 4px 0 0 0 #f97316; /* Orange left border effect */
 }
 
-.cell-label {
+.table-row:hover {
+  background-color: #f3f3f3;
+}
 
+.table-row.odd:not(.selected):hover {
+  background-color: #f3f3f3;
+}
+
+.table-row.selected:hover {
+  background-color: #ffedd5 !important; /* Slightly darker orange */
+}
+
+.table-cell, .table-header {
+  flex: 1;
+  padding: 5px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.table-header {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  justify-content: center;
 }
 
 .cell-value {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
+.table-empty {
+  padding: 15px;
+  margin: auto;
+  color: #525252;
 }
 
 /* On-page messages. */

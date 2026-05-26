@@ -301,10 +301,13 @@
         "buttonBusy": "Ładowanie..."
       },
       "table": {
-        "id": "Id",
-        "createdAt": "Utworzony",
-        "username": "Nazwa",
-        "email": "Email"
+        "empty": "Brak użytkowników do wyświetlenia. Sprawdź ustawienia filtra.",
+        "col": {
+          "id": "Id",
+          "createdAt": "Utworzony",
+          "username": "Nazwa",
+          "email": "Email"
+        }
       },
       "edit": {
         

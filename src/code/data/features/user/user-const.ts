@@ -7,22 +7,22 @@ export const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
 export const userTableColumns: ColumnData[] = [
   {
     name: "id",
-    translation: "admin.user.table.id",
+    translation: "admin.user.table.col.id",
     visible: false
   },
   {
     name: "createdAt",
-    translation: "admin.user.table.createdAt",
+    translation: "admin.user.table.col.createdAt",
     visible: true
   },
   {
     name: "username",
-    translation: "admin.user.table.username",
+    translation: "admin.user.table.col.username",
     visible: true
   },
   {
     name: "email",
-    translation: "admin.user.table.email",
+    translation: "admin.user.table.col.email",
     visible: true
   }
 ];

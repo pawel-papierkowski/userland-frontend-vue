@@ -301,10 +301,13 @@
         "buttonBusy": "Loading..."
       },
       "table": {
-        "id": "Id",
-        "createdAt": "Created",
-        "username": "Username",
-        "email": "Email"
+        "empty": "No users to show. Check filter settings.",
+        "col": {
+          "id": "Id",
+          "createdAt": "Created",
+          "username": "Username",
+          "email": "Email"
+        }
       },
       "edit": {
         
