@@ -69,7 +69,7 @@ export class AppLoginer {
         AppMessager.infoT('user.prolong.msg.info.title', 'user.prolong.msg.info.content');
         logger.debug('Prolong successful.');
       } else {
-        logger.error('Prolong failed!');
+        logger.warn('Prolong failed!');
       }
     } catch (error) {
       backendApi.logError(error, 'Prolong failed!');

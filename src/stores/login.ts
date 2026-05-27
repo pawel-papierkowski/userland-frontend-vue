@@ -40,7 +40,7 @@ export const useLoginStore = defineStore('login', () => {
       logger.debug('Decoded JWT:', decodedJwt);
       if (!verifyToken(decodedJwt)) {
         loginState.value.isLogged = false;
-        logger.warn('Failed to use JWT: it is expired.');
+        logger.debug('Failed to use JWT: it is expired.');
         return false;
       }
       loginState.value.isLogged = true;
@@ -49,7 +49,7 @@ export const useLoginStore = defineStore('login', () => {
       return true;
     }
 
-    logger.warn('Failed to decode JWT.');
+    logger.debug('Failed to decode JWT.');
     return false;
   }
 

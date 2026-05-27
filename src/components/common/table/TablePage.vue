@@ -20,9 +20,9 @@ const { t } = useI18n();
 const selRecord = defineModel<T | null>(); // Selected record, null means nothing is selected.
 
 const props = defineProps<{
-  columns: ColumnData[];
-  data: T[];
-  empty: string;
+  columns: ColumnData[]; // Data about columns.
+  data: T[]; // Content of table itself.
+  empty: string; // I18n key to show when table is empty
 }>();
 
 const selectItem = (item: T) => {

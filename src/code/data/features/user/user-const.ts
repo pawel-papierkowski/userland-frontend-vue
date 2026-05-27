@@ -1,7 +1,7 @@
 import type { ColumnData } from "@/code/data/features/common.ts";
 
 /** List of user status values. */
-export const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
+export const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE', 'DEMO' ];
 
 /** List of user table columns. */
 export const userTableColumns: ColumnData[] = [

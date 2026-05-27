@@ -18,6 +18,8 @@ export type UserTableReq = {
 /** User table response: page. */
 export type UserTableResp = {
   entries: UserTableEntry[]; // All entries for single page from user table.
+  pageCount: number;
+  entryCount: number;
 };
 
 /** User table entry. */
