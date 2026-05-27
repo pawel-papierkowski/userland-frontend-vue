@@ -34,8 +34,5 @@
 - Tests are NOT co-located. We have mirror directory structure in separate `src/__tests__/` directory.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
 
-## Other
-- When you provide code listings or examples, do not print line numbers.
-
 ## Project Specific Rules
 - **API Calls:** All API calls must be placed in the `src/services/` directory, never directly inside a `.vue` component.

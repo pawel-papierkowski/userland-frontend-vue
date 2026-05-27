@@ -1,5 +1,5 @@
 // All types for admin user feature.
-import type { TableMeta } from '@/code/data/features/common.ts';
+import type { TableMetaReq, TableMetaResp } from '@/code/data/features/common.ts';
 import type { UserProfileDataResp } from '@/code/data/features/user/user';
 
 // USER TABLE
@@ -12,14 +12,13 @@ export type UserTableReq = {
   locked: boolean | null; // If present, show only records of users with given locked value.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
-  tableMeta: TableMeta | null; // Metadata for table result.
+  tableMeta: TableMetaReq | null; // Metadata for table result.
 };
 
 /** User table response: page. */
 export type UserTableResp = {
   entries: UserTableEntry[]; // All entries for single page from user table.
-  pageCount: number;
-  entryCount: number;
+  tableMeta: TableMetaResp;
 };
 
 /** User table entry. */

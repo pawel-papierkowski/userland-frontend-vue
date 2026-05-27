@@ -16,6 +16,7 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 const { t } = useI18n();
 
 const form = defineModel<UserTableReq>({ required: true });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   isLoading: boolean;
 }>();

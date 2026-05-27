@@ -115,6 +115,7 @@ const selectOption = (option: string|null) => {
   flex: 1;
 }
 
+/* Down arrow. */
 .arrow {
   width: 0;
   height: 0;

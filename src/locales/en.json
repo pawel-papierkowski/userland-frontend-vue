@@ -301,7 +301,7 @@
         "buttonBusy": "Loading..."
       },
       "table": {
-        "empty": "No users to show. Check filter settings.",
+        "empty": "⚠️ No users to show. Check filter settings. ⚠️",
         "col": {
           "id": "Id",
           "createdAt": "Created",
@@ -334,7 +334,8 @@
       "status": {
         "null": "-",
         "PENDING": "Pending",
-        "ACTIVE": "Active"
+        "ACTIVE": "Active",
+        "DEMO": "Demo"
       }
     }
   },

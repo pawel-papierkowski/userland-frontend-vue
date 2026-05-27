@@ -301,7 +301,7 @@
         "buttonBusy": "Ładowanie..."
       },
       "table": {
-        "empty": "Brak użytkowników do wyświetlenia. Sprawdź ustawienia filtra.",
+        "empty": "⚠️ Brak użytkowników do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
         "col": {
           "id": "Id",
           "createdAt": "Utworzony",
@@ -334,7 +334,8 @@
       "status": {
         "null": "-",
         "PENDING": "Oczekujący",
-        "ACTIVE": "Aktywny"
+        "ACTIVE": "Aktywny",
+        "DEMO": "Demo"
       }
     }
   },
