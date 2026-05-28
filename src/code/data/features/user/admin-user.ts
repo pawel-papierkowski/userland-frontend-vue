@@ -4,6 +4,17 @@ import type { UserProfileDataResp } from '@/code/data/features/user/user';
 
 // USER TABLE
 
+/** User table form. */
+export type UserTableForm = {
+  username: string | null; // If present, show only records that contain fully or partially this username.
+  email: string | null; // If present, show only records that contain fully or partially this email.
+  status: string | null; // If present, show only records of users with given status.
+  locked: boolean | null; // If present, show only records of users with given locked value.
+  createdFromAt: Date | null; // If present, show records with creation date that is same or later.
+  createdToAt: Date | null; // If present, show records with creation date that is same or earlier.
+  tableMeta: TableMetaReq | null; // Metadata for table result.
+};
+
 /** User table request. */
 export type UserTableReq = {
   username: string | null; // If present, show only records that contain fully or partially this username.

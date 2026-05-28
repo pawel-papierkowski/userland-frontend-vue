@@ -8,8 +8,9 @@ import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableReq, UserTableResp, UserTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type { UserTableForm, UserTableReq, UserTableResp, UserTableEntry } from '@/code/data/features/user/admin-user.ts';
 import { userTableColumns, emptyUserTable } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserFilter from '@/components/pages/admin/user/AdminUserFilter.vue';
@@ -21,7 +22,7 @@ import TablePage from '@/components/common/table/TablePage.vue';
 const log = useLogger();
 
 /** User table filtering form data. */
-const form: UserTableReq = reactive({
+const form: UserTableForm = reactive({
   username: null,
   email: null,
   status: null,
@@ -86,7 +87,8 @@ const handleReload = async () => {
   data.value = emptyUserTable;
 
   try {
-    const result = await backendApiAdminUser.loadPage(form); // API CALL
+    const req = convertToReq(form);
+    const result = await backendApiAdminUser.loadPage(req); // API CALL
     processData(result.data);
     data.value = result.data;
 
@@ -99,6 +101,19 @@ const handleReload = async () => {
   } finally {
     isLoading.value = false;
   }
+};
+
+/**
+ * Convert form data to request data.
+ * @param form Form data.
+ * @returns Request data.
+ */
+const convertToReq = (form: UserTableForm): UserTableReq => {
+  return {
+    ...form,
+    createdFromAt: TimeUtils.cnv(form.createdFromAt),
+    createdToAt: TimeUtils.cnv(form.createdToAt)
+  };
 };
 
 /**

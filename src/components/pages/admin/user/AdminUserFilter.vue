@@ -8,14 +8,15 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import type { UserTableReq } from '@/code/data/features/user/admin-user.ts';
+import type { UserTableForm } from '@/code/data/features/user/admin-user.ts';
 import { enUserStatus } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
+import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
 
 const { t } = useI18n();
 
-const form = defineModel<UserTableReq>({ required: true });
+const form = defineModel<UserTableForm>({ required: true });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   isLoading: boolean;
@@ -45,22 +46,10 @@ const emit = defineEmits(['reload']);
 
         <div class="form-pairs">
           <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
-          <input
-            id="createdFromAt"
-            data-testid="createdFromAt"
-            type="text"
-            v-model="form.createdFromAt"
-            autocomplete="off"
-          />
+          <DateTimePicker v-model="form.createdFromAt" ident="createdFromAt" mode="date" />
 
           <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
-          <input
-            id="createdToAt"
-            data-testid="createdToAt"
-            type="text"
-            v-model="form.createdToAt"
-            autocomplete="off"
-          />
+          <DateTimePicker v-model="form.createdToAt" ident="createdToAt" mode="date" />
 
           <label for="locked">{{ t('admin.user.filter.locked') }}:</label>
           <input id="locked" data-testid="locked" type="checkbox" v-model="form.locked" autocomplete="off" />

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 /** Table wrapper. */
-
 </script>
 
 <template>
