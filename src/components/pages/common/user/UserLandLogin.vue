@@ -159,29 +159,15 @@ const getInputClass = (msgError: string | null): string => {
       <div class="form-group">
         <div class="form-entry">
           <label for="email">{{ t('user.login.form.email') }}:</label>
-          <input
-            :class="getInputClass(emailError)"
-            id="email"
-            data-testid="email"
-            type="email"
-            v-model="form.email"
-            required
-            autocomplete="email"
-          />
+          <input id="email" data-testid="email" type="email" v-model="form.email"
+            required autocomplete="email" :class="getInputClass(emailError)" />
           <span v-if="emailError" class="form-text-error">{{ emailError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="password">{{ t('user.login.form.password') }}:</label>
-          <input
-            :class="getInputClass(passwordError)"
-            id="password"
-            data-testid="password"
-            type="password"
-            v-model="form.password"
-            required
-            autocomplete="new-password"
-          />
+          <input id="password" data-testid="password" type="password" v-model="form.password"
+            required autocomplete="new-password" :class="getInputClass(passwordError)" />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
       </div>

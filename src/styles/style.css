@@ -70,7 +70,7 @@ footer {
 h1 {
   color: var(--h1-color);
 
-  font-size: 54px;
+  font-size: var(--h1-text-size);
   font-family: var(--font-family-header);
 
   text-align: var(--h1-text-align);
@@ -80,7 +80,7 @@ h1 {
 h2 {
   color: var(--h2-color);
 
-  font-size: 28px;
+  font-size: var(--h2-text-size);
   font-family: var(--font-family-header);
 
   text-align: var(--h2-text-align);
@@ -90,23 +90,42 @@ h2 {
 h3 {
   color: var(--h3-color);
 
-  font-size: 24px;
+  font-size: var(--h3-text-size);
   font-family: var(--font-family-header);
 
   text-align: var(--h3-text-align);
   text-shadow: var(--h3-text-shadow);
 }
 
+h4 {
+  color: var(--h4-color);
+
+  font-size: var(--h4-text-size);
+  font-family: var(--font-family-header);
+
+  text-align: var(--h4-text-align);
+  text-shadow: var(--h4-text-shadow);
+}
+
 /**/
 
 input {
-  margin-top: 5px;
+  margin: 0px;
   padding: 2px;
 
   color: var(--input-color);
   background: var(--input-background);
   border: var(--input-border);
   border-radius: var(--input-border-radius);
+}
+
+input:focus {
+  outline: none;
+}
+
+input:hover {
+  color: var(--input-hover-color);
+  background: var(--input-hover-background);
 }
 
 input:disabled {

@@ -5,7 +5,7 @@
 :root {
   /* Colors */
   --color-primary: #3498db;
-  --color-text: #000000;
+  --color-text: #111111;
   --color-background: #ffffff;
 
   /* Spacing */
@@ -55,22 +55,33 @@
 
   /* Text headers. */
   --h1-color: #484848;
+  --h1-text-size: 54px;
   --h1-text-shadow: 0 0 2px currentColor;
   --h1-text-align: center;
 
   --h2-color: #484848;
+  --h2-text-size: 28px;
   --h2-text-shadow: 0 0 1px currentColor;
   --h2-text-align: center;
 
   --h3-color: #484848;
+  --h3-text-size: 24px;
   --h3-text-shadow: 0 0 1px currentColor;
   --h3-text-align: center;
+
+  --h4-color: #484848;
+  --h4-text-size: 20px;
+  --h4-text-shadow: 0 0 0px currentColor;
+  --h4-text-align: center;
 
   /* Input specific vars. */
   --input-color: #000000;
   --input-background: #fdfdfd;
   --input-border: 1px solid #444444;
   --input-border-radius: 2px;
+
+  --input-hover-background: #fbfbfb;
+  --input-hover-text: #111827;
 
   --input-disabled-color: #555555;
   --input-disabled-background: #dddddd;
@@ -111,17 +122,6 @@
   --button-hover-danger-background: linear-gradient(to bottom, #ffb9b9 0%, #ff8686 100%);
   --button-hover-danger-border: 1px solid #7b0000;
 
-  /* ComboBox specific vars. */
-  --combobox-border: 1px solid #444444;
-  --combobox-background: #ffffff;
-  --combobox-text: #111827;
-  --combobox-background-hover: #f0f0f0;
-  --combobox-text-hover: #111827;
-  --combobox-option-border: 1px solid #444444;
-  --combobox-option-background: #f8f8f8;
-  --combobox-option-background-hover: #e8e8e8;
-  --combobox-option-text-hover: #111827;
-
   /* Navigation link specific vars. */
   --nav-major-color: #484848;
   --nav-major-font-size: 16px;
@@ -144,4 +144,49 @@
 
   --nav-minor-hover-color: #000000;
   --nav-minor-hover-text-shadow: none;
+
+  /* TablePage specific vars. */
+  --tablepage-color: var(--input-color);
+
+  --tablepaginer-navbtn-filter: none;
+  --tablepaginer-navbtn-hover-filter: brightness(1.3);
+
+  /* ComboBox specific vars. */
+  --combobox-color: var(--input-color);
+  --combobox-background: var(--input-background);
+  --combobox-border: var(--input-border);
+  --combobox-border-radius: var(--input-border-radius);
+
+  --combobox-hover-color: var(--input-hover-color);
+  --combobox-hover-background: var(--input-hover-background);
+
+  --combobox-option-border: 1px solid #444444;
+  --combobox-option-background: #f8f8f8;
+  --combobox-option-background-hover: #e8e8e8;
+  --combobox-option-text-hover: #111827;
+
+  /* DateTimePicker specific vars. */
+  --datetimepicker-background: linear-gradient(to bottom right, #fefefe 0px, #f5f5f5 400px);
+  --datetimepicker-border: 1px solid #444444;
+  --datetimepicker-border-radius: 10px;
+
+  --datetimepicker-navbtn-filter: hue-rotate(200deg) brightness(1.6);
+  --datetimepicker-navbtn-hover-filter: hue-rotate(200deg) brightness(1.9);
+
+  --datetimepicker-day-hover-color: #111827;
+  --datetimepicker-day-hover-background: linear-gradient(to bottom, #ffedab 1%, #ffdd86 99%);
+
+  --datetimepicker-day-color: #111111;
+  --datetimepicker-day-notcurrent-color: #aaaaaa;
+
+  --datetimepicker-day-today-color: #111111;
+  --datetimepicker-day-today-background: unset;
+  --datetimepicker-day-today-shadow: inset 0 0 0 2px #d4a017;
+
+  --datetimepicker-day-selected-color: #111111;
+  --datetimepicker-day-selected-background: linear-gradient(to bottom, #ffdd66 1%, #fbc02d 99%);
+
+  --datetimepicker-day-disabled-color: #777777;
+  --datetimepicker-day-disabled-background: #dddddd;
+  --datetimepicker-day-disabled-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
 }

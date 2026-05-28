@@ -10,10 +10,10 @@ import { useLoginStore } from '@/stores/login.ts';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user';
+import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
@@ -49,6 +49,7 @@ const usernameError: ComputedRef<string | null> = computed(() => {
 
 /** Fill form. */
 const fillForm = async () => {
+  clearForm();
   const data = await resolveUserData();
   if (data === null) return; // failed to load data
 
@@ -57,14 +58,16 @@ const fillForm = async () => {
   form.name = data.profile.name;
   form.surname = data.profile.surname;
 
-  isLoading.value = false;
 };
 
 /** Retrieve all available data about currently logged user from backend. */
 const resolveUserData = async (): Promise<UserDataResp | null> => {
-  clearForm();
+  isLoading.value = true;
+  canSpin.value = true;
+
   try {
     const response = await backendApiUser.view(); // API CALL
+    isLoading.value = false;
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'user.profile.msg.loadError.title', 'user.profile.msg.loadError.content');
@@ -76,7 +79,8 @@ const resolveUserData = async (): Promise<UserDataResp | null> => {
 
 //
 
-const handleUserData = async () => {
+/** Save user data. */
+const saveUserData = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
   isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
@@ -180,43 +184,31 @@ onMounted(async () => {
       <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
 
-    <form @submit.prevent="handleUserData" novalidate v-if="!isLoading" data-testid="form">
+    <form @submit.prevent="saveUserData" novalidate v-if="!isLoading" data-testid="form">
       <div class="form-group">
         <div class="form-entry">
           <label for="username">{{ t('user.profile.form.username') }}:</label>
-          <input
-            :class="getInputClass(usernameError)"
-            id="username"
-            data-testid="username"
-            type="text"
-            v-model="form.username"
-            required
-            autocomplete="off"
-          />
+          <input id="username" data-testid="username" type="text" v-model="form.username"
+            required autocomplete="off" :class="getInputClass(usernameError)" />
           <span v-if="usernameError" class="form-text-error">{{ usernameError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="email">{{ t('user.profile.form.email') }}:</label>
-          <input
-            id="email"
-            data-testid="email"
-            type="email"
-            v-model="form.email"
-            required
-            disabled
-            autocomplete="email"
-          />
+          <input id="email" data-testid="email" type="email" v-model="form.email"
+            required disabled autocomplete="email" />
         </div>
 
         <div class="form-entry">
           <label for="name">{{ t('user.profile.form.name') }}:</label>
-          <input id="name" data-testid="name" type="text" v-model="form.name" required autocomplete="off" />
+          <input id="name" data-testid="name" type="text" v-model="form.name"
+            required autocomplete="off" />
         </div>
 
         <div class="form-entry">
           <label for="surname">{{ t('user.profile.form.surname') }}:</label>
-          <input id="surname" data-testid="surname" type="text" v-model="form.surname" required autocomplete="off" />
+          <input id="surname" data-testid="surname" type="text" v-model="form.surname"
+            required autocomplete="off" />
         </div>
       </div>
 

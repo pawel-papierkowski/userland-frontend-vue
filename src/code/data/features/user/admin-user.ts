@@ -4,7 +4,7 @@ import type { UserProfileDataResp } from '@/code/data/features/user/user';
 
 // USER TABLE
 
-/** User table form. */
+/** User table load form. */
 export type UserTableForm = {
   username: string | null; // If present, show only records that contain fully or partially this username.
   email: string | null; // If present, show only records that contain fully or partially this email.
@@ -15,7 +15,7 @@ export type UserTableForm = {
   tableMeta: TableMetaReq | null; // Metadata for table result.
 };
 
-/** User table request. */
+/** User table load request. */
 export type UserTableReq = {
   username: string | null; // If present, show only records that contain fully or partially this username.
   email: string | null; // If present, show only records that contain fully or partially this email.
@@ -26,7 +26,7 @@ export type UserTableReq = {
   tableMeta: TableMetaReq | null; // Metadata for table result.
 };
 
-/** User table response: page. */
+/** User table load response: page. */
 export type UserTableResp = {
   entries: UserTableEntry[]; // All entries for single page from user table.
   tableMeta: TableMetaResp;
@@ -56,4 +56,17 @@ export type UserFullDataResp = {
   locked: boolean;
   lang: string;
   profile: UserProfileDataResp;
+};
+
+export type UserFullDataForm = {
+  createdAt: string;
+  modifiedAt: string;
+  username: string;
+  email: string;
+  status: string;
+  locked: boolean|null;
+  lang: string;
+  // Profile data.
+  name: string;
+  surname: string;
 };

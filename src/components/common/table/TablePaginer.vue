@@ -74,10 +74,10 @@ const pageInputDisabled = () => {
 <template>
   <div class="table-paginer">
     <div class="table-paginer-side"></div>
-    <div class="table-paginer-entry" :class="stylePrevPage()" @click="goFirstPage()">
+    <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goFirstPage()">
     ⏮️
     </div>
-    <div class="table-paginer-entry" :class="stylePrevPage()" @click="goPrevPage()">
+    <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goPrevPage()">
     ◀️
     </div>
     <div class="table-paginer-entry">
@@ -86,10 +86,10 @@ const pageInputDisabled = () => {
         @blur="applyPage" @keyup.enter="applyPage" />
       / {{ meta.pageCount }}
     </div>
-    <div class="table-paginer-entry" :class="styleNextPage()" @click="goNextPage()">
+    <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">
     ▶️
     </div>
-    <div class="table-paginer-entry" :class="styleNextPage()" @click="goLastPage()">
+    <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">
     ⏭️
     </div>
     <div class="table-paginer-side"></div>

@@ -1,5 +1,19 @@
 // Common types.
 
+import type { Component } from 'vue';
+
+// //////
+// EDITOR
+
+export type TabData = {
+  id: string,
+  label: string,
+  component: Component
+};
+
+// /////
+// TABLE
+
 /** Column data for TablePage component. */
 export type ColumnData = {
   name: string,

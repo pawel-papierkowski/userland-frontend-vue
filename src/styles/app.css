@@ -159,8 +159,8 @@
   margin-top: 5px;
 }
 
-/* Filter form. */
-.form-filter {
+/* Wide form. */
+.form-wide {
   width: 100%;
   margin: 0 auto;
   padding: 5px;
@@ -172,8 +172,19 @@
 .form-divider {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
   gap: 1rem;
+
+  align-items: center;
+
+  margin-bottom: 6px;
+}
+.form-spacer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+
+  justify-content: center;
+  align-items: left;
 
   margin-bottom: 6px;
 }
@@ -182,10 +193,11 @@
   grid-template-columns: 1fr 3fr;
   gap: 0.5rem;
 
-  white-space: nowrap;
-
   align-items: center;
+  justify-content: center;
   justify-items: stretch;
+
+  white-space: nowrap;
 }
 .form-pairs input[type="checkbox"] {
   justify-self: start;
@@ -370,17 +382,24 @@
   height: 100%;
 }
 
+.table-paginer-navbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  filter: var(--tablepaginer-navbtn-filter);
+}
+.table-paginer-navbtn:hover {
+  filter: var(--tablepaginer-navbtn-hover-filter);
+}
+
+.table-paginer-navbtn.disabled,
 .table-paginer-entry.disabled {
-  /* Grays out the colors (essential for emojis) */
-  filter: grayscale(100%);
+  filter: grayscale(100%); /* Grays out the colors (essential for emojis) */
+  opacity: 0.5; /* Makes it look faded */
+  color: #9ca3af; /* For regular text */
 
-  /* Makes it look faded */
-  opacity: 0.5;
-
-  /* For regular text */
-  color: #9ca3af;
-
-  /* Functional "gray out" */
   pointer-events: none;
   cursor: default;
 }
@@ -403,6 +422,7 @@
 }
 .input-paginer[type=number] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* On-page messages. */

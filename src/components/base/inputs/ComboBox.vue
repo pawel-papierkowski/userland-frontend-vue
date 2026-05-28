@@ -84,20 +84,19 @@ const selectOption = (option: string|null) => {
 
   margin: 0px;
   padding: 2px;
-
-  color: var(--combobox-text);
-  background: var(--combobox-background);
-
-  border: var(--combobox-border);
-  border-radius: 5px;
   min-width: 125px;
+
+  color: var(--combobox-color);
+  background: var(--combobox-background);
+  border: var(--combobox-border);
+  border-radius: var(--combobox-border-radius);
 
   user-select: none;
 }
 
 .combobox:hover {
-  color: var(--combobox-text-hover);
-  background-color: var(--combobox-background-hover);
+  color: var(--combobox-hover-color);
+  background-color: var(--combobox-hover-background);
 }
 
 /**/
@@ -121,7 +120,7 @@ const selectOption = (option: string|null) => {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 6px solid var(--combobox-text);
+  border-top: 6px solid var(--combobox-color);
   transition: transform 0.2s;
 }
 

@@ -72,7 +72,7 @@ const icon = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--spacing-sm, 8px);
+  padding: var(--spacing-sm);
 
   width: 100%;
   font-size: 13px;
@@ -113,7 +113,7 @@ const icon = computed(() => {
 }
 
 .message-icon {
-  margin-right: var(--spacing-sm, 8px);
+  margin-right: var(--spacing-sm);
   font-size: 1.1em;
   flex-shrink: 0;
   user-select: none;
@@ -142,13 +142,13 @@ const icon = computed(() => {
 .message-divider {
   border-top: 1px solid currentColor;
   opacity: 0.2;
-  margin-bottom: 4px;
+  margin-bottom: var(--spacing-xs);
   width: 100%;
 }
 
 .message-errCode {
   width: 100%;
   text-align: center;
-  margin-top: 4px;
+  margin-top: var(--spacing-xs);
 }
 </style>

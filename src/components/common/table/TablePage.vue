@@ -32,6 +32,7 @@ const props = defineProps<{
   data: E[]; // Content of table itself.
   meta: TableMetaResp; // Table metadata.
   isLoading: boolean; // If true, show spinner instead of innards of table.
+  canSpin: boolean; // If true, can spin.
   empty: string; // I18n key to show when table is empty
 }>();
 
@@ -90,7 +91,7 @@ const sortMarker = (column: ColumnData) => {
 
     <div class="table-empty" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
     <div class="spinner-container" v-if="isLoading">
-        <SpinnerTorus data-testid="spinner" display="block" size="100px" />
+      <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
 
     <div v-else>
@@ -120,7 +121,7 @@ const sortMarker = (column: ColumnData) => {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 6px solid var(--combobox-text);
+  border-top: 6px solid var(--tablepage-color);
 
   margin-left: 2px;
 }
@@ -137,7 +138,7 @@ const sortMarker = (column: ColumnData) => {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 6px solid var(--combobox-text);
+  border-bottom: 6px solid var(--tablepage-color);
 
   margin-left: 2px;
 }

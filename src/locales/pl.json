@@ -19,7 +19,7 @@
     },
     "admin": {
       "main": "🏁 Strona główna",
-      "user": "👤 Użytkownicy"
+      "user": "👥 Użytkownicy"
     }
   },
 
@@ -290,7 +290,7 @@
   "admin": {
     "user": {
       "filter": {
-        "title": "Użytkownicy",
+        "title": "🔍 Filtr użytkowników",
         "username": "Nazwa",
         "email": "Email",
         "status": "Status",
@@ -309,11 +309,43 @@
           "email": "Email"
         }
       },
-      "edit": {
-        
+      "main": {
+        "tab": "👤 Użytkownik",
+        "form": {
+          "general": "🆔 Dane ogólne",
+          "createdAt": "Utworzony",
+          "modifiedAt": "Zmodyfikowany",
+          "username": "Nazwa",
+          "email": "Email",
+          "status": "Status",
+          "locked": "Zablokowany",
+          "lang": "Język",
+          "profile": "👤 Dane profilu",
+          "name": "Imię",
+          "surname": "Nazwisko"
+        }
+      },
+      "history": {
+        "tab": "📅 Historia"
+      },
+      "permissions": {
+        "tab": "🔐 Uprawnienia"
+      },
+      "config": {
+        "tab": "⚙️ Konfiguracja"
+      },
+      "tokens": {
+        "tab": "🔗 Tokeny"
+      },
+      "jwt": {
+        "tab": "🎫 JWT"
       },
       "msg": {
-        "loadError": {
+        "errorLoadTable": {
+          "title": "Błąd",
+          "content": "Nie udało się pobrać danych z tabeli użytkowników."
+        },
+        "errorLoadUser": {
           "title": "Błąd",
           "content": "Nie udało się pobrać danych użytkownika."
         },
@@ -577,5 +609,32 @@
         "content": "Fallback content."
       }
     }
+  },
+
+  "dateTimePicker": {
+    "placeholder": "RRRR-MM-DD",
+    "dayOfWeek": {
+      "mon": "Pon",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Czw",
+      "fri": "Pią",
+      "sat": "Sob",
+      "sun": "Nie"
+    },
+    "month": {
+      "0": "Styczeń",
+      "1": "Luty",
+      "2": "Marzec",
+      "3": "Kwiecień",
+      "4": "Maj",
+      "5": "Czerwiec",
+      "6": "Lipiec",
+      "7": "Sierpień",
+      "8": "Wrzesień",
+      "9": "Październik",
+      "10": "Listopad",
+      "11": "Grudzień"
+    }    
   }
 }

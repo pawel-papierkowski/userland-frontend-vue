@@ -43,6 +43,8 @@ const currSortBy: Ref<string|null> = ref(null);
 /** Current sort order. Null means default sort order. */
 const currSortOrder: Ref<string|null> = ref(null);
 
+/** True if submission is in progress, otherwise false. Used to disable submit button. */
+const isSubmitting: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. */
 const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
@@ -83,6 +85,7 @@ watch(currSortOrder, (newVal, oldVal) => {
 const handleReload = async () => {
   log.debug('Triggered handleReload().');
   isLoading.value = true;
+  isSubmitting.value = true;
   canSpin.value = true;
   data.value = emptyUserTable;
 
@@ -94,12 +97,13 @@ const handleReload = async () => {
 
     currSortBy.value = data.value.tableMeta.sortBy;
     currSortOrder.value = data.value.tableMeta.sortOrder;
+    isLoading.value = false;
   } catch (error) {
     canSpin.value = false;
-    AppMessager.errorT(error, 'admin.user.msg.loadError.title', 'admin.user.msg.loadError.content');
+    AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
     backendApi.logError(error, 'User table reload failed!');
   } finally {
-    isLoading.value = false;
+    isSubmitting.value = false;
   }
 };
 
@@ -109,10 +113,13 @@ const handleReload = async () => {
  * @returns Request data.
  */
 const convertToReq = (form: UserTableForm): UserTableReq => {
+  const createdFromStr = TimeUtils.cnvDate(form.createdFromAt);
+  const createdToStr = TimeUtils.cnvDate(form.createdToAt);
+
   return {
     ...form,
-    createdFromAt: TimeUtils.cnv(form.createdFromAt),
-    createdToAt: TimeUtils.cnv(form.createdToAt)
+    createdFromAt: createdFromStr === null ? null : createdFromStr + 'T00:00:00',
+    createdToAt: createdToStr === null ? null : createdToStr + 'T23:59:59.999999'
   };
 };
 
@@ -146,12 +153,12 @@ onMounted(async () => { // automatically call once user enters page
 <template>
   <TableWrapper>
     <template #filterPanel>
-      <AdminUserFilter v-model="form" :isLoading="isLoading" @reload="handleReload"/>
+      <AdminUserFilter v-model="form" :isSubmitting="isSubmitting" @reload="handleReload"/>
     </template>
     <template #tablePanel>
       <div>
         <TablePage v-model="selRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
-          :columns="userTableColumns" :data="data.entries" :meta="data.tableMeta" :isLoading="isLoading"
+          :columns="userTableColumns" :data="data.entries" :meta="data.tableMeta" :isLoading="isLoading" :canSpin="canSpin"
           empty="admin.user.table.empty"/>
       </div>
     </template>
