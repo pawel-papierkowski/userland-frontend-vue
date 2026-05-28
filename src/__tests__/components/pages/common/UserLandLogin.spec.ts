@@ -10,7 +10,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-import UserLandLogin from '@/components/pages/common/UserLandLogin.vue';
+import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({

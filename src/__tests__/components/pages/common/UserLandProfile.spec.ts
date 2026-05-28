@@ -9,7 +9,7 @@ import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-import UserProfile from '@/components/pages/user/UserProfile.vue';
+import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -20,21 +20,23 @@ vi.mock('@/services/features/api-users', () => ({
 }));
 
 const mockPush = vi.fn<(to: any) => void>();
+const mockRoute = { name: 'user-profile' };
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: mockPush, }),
+  useRoute: () => mockRoute,
 }));
 
 /** Boilerplate code. */
 function createWrapper() {
-  return mount(UserProfile, {
+  return mount(UserLandProfile, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
     },
   });
 }
 
-/** Tests of UserProfile component. */
-describe('UserProfile', () => {
+/** Tests of UserLandProfile component. */
+describe('UserLandProfile', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     vi.clearAllMocks();
