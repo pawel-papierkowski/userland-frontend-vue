@@ -5,7 +5,7 @@
  * - Input is not editable.
  */
 
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
@@ -28,7 +28,13 @@ const props = withDefaults(defineProps<{
 
 const isPickerVisible = ref(false);
 const pickerRef = ref(null);
+const pickerContainerRef = ref<HTMLElement | null>(null);
 const viewDate = ref(new Date()); // Date used for viewing month/year in picker.
+
+const containerStyle = ref({
+  left: '0',
+  right: 'auto'
+});
 
 onClickOutside(pickerRef, () => {
   isPickerVisible.value = false;
@@ -97,13 +103,24 @@ const calendarDays = computed(() => {
 });
 
 /** Toggle visibility of picker panel. */
-const togglePicker = () => {
+const togglePicker = async () => {
   if (isPickerVisible.value) {
     isPickerVisible.value = false;
   } else {
     // If null, set viewDate to current date
     viewDate.value = currDateTime.value ? new Date(currDateTime.value) : new Date();
     isPickerVisible.value = true;
+
+    await nextTick();
+    // Adjust picker position if needed.
+    if (pickerContainerRef.value) {
+      const rect = pickerContainerRef.value.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        containerStyle.value = { left: 'auto', right: '0' };
+      } else {
+        containerStyle.value = { left: '0', right: 'auto' };
+      }
+    }
   }
 };
 
@@ -219,7 +236,7 @@ const isDisabled = (pickableDay: DatePick): boolean => {
       :placeholder="t('dateTimePicker.placeholder')"
     />
 
-    <div v-if="isPickerVisible" class="picker-container">
+    <div v-if="isPickerVisible" class="picker-container" ref="pickerContainerRef" :style="containerStyle">
       <div class="picker-header">
         <div class="header-nav">
           <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
