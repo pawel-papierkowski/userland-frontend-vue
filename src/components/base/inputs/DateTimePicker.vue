@@ -255,12 +255,12 @@ const isDisabled = (pickableDay: DatePick): boolean => {
 .picker {
   display: inline-block;
   position: relative;
-  width: 120px;
+  width: var(--datetimepicker-width);
   user-select: none;
 }
 
 .picker-input {
-  width: 120px;
+  width: var(--datetimepicker-width);
   cursor: pointer;
   caret-color: transparent;
   user-select: none;
@@ -274,15 +274,14 @@ const isDisabled = (pickableDay: DatePick): boolean => {
   top: 100%;
   left: 0;
 
-  margin-top: 2px;
-  margin-left: 2px;
+  margin: var(--datetimepicker-offset);
   padding: var(--spacing-sm);
   min-width: 280px;
 
   background: var(--datetimepicker-background);
   border: var(--datetimepicker-border);
   border-radius: var(--datetimepicker-border-radius);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--datetimepicker-shadow);
 
   z-index: 1000;
 }
@@ -300,7 +299,7 @@ const isDisabled = (pickableDay: DatePick): boolean => {
 
 .header-title {
   display: flex;
-  gap: 5px;
+  gap: var(--spacing-xs);
   font-weight: bold;
 }
 
@@ -323,7 +322,7 @@ const isDisabled = (pickableDay: DatePick): boolean => {
 .weekday {
   font-weight: bold;
   font-size: 0.8em;
-  padding-bottom: 5px;
+  padding-bottom: var(--spacing-xs);
   color: var(--color-primary);
 }
 

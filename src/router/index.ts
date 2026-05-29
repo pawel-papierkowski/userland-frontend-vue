@@ -38,7 +38,7 @@ const routes = [
     { name:'home', path: '/', component: UserLandHome, meta: meta4unlogged },
     { name:'testArea', path: '/testArea', component: UserLandTestArea, meta: meta4unlogged },
     { name:'debugArea', path: '/debugArea', component: UserLandDebugArea, meta: meta4unlogged },
-    { name:'member', path: '/member', component: UserLandMember, meta: meta4logged },
+    { name:'memberArea', path: '/memberArea', component: UserLandMember, meta: meta4logged },
     { name:'registration', path: '/registration', component: UserRegistration, meta: meta4unlogged },
     { name:'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
 
@@ -83,17 +83,29 @@ router.beforeEach((to) => {
     return { name: 'login' }; // Redirects to the normal login route.
   }
 
-  // Is authenticated, but not authorized?
-  if (!checkAdminPermissions(to.meta)) {
-    return { name: 'login' }; // Redirects to the normal login route.
+  if (isAuthenticated) {
+    // Is authenticated, but not authorized?
+    if (!checkAccessPermissions(to.meta)) {
+      return { name: 'home' }; // Redirects to the normal login route.
+    }
+
+    // Is on admin login page, but already authenticated AND authorized?
+    if (checkAccessPermissions(to.meta) && to.name?.toString() === 'admin-login') {
+      return { name: 'admin-main' }; // Redirects to main page of administration panel.
+    }
   }
 
   // If no return statement is hit, the navigation proceeds normally.
 });
 
-const checkAdminPermissions = (meta: RouteMeta): boolean => {
+/**
+ * Check if currently logged user has access to given route.
+ * @param meta Metadata about route.
+ * @returns True if given user has access, otherwise false.
+ */
+const checkAccessPermissions = (meta: RouteMeta): boolean => {
   const permissions = meta.permissions as string[];
-  if (permissions.length === 0) return true; // no permissions needed
+  if (permissions.length === 0) return true; // this route does not need any permissions
 
   // You need just one of permissions on list to be allowed here.
   for (const perm of permissions) {

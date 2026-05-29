@@ -2,13 +2,13 @@
 /**
  * Component that shows any table.
  * Features:
- * - Selecting record
- * - Pagination
- * - Sorting of any column (ASC or DESC)
+ * - Selecting/deselecting record.
+ * - Pagination.
+ * - Sorting of any column (ASC or DESC).
  *
  * Properties:
  * - v-model - Holds selected record.
- * - :columns - Array of columns.
+ * - :columns - Array of columns. First column must be unique key.
  * - :data - Array of data.
  * - empty - I18n key for empty table.
  */
@@ -26,7 +26,6 @@ const currPage = defineModel<number>('currPage', { required: true }); // Current
 const currSortBy = defineModel<string|null>('currSortBy', { required: true }); // Current sort column.
 const currSortOrder = defineModel<string|null>('currSortOrder', { required: true }); // Current sort order.
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   columns: ColumnData[]; // Data about columns.
   data: E[]; // Content of table itself.
@@ -48,12 +47,10 @@ const selectEntry = (entry: E) => {
 
 const changeSort = (column: ColumnData) => {
   if (currSortBy.value === column.name) {
-    console.warn(`Same column ${column.name}`);
     if (currSortOrder.value === 'DESC') currSortOrder.value = 'ASC';
     else currSortOrder.value = 'DESC';
     return;
   }
-    console.warn(`Diff column. old: ${currSortBy.value}, new: ${column.name}`);
   // Different column to sort.
   currSortBy.value = column.name;
   currSortOrder.value = column.defSort;
@@ -70,6 +67,20 @@ const sortMarker = (column: ColumnData) => {
   }
   if (currSortOrder.value === 'DESC') return 'arrow-desc';
   return 'arrow-asc';
+}
+
+/**
+ * Determine class for table row.
+ * @param entry Entry.
+ * @param rowIndex Row index.
+ */
+const rowClass = (entry: E, rowIndex: number) => {
+  const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
+  const selected = selRecord.value === null ? false : selRecord.value[key] === entry[key];
+  return {
+    selected: selected,
+    odd: rowIndex%2 === 0
+  };
 }
 </script>
 
@@ -98,7 +109,7 @@ const sortMarker = (column: ColumnData) => {
       <div class="table-body-group" role="rowgroup">
         <div v-for="(entry, rowIndex) in data" :key="rowIndex"
               class="table-row"
-              :class="{ selected: selRecord === entry, odd: rowIndex%2 === 0 }"
+              :class="rowClass(entry, rowIndex)"
               role="row"
               @click="selectEntry(entry)">
           <template v-for="(column, colIndex) in columns" :key="colIndex">

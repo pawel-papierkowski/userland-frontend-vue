@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.passwordReset.form.title') }}</h2>
 
     <form @submit.prevent="handlePasswordResetConfirmation" novalidate>

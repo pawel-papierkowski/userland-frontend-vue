@@ -77,10 +77,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.accountDelete.form.title') }}</h2>
     <div class="form-group">
-      <div class="box-warning" v-html="t('user.accountDelete.form.warning')" />
+      <div class="onpage-msg warning" v-html="t('user.accountDelete.form.warning')" />
     </div>
 
     <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDeletion()">

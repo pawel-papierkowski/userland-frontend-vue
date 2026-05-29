@@ -27,7 +27,7 @@ const form: UserFullDataForm = reactive({
   username: '',
   email: '',
   status: '',
-  locked: false,
+  locked: null,
   lang: '',
   name: '',
   surname: '',
@@ -121,59 +121,41 @@ const isUnloaded = (): boolean => {
 
     <form @submit.prevent="saveUserData" novalidate v-if="!isLoading" data-testid="form-user-main">
       <div class="form-group">
-        <div class="form-spacer">
-          <h4>{{ t('admin.user.main.form.general') }}</h4>
+        <h4>{{ t('admin.user.main.form.general') }}</h4>
+        <div class="form-subform">
+          <div>{{ t('admin.user.main.form.createdAt') }}:</div>
+          <div>{{ form.createdAt }}</div>
 
-          <div class="form-pairs">
-            <div>{{ t('admin.user.main.form.createdAt') }}:</div>
-            <div>{{ form.createdAt }}</div>
-          </div>
+          <div>{{ t('admin.user.main.form.modifiedAt') }}:</div>
+          <div>{{ form.modifiedAt }}</div>
 
-          <div class="form-pairs">
-            <div>{{ t('admin.user.main.form.modifiedAt') }}:</div>
-            <div>{{ form.modifiedAt }}</div>
-          </div>
+          <label for="username">{{ t('admin.user.main.form.username') }}:</label>
+          <input id="username" data-testid="username" type="text" v-model="form.username"
+            required :disabled="isUnloaded()" autocomplete="off" />
 
-          <div class="form-pairs">
-            <label for="username">{{ t('admin.user.main.form.username') }}:</label>
-            <input id="username" data-testid="username" type="text" v-model="form.username"
-              required :disabled="isUnloaded()" autocomplete="off" />
-          </div>
+          <label for="email">{{ t('admin.user.main.form.email') }}:</label>
+          <input id="email" data-testid="email" type="email" v-model="form.email"
+            required :disabled="isUnloaded()" autocomplete="off" />
 
-          <div class="form-pairs">
-            <label for="email">{{ t('admin.user.main.form.email') }}:</label>
-            <input id="email" data-testid="email" type="email" v-model="form.email"
-              required :disabled="isUnloaded()" autocomplete="email" />
-          </div>
+          <div>{{ t('admin.user.main.form.status') }}:</div>
+          <div>{{ form.status }}</div>
 
-          <div class="form-pairs">
-            <div>{{ t('admin.user.main.form.status') }}:</div>
-            <div>{{ form.status }}</div>
-          </div>
+          <div>{{ t('admin.user.main.form.locked') }}:</div>
+          <div>{{ form.locked === null ? '' : t('state.'+form.locked) }}</div>
 
-          <div class="form-pairs">
-            <div>{{ t('admin.user.main.form.locked') }}:</div>
-            <div>{{ form.locked === null ? '' : t('state.'+form.locked) }}</div>
-          </div>
+          <div>{{ t('admin.user.main.form.lang') }}:</div>
+          <div>{{ form.lang }}</div>
+        </div>
 
-          <div class="form-pairs">
-            <div>{{ t('admin.user.main.form.lang') }}:</div>
-            <div>{{ form.lang }}</div>
-          </div>
+        <h4>{{ t('admin.user.main.form.profile') }}</h4>
+        <div class="form-subform">
+          <label for="name">{{ t('admin.user.main.form.name') }}:</label>
+          <input id="name" data-testid="name" type="text" v-model="form.name"
+            required :disabled="isUnloaded()" autocomplete="off" />
 
-          <h4>{{ t('admin.user.main.form.profile') }}</h4>
-
-          <div class="form-pairs">
-            <label for="name">{{ t('admin.user.main.form.name') }}:</label>
-            <input id="name" data-testid="name" type="text" v-model="form.name"
-              required :disabled="isUnloaded()" autocomplete="off" />
-          </div>
-
-          <div class="form-pairs">
-            <label for="surname">{{ t('admin.user.main.form.surname') }}:</label>
-            <input id="surname" data-testid="surname" type="text" v-model="form.surname"
-              required :disabled="isUnloaded()" autocomplete="off" />
-          </div>
+          <label for="surname">{{ t('admin.user.main.form.surname') }}:</label>
+          <input id="surname" data-testid="surname" type="text" v-model="form.surname"
+            required :disabled="isUnloaded()" autocomplete="off" />
         </div>
       </div>
     </form>

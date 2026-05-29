@@ -95,12 +95,12 @@ const getInputClass = (msgError: string | null): string => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.accountDeleteStart.form.title') }}</h2>
 
     <form @submit.prevent="handleAccountDeletionLink" novalidate>
       <div class="form-group">
-        <div class="box-info" v-html="t('user.accountDeleteStart.form.info')" />
+        <div class="onpage-msg info" v-html="t('user.accountDeleteStart.form.info')" />
         <div class="form-entry">
           <label for="password">{{ t('user.accountDeleteStart.form.password') }}:</label>
           <input

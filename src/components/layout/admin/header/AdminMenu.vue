@@ -10,8 +10,8 @@ import DropdownMenu from '@/components/base/layout/DropdownMenu.vue';
 const router = useRouter();
 const { t } = useI18n();
 
-const handleLogout = () => {
-  AppLoginer.logout();
+const handleLogout = async () => {
+  await AppLoginer.logout();
   router.push({ name: 'admin-login' });
 }
 </script>

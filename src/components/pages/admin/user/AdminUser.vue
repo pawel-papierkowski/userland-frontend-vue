@@ -156,11 +156,9 @@ onMounted(async () => { // automatically call once user enters page
       <AdminUserFilter v-model="form" :isSubmitting="isSubmitting" @reload="handleReload"/>
     </template>
     <template #tablePanel>
-      <div>
-        <TablePage v-model="selRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
-          :columns="userTableColumns" :data="data.entries" :meta="data.tableMeta" :isLoading="isLoading" :canSpin="canSpin"
-          empty="admin.user.table.empty"/>
-      </div>
+      <TablePage v-model="selRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
+        :columns="userTableColumns" :data="data.entries" :meta="data.tableMeta" :isLoading="isLoading" :canSpin="canSpin"
+        empty="admin.user.table.empty"/>
     </template>
     <template #entryEditor>
       <AdminUserEditor v-model="selRecord" />

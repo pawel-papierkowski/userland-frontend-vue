@@ -10,7 +10,7 @@ export const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE', 'DEMO'
 /** List of user table columns. */
 export const userTableColumns: ColumnData[] = [
   {
-    name: "id",
+    name: "id", // unique key
     defSort: "ASC",
     translation: "admin.user.table.col.id",
     visible: false

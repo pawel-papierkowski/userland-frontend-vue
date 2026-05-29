@@ -101,12 +101,12 @@ const getInputClass = (msgError: string | null): string => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.emailChangeStart.form.title') }}</h2>
 
     <form @submit.prevent="handleEmailChangeLink" novalidate>
       <div class="form-group">
-        <div class="box-info" v-html="t('user.emailChangeStart.form.info')" />
+        <div class="onpage-msg info" v-html="t('user.emailChangeStart.form.info')" />
         <div class="form-entry">
           <label for="newEmail">{{ t('user.emailChangeStart.form.newEmail') }}:</label>
           <input

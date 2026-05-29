@@ -119,12 +119,12 @@ const getInputClass = (msgError: string | null): string => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.registration.form.title') }}</h2>
 
     <form @submit.prevent="handleRegister" novalidate>
       <div class="form-group">
-        <div class="box-warning" v-html="t('user.registration.form.warning')" />
+        <div class="onpage-msg warning" v-html="t('user.registration.form.warning')" />
         <div class="form-entry">
           <label for="username">{{ t('user.registration.form.username') }}:</label>
           <input

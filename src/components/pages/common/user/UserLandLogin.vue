@@ -99,12 +99,12 @@ const convertToReq = (form: UserLoginForm): UserLoginReq => {
 const showMessage = (success: boolean) => {
   if (success) {
     if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
-      AppMessager.successT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
+      AppMessager.infoT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
       log.debug('Successfully logged in as admin user "', form.email, '".');
       return;
     }
 
-    AppMessager.successT('user.login.msg.success.title', 'user.login.msg.success.content');
+    AppMessager.infoT('user.login.msg.success.title', 'user.login.msg.success.content');
     log.debug('Successfully logged in as user "', form.email, '".');
     return;
   }
@@ -152,22 +152,36 @@ const getInputClass = (msgError: string | null): string => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ isAdminPanel ? t('user.login.formAdmin.title') : t('user.login.form.title') }}</h2>
 
     <form @submit.prevent="handleLogin" novalidate>
       <div class="form-group">
         <div class="form-entry">
           <label for="email">{{ t('user.login.form.email') }}:</label>
-          <input id="email" data-testid="email" type="email" v-model="form.email"
-            required autocomplete="email" :class="getInputClass(emailError)" />
+          <input
+            id="email"
+            data-testid="email"
+            type="email"
+            v-model="form.email"
+            required
+            autocomplete="email"
+            :class="getInputClass(emailError)"
+          />
           <span v-if="emailError" class="form-text-error">{{ emailError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="password">{{ t('user.login.form.password') }}:</label>
-          <input id="password" data-testid="password" type="password" v-model="form.password"
-            required autocomplete="new-password" :class="getInputClass(passwordError)" />
+          <input
+            id="password"
+            data-testid="password"
+            type="password"
+            v-model="form.password"
+            required
+            autocomplete="new-password"
+            :class="getInputClass(passwordError)"
+          />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
       </div>

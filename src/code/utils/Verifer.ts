@@ -52,7 +52,7 @@ export class Verifier {
    * @returns Null if password is correct, otherwise error message.
    */
   public static verifyConfirmPassword(password: string, confirmPassword: string, usedButton: boolean): string|null {
-    const result = Verifier.verifyFieldInt(password, usedButton);
+    const result = Verifier.verifyFieldInt(confirmPassword, usedButton);
     if (result !== '') return result;
 
     if (password !== confirmPassword) return t('form.errPasswordMatch');

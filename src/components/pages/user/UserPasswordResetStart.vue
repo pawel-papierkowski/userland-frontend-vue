@@ -95,12 +95,12 @@ const getInputClass = (msgError: string | null): string => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ t('user.passwordResetStart.form.title') }}</h2>
 
     <form @submit.prevent="handlePasswordResetLink" novalidate>
       <div class="form-group">
-        <div class="box-info" v-html="t('user.passwordResetStart.form.info')" />
+        <div class="onpage-msg info" v-html="t('user.passwordResetStart.form.info')" />
         <div class="form-entry">
           <label for="email">{{ t('user.passwordResetStart.form.email') }}:</label>
           <input

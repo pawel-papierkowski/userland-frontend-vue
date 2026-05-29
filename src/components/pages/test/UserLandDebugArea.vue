@@ -36,7 +36,7 @@ const callCheckAlive = async () => {
   } finally {
     isOptionSubmitting.value = false; // Enable checks buttons.
   }
-}
+};
 
 /** Call API checks endpoint: logged. */
 const callCheckLogged = async () => {
@@ -52,7 +52,7 @@ const callCheckLogged = async () => {
   } finally {
     isOptionSubmitting.value = false; // Enable checks buttons.
   }
-}
+};
 
 /** Call API checks endpoint: admin. */
 const callCheckAdmin = async () => {
@@ -68,7 +68,7 @@ const callCheckAdmin = async () => {
   } finally {
     isOptionSubmitting.value = false; // Enable checks buttons.
   }
-}
+};
 
 /** Call API checks endpoint: exception. */
 const callCheckException = async () => {
@@ -76,15 +76,22 @@ const callCheckException = async () => {
     isOptionSubmitting.value = true;
     await backendApiCheck.exception(); // API CALL
 
-    AppMessager.successT('debugArea.checks.exception.msg.success.title', 'debugArea.checks.exception.msg.success.content');
+    AppMessager.successT(
+      'debugArea.checks.exception.msg.success.title',
+      'debugArea.checks.exception.msg.success.content',
+    );
     log.debug('Called /api/checks/exception successfully.');
   } catch (error) {
-    AppMessager.errorT(error, 'debugArea.checks.exception.msg.error.title', 'debugArea.checks.exception.msg.error.content');
+    AppMessager.errorT(
+      error,
+      'debugArea.checks.exception.msg.error.title',
+      'debugArea.checks.exception.msg.error.content',
+    );
     backendApi.logError(error, 'Failed to call /api/checks/exception!');
   } finally {
     isOptionSubmitting.value = false; // Enable checks buttons.
   }
-}
+};
 
 /** Call API users endpoint: prolong. */
 const callProlong = async () => {
@@ -93,29 +100,38 @@ const callProlong = async () => {
     const { result, jwt } = await AppLoginer.prolongSilently();
 
     if (result) {
-      AppMessager.successT('debugArea.options.prolong.msg.success.title', 'debugArea.options.prolong.msg.success.content');
+      AppMessager.successT(
+        'debugArea.options.prolong.msg.success.title',
+        'debugArea.options.prolong.msg.success.content',
+      );
       log.debug('Prolonged user session successfully. New token: ' + jwt);
     } else {
-      AppMessager.failureT('debugArea.options.prolong.msg.failure.title', 'debugArea.options.prolong.msg.failure.content');
+      AppMessager.failureT(
+        'debugArea.options.prolong.msg.failure.title',
+        'debugArea.options.prolong.msg.failure.content',
+      );
       log.error('Prolong failed! Used token: ' + jwt);
     }
   } catch (error) {
-    AppMessager.errorT(error, 'debugArea.options.prolong.msg.error.title', 'debugArea.options.prolong.msg.error.content');
+    AppMessager.errorT(
+      error,
+      'debugArea.options.prolong.msg.error.title',
+      'debugArea.options.prolong.msg.error.content',
+    );
     backendApi.logError(error, 'Failed to prolong user session!');
   } finally {
     isOptionSubmitting.value = false; // Enable checks buttons.
   }
-}
+};
 </script>
 
 <template>
   <div class="debugArea-wrapper">
-
     <fieldset>
       <legend>{{ t('debugArea.login.legend') }}</legend>
       <div class="debugArea-data">
         <div>{{ t('debugArea.login.logged') }}:</div>
-        <div>{{ t('state.'+loginStore.loginState.isLogged) }}</div>
+        <div>{{ t('state.' + loginStore.loginState.isLogged) }}</div>
         <div>{{ t('debugArea.login.username') }}:</div>
         <div>{{ loginStore.loginState.username }}</div>
         <div>{{ t('debugArea.login.email') }}:</div>
@@ -131,21 +147,30 @@ const callProlong = async () => {
 
     <fieldset>
       <legend>{{ t('debugArea.checks.legend') }}</legend>
-      <div class="buttons-vertical">
-        <button :disabled="isOptionSubmitting" @click="callCheckAlive()">{{ t('debugArea.checks.alive.button') }}</button>
-        <button :disabled="isOptionSubmitting" @click="callCheckLogged()">{{ t('debugArea.checks.logged.button') }}</button>
-        <button :disabled="isOptionSubmitting" @click="callCheckAdmin()">{{ t('debugArea.checks.admin.button') }}</button>
-        <button :disabled="isOptionSubmitting" @click="callCheckException()">{{ t('debugArea.checks.exception.button') }}</button>
+      <div class="items-vertical">
+        <button :disabled="isOptionSubmitting" @click="callCheckAlive()">
+          {{ t('debugArea.checks.alive.button') }}
+        </button>
+        <button :disabled="isOptionSubmitting" @click="callCheckLogged()">
+          {{ t('debugArea.checks.logged.button') }}
+        </button>
+        <button :disabled="isOptionSubmitting" @click="callCheckAdmin()">
+          {{ t('debugArea.checks.admin.button') }}
+        </button>
+        <button :disabled="isOptionSubmitting" @click="callCheckException()">
+          {{ t('debugArea.checks.exception.button') }}
+        </button>
       </div>
     </fieldset>
 
     <fieldset>
       <legend>{{ t('debugArea.options.legend') }}</legend>
-      <div class="buttons-vertical">
-        <button :disabled="isOptionSubmitting" @click="callProlong()">{{ t('debugArea.options.prolong.button') }}</button>
+      <div class="items-vertical">
+        <button :disabled="isOptionSubmitting" @click="callProlong()">
+          {{ t('debugArea.options.prolong.button') }}
+        </button>
       </div>
     </fieldset>
-
   </div>
 </template>
 
@@ -154,7 +179,7 @@ const callProlong = async () => {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row; /* Stacks children horizontally */
-  
+
   align-items: center; /* Centers the items horizontally */
   justify-content: center;
 

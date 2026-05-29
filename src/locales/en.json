@@ -389,7 +389,7 @@
       "disabled": "Disabled"
     },
     "msgButtons": {
-      "legend": "AppMessager tests",
+      "legend": "Tests of temporary messages",
       "info": {
         "label": "Generate info message",
         "title": "Info",
@@ -420,6 +420,14 @@
       "legend": "Spinner",
       "start": "Start",
       "stop": "Stop"
+    },
+    "inMessages": {
+      "legend": "Permanent messages",
+      "info": "This is <b>info</b> message.",
+      "success": "This is <b>success</b> message.",
+      "warning": "This is <b>warning</b> message.",
+      "failure": "This is <b>failure</b> message.",
+      "error": "This is <b>error</b> message."
     }
   },
 
@@ -612,7 +620,7 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "YYYY-MM-DD",
+    "placeholder": "📅 YYYY-MM-DD",
     "dayOfWeek": {
       "mon": "Mon",
       "tue": "Tue",

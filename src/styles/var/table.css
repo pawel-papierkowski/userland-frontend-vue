@@ -1,0 +1,11 @@
+/*** Variables: table. ***/
+
+:root {
+
+  /* TablePage specific vars. */
+  --tablepage-color: var(--input-color);
+
+  --tablepaginer-navbtn-filter: none;
+  --tablepaginer-navbtn-hover-filter: brightness(1.3);
+
+}

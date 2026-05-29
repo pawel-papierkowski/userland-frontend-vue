@@ -10,8 +10,8 @@ import DropdownMenu from '@/components/base/layout/DropdownMenu.vue';
 const router = useRouter();
 const { t } = useI18n();
 
-const handleLogout = () => {
-  AppLoginer.logout();
+const handleLogout = async () => {
+  await AppLoginer.logout();
   router.push({ name: 'home' });
 }
 </script>
@@ -21,6 +21,7 @@ const handleLogout = () => {
     <router-link class="nav-major" :to="{ name: 'login' }">{{ t('header.user.login') }}</router-link>
     <router-link class="nav-major" :to="{ name: 'registration' }">{{ t('header.user.registration') }}</router-link>
   </template>
+
   <DropdownMenu v-if="AppLoginer.isLogged()">
     <template #trigger>
       {{ t('header.user.options') }}

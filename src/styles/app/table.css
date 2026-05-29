@@ -1,0 +1,192 @@
+/*** Styles specific to this application: tables. ***/
+
+/*** Table wrapper classes. ***/
+
+.table-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'filter editor'
+    'table editor';
+  gap: 1rem;
+  justify-items: stretch;
+  align-items: start;
+}
+.table-wrapper-filter {
+  grid-area: filter;
+}
+.table-wrapper-page {
+  grid-area: table;
+}
+.table-wrapper-editor {
+  grid-area: editor;
+}
+
+@media (max-width: 1000px) {
+  .table-wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'filter'
+      'table'
+      'editor';
+  }
+}
+
+/*** Table page classes. ***/
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid #d1d1d1;
+  border-radius: 8px;
+
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.table-header-group {
+  background-color: #d8d8d8;
+}
+
+.table-header-row {
+  display: flex;
+  font-weight: 600;
+  color: #374151;
+}
+
+.table-row {
+  display: flex;
+  transition: all 0.2s ease;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row.odd:not(.selected) {
+  background-color: #fafafa;
+}
+
+.table-row.selected {
+  background-color: #fff7ed !important; /* Very light orange */
+  color: #9a3412;
+  box-shadow: inset 4px 0 0 0 #f97316; /* Orange left border effect */
+}
+
+.table-row:hover {
+  background-color: #f3f3f3;
+}
+
+.table-row.odd:not(.selected):hover {
+  background-color: #f3f3f3;
+}
+
+.table-row.selected:hover {
+  background-color: #ffedd5 !important; /* Slightly darker orange */
+}
+
+.table-cell,
+.table-header {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  padding: 5px;
+  text-align: left;
+  align-items: center;
+}
+
+.table-header {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  justify-content: center;
+}
+
+.cell-value {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-empty {
+  padding: 15px;
+  margin: auto;
+  color: #525252;
+  cursor: default;
+}
+
+.table-paginer {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto auto 1fr;
+  gap: 0.3rem;
+
+  padding: 2px;
+
+  background-color: #e3e3e3;
+
+  justify-items: center;
+  align-items: center;
+}
+
+.table-paginer-side {
+  width: 100%;
+}
+
+.table-paginer-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.table-paginer-navbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  filter: var(--tablepaginer-navbtn-filter);
+}
+.table-paginer-navbtn:hover {
+  filter: var(--tablepaginer-navbtn-hover-filter);
+}
+
+.table-paginer-navbtn.disabled,
+.table-paginer-entry.disabled {
+  filter: grayscale(100%); /* Grays out the colors (essential for emojis) */
+  opacity: 0.5; /* Makes it look faded */
+  color: #9ca3af; /* For regular text */
+
+  pointer-events: none;
+  cursor: default;
+}
+
+.input-paginer {
+  width: 45px;
+  text-align: center;
+  padding: 1px;
+  margin: 1px 5px 0 0;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+  height: 1.25em;
+  box-sizing: border-box;
+}
+/* Remove arrows from numeric input */
+.input-paginer::-webkit-outer-spin-button,
+.input-paginer::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input-paginer[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

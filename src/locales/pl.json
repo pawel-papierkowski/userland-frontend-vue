@@ -389,7 +389,7 @@
       "disabled": "Zablokowany"
     },
     "msgButtons": {
-      "legend": "Testy AppMessager",
+      "legend": "Testy wiadomości tymczasowych",
       "info": {
         "label": "Wygeneruj wiadomość informacyjną",
         "title": "Informacja",
@@ -420,6 +420,14 @@
       "legend": "Kręciołek",
       "start": "Start",
       "stop": "Stop"
+    },
+    "inMessages": {
+      "legend": "Stałe wiadomości",
+      "info": "To jest wiadomość <b>informacyjna</b>.",
+      "success": "To jest wiadomość o <b>sukcesie</b>.",
+      "warning": "To jest wiadomość - <b>ostrzeżenie</b>.",
+      "failure": "To jest wiadomość o <b>niepowodzeniu</b>.",
+      "error": "To jest wiadomość o <b>błędzie</b>."
     }
   },
 
@@ -612,7 +620,7 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "RRRR-MM-DD",
+    "placeholder": "📅 RRRR-MM-DD",
     "dayOfWeek": {
       "mon": "Pon",
       "tue": "Wt",

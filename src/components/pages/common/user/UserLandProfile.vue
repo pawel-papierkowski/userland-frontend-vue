@@ -57,7 +57,6 @@ const fillForm = async () => {
   form.email = data.email;
   form.name = data.profile.name;
   form.surname = data.profile.surname;
-
 };
 
 /** Retrieve all available data about currently logged user from backend. */
@@ -177,7 +176,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="form-all">
+  <div class="form-alone">
     <h2>{{ isAdminPanel ? t('user.profile.formAdmin.title') : t('user.profile.form.title') }}</h2>
 
     <div class="spinner-container" v-if="isLoading">
@@ -188,34 +187,46 @@ onMounted(async () => {
       <div class="form-group">
         <div class="form-entry">
           <label for="username">{{ t('user.profile.form.username') }}:</label>
-          <input id="username" data-testid="username" type="text" v-model="form.username"
-            required autocomplete="off" :class="getInputClass(usernameError)" />
+          <input
+            id="username"
+            data-testid="username"
+            type="text"
+            v-model="form.username"
+            required
+            autocomplete="off"
+            :class="getInputClass(usernameError)"
+          />
           <span v-if="usernameError" class="form-text-error">{{ usernameError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="email">{{ t('user.profile.form.email') }}:</label>
-          <input id="email" data-testid="email" type="email" v-model="form.email"
-            required disabled autocomplete="email" />
+          <input
+            id="email"
+            data-testid="email"
+            type="email"
+            v-model="form.email"
+            required
+            disabled
+            autocomplete="email"
+          />
         </div>
 
         <div class="form-entry">
           <label for="name">{{ t('user.profile.form.name') }}:</label>
-          <input id="name" data-testid="name" type="text" v-model="form.name"
-            required autocomplete="off" />
+          <input id="name" data-testid="name" type="text" v-model="form.name" required autocomplete="off" />
         </div>
 
         <div class="form-entry">
           <label for="surname">{{ t('user.profile.form.surname') }}:</label>
-          <input id="surname" data-testid="surname" type="text" v-model="form.surname"
-            required autocomplete="off" />
+          <input id="surname" data-testid="surname" type="text" v-model="form.surname" required autocomplete="off" />
         </div>
       </div>
 
       <button data-testid="btn-submit" type="submit" :disabled="isSubmitting">
         {{ isSubmitting ? t('user.profile.button.updateSubmitting') : t('user.profile.button.update') }}
       </button>
-      <div class="buttons-horizontal">
+      <div class="items-horizontal">
         <button data-testid="btn-emailChange" :disabled="isSubmitting" @click="handleEmailChange()">
           {{ t('user.profile.button.emailChange') }}
         </button>

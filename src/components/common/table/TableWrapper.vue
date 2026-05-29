@@ -4,13 +4,13 @@
 
 <template>
   <div class="table-wrapper">
-    <div class="table-filter">
+    <div class="table-wrapper-filter">
       <slot name="filterPanel" />
     </div>
-    <div class="table-page">
+    <div class="table-wrapper-page">
       <slot name="tablePanel" />
     </div>
-    <div class="table-entry-editor">
+    <div class="table-wrapper-editor">
       <slot name="entryEditor" />
     </div>
   </div>

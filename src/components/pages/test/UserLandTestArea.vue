@@ -42,19 +42,19 @@ const genMessage = (level: EnMessageLevel) => {
 /** Starts spinner. */
 const startSpinner = () => {
   canSpin.value = true;
-}
+};
 
 /** Stops spinner. */
 const stopSpinner = () => {
   canSpin.value = false;
-}
+};
 </script>
 
 <template>
   <div class="testArea-wrapper">
     <fieldset>
       <legend>{{ t('testArea.generalButtons.legend') }}</legend>
-      <div class="buttons-horizontal">
+      <div class="items-horizontal">
         <button>{{ t('testArea.generalButtons.standard') }}</button>
         <button class="danger">{{ t('testArea.generalButtons.danger') }}</button>
         <button disabled>{{ t('testArea.generalButtons.disabled') }}</button>
@@ -64,7 +64,7 @@ const stopSpinner = () => {
   <div class="testArea-wrapper">
     <fieldset>
       <legend>{{ t('testArea.msgButtons.legend') }}</legend>
-      <div class="buttons-vertical">
+      <div class="items-vertical">
         <button @click="genMessage(EnMessageLevel.Info)">{{ t('testArea.msgButtons.info.label') }}</button>
         <button @click="genMessage(EnMessageLevel.Success)">{{ t('testArea.msgButtons.success.label') }}</button>
         <button @click="genMessage(EnMessageLevel.Warning)">{{ t('testArea.msgButtons.warning.label') }}</button>
@@ -76,10 +76,22 @@ const stopSpinner = () => {
       <legend>{{ t('testArea.spinner.legend') }}</legend>
       <div class="spinner-container">
         <SpinnerTorus display="block" size="100px" :canSpin="canSpin" />
-        <div class="buttons-vertical">
+        <div class="items-vertical">
           <button @click="startSpinner()">{{ t('testArea.spinner.start') }}</button>
           <button @click="stopSpinner()">{{ t('testArea.spinner.stop') }}</button>
         </div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="testArea-wrapper">
+    <fieldset>
+      <legend>{{ t('testArea.inMessages.legend') }}</legend>
+      <div class="items-vertical">
+        <div class="onpage-msg info" v-html="t('testArea.inMessages.info')" />
+        <div class="onpage-msg success" v-html="t('testArea.inMessages.success')" />
+        <div class="onpage-msg warning" v-html="t('testArea.inMessages.warning')" />
+        <div class="onpage-msg failure" v-html="t('testArea.inMessages.failure')" />
+        <div class="onpage-msg error" v-html="t('testArea.inMessages.error')" />
       </div>
     </fieldset>
   </div>
@@ -88,13 +100,12 @@ const stopSpinner = () => {
 <style scoped>
 .testArea-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: row; /* Stacks children horizontally */
+  flex-direction: row; /* Stacks children horizontally. */
+  flex-wrap: wrap; /* If not enough space, children will be stacked vertically. */
 
   align-items: center; /* Centers the items horizontally */
   justify-content: center;
 
-  gap: 1rem; /* Adds consistent spacing between items without margins */
+  gap: 1rem;
 }
-
 </style>
