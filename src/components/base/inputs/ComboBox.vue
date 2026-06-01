@@ -14,9 +14,13 @@ Component uses CSS variables to set up look&feel of combobox. Variables:
   --combobox-option-background-hover: Background color of dropdown option when mouse hovers over it.
   --combobox-option-text-hover: Text color of dropdown option when mouse hovers over it.
 
+Features:
+- Accept null (not set) value.
+
 Properties:
 - v-model - Variable holding selected value.
 - :options - Array of options, will be shown.
+- disabled - If true, acts as disabled component. Optional, default is false.
 - langPrefix - Prefix, used for auto-translating entries in dropdown list.
 - placeholder - Translated text to use if nothing is selected.
 
@@ -24,14 +28,17 @@ Notes:
 - ComboBox is integrated with vue-i18n.
 - Null value is supported as option. Example: const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
 */
-
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
 const props = defineProps({
   modelValue: [String, null], // null means nothing is selected
+  disabled: {
+    type: Boolean,
+    default: false
+  },
   options: {
     type: Array<string|null>,
     default: () => []
@@ -49,13 +56,25 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const isOpen = ref(false);
-const arrowClass = computed(() => ({ open: isOpen.value }))
+const arrowClass = computed(() => ({ open: isOpen.value }));
 
 const selectedOption = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value)
 });
 
+/** If you disable combobox, list of options will close. */
+watch(() => props.disabled, () => {
+  if (props.disabled) isOpen.value = false;
+});
+
+/** User clicked on input. */
+const openOptions = () => {
+  if (props.disabled) return;
+  isOpen.value = !isOpen.value;
+}
+
+/** User clicked on option. */
 const selectOption = (option: string|null) => {
   selectedOption.value = option;
   isOpen.value = false;
@@ -63,8 +82,8 @@ const selectOption = (option: string|null) => {
 </script>
 
 <template>
-  <div class="combobox" ref="combobox" tabindex="0" @blur="isOpen = false">
-    <div class="selected" @click="isOpen = !isOpen">
+  <div class="combobox" :class="{ disabled: disabled }" ref="combobox" tabindex="0" @blur="isOpen = false">
+    <div class="selected" @click="openOptions()">
       <span class="selected-text">{{ selectedOption ? t(langPrefix+'.'+selectedOption) : t(placeholder) }}</span>
       <span class="arrow" :class="arrowClass"></span>
     </div>
@@ -97,6 +116,11 @@ const selectOption = (option: string|null) => {
 .combobox:hover {
   color: var(--combobox-hover-color);
   background-color: var(--combobox-hover-background);
+}
+
+.combobox.disabled {
+  color: var(--combobox-disabled-color);
+  background: var(--combobox-disabled-background);
 }
 
 /**/

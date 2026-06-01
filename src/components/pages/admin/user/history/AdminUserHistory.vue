@@ -1,8 +1,12 @@
 <script setup lang="ts">
-/** User management page. Shows table with users and allows editing selected user. */
-import { onMounted, reactive, ref, watch } from 'vue';
+/**
+ * View of user's history. No editing here.
+ *
+ * Properties:
+ * - v-model - Holds selected user.
+ */
+import { reactive, ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
-import { useLogger } from 'vue-logger-plugin';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -10,38 +14,38 @@ import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableForm, UserTableReq, UserTableResp, UserTableEntry } from '@/code/data/features/user/admin-user.ts';
-import { userTableColumns, emptyUserTable } from '@/code/data/features/user/user-const.ts';
+import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
 
-import AdminUserFilter from '@/components/pages/admin/user/AdminUserFilter.vue';
-import AdminUserEditor from '@/components/pages/admin/user/AdminUserEditor.vue';
+import type { UserHistoryTableFilterForm, UserHistoryTableReq, UserHistoryTableResp, UserHistoryTableEntry } from '@/code/data/features/user/admin-user.ts';
+import { userHistoryTableColumns, emptyUserHistoryTable } from '@/code/data/features/user/user-const.ts';
+
+import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminUserHistoryFilter.vue';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
-const log = useLogger();
-
 /** User table filtering form data. */
-const form: UserTableForm = reactive({
-  username: null,
-  email: null,
-  status: null,
-  locked: null,
+const form: UserHistoryTableFilterForm = reactive({
+  userId: -1,
+  who: null,
+  what: null,
   createdFromAt: null,
   createdToAt: null,
-  tableMeta: { pageSize:null, page:null, sortBy:null, sortOrder:null },
+  tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** Loaded page of users. */
-const data: Ref<UserTableResp> = ref(emptyUserTable);
-/** Selected record of table. */
-const selRecord: Ref<UserTableEntry|null> = ref(null);
+/** Loaded page of user history. */
+const data: Ref<UserHistoryTableResp> = ref(emptyUserHistoryTable);
+/** Selected user record. */
+const selUserRecord = defineModel<UserTableEntry|null>();
+/** Selected user history record. */
+const selHistoryRecord: Ref<UserHistoryTableEntry | null> = ref(null);
 /** Current page. */
 const currPage: Ref<number> = ref(0);
 /** Current sort column. Null means default sorting. */
-const currSortBy: Ref<string|null> = ref(null);
+const currSortBy: Ref<string | null> = ref(null);
 /** Current sort order. Null means default sort order. */
-const currSortOrder: Ref<string|null> = ref(null);
+const currSortOrder: Ref<string | null> = ref(null);
 
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isSubmitting: Ref<boolean> = ref(false);
@@ -50,8 +54,14 @@ const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
 const canSpin: Ref<boolean> = ref(true);
 
+const isDisabled = computed(() => { return selUserRecord.value === null; });
+
+/** Change in selection requires reload of form. */
+watch(selUserRecord, () => {
+  handleReload();
+});
+
 watch(currPage, (newVal, oldVal) => {
-  log.debug(`Field currPage changed! newVal: '${newVal}', oldVal: '${oldVal}'`);
   if (oldVal === null) return;
 
   if (!form.tableMeta) form.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
@@ -59,10 +69,10 @@ watch(currPage, (newVal, oldVal) => {
   handleReload();
 });
 watch(currSortBy, (newVal, oldVal) => {
-  log.debug(`Field currSortBy changed! newVal: '${newVal}', oldVal: '${oldVal}'`);
   if (oldVal === null) return;
 
-  if (!form.tableMeta) form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  if (!form.tableMeta)
+    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
   else {
     form.tableMeta.sortBy = currSortBy.value;
     form.tableMeta.sortOrder = currSortOrder.value;
@@ -70,10 +80,10 @@ watch(currSortBy, (newVal, oldVal) => {
   handleReload();
 });
 watch(currSortOrder, (newVal, oldVal) => {
-  log.debug(`Field currSortOrder changed! newVal: '${newVal}', oldVal: '${oldVal}'`);
   if (oldVal === null) return;
 
-  if (!form.tableMeta) form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  if (!form.tableMeta)
+    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
   else {
     form.tableMeta.sortBy = currSortBy.value;
     form.tableMeta.sortOrder = currSortOrder.value;
@@ -81,17 +91,21 @@ watch(currSortOrder, (newVal, oldVal) => {
   handleReload();
 });
 
-/** Handle reload of user table with filtering. */
+/** Handle reload of user history table with filtering. */
 const handleReload = async () => {
-  log.debug('Triggered handleReload().');
+  data.value = emptyUserHistoryTable;
+  if (!selUserRecord.value) {  // nothing to do
+    isLoading.value = false;
+    isSubmitting.value = false;
+    return;
+  }
   isLoading.value = true;
   isSubmitting.value = true;
   canSpin.value = true;
-  data.value = emptyUserTable;
 
   try {
     const req = convertToReq(form);
-    const result = await backendApiAdminUser.loadPage(req); // API CALL
+    const result = await backendApiAdminUser.loadHistoryPage(req); // API CALL
     processData(result.data);
     data.value = result.data;
 
@@ -101,7 +115,7 @@ const handleReload = async () => {
   } catch (error) {
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
-    backendApi.logError(error, 'User table reload failed!');
+    backendApi.logError(error, 'User history table reload failed!');
   } finally {
     isSubmitting.value = false;
   }
@@ -112,14 +126,15 @@ const handleReload = async () => {
  * @param form Form data.
  * @returns Request data.
  */
-const convertToReq = (form: UserTableForm): UserTableReq => {
+const convertToReq = (form: UserHistoryTableFilterForm): UserHistoryTableReq => {
   const createdFromStr = TimeUtils.cnvDate(form.createdFromAt);
   const createdToStr = TimeUtils.cnvDate(form.createdToAt);
 
   return {
     ...form,
+    userId: selUserRecord.value?.id || -1,
     createdFromAt: createdFromStr === null ? null : createdFromStr + 'T00:00:00',
-    createdToAt: createdToStr === null ? null : createdToStr + 'T23:59:59.999999'
+    createdToAt: createdToStr === null ? null : createdToStr + 'T23:59:59.999999',
   };
 };
 
@@ -127,41 +142,40 @@ const convertToReq = (form: UserTableForm): UserTableReq => {
  * Process data.
  * @param data Data to process.
  */
-const processData = (data: UserTableResp) => {
+const processData = (data: UserHistoryTableResp) => {
   data.entries.forEach((entry) => {
     processEntry(entry);
   });
-}
+};
 
 /**
  * Process single entry.
  * @param entry Table entry.
  */
-const processEntry = (entry: UserTableEntry) => {
+const processEntry = (entry: UserHistoryTableEntry) => {
   if (entry.createdAt) {
     entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
   }
+};
+
+const resolveEmptyText = () => {
+  if (!selUserRecord.value) return 'admin.user.history.table.emptyNoUser';
+  return 'admin.user.history.table.empty';
 }
-
-//
-
-onMounted(async () => { // automatically call once user enters page
-  await handleReload();
-});
 </script>
 
 <template>
-  <TableWrapper>
+  <TableWrapper layout="bottom">
     <template #filterPanel>
-      <AdminUserFilter v-model="form" :isSubmitting="isSubmitting" @reload="handleReload"/>
+      <AdminUserHistoryFilter v-model="form" :isSubmitting="isSubmitting" :disabled="isDisabled" @reload="handleReload"/>
     </template>
     <template #tablePanel>
-      <TablePage v-model="selRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
-        :columns="userTableColumns" :data="data.entries" :meta="data.tableMeta" :isLoading="isLoading" :canSpin="canSpin"
-        empty="admin.user.table.empty"/>
+      <TablePage v-model="selHistoryRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
+        :columns="userHistoryTableColumns" :data="data.entries" :meta="data.tableMeta"
+        :isLoading="isLoading" :canSpin="canSpin" :canSelect="false"
+        :empty="resolveEmptyText()"/>
     </template>
     <template #entryEditor>
-      <AdminUserEditor v-model="selRecord" />
     </template>
   </TableWrapper>
 </template>

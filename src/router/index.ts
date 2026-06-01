@@ -19,7 +19,7 @@ import UserAccountDeletionStart from '@/components/pages/user/UserAccountDeletio
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
 import AdminMain from '@/components/pages/admin/general/AdminMain.vue';
-import AdminUser from '@/components/pages/admin/user/AdminUser.vue';
+import AdminUser from '@/components/pages/admin/user/main/AdminUser.vue';
 
 import AppNotFound from '@/components/pages/common/AppNotFound.vue';
 import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';

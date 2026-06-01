@@ -60,8 +60,8 @@ export class TimeUtils {
 
   /**
    * Format date.
-   * @param date Date.
-   * @returns Formatted date as string.
+   * @param date Date. Can be null.
+   * @returns Formatted date as string. If null, will return empty string.
    */
   public static formatDate(date: Date | null): string {
     if (!date) return '';

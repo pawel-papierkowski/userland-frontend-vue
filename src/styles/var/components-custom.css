@@ -7,6 +7,9 @@
   --combobox-border: var(--input-border);
   --combobox-border-radius: var(--input-border-radius);
 
+  --combobox-disabled-color: var(--input-disabled-color);
+  --combobox-disabled-background: var(--input-disabled-background);
+
   --combobox-hover-color: var(--input-hover-color);
   --combobox-hover-background: var(--input-hover-background);
 

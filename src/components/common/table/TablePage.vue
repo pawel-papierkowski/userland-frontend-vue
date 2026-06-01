@@ -12,6 +12,7 @@
  * - :data - Array of data.
  * - empty - I18n key for empty table.
  */
+import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, TableMetaResp } from "@/code/data/features/common.ts";
@@ -26,20 +27,30 @@ const currPage = defineModel<number>('currPage', { required: true }); // Current
 const currSortBy = defineModel<string|null>('currSortBy', { required: true }); // Current sort column.
 const currSortOrder = defineModel<string|null>('currSortOrder', { required: true }); // Current sort order.
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   columns: ColumnData[]; // Data about columns.
   data: E[]; // Content of table itself.
   meta: TableMetaResp; // Table metadata.
-  isLoading: boolean; // If true, show spinner instead of innards of table.
+  canSelect?: boolean; // If true, can select row in table. Optional, defaults to true.
+  isLoading: boolean; // If true, show spinner instead of table content.
   canSpin: boolean; // If true, can spin.
-  empty: string; // I18n key to show when table is empty
-}>();
+  empty?: string; // I18n key to show when table is empty. Optional.
+}>(), {
+  canSelect: true,
+  empty: ''
+});
+
+/** If you disable selection abiliy, automatically deselect. */
+watch(() => props.canSelect, () => {
+  if (!props.canSelect) selRecord.value = null;
+});
 
 /**
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select.
  */
 const selectEntry = (entry: E) => {
+  if (!props.canSelect) return;
   // This automatically emits 'update:modelValue' to the parent.
   if (selRecord.value === entry) selRecord.value = null;
   else selRecord.value = entry;
@@ -78,6 +89,7 @@ const rowClass = (entry: E, rowIndex: number) => {
   const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
   const selected = selRecord.value === null ? false : selRecord.value[key] === entry[key];
   return {
+    unselectable: selRecord.value === null,
     selected: selected,
     odd: rowIndex%2 === 0
   };

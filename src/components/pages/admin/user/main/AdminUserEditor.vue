@@ -12,25 +12,25 @@ import { useI18n } from 'vue-i18n';
 import type { TabData } from '@/code/data/features/common.ts';
 import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
 
-import AdminUserEditMain from '@/components/pages/admin/user/AdminUserEditMain.vue';
-import AdminUserEditHistory from '@/components/pages/admin/user/AdminUserEditHistory.vue';
-import AdminUserEditPermissions from '@/components/pages/admin/user/AdminUserEditPermissions.vue';
-import AdminUserEditConfig from '@/components/pages/admin/user/AdminUserEditConfig.vue';
-import AdminUserEditTokens from '@/components/pages/admin/user/AdminUserEditTokens.vue';
-import AdminUserEditJwt from '@/components/pages/admin/user/AdminUserEditJwt.vue';
+import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';
+import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
+import AdminUserPermissions from '@/components/pages/admin/user/permissions/AdminUserPermissions.vue';
+import AdminUserConfig from '@/components/pages/admin/user/config/AdminUserConfig.vue';
+import AdminUserTokens from '@/components/pages/admin/user/tokens/AdminUserTokens.vue';
+import AdminUserJwt from '@/components/pages/admin/user/jwt/AdminUserJwt.vue';
 
 const { t } = useI18n();
 
 const selRecord = defineModel<UserTableEntry|null>();
 
-const activeTab: Component = shallowRef(AdminUserEditMain);
+const activeTab: Component = shallowRef(AdminUserMain);
 const tabs: TabData[] = [
-  { id: 'main', label: 'admin.user.main.tab', component: AdminUserEditMain },
-  { id: 'history', label: 'admin.user.history.tab', component: AdminUserEditHistory },
-  { id: 'permissions', label: 'admin.user.permissions.tab', component: AdminUserEditPermissions },
-  { id: 'config', label: 'admin.user.config.tab', component: AdminUserEditConfig },
-  { id: 'tokens', label: 'admin.user.tokens.tab', component: AdminUserEditTokens },
-  { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserEditJwt }
+  { id: 'main', label: 'admin.user.main.tab', component: AdminUserMain },
+  { id: 'history', label: 'admin.user.history.tab', component: AdminUserHistory },
+  { id: 'permissions', label: 'admin.user.permissions.tab', component: AdminUserPermissions },
+  { id: 'config', label: 'admin.user.config.tab', component: AdminUserConfig },
+  { id: 'tokens', label: 'admin.user.tokens.tab', component: AdminUserTokens },
+  { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserJwt }
 ];
 
 /**

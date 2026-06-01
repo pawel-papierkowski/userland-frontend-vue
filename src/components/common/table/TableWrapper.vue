@@ -1,9 +1,22 @@
 <script setup lang="ts">
 /** Table wrapper. */
+
+const props = withDefaults(defineProps<{
+  layout?: string;
+}>(), {
+  layout: 'side'
+});
+
+const getClass = () => {
+  return {
+    side: props.layout === 'side',
+    bottom: props.layout === 'bottom',
+  }
+}
 </script>
 
 <template>
-  <div class="table-wrapper">
+  <div class="table-wrapper" :class="getClass()">
     <div class="table-wrapper-filter">
       <slot name="filterPanel" />
     </div>

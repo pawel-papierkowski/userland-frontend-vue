@@ -33,18 +33,18 @@ const form: UserFullDataForm = reactive({
   surname: '',
 });
 
-/** Selected record. */
-const selRecord = defineModel<UserTableEntry|null>();
+/** Selected user record. */
+const selUserRecord = defineModel<UserTableEntry|null>();
 
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+//const isSubmitting: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
 const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
 const canSpin: Ref<boolean> = ref(true);
 
 /** Change in selection requires reload of form. */
-watch(selRecord, () => {
+watch(selUserRecord, () => {
   fillForm();
 });
 
@@ -70,12 +70,12 @@ const fillForm = async () => {
 
 /** Retrieve all available data about currently logged user from backend. */
 const resolveUserData = async (): Promise<UserFullDataResp | null> => {
-  if (!selRecord.value) return null; // nothing to do
+  if (!selUserRecord.value) return null; // nothing to do
   isLoading.value = true;
   canSpin.value = true;
 
   try {
-    const payload: UserFullDataReq = { id: selRecord.value.id };
+    const payload: UserFullDataReq = { id: selUserRecord.value.id };
     const response = await backendApiAdminUser.loadUserData(payload); // API CALL
     isLoading.value = false; // Enable submit button.
     return response.data;
@@ -109,7 +109,7 @@ const clearForm = () => {
 };
 
 const isUnloaded = (): boolean => {
-  return selRecord.value === null;
+  return selUserRecord.value === null;
 };
 </script>
 

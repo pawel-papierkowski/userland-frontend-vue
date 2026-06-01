@@ -326,19 +326,108 @@
         }
       },
       "history": {
-        "tab": "📅 Historia"
+        "tab": "📅 Historia",
+        "filter": {
+          "title": "🔍 Filtr historii użytkownika",
+          "who": "Kto",
+          "what": "Co",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak historii do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak historii do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "who": "Kto",
+            "what": "Co",
+            "params": "Parametry"
+          }
+        }
       },
       "permissions": {
-        "tab": "🔐 Uprawnienia"
+        "tab": "🔐 Uprawnienia",
+        "filter": {
+          "title": "🔍 Filtr uprawnień użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak uprawnień do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak uprawnień do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "name": "Nazwa",
+            "value": "Wartość"
+          }
+        }
       },
       "config": {
-        "tab": "⚙️ Konfiguracja"
+        "tab": "⚙️ Konfiguracja",
+        "filter": {
+          "title": "🔍 Filtr konfiguracji użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak konfiguracji do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak konfiguracji do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "name": "Nazwa",
+            "value": "Wartość"
+          }
+        }
       },
       "tokens": {
-        "tab": "🔗 Tokeny"
+        "tab": "🔗 Tokeny",
+        "filter": {
+          "title": "🔍 Filtr tokenów użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak tokenów do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak tokenów do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "expiresAt": "Ważny do",
+            "token": "Token",
+            "payload": "Zawartość"
+          }
+        }
       },
       "jwt": {
-        "tab": "🎫 JWT"
+        "tab": "🎫 JWT",
+        "filter": {
+          "title": "🔍 Filtr JWT użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak JWT do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak JWT do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "expiresAt": "Ważny do",
+            "token": "Token"
+          }
+        }
       },
       "msg": {
         "errorLoadTable": {
@@ -368,6 +457,26 @@
         "PENDING": "Oczekujący",
         "ACTIVE": "Aktywny",
         "DEMO": "Demo"
+      },
+      "who": {
+        "null": "-",
+        "USER": "Użytkownik",
+        "OPERATOR": "Operator",
+        "SYSTEM": "System"
+      },
+      "what": {
+        "null": "-",
+        "CREATE": "Utworzenie",
+        "ACTIVATE": "Aktywacja",
+        "EDIT": "Edycja",
+        "EMAIL_CHANGE_REQ": "Prośba o zmianę emaila",
+        "EMAIL_CHANGE": "Zmiana emaila",
+        "PASS_RESET_REQ": "Prośba o reset hasła",
+        "PASS_RESET": "Zresetowanie hasła",
+        "DELETE_REQ": "Prośba o usunięcie konta",
+        "LOGIN": "Zalogowanie",
+        "LOGOUT": "Wylogowanie",
+        "PROLONG": "Przedłużenie sesji"
       }
     }
   },

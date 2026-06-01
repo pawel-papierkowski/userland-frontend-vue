@@ -326,19 +326,108 @@
         }
       },
       "history": {
-        "tab": "📅 History"
+        "tab": "📅 History",
+        "filter": {
+          "title": "🔍 User history filter",
+          "who": "Who",
+          "what": "What",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No history to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No history to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "who": "Who",
+            "what": "What",
+            "params": "Parameters"
+          }
+        }
       },
       "permissions": {
-        "tab": "🔐 Permissions"
+        "tab": "🔐 Permissions",
+        "filter": {
+          "title": "🔍 User permission filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No permissions to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No permissions to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "name": "Name",
+            "value": "Value"
+          }
+        }
       },
       "config": {
-        "tab": "⚙️ Configuration"
+        "tab": "⚙️ Configuration",
+        "filter": {
+          "title": "🔍 User configuration filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No configuration to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No configuration to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "name": "Name",
+            "value": "Value"
+          }
+        }
       },
       "tokens": {
-        "tab": "🔗 Tokens"
+        "tab": "🔗 Tokens",
+        "filter": {
+          "title": "🔍 User tokens filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No tokens to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No tokens to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "expiresAt": "Expires",
+            "token": "Token",
+            "payload": "Payload"
+          }
+        }
       },
       "jwt": {
-        "tab": "🎫 JWT"
+        "tab": "🎫 JWT",
+        "filter": {
+          "title": "🔍 User JWT filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No JWTs to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No JWTs to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "expiresAt": "Expires",
+            "token": "Token"
+          }
+        }
       },
       "msg": {
         "errorLoadTable": {
@@ -368,6 +457,26 @@
         "PENDING": "Pending",
         "ACTIVE": "Active",
         "DEMO": "Demo"
+      },
+      "who": {
+        "null": "-",
+        "USER": "User",
+        "OPERATOR": "Operator",
+        "SYSTEM": "System"
+      },
+      "what": {
+        "null": "-",
+        "CREATE": "Create",
+        "ACTIVATE": "Activate",
+        "EDIT": "Edit",
+        "EMAIL_CHANGE_REQ": "Email change request",
+        "EMAIL_CHANGE": "Email change",
+        "PASS_RESET_REQ": "Password reset request",
+        "PASS_RESET": "Password reset",
+        "DELETE_REQ": "Account deletion request",
+        "LOGIN": "Login",
+        "LOGOUT": "Logout",
+        "PROLONG": "Session prolong"
       }
     }
   },

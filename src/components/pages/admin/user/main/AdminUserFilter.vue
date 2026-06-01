@@ -8,7 +8,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import type { UserTableForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserTableFilterForm } from '@/code/data/features/user/admin-user.ts';
 import { enUserStatus } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
@@ -16,14 +16,13 @@ import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
 
 const { t } = useI18n();
 
-const form = defineModel<UserTableForm>({ required: true });
+const form = defineModel<UserTableFilterForm>({ required: true });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   isSubmitting: boolean;
 }>();
 
 const emit = defineEmits(['reload']);
-
 </script>
 
 <template>
@@ -40,15 +39,30 @@ const emit = defineEmits(['reload']);
           <input id="email" data-testid="email" type="text" v-model="form.email" autocomplete="off" />
 
           <label for="status">{{ t('admin.user.filter.status') }}:</label>
-          <ComboBox data-testid="status" v-model="form.status" :options="enUserStatus"
-            langPrefix="tech.user.status" placeholder="tech.user.status.null"/>
+          <ComboBox
+            data-testid="status"
+            v-model="form.status"
+            :options="enUserStatus"
+            langPrefix="tech.user.status"
+            placeholder="tech.user.status.null"
+          />
         </div>
         <div class="form-subform">
           <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
-          <DateTimePicker v-model="form.createdFromAt" ident="createdFromAt" mode="date" :dateTimeMax="form.createdToAt" />
+          <DateTimePicker
+            v-model="form.createdFromAt"
+            ident="createdFromAt"
+            mode="date"
+            :dateTimeMax="form.createdToAt"
+          />
 
           <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
-          <DateTimePicker v-model="form.createdToAt" ident="createdToAt" mode="date" :dateTimeMin="form.createdFromAt" />
+          <DateTimePicker
+            v-model="form.createdToAt"
+            ident="createdToAt"
+            mode="date"
+            :dateTimeMin="form.createdFromAt"
+          />
 
           <label for="locked">{{ t('admin.user.filter.locked') }}:</label>
           <input id="locked" data-testid="locked" type="checkbox" v-model="form.locked" autocomplete="off" />

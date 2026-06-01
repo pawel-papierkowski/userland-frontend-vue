@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * View/edit of user's permissions. Only admin can edit permissions.
+ * View/edit of user's configuration.
  *
  * Properties:
  * - v-model - Holds selected user.
@@ -12,6 +12,9 @@ import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
+import TableWrapper from '@/components/common/table/TableWrapper.vue';
+import TablePage from '@/components/common/table/TablePage.vue';
+
 const { t } = useI18n();
 
 const selRecord = defineModel<UserTableEntry|null>();
@@ -19,7 +22,7 @@ const selRecord = defineModel<UserTableEntry|null>();
 </script>
 
 <template>
-  ADMIN USER PERMISSIONS PLACEHOLDER
+  ADMIN USER CONFIG PLACEHOLDER
 </template>
 
 <style scoped></style>

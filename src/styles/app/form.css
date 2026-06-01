@@ -26,8 +26,6 @@
   gap: 1rem;
 
   align-items: center;
-
-  margin-bottom: 6px;
 }
 
 @media (max-width: 1300px) {
@@ -50,6 +48,8 @@
   align-items: center;
   justify-content: center;
   justify-items: stretch;
+
+  margin-bottom: 6px;
 
   white-space: nowrap;
 }
