@@ -15,12 +15,13 @@ export default {
   /**
    * Set up a default Axios instance.
    * @param endpointBase Base endpoint.
+   * @param timeout Timeout in seconds. Default is minute since we may need to wait for GCP to spin up.
    * @returns Axios instance.
    */
-  create(endpointBase : string) {
+  create(endpointBase : string, timeout: number=60) {
     const instance = axios.create({
       baseURL: apiAddress + endpointBase,
-      timeout: 5000,
+      timeout: timeout*1000,
     });
 
     // Add authentication token, if it is present.

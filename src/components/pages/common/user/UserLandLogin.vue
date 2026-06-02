@@ -184,7 +184,10 @@ const getInputClass = (msgError: string | null): string => {
           />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
+
+        <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
+
 
       <button type="submit" :disabled="isSubmitting">
         {{ isSubmitting ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}

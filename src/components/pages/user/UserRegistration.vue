@@ -192,7 +192,10 @@ const getInputClass = (msgError: string | null): string => {
             autocomplete="new-password"
           />
         </div>
+
+        <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
+
 
       <button type="submit" :disabled="isSubmitting">
         {{ isSubmitting ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}

@@ -15,6 +15,8 @@ import type {
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
+// Set up fast timeout instance.
+const apiClientFastTimeout = backendApi.create('/users', 5);
 
 export default {
   /**
@@ -49,7 +51,7 @@ export default {
    * @returns Result of call.
    */
   logout() {
-    return apiClient.post('/logout');
+    return apiClientFastTimeout.post('/logout');
   },
 
   /**
