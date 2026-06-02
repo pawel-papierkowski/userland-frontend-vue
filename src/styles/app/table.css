@@ -113,7 +113,7 @@
 .table-header {
   display: flex;
   flex: 1;
-  min-width: 0;
+  min-width: 0px;
   padding: 5px;
   text-align: left;
   align-items: center;
@@ -129,6 +129,7 @@
 
 .cell-value {
   font-size: 0.8rem;
+  /* Force text to be visually cut instead of wrapping. */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

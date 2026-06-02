@@ -56,11 +56,6 @@ const canSpin: Ref<boolean> = ref(true);
 
 const isDisabled = computed(() => { return selUserRecord.value === null; });
 
-/** Change in selection requires reload of form. */
-watch(selUserRecord, () => {
-  handleReload();
-});
-
 watch(currPage, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -93,6 +88,7 @@ watch(currSortOrder, (newVal, oldVal) => {
 
 /** Handle reload of user history table with filtering. */
 const handleReload = async () => {
+  console.warn(`called handleReload() for AdminUserHistory for '${selUserRecord.value?.username}'`);
   data.value = emptyUserHistoryTable;
   if (!selUserRecord.value) {  // nothing to do
     isLoading.value = false;
@@ -158,10 +154,16 @@ const processEntry = (entry: UserHistoryTableEntry) => {
   }
 };
 
+/** Find out correct text to show when table has no results. */
 const resolveEmptyText = () => {
   if (!selUserRecord.value) return 'admin.user.history.table.emptyNoUser';
   return 'admin.user.history.table.empty';
 }
+
+/** Change in selection requires reload of form. */
+watch(selUserRecord, () => {
+  handleReload();
+}, { immediate: true });
 </script>
 
 <template>
