@@ -11,7 +11,7 @@
 }
 
 .table-wrapper.side {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* 1fr 1fr */
   grid-template-rows: auto 1fr;
   grid-template-areas:
     'filter editor'
@@ -63,68 +63,75 @@
   user-select: none;
 }
 
-.table-header-group {
-  background-color: #d8d8d8;
-}
+/* Table header classes. */
 
 .table-header-row {
   display: flex;
-  font-weight: 600;
   color: #374151;
+  background-color: #d8d8d8;
+  font-weight: 600;
   cursor: pointer;
 }
+
+.table-header-cell {
+  display: flex;
+  flex: 1;
+
+  min-width: 0px;
+  padding: 5px;
+
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  text-align: left;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Table row classes. */
 
 .table-row {
   display: flex;
   transition: all 0.2s ease;
   cursor: pointer;
 }
+
 .table-row.unselectable {
   cursor: default;
 }
 
-.table-row:last-child {
-  border-bottom: none;
-}
-
-.table-row.odd:not(.selected) {
+.table-row.odd {
   background-color: #fafafa;
 }
 
 .table-row.selected {
-  background-color: #fff7ed !important; /* Very light orange */
+  background-color: #fff7ed; /* Very light orange */
   color: #9a3412;
   box-shadow: inset 4px 0 0 0 #f97316; /* Orange left border effect */
 }
 
-.table-row:hover {
+.table-row:not(.unselectable):hover {
   background-color: #f3f3f3;
 }
-
-.table-row.odd:not(.selected):hover {
+.table-row:not(.unselectable).odd:hover {
   background-color: #f3f3f3;
 }
-
-.table-row.selected:hover {
-  background-color: #ffedd5 !important; /* Slightly darker orange */
+.table-row:not(.unselectable).selected:hover {
+  background-color: #ffedd5; /* Slightly darker orange */
 }
 
-.table-cell,
-.table-header {
+/* Table cell classes. */
+
+.table-cell {
   display: flex;
   flex: 1;
+
   min-width: 0px;
   padding: 5px;
+
   text-align: left;
   align-items: center;
-}
-
-.table-header {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-
-  justify-content: center;
 }
 
 .cell-value {
@@ -135,12 +142,16 @@
   text-overflow: ellipsis;
 }
 
+/* Other table classes. */
+
 .table-empty {
   padding: 15px;
   margin: auto;
   color: #525252;
   cursor: default;
 }
+
+/* Table paginer classes. */
 
 .table-paginer {
   display: grid;

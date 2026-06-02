@@ -24,7 +24,7 @@ import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminU
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
-/** User table filtering form data. */
+/** User history table filtering form data. */
 const form: UserHistoryTableFilterForm = reactive({
   userId: -1,
   who: null,
@@ -56,39 +56,8 @@ const canSpin: Ref<boolean> = ref(true);
 
 const isDisabled = computed(() => { return selUserRecord.value === null; });
 
-watch(currPage, (newVal, oldVal) => {
-  if (oldVal === null) return;
-
-  if (!form.tableMeta) form.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
-  else form.tableMeta.page = currPage.value;
-  handleReload();
-});
-watch(currSortBy, (newVal, oldVal) => {
-  if (oldVal === null) return;
-
-  if (!form.tableMeta)
-    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
-  else {
-    form.tableMeta.sortBy = currSortBy.value;
-    form.tableMeta.sortOrder = currSortOrder.value;
-  }
-  handleReload();
-});
-watch(currSortOrder, (newVal, oldVal) => {
-  if (oldVal === null) return;
-
-  if (!form.tableMeta)
-    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
-  else {
-    form.tableMeta.sortBy = currSortBy.value;
-    form.tableMeta.sortOrder = currSortOrder.value;
-  }
-  handleReload();
-});
-
 /** Handle reload of user history table with filtering. */
 const handleReload = async () => {
-  console.warn(`called handleReload() for AdminUserHistory for '${selUserRecord.value?.username}'`);
   data.value = emptyUserHistoryTable;
   if (!selUserRecord.value) {  // nothing to do
     isLoading.value = false;
@@ -160,6 +129,37 @@ const resolveEmptyText = () => {
   return 'admin.user.history.table.empty';
 }
 
+// WATCHES
+
+watch(currPage, (newVal, oldVal) => {
+  if (oldVal === null) return;
+
+  if (!form.tableMeta) form.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
+  else form.tableMeta.page = currPage.value;
+  handleReload();
+});
+watch(currSortBy, (newVal, oldVal) => {
+  if (oldVal === null) return;
+
+  if (!form.tableMeta)
+    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  else {
+    form.tableMeta.sortBy = currSortBy.value;
+    form.tableMeta.sortOrder = currSortOrder.value;
+  }
+  handleReload();
+});
+watch(currSortOrder, (newVal, oldVal) => {
+  if (oldVal === null) return;
+
+  if (!form.tableMeta)
+    form.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  else {
+    form.tableMeta.sortBy = currSortBy.value;
+    form.tableMeta.sortOrder = currSortOrder.value;
+  }
+  handleReload();
+});
 /** Change in selection requires reload of form. */
 watch(selUserRecord, () => {
   handleReload();

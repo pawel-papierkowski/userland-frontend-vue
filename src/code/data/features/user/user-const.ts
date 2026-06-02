@@ -86,17 +86,135 @@ export const userHistoryTableColumns: ColumnData[] = [
 /** Empty user permissions table. */
 export const emptyUserPermissionTable: UserPermissionTableResp = { entries: [], tableMeta: {pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: "", sortOrder: ""}};
 
+/** List of user permissions table columns. */
+export const userPermissionsTableColumns: ColumnData[] = [
+  {
+    name: "id", // unique key
+    defSort: "ASC",
+    translation: "admin.user.permissions.table.col.id",
+    visible: false
+  },
+  {
+    name: "createdAt",
+    defSort: "DESC",
+    translation: "admin.user.permissions.table.col.createdAt",
+    visible: true
+  },
+  {
+    name: "name",
+    defSort: "ASC",
+    translation: "admin.user.permissions.table.col.name",
+    visible: true
+  },
+  {
+    name: "value",
+    defSort: "ASC",
+    translation: "admin.user.permissions.table.col.value",
+    visible: true
+  }
+];
+
 // USER CONFIG TABLE
 
 /** Empty user config table. */
 export const emptyUserConfigTable: UserConfigTableResp = { entries: [], tableMeta: {pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: "", sortOrder: ""}};
+
+/** List of user config table columns. */
+export const userConfigTableColumns: ColumnData[] = [
+  {
+    name: "id", // unique key
+    defSort: "ASC",
+    translation: "admin.user.config.table.col.id",
+    visible: false
+  },
+  {
+    name: "createdAt",
+    defSort: "DESC",
+    translation: "admin.user.config.table.col.createdAt",
+    visible: true
+  },
+  {
+    name: "name",
+    defSort: "ASC",
+    translation: "admin.user.config.table.col.name",
+    visible: true
+  },
+  {
+    name: "value",
+    defSort: "ASC",
+    translation: "admin.user.config.table.col.value",
+    visible: true
+  }
+];
 
 // USER TOKENS TABLE
 
 /** Empty user tokens table. */
 export const emptyUserTokenTable: UserTokenTableResp = { entries: [], tableMeta: {pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: "", sortOrder: ""}};
 
+/** List of user tokens table columns. */
+export const userTokensTableColumns: ColumnData[] = [
+  {
+    name: "id", // unique key
+    defSort: "ASC",
+    translation: "admin.user.tokens.table.col.id",
+    visible: false
+  },
+  {
+    name: "createdAt",
+    defSort: "DESC",
+    translation: "admin.user.tokens.table.col.createdAt",
+    visible: true
+  },
+  {
+    name: "expiresAt",
+    defSort: "ASC",
+    translation: "admin.user.tokens.table.col.expiresAt",
+    visible: true
+  },
+  {
+    name: "token",
+    defSort: "ASC",
+    translation: "admin.user.tokens.table.col.token",
+    visible: true
+  },
+  {
+    name: "payload",
+    defSort: "ASC",
+    translation: "admin.user.tokens.table.col.payload",
+    visible: true
+  }
+];
+
 // USER JWT TABLE
 
 /** Empty user JWT table. */
 export const emptyUserJwtTable: UserJwtTableResp = { entries: [], tableMeta: {pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: "", sortOrder: ""}};
+
+/** List of user JWT table columns. */
+export const userJwtTableColumns: ColumnData[] = [
+  {
+    name: "id", // unique key
+    defSort: "ASC",
+    translation: "admin.user.jwt.table.col.id",
+    visible: false
+  },
+  {
+    name: "createdAt",
+    defSort: "DESC",
+    translation: "admin.user.jwt.table.col.createdAt",
+    visible: true
+  },
+  {
+    name: "expiresAt",
+    defSort: "ASC",
+    translation: "admin.user.jwt.table.col.expiresAt",
+    visible: true
+  },
+  {
+    name: "token",
+    defSort: "ASC",
+    translation: "admin.user.jwt.table.col.token",
+    visible: true
+  }
+];

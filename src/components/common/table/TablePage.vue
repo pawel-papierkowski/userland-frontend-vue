@@ -89,7 +89,7 @@ const rowClass = (entry: E, rowIndex: number) => {
   const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
   const selected = selRecord.value === null ? false : selRecord.value[key] === entry[key];
   return {
-    unselectable: selRecord.value === null,
+    unselectable: !props.canSelect,
     selected: selected,
     odd: rowIndex%2 === 0
   };
@@ -98,10 +98,12 @@ const rowClass = (entry: E, rowIndex: number) => {
 
 <template>
   <div class="table-container" role="table">
+
+    <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
       <div class="table-header-row" role="row">
         <template v-for="(column, colIndex) in columns" :key="colIndex">
-          <div v-if="column.visible" class="table-header" role="columnheader"
+          <div v-if="column.visible" class="table-header-cell" role="columnheader"
             @click="changeSort(column)">
             {{ t(column.translation) }}
             <span :class="sortMarker(column)"></span>
@@ -113,17 +115,20 @@ const rowClass = (entry: E, rowIndex: number) => {
     <TablePaginer v-model:currPage="currPage" :meta="meta" />
 
     <div class="table-empty" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
-    <div class="spinner-container" v-if="isLoading">
-      <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
-    </div>
+    <template v-if="isLoading">
+      <div class="spinner-container">
+        <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
+      </div>
+    </template>
 
-    <div v-else>
-      <div class="table-body-group" role="rowgroup">
+    <template v-else>
+      <!-- TABLE ROWS -->
+      <div class="table-row-group" role="rowgroup">
         <div v-for="(entry, rowIndex) in data" :key="rowIndex"
-              class="table-row"
-              :class="rowClass(entry, rowIndex)"
-              role="row"
-              @click="selectEntry(entry)">
+              class="table-row" :class="rowClass(entry, rowIndex)"
+              role="row" @click="selectEntry(entry)">
+
+          <!-- CELLS FOR SINGLE TABLE ROW -->
           <template v-for="(column, colIndex) in columns" :key="colIndex">
             <div v-if="column.visible" class="table-cell" role="cell">
               <span class="cell-value">{{ entry[column.name] }}</span>
@@ -131,7 +136,7 @@ const rowClass = (entry: E, rowIndex: number) => {
           </template>
         </div>
       </div>
-    </div>
+    </template>
 
     <TablePaginer v-model:currPage="currPage" :meta="meta" />
   </div>

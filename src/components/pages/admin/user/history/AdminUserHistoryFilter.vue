@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Filter for user table.
+ * Filter for user history table.
  *
  * Properties:
  * - v-model - Holds filter form data.
