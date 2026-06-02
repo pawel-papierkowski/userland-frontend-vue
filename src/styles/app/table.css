@@ -50,75 +50,108 @@
 /*** Table page classes. ***/
 
 .table-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(var(--col-count), auto);
 
   border: 1px solid #d1d1d1;
   border-radius: 8px;
 
-  background-color: #ffffff;
+  background-color: #f1f1f1; /* Used as color of lines. */
+  gap: 1px; /* This creates the "borders" between cells. */
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 
   overflow: hidden;
   user-select: none;
 }
 
+.table-entire-row {
+  grid-column: 1 / span var(--col-count);
+}
+
+.table-empty {
+  padding: 15px;
+  margin: auto;
+  color: #525252;
+  background-color: #ffffff;
+  cursor: default;
+}
+
 /* Table header classes. */
 
+.table-header-group {
+  display: contents;
+}
+
 .table-header-row {
-  display: flex;
-  color: #374151;
-  background-color: #d8d8d8;
-  font-weight: 600;
-  cursor: pointer;
+  display: contents;
 }
 
 .table-header-cell {
   display: flex;
   flex: 1;
 
-  min-width: 0px;
+  color: #374151;
+  background-color: #d8d8d8;
+  box-shadow: 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, -1px 1px 0 0 #d8d8d8; /* Ensure gap is not visible*/
+
+  min-width: 0; /* Prevents cell from expanding parent */
   padding: 5px;
 
   font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
   text-align: left;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
 }
 
 /* Table row classes. */
 
-.table-row {
-  display: flex;
-  transition: all 0.2s ease;
-  cursor: pointer;
+.table-row-group {
+  display: contents;
 }
 
-.table-row.unselectable {
+.table-row {
+  display: contents;
+}
+
+.table-row.unselectable .table-cell {
   cursor: default;
 }
 
-.table-row.odd {
+.table-row.odd .table-cell {
   background-color: #fafafa;
 }
 
-.table-row.selected {
-  background-color: #fff7ed; /* Very light orange */
+.table-row.selected .table-cell {
   color: #9a3412;
-  box-shadow: inset 4px 0 0 0 #f97316; /* Orange left border effect */
+  background-color: #fff7ed; /* Very light orange */
+  box-shadow: 1px 0 0 0 #fff7ed; /* Ensure gap is not visible*/
+}
+.table-row.selected .table-cell:first-child {
+   /* Orange left border effect and gap hiding. */
+  box-shadow: inset 4px 0 0 0 #f97316, 1px 0 0 0 #fff7ed;
 }
 
-.table-row:not(.unselectable):hover {
+.table-row:not(.unselectable):hover .table-cell {
   background-color: #f3f3f3;
+  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible*/
 }
-.table-row:not(.unselectable).odd:hover {
+.table-row:not(.unselectable).odd:hover .table-cell {
   background-color: #f3f3f3;
+  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible*/
 }
-.table-row:not(.unselectable).selected:hover {
+.table-row:not(.unselectable).selected:hover .table-cell {
   background-color: #ffedd5; /* Slightly darker orange */
+  box-shadow: 1px 0 0 0 #ffedd5; /* Ensure gap is not visible*/
+}
+.table-row.selected:hover .table-cell:first-child {
+   /* Orange left border effect and gap hiding. */
+  box-shadow: inset 4px 0 0 0 #f97316, 1px 0 0 0 #ffedd5;
 }
 
 /* Table cell classes. */
@@ -127,11 +160,16 @@
   display: flex;
   flex: 1;
 
-  min-width: 0px;
+  background-color: #ffffff;
+
+  min-width: 0; /* Prevents cell from expanding parent */
   padding: 5px;
 
   text-align: left;
   align-items: center;
+
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .cell-value {
@@ -140,15 +178,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Other table classes. */
-
-.table-empty {
-  padding: 15px;
-  margin: auto;
-  color: #525252;
-  cursor: default;
 }
 
 /* Table paginer classes. */

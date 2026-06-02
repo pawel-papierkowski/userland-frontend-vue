@@ -42,7 +42,9 @@ const applyLanguage = (langKey: string) => {
 
 <style scoped>
 .lang-container {
+  font-family: "Twemoji Country Flags", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "Android Emoji", sans-serif;
   font-size: 18px;
+
   cursor: pointer; /* Changes the mouse to a pointing hand */
   user-select: none; /* Prevents text highlighting when clicking rapidly */
 }

@@ -17,7 +17,7 @@
  * - :data - Array of data.
  * - empty - I18n key for empty table.
  */
-import { watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, TableMetaResp } from "@/code/data/features/common.ts";
@@ -43,6 +43,10 @@ const props = withDefaults(defineProps<{
 }>(), {
   canSelect: true,
   empty: ''
+});
+
+const visibleColumnsCount = computed(() => {
+  return props.columns.filter(c => c.visible).length;
 });
 
 /** If you disable selection abiliy, automatically deselect. */
@@ -102,7 +106,7 @@ const rowClass = (entry: E, rowIndex: number) => {
 </script>
 
 <template>
-  <div class="table-container" role="table">
+  <div class="table-container" role="table" :style="{ '--col-count': visibleColumnsCount }">
 
     <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
@@ -117,11 +121,11 @@ const rowClass = (entry: E, rowIndex: number) => {
       </div>
     </div>
 
-    <TablePaginer v-model:currPage="currPage" :meta="meta" />
+    <div class="table-entire-row"><TablePaginer v-model:currPage="currPage" :meta="meta" /></div>
 
-    <div class="table-empty" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
+    <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
     <template v-if="isLoading">
-      <div class="spinner-container">
+      <div class="spinner-container table-entire-row">
         <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
       </div>
     </template>
@@ -143,7 +147,7 @@ const rowClass = (entry: E, rowIndex: number) => {
       </div>
     </template>
 
-    <TablePaginer v-model:currPage="currPage" :meta="meta" />
+    <div class="table-entire-row"><TablePaginer v-model:currPage="currPage" :meta="meta" /></div>
   </div>
 </template>
 
