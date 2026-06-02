@@ -6,8 +6,13 @@
  * - Pagination.
  * - Sorting of any column (ASC or DESC).
  *
- * Properties:
+ * Generics:
+ * - E: Type of table entry.
+ *
+ * Models:
  * - v-model - Holds selected record.
+ *
+ * Properties:
  * - :columns - Array of columns. First column must be unique key.
  * - :data - Array of data.
  * - empty - I18n key for empty table.
