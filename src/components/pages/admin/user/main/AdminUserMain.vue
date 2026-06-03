@@ -104,7 +104,6 @@ const saveUserData = async (): Promise<UserFullDataResp|null> => {
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
     backendApi.logError(error, 'Updating user data failed!');
-    canSpin.value = false;
     return null;
   } finally {
     isBusy.value = false;
@@ -157,7 +156,6 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp|null> => {
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
     backendApi.logError(error, 'Updating user data failed!');
-    canSpin.value = false;
     return null;
   } finally {
     isBusy.value = false;
