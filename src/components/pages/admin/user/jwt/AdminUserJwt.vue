@@ -10,13 +10,18 @@ import { reactive } from 'vue';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableEntry, UserJwtTableFilterForm, UserJwtTableReq, UserJwtTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type {
+  UserTableEntry,
+  UserJwtTableFilterForm,
+  UserJwtTableReq,
+  UserJwtTableEntry,
+} from '@/code/data/features/user/admin-user.ts';
 import { userJwtTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserJwtFilter from '@/components/pages/admin/user/jwt/AdminUserJwtFilter.vue';
 
-const selUserRecord = defineModel<UserTableEntry|null>();
+const selUserRecord = defineModel<UserTableEntry | null>();
 
 const form: UserJwtTableFilterForm = reactive({
   userId: -1,
@@ -68,8 +73,8 @@ const processEntry = (entry: UserJwtTableEntry) => {
     emptyText="admin.user.jwt.table.empty"
     emptyNoUserText="admin.user.jwt.table.emptyNoUser"
   >
-    <template #filter="{ isSubmitting, isDisabled, handleReload }">
-      <AdminUserJwtFilter v-model="form" :isSubmitting="isSubmitting" :disabled="isDisabled" @reload="handleReload"/>
+    <template #filter="{ isBusy, isDisabled, handleReload }">
+      <AdminUserJwtFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

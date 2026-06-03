@@ -50,13 +50,13 @@ export type UserDataResp = {
   username: string;
   email: string;
   lang: string;
-  profile: UserProfileDataResp;
+  profile: UserProfileData;
 };
 
 /** User profile view data. */
-export type UserProfileDataResp = {
-  name: string;
-  surname: string;
+export type UserProfileData = {
+  name: string|null;
+  surname: string|null;
 };
 
 // USER EDIT
@@ -65,16 +65,15 @@ export type UserProfileDataResp = {
 export type UserEditForm = {
   username: string;
   email: string; // we won't be editing it directly, but we can show it
-  name: string;
-  surname: string;
+  name: string|null;
+  surname: string|null;
 };
 
 /** User edit request. */
 export type UserEditReq = {
   username: string;
   lang: string;
-  name: string;
-  surname: string;
+  profile: UserProfileData;
 };
 
 // USER PASSWORD RESET

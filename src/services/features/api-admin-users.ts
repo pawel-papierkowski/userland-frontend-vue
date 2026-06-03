@@ -1,10 +1,15 @@
 // Handles calling user feature endpoints.
 import backendApi from '@/services/api-common.ts';
-import type { UserTableReq, UserFullDataReq,
-  UserHistoryTableReq, UserPermissionTableReq, UserConfigTableReq, UserTokenTableReq, UserJwtTableReq } from '@/code/data/features/user/admin-user';
+import type { UserTableReq, UserTableResp, UserFullDataReq, UserFullDataResp,
+  UserHistoryTableReq, UserHistoryTableResp,
+  UserPermissionTableReq, UserPermissionTableResp,
+  UserConfigTableReq, UserConfigTableResp,
+  UserTokenTableReq, UserTokenTableResp,
+  UserJwtTableReq, UserJwtTableResp
+} from '@/code/data/features/user/admin-user';
 
 // Set up a default Axios instance for this feature.
-const apiClient = backendApi.create('/admin/users');
+const apiClient = backendApi.create('/admin');
 
 export default {
   // USER TABLE
@@ -15,16 +20,25 @@ export default {
    * @returns Result of call.
    */
   loadPage(payload: UserTableReq) {
-    return apiClient.post('', payload);
+    return apiClient.post<UserTableResp>('/users', payload);
   },
 
   /**
    * Get data (general and profile) of given user.
+   * @param userId User identificator.
+   * @returns Result of call.
+   */
+  loadUserData(userId: number) {
+    return apiClient.get<UserFullDataResp>('/user/'+userId);
+  },
+
+  /**
+   * Change data (general and profile) of given user.
    * @param payload User data request.
    * @returns Result of call.
    */
-  loadUserData(payload: UserFullDataReq) {
-    return apiClient.get('/'+payload.id);
+  editUserData(payload: UserFullDataReq) {
+    return apiClient.patch<UserFullDataResp>('/user', payload);
   },
 
   // USER HISTORY TABLE
@@ -35,7 +49,7 @@ export default {
    * @returns Result of call.
    */
   loadHistoryPage(payload: UserHistoryTableReq) {
-    return apiClient.post('/history', payload);
+    return apiClient.post<UserHistoryTableResp>('/user/history', payload);
   },
 
   // USER PERMISSIONS TABLE
@@ -46,10 +60,10 @@ export default {
    * @returns Result of call.
    */
   loadPermissionsPage(payload: UserPermissionTableReq) {
-    return apiClient.post('/permissions', payload);
+    return apiClient.post<UserPermissionTableResp>('/user/permissions', payload);
   },
 
-  // USER CONFIG TABLE
+  // USER CONFIGS TABLE
 
   /**
    * Get page from user config table.
@@ -57,7 +71,7 @@ export default {
    * @returns Result of call.
    */
   loadConfigPage(payload: UserConfigTableReq) {
-    return apiClient.post('/config', payload);
+    return apiClient.post<UserConfigTableResp>('/user/configs', payload);
   },
 
   // USER TOKENS TABLE
@@ -68,7 +82,7 @@ export default {
    * @returns Result of call.
    */
   loadTokensPage(payload: UserTokenTableReq) {
-    return apiClient.post('/tokens', payload);
+    return apiClient.post<UserTokenTableResp>('/user/tokens', payload);
   },
 
   // USER JWT TABLE
@@ -79,6 +93,6 @@ export default {
    * @returns Result of call.
    */
   loadJwtPage(payload: UserJwtTableReq) {
-    return apiClient.post('/jwt', payload);
+    return apiClient.post<UserJwtTableResp>('/user/jwt', payload);
   },
 };

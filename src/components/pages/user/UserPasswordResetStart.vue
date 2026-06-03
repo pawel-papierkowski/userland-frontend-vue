@@ -25,7 +25,7 @@ const form: UserPasswordResetLinkForm = reactive({
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyEmail(form.email, usedButton.value);
@@ -37,7 +37,7 @@ const emailError: ComputedRef<string | null> = computed(() => {
 const handlePasswordResetLink = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const passwordResetReq = convertToReq(form);
@@ -50,7 +50,7 @@ const handlePasswordResetLink = async () => {
     AppMessager.errorT(error, 'user.passwordResetStart.msg.error.title', 'user.passwordResetStart.msg.error.content');
     backendApi.logError(error, 'Password reset request failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -116,8 +116,8 @@ const getInputClass = (msgError: string | null): string => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.passwordResetStart.form.buttonBusy') : t('user.passwordResetStart.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.passwordResetStart.form.buttonBusy') : t('user.passwordResetStart.form.button') }}
       </button>
     </form>
   </div>

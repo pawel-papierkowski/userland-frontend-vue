@@ -30,7 +30,7 @@ const tokenStr = TokenUtils.resolve(route);
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyPassword(form.password, usedButton.value);
@@ -57,7 +57,7 @@ const verifyToken = () => {
 const handlePasswordResetConfirmation = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const passwordResetReq = convertToReq(form);
@@ -70,7 +70,7 @@ const handlePasswordResetConfirmation = async () => {
     AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
     backendApi.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -158,8 +158,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.passwordReset.form.buttonBusy') : t('user.passwordReset.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.passwordReset.form.buttonBusy') : t('user.passwordReset.form.button') }}
       </button>
     </form>
   </div>

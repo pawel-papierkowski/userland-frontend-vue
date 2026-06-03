@@ -25,7 +25,7 @@ const form: UserAccountDeleteLinkForm = reactive({
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyPassword(form.password, usedButton.value);
@@ -37,7 +37,7 @@ const passwordError: ComputedRef<string | null> = computed(() => {
 const handleAccountDeletionLink = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const accountDeleteReq = convertToReq(form);
@@ -50,7 +50,7 @@ const handleAccountDeletionLink = async () => {
     AppMessager.errorT(error, 'user.accountDeleteStart.msg.error.title', 'user.accountDeleteStart.msg.error.content');
     backendApi.logError(error, 'Account deletion request failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -116,8 +116,8 @@ const getInputClass = (msgError: string | null): string => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.accountDeleteStart.form.buttonBusy') : t('user.accountDeleteStart.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.accountDeleteStart.form.buttonBusy') : t('user.accountDeleteStart.form.button') }}
       </button>
     </form>
   </div>

@@ -4,6 +4,7 @@ import type {
   UserRegisterReq,
   TokenActivationReq,
   UserLoginReq,
+  UserDataResp,
   UserEditReq,
   UserPasswordResetLinkReq,
   UserPasswordResetReq,
@@ -67,7 +68,7 @@ export default {
    * @returns Result of call.
    */
   view() {
-    return apiClient.get('/view');
+    return apiClient.get<UserDataResp>('/view');
   },
 
   /**
@@ -75,7 +76,7 @@ export default {
    * @returns Result of call.
    */
   edit(payload: UserEditReq) {
-    return apiClient.patch('/edit', payload);
+    return apiClient.patch<UserDataResp>('/edit', payload);
   },
 
   //

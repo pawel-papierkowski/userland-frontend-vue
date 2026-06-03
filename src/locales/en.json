@@ -266,7 +266,7 @@
       },
       "button": {
         "update": "Update profile",
-        "updateSubmitting": "Updating profile...",
+        "updateBusy": "Updating profile...",
         "emailChange": "Change email address",
         "deleteAccount": "Delete account"
       },
@@ -323,6 +323,12 @@
           "profile": "👤 Profile data",
           "name": "Name",
           "surname": "Surname"
+        },
+        "button": {
+          "update": "Update user data",
+          "lock": "🔒 Lock",
+          "unlock": "🔓 Unlock",
+          "busy": "Please wait..."
         }
       },
       "history": {
@@ -711,6 +717,10 @@
     "user_0122": {
       "title": "Failure",
       "content": "User is locked."
+    },
+    "user_0201": {
+      "title": "Failure",
+      "content": "Cannot edit this user."
     }
   },
 

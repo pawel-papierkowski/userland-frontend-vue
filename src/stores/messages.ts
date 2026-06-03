@@ -4,6 +4,8 @@ import { ref } from 'vue';
 import type { Message } from '@/code/stores/messages/types.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 
+/** Default duration of messages in seconds. */
+const defDuration = 10;
 /** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
 const maxMessages = 20;
 
@@ -24,7 +26,7 @@ export const useMessageStore = defineStore('messages', () => {
    * @param errCode Error code. If present, will show separately in message box.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  function addMessage(level: EnMessageLevel, title: string = '', content: string, errCode: string = '', duration = 15) {
+  function addMessage(level: EnMessageLevel, title: string = '', content: string, errCode: string = '', duration = defDuration) {
     if (messages.value.length >= maxMessages) {
       // Remove oldest message.
       const id = messages.value[0]?.id ?? '';

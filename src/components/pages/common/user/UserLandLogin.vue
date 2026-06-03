@@ -30,7 +30,7 @@ const form: UserLoginForm = reactive({
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyEmail(form.email, usedButton.value);
@@ -51,7 +51,7 @@ const passwordError: ComputedRef<string | null> = computed(() => {
 const handleLogin = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const loginReq = convertToReq(form);
@@ -72,7 +72,7 @@ const handleLogin = async () => {
     AppMessager.errorT(error, 'user.login.msg.error.title', 'user.login.msg.error.content');
     backendApi.logError(error, 'Login failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -188,9 +188,8 @@ const getInputClass = (msgError: string | null): string => {
         <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
 
-
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}
       </button>
 
       <div class="form-under-2" v-if="!isAdminPanel">

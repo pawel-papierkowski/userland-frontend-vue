@@ -18,14 +18,14 @@ const log = useLogger();
 const { t } = useI18n();
 
 /** True if option call is in progress, otherwise false. Used to disable option buttons. */
-const isOptionSubmitting: Ref<boolean> = ref(false);
+const isOptionBusy: Ref<boolean> = ref(false);
 
 //
 
 /** Call API checks endpoint: alive. */
 const callCheckAlive = async () => {
   try {
-    isOptionSubmitting.value = true;
+    isOptionBusy.value = true;
     await backendApiCheck.alive(); // API CALL
 
     AppMessager.successT('debugArea.checks.alive.msg.success.title', 'debugArea.checks.alive.msg.success.content');
@@ -34,14 +34,14 @@ const callCheckAlive = async () => {
     AppMessager.errorT(error, 'debugArea.checks.alive.msg.error.title', 'debugArea.checks.alive.msg.error.content');
     backendApi.logError(error, 'Failed to call /api/checks/alive!');
   } finally {
-    isOptionSubmitting.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable checks buttons.
   }
 };
 
 /** Call API checks endpoint: logged. */
 const callCheckLogged = async () => {
   try {
-    isOptionSubmitting.value = true;
+    isOptionBusy.value = true;
     await backendApiCheck.mustBeLogged(); // API CALL
 
     AppMessager.successT('debugArea.checks.logged.msg.success.title', 'debugArea.checks.logged.msg.success.content');
@@ -50,14 +50,14 @@ const callCheckLogged = async () => {
     AppMessager.errorT(error, 'debugArea.checks.logged.msg.error.title', 'debugArea.checks.logged.msg.error.content');
     backendApi.logError(error, 'Failed to call /api/checks/must-be-logged!');
   } finally {
-    isOptionSubmitting.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable checks buttons.
   }
 };
 
 /** Call API checks endpoint: admin. */
 const callCheckAdmin = async () => {
   try {
-    isOptionSubmitting.value = true;
+    isOptionBusy.value = true;
     await backendApiCheck.mustBeAdmin(); // API CALL
 
     AppMessager.successT('debugArea.checks.admin.msg.success.title', 'debugArea.checks.admin.msg.success.content');
@@ -66,14 +66,14 @@ const callCheckAdmin = async () => {
     AppMessager.errorT(error, 'debugArea.checks.admin.msg.error.title', 'debugArea.checks.admin.msg.error.content');
     backendApi.logError(error, 'Failed to call /api/checks/must-be-admin!');
   } finally {
-    isOptionSubmitting.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable checks buttons.
   }
 };
 
 /** Call API checks endpoint: exception. */
 const callCheckException = async () => {
   try {
-    isOptionSubmitting.value = true;
+    isOptionBusy.value = true;
     await backendApiCheck.exception(); // API CALL
 
     AppMessager.successT(
@@ -89,14 +89,14 @@ const callCheckException = async () => {
     );
     backendApi.logError(error, 'Failed to call /api/checks/exception!');
   } finally {
-    isOptionSubmitting.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable checks buttons.
   }
 };
 
 /** Call API users endpoint: prolong. */
 const callProlong = async () => {
   try {
-    isOptionSubmitting.value = true;
+    isOptionBusy.value = true;
     const { result, jwt } = await AppLoginer.prolongSilently();
 
     if (result) {
@@ -120,7 +120,7 @@ const callProlong = async () => {
     );
     backendApi.logError(error, 'Failed to prolong user session!');
   } finally {
-    isOptionSubmitting.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable checks buttons.
   }
 };
 </script>
@@ -148,16 +148,16 @@ const callProlong = async () => {
     <fieldset>
       <legend>{{ t('debugArea.checks.legend') }}</legend>
       <div class="items-vertical">
-        <button :disabled="isOptionSubmitting" @click="callCheckAlive()">
+        <button :disabled="isOptionBusy" @click="callCheckAlive()">
           {{ t('debugArea.checks.alive.button') }}
         </button>
-        <button :disabled="isOptionSubmitting" @click="callCheckLogged()">
+        <button :disabled="isOptionBusy" @click="callCheckLogged()">
           {{ t('debugArea.checks.logged.button') }}
         </button>
-        <button :disabled="isOptionSubmitting" @click="callCheckAdmin()">
+        <button :disabled="isOptionBusy" @click="callCheckAdmin()">
           {{ t('debugArea.checks.admin.button') }}
         </button>
-        <button :disabled="isOptionSubmitting" @click="callCheckException()">
+        <button :disabled="isOptionBusy" @click="callCheckException()">
           {{ t('debugArea.checks.exception.button') }}
         </button>
       </div>
@@ -166,7 +166,7 @@ const callProlong = async () => {
     <fieldset>
       <legend>{{ t('debugArea.options.legend') }}</legend>
       <div class="items-vertical">
-        <button :disabled="isOptionSubmitting" @click="callProlong()">
+        <button :disabled="isOptionBusy" @click="callProlong()">
           {{ t('debugArea.options.prolong.button') }}
         </button>
       </div>

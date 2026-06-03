@@ -10,13 +10,18 @@ import { reactive } from 'vue';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableEntry, UserTokenTableFilterForm, UserTokenTableReq, UserTokenTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type {
+  UserTableEntry,
+  UserTokenTableFilterForm,
+  UserTokenTableReq,
+  UserTokenTableEntry,
+} from '@/code/data/features/user/admin-user.ts';
 import { userTokensTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserTokensFilter from '@/components/pages/admin/user/tokens/AdminUserTokensFilter.vue';
 
-const selUserRecord = defineModel<UserTableEntry|null>();
+const selUserRecord = defineModel<UserTableEntry | null>();
 
 const form: UserTokenTableFilterForm = reactive({
   userId: -1,
@@ -68,8 +73,8 @@ const processEntry = (entry: UserTokenTableEntry) => {
     emptyText="admin.user.tokens.table.empty"
     emptyNoUserText="admin.user.tokens.table.emptyNoUser"
   >
-    <template #filter="{ isSubmitting, isDisabled, handleReload }">
-      <AdminUserTokensFilter v-model="form" :isSubmitting="isSubmitting" :disabled="isDisabled" @reload="handleReload"/>
+    <template #filter="{ isBusy, isDisabled, handleReload }">
+      <AdminUserTokensFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

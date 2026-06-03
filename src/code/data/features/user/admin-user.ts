@@ -1,6 +1,6 @@
 // All types for admin user feature.
 import type { TableMetaReq, TableMetaResp } from '@/code/data/features/common.ts';
-import type { UserProfileDataResp } from '@/code/data/features/user/user';
+import type { UserProfileData } from '@/code/data/features/user/user.ts';
 
 // USER TABLE
 
@@ -45,6 +45,11 @@ export type UserTableEntry = {
 /** User full data request. */
 export type UserFullDataReq = {
   id: number; // Identificator of user.
+  username: string|null;
+  email: string|null;
+  locked: boolean|null;
+  lang: string|null;
+  profile: UserProfileData|null;
 };
 
 /** User full data response. */
@@ -57,7 +62,7 @@ export type UserFullDataResp = {
   status: string;
   locked: boolean;
   lang: string;
-  profile: UserProfileDataResp;
+  profile: UserProfileData;
 };
 
 export type UserFullDataForm = {
@@ -69,8 +74,8 @@ export type UserFullDataForm = {
   locked: boolean | null;
   lang: string;
   // Profile data.
-  name: string;
-  surname: string;
+  name: string | null;
+  surname: string | null;
 };
 
 // USER HISTORY TABLE

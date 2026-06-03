@@ -26,7 +26,7 @@ const form: UserEmailChangeLinkForm = reactive({
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const newEmailError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyEmail(form.newEmail, usedButton.value);
@@ -41,7 +41,7 @@ const passwordError: ComputedRef<string | null> = computed(() => {
 const handleEmailChangeLink = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const emailChangeReq = convertToReq(form);
@@ -54,7 +54,7 @@ const handleEmailChangeLink = async () => {
     AppMessager.errorT(error, 'user.emailChangeStart.msg.error.title', 'user.emailChangeStart.msg.error.content');
     backendApi.logError(error, 'Email change request failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -136,8 +136,8 @@ const getInputClass = (msgError: string | null): string => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.emailChangeStart.form.buttonBusy') : t('user.emailChangeStart.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.emailChangeStart.form.buttonBusy') : t('user.emailChangeStart.form.button') }}
       </button>
     </form>
   </div>

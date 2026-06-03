@@ -10,13 +10,18 @@ import { reactive } from 'vue';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableEntry, UserHistoryTableFilterForm, UserHistoryTableReq, UserHistoryTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type {
+  UserTableEntry,
+  UserHistoryTableFilterForm,
+  UserHistoryTableReq,
+  UserHistoryTableEntry,
+} from '@/code/data/features/user/admin-user.ts';
 import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminUserHistoryFilter.vue';
 
-const selUserRecord = defineModel<UserTableEntry|null>();
+const selUserRecord = defineModel<UserTableEntry | null>();
 
 const form: UserHistoryTableFilterForm = reactive({
   userId: -1,
@@ -67,8 +72,8 @@ const processEntry = (entry: UserHistoryTableEntry) => {
     emptyText="admin.user.history.table.empty"
     emptyNoUserText="admin.user.history.table.emptyNoUser"
   >
-    <template #filter="{ isSubmitting, isDisabled, handleReload }">
-      <AdminUserHistoryFilter v-model="form" :isSubmitting="isSubmitting" :disabled="isDisabled" @reload="handleReload"/>
+    <template #filter="{ isBusy, isDisabled, handleReload }">
+      <AdminUserHistoryFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

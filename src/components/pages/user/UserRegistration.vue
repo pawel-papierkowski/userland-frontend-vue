@@ -29,7 +29,7 @@ const form: UserRegisterForm = reactive({
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyField(form.username, usedButton.value);
@@ -50,7 +50,7 @@ const passwordConfirmError: ComputedRef<string | null> = computed(() => {
 const handleRegister = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const registerReq = convertToReq(form);
@@ -63,7 +63,7 @@ const handleRegister = async () => {
     AppMessager.errorT(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
     backendApi.logError(error, 'Registration failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -196,9 +196,8 @@ const getInputClass = (msgError: string | null): string => {
         <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
 
-
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}
       </button>
 
       <div class="form-under-1">

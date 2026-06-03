@@ -77,7 +77,7 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0].title).toBe("User logged in successfully");
     expect(messageStore.messages[0].content).toBe("");
 
@@ -116,7 +116,7 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0].title).toBe("Admin panel user logged in successfully");
     expect(messageStore.messages[0].content).toBe("");
 
@@ -158,7 +158,7 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0].title).toBe("User logged in successfully");
     expect(messageStore.messages[0].content).toBe("");
 

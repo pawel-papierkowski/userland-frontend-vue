@@ -27,7 +27,7 @@ import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
-import type { ColumnData, TableMetaReq, TableMetaResp } from "@/code/data/features/common.ts";
+import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/features/common.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
@@ -47,7 +47,7 @@ const form = defineModel<F>('form', { required: true });
 /** Loaded page of data. */
 const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({
   entries: [],
-  tableMeta: { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' }
+  tableMeta: { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' },
 });
 
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
@@ -60,7 +60,7 @@ const currSortBy: Ref<string | null> = ref(null);
 const currSortOrder: Ref<string | null> = ref(null);
 
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. */
 const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
@@ -73,11 +73,11 @@ const handleReload = async () => {
   data.value.entries = [];
   if (!selUserRecord.value) {
     isLoading.value = false;
-    isSubmitting.value = false;
+    isBusy.value = false;
     return;
   }
   isLoading.value = true;
-  isSubmitting.value = true;
+  isBusy.value = true;
   canSpin.value = true;
 
   try {
@@ -98,7 +98,7 @@ const handleReload = async () => {
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
     backendApi.logError(error, 'User tab table reload failed!');
   } finally {
-    isSubmitting.value = false;
+    isBusy.value = false;
   }
 };
 
@@ -106,19 +106,24 @@ const handleReload = async () => {
 const resolveEmptyText = () => {
   if (!selUserRecord.value) return props.emptyNoUserText;
   return props.emptyText;
-}
+};
 
 // WATCHERS
 
 /** Change in selection requires reload of form. */
-watch(selUserRecord, () => {
-  handleReload();
-}, { immediate: true });
+watch(
+  selUserRecord,
+  () => {
+    handleReload();
+  },
+  { immediate: true },
+);
 
 watch(currPage, (newVal, oldVal) => {
   if (oldVal === null) return;
 
-  if (!form.value.tableMeta) form.value.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
+  if (!form.value.tableMeta)
+    form.value.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
   else form.value.tableMeta.page = currPage.value;
   handleReload();
 });
@@ -151,16 +156,24 @@ watch(currSortOrder, (newVal, oldVal) => {
 <template>
   <TableWrapper layout="bottom">
     <template #filterPanel>
-      <slot name="filter" :isSubmitting="isSubmitting" :isDisabled="isDisabled" :handleReload="handleReload" />
+      <slot name="filter" :isBusy="isBusy" :isDisabled="isDisabled" :handleReload="handleReload" />
     </template>
     <template #tablePanel>
-      <TablePage v-model="selEntryRecord" v-model:currPage="currPage" v-model:currSortBy="currSortBy" v-model:currSortOrder="currSortOrder"
-        :columns="columns" :data="data.entries" :meta="data.tableMeta"
-        :isLoading="isLoading" :canSpin="canSpin" :canSelect="false"
-        :empty="resolveEmptyText()"/>
+      <TablePage
+        v-model="selEntryRecord"
+        v-model:currPage="currPage"
+        v-model:currSortBy="currSortBy"
+        v-model:currSortOrder="currSortOrder"
+        :columns="columns"
+        :data="data.entries"
+        :meta="data.tableMeta"
+        :isLoading="isLoading"
+        :canSpin="canSpin"
+        :canSelect="false"
+        :empty="resolveEmptyText()"
+      />
     </template>
-    <template #entryEditor>
-    </template>
+    <template #entryEditor> </template>
   </TableWrapper>
 </template>
 

@@ -34,8 +34,8 @@ const form: UserEditForm = reactive({
 
 /** True if submit button was clicked at least once. */
 const usedButton: Ref<boolean> = ref(false);
-/** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+/** True if busy doing something, otherwise false. Used to disable edit button. */
+const isBusy: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
 const isLoading: Ref<boolean> = ref(true);
 /** Can spinner spin? */
@@ -82,7 +82,7 @@ const resolveUserData = async (): Promise<UserDataResp | null> => {
 const saveUserData = async () => {
   usedButton.value = true; // Now we can show all errors.
   if (isFormError()) return; // Prevent submission if there are client-side errors.
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const editReq = convertToReq(form);
@@ -94,7 +94,7 @@ const saveUserData = async () => {
     AppMessager.errorT(error, 'user.profile.msg.error.title', 'user.profile.msg.error.content');
     backendApi.logError(error, 'Profile update failed!');
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -130,6 +130,10 @@ const convertToReq = (form: UserEditForm): UserEditReq => {
   return {
     ...form,
     lang: locale.value,
+    profile: {
+      name: form.name,
+      surname: form.surname,
+    },
   };
 };
 
@@ -223,14 +227,14 @@ onMounted(async () => {
         </div>
       </div>
 
-      <button data-testid="btn-submit" type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('user.profile.button.updateSubmitting') : t('user.profile.button.update') }}
+      <button data-testid="btn-submit" type="submit" :disabled="isBusy">
+        {{ isBusy ? t('user.profile.button.updateBusy') : t('user.profile.button.update') }}
       </button>
       <div class="items-horizontal">
-        <button data-testid="btn-emailChange" :disabled="isSubmitting" @click="handleEmailChange()">
+        <button data-testid="btn-emailChange" :disabled="isBusy" @click="handleEmailChange()">
           {{ t('user.profile.button.emailChange') }}
         </button>
-        <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDelete()">
+        <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDelete()">
           {{ t('user.profile.button.deleteAccount') }}
         </button>
       </div>

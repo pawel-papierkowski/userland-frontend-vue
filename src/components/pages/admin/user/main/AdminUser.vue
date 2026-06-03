@@ -9,7 +9,12 @@ import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import type { UserTableFilterForm, UserTableReq, UserTableResp, UserTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type {
+  UserTableFilterForm,
+  UserTableReq,
+  UserTableResp,
+  UserTableEntry,
+} from '@/code/data/features/user/admin-user.ts';
 import { userTableColumns, emptyUserTable } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserFilter from '@/components/pages/admin/user/main/AdminUserFilter.vue';
@@ -41,7 +46,7 @@ const currSortBy: Ref<string | null> = ref(null);
 const currSortOrder: Ref<string | null> = ref(null);
 
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. */
 const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
@@ -80,7 +85,7 @@ watch(currSortOrder, (newVal, oldVal) => {
 /** Handle reload of user table with filtering. */
 const handleReload = async () => {
   isLoading.value = true;
-  isSubmitting.value = true;
+  isBusy.value = true;
   canSpin.value = true;
   data.value = emptyUserTable;
 
@@ -98,7 +103,7 @@ const handleReload = async () => {
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
     backendApi.logError(error, 'User table reload failed!');
   } finally {
-    isSubmitting.value = false;
+    isBusy.value = false;
   }
 };
 
@@ -149,7 +154,7 @@ onMounted(async () => {
 <template>
   <TableWrapper>
     <template #filterPanel>
-      <AdminUserFilter v-model="form" :isSubmitting="isSubmitting" @reload="handleReload" />
+      <AdminUserFilter v-model="form" :isBusy="isBusy" @reload="handleReload" />
     </template>
     <template #tablePanel>
       <TablePage

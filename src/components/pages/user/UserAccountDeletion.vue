@@ -25,7 +25,7 @@ const { t } = useI18n();
 /** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isSubmitting: Ref<boolean> = ref(false);
+const isBusy: Ref<boolean> = ref(false);
 
 //
 
@@ -48,7 +48,7 @@ const verifyAll = () => {
 
 /** Handle account deletion confirmation. */
 const handleAccountDeletion = async () => {
-  isSubmitting.value = true; // Disable submit button to prevent new submission while we are working on current submission.
+  isBusy.value = true; // Disable submit button to prevent new submission while we are working on current submission.
 
   try {
     const payload: UserAccountDeleteReq = { token: tokenStr };
@@ -64,7 +64,7 @@ const handleAccountDeletion = async () => {
     AppMessager.errorT(error, 'user.accountDelete.msg.error.title', 'user.accountDelete.msg.error.content');
     backendApi.logError(error, 'User account deletion failed! Token: ' + tokenStr);
   } finally {
-    isSubmitting.value = false; // Enable submit button.
+    isBusy.value = false; // Enable submit button.
   }
 };
 
@@ -83,8 +83,8 @@ onMounted(() => {
       <div class="onpage-msg warning" v-html="t('user.accountDelete.form.warning')" />
     </div>
 
-    <button data-testid="btn-deleteAccount" class="danger" :disabled="isSubmitting" @click="handleAccountDeletion()">
-      {{ isSubmitting ? t('user.accountDelete.form.buttonBusy') : t('user.accountDelete.form.button') }}
+    <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDeletion()">
+      {{ isBusy ? t('user.accountDelete.form.buttonBusy') : t('user.accountDelete.form.button') }}
     </button>
   </div>
 </template>

@@ -266,7 +266,7 @@
       },
       "button": {
         "update": "Zaktualizuj profil",
-        "updateSubmitting": "Aktualizacja profilu...",
+        "updateBusy": "Aktualizacja profilu...",
         "emailChange": "Zmień adres email",
         "deleteAccount": "Usuń konto"
       },
@@ -323,6 +323,12 @@
           "profile": "👤 Dane profilu",
           "name": "Imię",
           "surname": "Nazwisko"
+        },
+        "button": {
+          "update": "Zaktualizuj dane użytkownika",
+          "lock": "🔒 Zablokuj",
+          "unlock": "🔓 Odblokuj",
+          "busy": "Proszę zaczekać..."
         }
       },
       "history": {
@@ -629,7 +635,7 @@
 
   "msgs": {
     "errorCode": "Kod błędu",
-    
+
     "networkError": {
       "title": "Błąd sieci",
       "content": "Nie można się połączyć z serwerem. Upewnij się, że masz połączenie z Internetem."
@@ -711,6 +717,10 @@
     "user_0122": {
       "title": "Niepowodzenie",
       "content": "Użytkownik jest zablokowany."
+    },
+    "user_0201": {
+      "title": "Niepowodzenie",
+      "content": "Nie można edytować tego użytkownika."
     }
   },
 
@@ -753,6 +763,6 @@
       "9": "Październik",
       "10": "Listopad",
       "11": "Grudzień"
-    }    
+    }
   }
 }

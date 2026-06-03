@@ -4,7 +4,7 @@
  *
  * Properties:
  * - v-model - Holds filter form data.
- * - isSubmitting - If true, show filter button as disabled and busy.
+ * - isBusy - If true, show filter button as disabled and busy.
  */
 import { useI18n } from 'vue-i18n';
 
@@ -18,12 +18,15 @@ const { t } = useI18n();
 
 const form = defineModel<UserHistoryTableFilterForm>({ required: true });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = withDefaults(defineProps<{
-  isSubmitting: boolean,
-  disabled?: boolean,
-}>(), {
-  disabled: false
-});
+const props = withDefaults(
+  defineProps<{
+    isBusy: boolean;
+    disabled?: boolean;
+  }>(),
+  {
+    disabled: false,
+  },
+);
 
 const emit = defineEmits(['reload']);
 </script>
@@ -73,8 +76,8 @@ const emit = defineEmits(['reload']);
         />
       </div>
 
-      <button type="submit" :disabled="isSubmitting">
-        {{ isSubmitting ? t('admin.user.history.filter.buttonBusy') : t('admin.user.history.filter.button') }}
+      <button type="submit" :disabled="isBusy">
+        {{ isBusy ? t('admin.user.history.filter.buttonBusy') : t('admin.user.history.filter.button') }}
       </button>
     </form>
   </div>
