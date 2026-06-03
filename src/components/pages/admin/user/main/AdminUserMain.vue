@@ -67,7 +67,6 @@ const resolveUserData = async (): Promise<UserFullDataResp | null> => {
 
   try {
     const response = await backendApiAdminUser.loadUserData(selUserRecord.value.id); // API CALL
-    isBusy.value = false;
     isLoading.value = false;
     return response.data;
   } catch (error) {
@@ -75,6 +74,8 @@ const resolveUserData = async (): Promise<UserFullDataResp | null> => {
     backendApi.logError(error, 'Loading user data failed!');
     canSpin.value = false;
     return null;
+  } finally {
+    isBusy.value = false;
   }
 };
 
@@ -99,14 +100,14 @@ const saveUserData = async (): Promise<UserFullDataResp|null> => {
   try {
     const editReq = convertToReq(form);
     const response = await backendApiAdminUser.editUserData(editReq); // API CALL
-    isBusy.value = false;
-    isLoading.value = false;
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
     backendApi.logError(error, 'Updating user data failed!');
     canSpin.value = false;
     return null;
+  } finally {
+    isBusy.value = false;
   }
 };
 
@@ -152,14 +153,14 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp|null> => {
   try {
     const editReq = convertLockToReq(locked);
     const response = await backendApiAdminUser.editUserData(editReq); // API CALL
-    isBusy.value = false;
-    isLoading.value = false;
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
     backendApi.logError(error, 'Updating user data failed!');
     canSpin.value = false;
     return null;
+  } finally {
+    isBusy.value = false;
   }
 };
 
