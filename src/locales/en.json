@@ -692,15 +692,27 @@
     },
     "user_0011": {
       "title": "Failure",
-      "content": "Token is expired."
+      "content": "User token is missing."
     },
     "user_0012": {
       "title": "Failure",
-      "content": "Token is missing."
+      "content": "User token is expired."
     },
     "user_0013": {
       "title": "Failure",
-      "content": "Token already exists."
+      "content": "User token already exists."
+    },
+    "user_0021": {
+      "title": "Failure",
+      "content": "User config entry is missing."
+    },
+    "user_0031": {
+      "title": "Failure",
+      "content": "User permission entry is missing."
+    },
+    "user_0041": {
+      "title": "Failure",
+      "content": "Permission is missing."
     },
     "user_0111": {
       "title": "Failure",

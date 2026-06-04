@@ -692,15 +692,27 @@
     },
     "user_0011": {
       "title": "Niepowodzenie",
-      "content": "Token jest nieaktualny."
+      "content": "Token użytkownika nie istnieje."
     },
     "user_0012": {
       "title": "Niepowodzenie",
-      "content": "Token nie istnieje."
+      "content": "Token użytkownika jest nieaktualny."
     },
     "user_0013": {
       "title": "Niepowodzenie",
-      "content": "Token już istnieje."
+      "content": "Token użytkownika już istnieje."
+    },
+    "user_0021": {
+      "title": "Niepowodzenie",
+      "content": "Zmienna konfiguracji użytkownika nie istnieje."
+    },
+    "user_0031": {
+      "title": "Niepowodzenie",
+      "content": "Zmienna uprawnień użytkownika nie istnieje."
+    },
+    "user_0041": {
+      "title": "Niepowodzenie",
+      "content": "Uprawnienie nie istnieje."
     },
     "user_0111": {
       "title": "Niepowodzenie",
