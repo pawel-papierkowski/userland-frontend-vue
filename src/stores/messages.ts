@@ -5,7 +5,7 @@ import type { Message } from '@/code/stores/messages/types.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 
 /** Default duration of messages in seconds. */
-const defDuration = 10;
+export const defDuration = 10;
 /** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
 const maxMessages = 20;
 
@@ -51,12 +51,12 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   // Convenience helpers.
-  const info = (title: string, content: string) => addMessage(EnMessageLevel.Info, title, content);
-  const success = (title: string, content: string) => addMessage(EnMessageLevel.Success, title, content);
-  const warning = (title: string, content: string) => addMessage(EnMessageLevel.Warning, title, content);
-  const failure = (title: string, content: string) => addMessage(EnMessageLevel.Failure, title, content);
-  const error = (title: string, content: string, errCode: string = '') =>
-    addMessage(EnMessageLevel.Error, title, content, errCode);
+  const info = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Info, title, content, '', duration);
+  const success = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Success, title, content, '', duration);
+  const warning = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Warning, title, content, '', duration);
+  const failure = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Failure, title, content, '', duration);
+  const error = (title: string, content: string, errCode: string = '', duration = defDuration) =>
+    addMessage(EnMessageLevel.Error, title, content, errCode, duration);
 
   return { messages, addMessage, removeMessage, info, success, warning, failure, error };
 });

@@ -216,11 +216,19 @@ const isYourOwnAccount = (): boolean => {
 }
 
 /**
+ * Check if we have permission to edit users in general.
+ * @returns True if we can edit users, otherwise false.
+ */
+const canEditUsers = (): boolean => {
+  return AppLoginer.hasPermission('user_edit');
+}
+
+/**
  * Check if inputs should be disabled.
  * @returns True if should be disabled, otherwise false.
  */
 const isInputDisabled = (): boolean => {
-  return selUserRecord.value === null || isYourOwnAccount();
+  return selUserRecord.value === null || isYourOwnAccount() || !canEditUsers();
 };
 
 /**
@@ -306,9 +314,9 @@ const isBtnDisabled = (): boolean => {
         </div>
       </div>
 
-      <div class="onpage-msg info" v-if="isYourOwnAccount()" v-html="t('admin.user.msg.infoCannotEditYourself.content')" />
+      <div class="onpage-msg info" v-if="canEditUsers() && isYourOwnAccount()" v-html="t('admin.user.msg.info.cannotEditYourself')" />
 
-      <div class="items-horizontal">
+      <div class="items-horizontal" v-if="canEditUsers()">
         <button data-testid="btn-update" :disabled="isBtnDisabled()" @click="handleUserUpdate()">
           {{ isBusy ? t('admin.user.main.button.busy') : t('admin.user.main.button.update') }}
         </button>

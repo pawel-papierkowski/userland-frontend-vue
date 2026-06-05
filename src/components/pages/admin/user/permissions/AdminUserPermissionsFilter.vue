@@ -27,6 +27,14 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(['reload']);
+
+/**
+ * Should filter button be disabled?
+ * @returns True if button should be disabled, otherwise false.
+ */
+const isBtnDisabled = () => {
+  return props.isBusy || props.disabled;
+}
 </script>
 
 <template>
@@ -54,7 +62,7 @@ const emit = defineEmits(['reload']);
         />
       </div>
 
-      <button type="submit" :disabled="isBusy">
+      <button type="submit" :disabled="isBtnDisabled()">
         {{ isBusy ? t('admin.user.permissions.filter.buttonBusy') : t('admin.user.permissions.filter.button') }}
       </button>
     </form>

@@ -123,7 +123,7 @@
 
 /*** Local layout. ***/
 
-/* Layout for buttons. */
+/* Layout for items. */
 
 .items-vertical {
   display: flex;
@@ -137,7 +137,7 @@
 .items-horizontal {
   display: flex;
   flex-direction: row; /* Stacks children horizontally */
-  align-items: center; /* Centers the items horizontally */
+  align-items: top; /* Centers the items horizontally */
   gap: 1rem;
 
   padding: 10px;

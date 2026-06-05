@@ -1,8 +1,24 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 </script>
 
 <template>
-  HOME PLACEHOLDER
+  <article>
+    <h1>{{ t('homeArea.title') }}</h1>
+    <p v-html="t('homeArea.welcome')" />
+    <p v-html="t('homeArea.description')" />
+    <div class="items-horizontal">
+      <p class="wide" v-html="t('homeArea.techstack.backend')" />
+      <p class="wide" v-html="t('homeArea.techstack.frontend')" />
+    </div>
+  </article>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.wide {
+  width: 100%;
+}
+</style>

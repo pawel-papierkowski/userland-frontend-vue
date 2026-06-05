@@ -72,6 +72,15 @@ footer {
   box-shadow: var(--footer-box-shadow);
 }
 
+article {
+  width: 50%;
+  margin: auto;
+}
+
+article ul {
+  padding: 0 0 0 20px; /* or 1em */
+}
+
 /**/
 
 h1 {

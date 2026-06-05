@@ -1,5 +1,5 @@
 import { isAxiosError } from 'axios';
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore, defDuration } from '@/stores/messages.ts';
 import i18n from '@/code/lang/i18n.ts';
 
 const { t } = i18n.global;
@@ -13,18 +13,20 @@ export class AppMessager {
    * Generates info message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static infoT(title: string, content: string) {
-    this.info(t(title), t(content));
+  public static infoT(title: string, content: string, duration = defDuration) {
+    this.info(t(title), t(content), duration);
   }
 
   /**
    * Generates info message.
    * @param title Title as a string.
    * @param content Content as a string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static info(title: string, content: string) {
-    this.showInfo(title, content);
+  public static info(title: string, content: string, duration = defDuration) {
+    this.showInfo(title, content, duration);
   }
 
   //
@@ -33,18 +35,20 @@ export class AppMessager {
    * Generates success message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static successT(title: string, content: string) {
-    this.success(t(title), t(content));
+  public static successT(title: string, content: string, duration = defDuration) {
+    this.success(t(title), t(content), duration);
   }
 
   /**
    * Generates success message.
    * @param title Title as a string.
    * @param content Content as a string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static success(title: string, content: string) {
-    this.showSuccess(title, content);
+  public static success(title: string, content: string, duration = defDuration) {
+    this.showSuccess(title, content, duration);
   }
 
   //
@@ -53,18 +57,20 @@ export class AppMessager {
    * Generates warning message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static warningT(title: string, content: string) {
-    this.warning(t(title), t(content));
+  public static warningT(title: string, content: string, duration = defDuration) {
+    this.warning(t(title), t(content), duration);
   }
 
   /**
    * Generates warning message.
    * @param title Title as a string.
    * @param content Content as a string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static warning(title: string, content: string) {
-    this.showWarning(title, content);
+  public static warning(title: string, content: string, duration = defDuration) {
+    this.showWarning(title, content, duration);
   }
 
   //
@@ -73,18 +79,20 @@ export class AppMessager {
    * Generates failure message from provided translation keys.
    * @param title Title as i18n key.
    * @param content Content as i18n key.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static failureT(title: string, content: string) {
-    this.failure(t(title), t(content));
+  public static failureT(title: string, content: string, duration = defDuration) {
+    this.failure(t(title), t(content), duration);
   }
 
   /**
    * Generates failure message.
    * @param title Title as a string.
    * @param content Content as a string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static failure(title: string, content: string) {
-    this.showFailure(title, content);
+  public static failure(title: string, content: string, duration = defDuration) {
+    this.showFailure(title, content, duration);
   }
 
   //
@@ -166,40 +174,44 @@ export class AppMessager {
    * Helper to show info message using store.
    * @param title Title string.
    * @param content Content string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  private static showInfo(title: string, content: string) {
+  private static showInfo(title: string, content: string, duration = defDuration) {
     const messageStore = useMessageStore();
-    messageStore.info(title, content);
+    messageStore.info(title, content, duration);
   }
 
   /**
    * Helper to show success message using store.
    * @param title Title string.
    * @param content Content string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  private static showSuccess(title: string, content: string) {
+  private static showSuccess(title: string, content: string, duration = defDuration) {
     const messageStore = useMessageStore();
-    messageStore.success(title, content);
+    messageStore.success(title, content, duration);
   }
 
   /**
    * Helper to show warning message using store.
    * @param title Title string.
    * @param content Content string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  private static showWarning(title: string, content: string) {
+  private static showWarning(title: string, content: string, duration = defDuration) {
     const messageStore = useMessageStore();
-    messageStore.warning(title, content);
+    messageStore.warning(title, content, duration);
   }
 
   /**
    * Helper to show failure message using store.
    * @param title Title string.
    * @param content Content string.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  private static showFailure(title: string, content: string) {
+  private static showFailure(title: string, content: string, duration = defDuration) {
     const messageStore = useMessageStore();
-    messageStore.failure(title, content);
+    messageStore.failure(title, content, duration);
   }
 
   /**
@@ -207,9 +219,10 @@ export class AppMessager {
    * @param title Title string.
    * @param content Content string.
    * @param errCode Optional error code.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  private static showError(title: string, content: string, errCode: string = '') {
+  private static showError(title: string, content: string, errCode: string = '', duration = defDuration) {
     const messageStore = useMessageStore();
-    messageStore.error(title, content, errCode);
+    messageStore.error(title, content, errCode, duration);
   }
 }

@@ -452,8 +452,9 @@
           "title": "Failure",
           "content": "Failed to update user data."
         },
-        "infoCannotEditYourself": {
-          "content": "You cannot edit your own account here."
+        "info": {
+          "cannotEditYourself": "You cannot edit your own account.",
+          "noEditPermission": "You do not have permission to edit users."
         }
       }
     }
@@ -487,6 +488,16 @@
         "LOGOUT": "Logout",
         "PROLONG": "Session prolong"
       }
+    }
+  },
+
+  "homeArea": {
+    "title": "UserLand",
+    "welcome": "Welcome to demonstration project <b>UserLand</b>!",
+    "description": "This portfolio project demonstrates basic knowledge about backend and frontend programming (fullstack).",
+    "techstack": {
+      "backend": "Backend tech stack:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
+      "frontend": "Frontend tech stack:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
     }
   },
 
@@ -712,6 +723,10 @@
     "user_0031": {
       "title": "Failure",
       "content": "User permission entry is missing."
+    },
+    "user_0032": {
+      "title": "Failure",
+      "content": "Same user permission entry already exists."
     },
     "user_0041": {
       "title": "Failure",

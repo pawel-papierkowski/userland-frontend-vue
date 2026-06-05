@@ -452,8 +452,9 @@
           "title": "Niepowodzenie",
           "content": "Nie udało się zaktualizować danych użytkownika."
         },
-        "infoCannotEditYourself": {
-          "content": "Nie możesz edytować swojego własnego konta tutaj."
+        "info": {
+          "cannotEditYourself": "Nie możesz edytować swojego własnego konta.",
+          "noEditPermission": "Nie masz uprawnień do edycji użytkowników."
         }
       }
     }
@@ -487,6 +488,16 @@
         "LOGOUT": "Wylogowanie",
         "PROLONG": "Przedłużenie sesji"
       }
+    }
+  },
+
+  "homeArea": {
+    "title": "UserLand",
+    "welcome": "Witamy w projekcie demonstracyjnym <b>UserLand</b>!",
+    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack).",
+    "techstack": {
+      "backend": "Stos technologiczny backendu:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
+      "frontend": "Stos technologiczny frontendu:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
     }
   },
 
@@ -712,6 +723,10 @@
     "user_0031": {
       "title": "Niepowodzenie",
       "content": "Zmienna uprawnień użytkownika nie istnieje."
+    },
+    "user_0032": {
+      "title": "Niepowodzenie",
+      "content": "Ta sama zmienna uprawnień użytkownika już istnieje."
     },
     "user_0041": {
       "title": "Niepowodzenie",
