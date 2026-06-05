@@ -436,6 +436,10 @@
         }
       },
       "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Dane użytkownika zostały pomyślnie zaktualizowane."
+        },
         "errorLoadTable": {
           "title": "Błąd",
           "content": "Nie udało się pobrać danych z tabeli użytkowników."
@@ -444,13 +448,12 @@
           "title": "Błąd",
           "content": "Nie udało się pobrać danych użytkownika."
         },
-        "success": {
-          "title": "Sukces",
-          "content": "Dane użytkownika zostały pomyślnie zaktualizowane."
-        },
         "error": {
           "title": "Niepowodzenie",
           "content": "Nie udało się zaktualizować danych użytkownika."
+        },
+        "infoCannotEditYourself": {
+          "content": "Nie możesz edytować swojego własnego konta tutaj."
         }
       }
     }

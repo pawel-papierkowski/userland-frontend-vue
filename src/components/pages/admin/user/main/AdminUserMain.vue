@@ -15,6 +15,7 @@ import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
 import type { UserTableEntry, UserFullDataReq, UserFullDataResp, UserFullDataForm } from '@/code/data/features/user/admin-user.ts';
 
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
@@ -206,9 +207,29 @@ const fillFormData = async (data: UserFullDataResp) => {
   form.surname = data.profile.surname;
 };
 
-const isUnloaded = (): boolean => {
-  return selUserRecord.value === null;
+/**
+ * Check if we are looking at your own account.
+ * @returns True if selected account is same as currently logged in account, otherwise false.
+ */
+const isYourOwnAccount = (): boolean => {
+  return AppLoginer.getEmail() === form.email;
+}
+
+/**
+ * Check if inputs should be disabled.
+ * @returns True if should be disabled, otherwise false.
+ */
+const isInputDisabled = (): boolean => {
+  return selUserRecord.value === null || isYourOwnAccount();
 };
+
+/**
+ * Check if edit buttons should be disabled.
+ * @returns True if should be disabled, otherwise false.
+ */
+const isBtnDisabled = (): boolean => {
+  return isBusy.value || selUserRecord.value === null || isYourOwnAccount();
+}
 </script>
 
 <template>
@@ -234,7 +255,7 @@ const isUnloaded = (): boolean => {
             type="text"
             v-model="form.username"
             required
-            :disabled="isUnloaded()"
+            :disabled="isInputDisabled()"
             autocomplete="off"
           />
 
@@ -245,7 +266,7 @@ const isUnloaded = (): boolean => {
             type="email"
             v-model="form.email"
             required
-            :disabled="isUnloaded()"
+            :disabled="isInputDisabled()"
             autocomplete="off"
           />
 
@@ -268,7 +289,7 @@ const isUnloaded = (): boolean => {
             type="text"
             v-model="form.name"
             required
-            :disabled="isUnloaded()"
+            :disabled="isInputDisabled()"
             autocomplete="off"
           />
 
@@ -279,16 +300,19 @@ const isUnloaded = (): boolean => {
             type="text"
             v-model="form.surname"
             required
-            :disabled="isUnloaded()"
+            :disabled="isInputDisabled()"
             autocomplete="off"
           />
         </div>
       </div>
+
+      <div class="onpage-msg info" v-if="isYourOwnAccount()" v-html="t('admin.user.msg.infoCannotEditYourself.content')" />
+
       <div class="items-horizontal">
-        <button data-testid="btn-update" :disabled="isBusy || selUserRecord === null" @click="handleUserUpdate()">
+        <button data-testid="btn-update" :disabled="isBtnDisabled()" @click="handleUserUpdate()">
           {{ isBusy ? t('admin.user.main.button.busy') : t('admin.user.main.button.update') }}
         </button>
-        <button data-testid="btn-lock" class="danger" :disabled="isBusy || selUserRecord === null" @click="handleUserLock()">
+        <button data-testid="btn-lock" class="danger" :disabled="isBtnDisabled()" @click="handleUserLock()">
           {{ isBusy ? t('admin.user.main.button.busy') :
               form.locked ? t('admin.user.main.button.unlock') : t('admin.user.main.button.lock') }}
         </button>

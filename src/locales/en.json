@@ -436,6 +436,10 @@
         }
       },
       "msg": {
+        "success": {
+          "title": "Success",
+          "content": "User data updated successfully."
+        },
         "errorLoadTable": {
           "title": "Error",
           "content": "Failed to load user table."
@@ -444,13 +448,12 @@
           "title": "Error",
           "content": "Failed to load user data."
         },
-        "success": {
-          "title": "Success",
-          "content": "User data updated successfully."
-        },
         "error": {
           "title": "Failure",
           "content": "Failed to update user data."
+        },
+        "infoCannotEditYourself": {
+          "content": "You cannot edit your own account here."
         }
       }
     }

@@ -4,6 +4,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { useLoginStore } from '@/stores/login.ts';
 import { locstJwt, prolongExpiration } from '@/code/data/app/const.ts';
+import type { LoginState } from '@/code/data/app/types.ts';
 
 import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
@@ -106,15 +107,6 @@ export class AppLoginer {
   //
 
   /**
-   * Check if user is logged.
-   * @returns True if user is logged, otherwise false.
-   */
-  public static isLogged(): boolean {
-    const loginStore = useLoginStore();
-    return loginStore.loginState.isLogged;
-  }
-
-  /**
    * Check if user session should be prolonged.
    * @returns True if session should be prolonged, otherwise false.
    */
@@ -130,6 +122,26 @@ export class AppLoginer {
     return diff > 0 && diff < prolongExpiration * 60 * 1000;
   }
 
+  //
+
+  /**
+   * Get login state.
+   * @returns Login state.
+   */
+  public static getState(): LoginState {
+    const loginStore = useLoginStore();
+    return loginStore.loginState;
+  }
+
+  /**
+   * Check if user is logged.
+   * @returns True if user is logged, otherwise false.
+   */
+  public static isLogged(): boolean {
+    const loginStore = useLoginStore();
+    return loginStore.loginState.isLogged;
+  }
+
   /**
    * Get username.
    * @returns Username or empty string if no username.
@@ -137,6 +149,15 @@ export class AppLoginer {
   public static getUsername(): string {
     const loginStore = useLoginStore();
     return loginStore.loginState.username;
+  }
+
+  /**
+   * Get email.
+   * @returns email or empty string if no email.
+   */
+  public static getEmail(): string {
+    const loginStore = useLoginStore();
+    return loginStore.loginState.email;
   }
 
   /**
