@@ -68,11 +68,11 @@ export type UserFullDataResp = {
 export type UserFullDataForm = {
   createdAt: string;
   modifiedAt: string;
-  username: string;
-  email: string;
+  username: string | null;
+  email: string | null;
   status: string;
   locked: boolean | null;
-  lang: string;
+  lang: string | null;
   // Profile data.
   name: string | null;
   surname: string | null;

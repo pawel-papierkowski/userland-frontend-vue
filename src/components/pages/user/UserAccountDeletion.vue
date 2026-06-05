@@ -70,8 +70,8 @@ const handleAccountDeletion = async () => {
 
 //
 
+/** Automatically call once user enters page. */
 onMounted(() => {
-  // automatically call once user enters page
   verifyAll();
 });
 </script>

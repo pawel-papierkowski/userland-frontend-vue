@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 /**
  * View/edit of single, selected user.
@@ -14,25 +15,19 @@ import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
 import type { UserTableEntry, UserFullDataReq, UserFullDataResp, UserFullDataForm } from '@/code/data/features/user/admin-user.ts';
+import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const { t } = useI18n();
 
 /** User data for form. */
-const form: UserFullDataForm = reactive({
-  createdAt: '',
-  modifiedAt: '',
-  username: '',
-  email: '',
-  status: '',
-  locked: null,
-  lang: '',
-  name: '',
-  surname: '',
-});
+const form: UserFullDataForm = reactive(emptyUserForm);
+/** To mark which fields were actually changed. */
+const diffForm: Ref<UserFullDataForm> = ref(emptyUserForm);
 
 /** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
@@ -88,6 +83,7 @@ const handleUserUpdate = async () => {
   if (data === null) return; // failed to update user
 
   fillFormData(data); // Update local form.
+  AppUserEventer.notifyUserUpdated(diffForm.value);
 }
 
 /**
@@ -194,18 +190,39 @@ const clearForm = () => {
   form.surname = '';
 };
 
-/** Fill form data. */
-const fillFormData = async (data: UserFullDataResp) => {
+/**
+ * Fill form data.
+ * @param data Response from endpoint.
+ */
+const fillFormData = (data: UserFullDataResp) => {
+  diffForm.value = { ...emptyUserForm }; // Reset diff
+
   form.createdAt = data.createdAt;
   form.modifiedAt = data.modifiedAt;
-  form.username = data.username;
-  form.email = data.email;
+  updateFormField(data, 'username');
+  updateFormField(data, 'email');
   form.status = data.status;
-  form.locked = data.locked;
-  form.lang = data.lang;
+  updateFormField(data, 'locked');
+  updateFormField(data, 'lang');
   form.name = data.profile.name;
   form.surname = data.profile.surname;
 };
+
+/**
+ * Dynamically update form data and remember which fields changed.
+ * @param data Response from endpoint.
+ * @param fieldName Name of field to update.
+ */
+const updateFormField = (data: UserFullDataResp, fieldName: string) => {
+  // Cast fieldName to a valid key of the form type
+  const key = fieldName as keyof UserFullDataForm;
+  const value = (data as any)[key];
+
+  if (form[key] !== value) {
+    (form as any)[key] = value;
+    (diffForm.value as any)[key] = value;
+  }
+}
 
 /**
  * Check if we are looking at your own account.

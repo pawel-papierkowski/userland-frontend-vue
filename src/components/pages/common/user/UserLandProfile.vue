@@ -173,8 +173,8 @@ const getInputClass = (msgError: string | null): string => {
 
 //
 
+/** Automatically call once user enters page. */
 onMounted(async () => {
-  // automatically call once user enters page
   await fillForm();
 });
 </script>

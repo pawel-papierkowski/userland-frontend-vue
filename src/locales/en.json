@@ -557,6 +557,19 @@
       "warning": "This is <b>warning</b> message.",
       "failure": "This is <b>failure</b> message.",
       "error": "This is <b>error</b> message."
+    },
+    "logs": {
+      "legend": "Logging to console",
+      "browser": {
+        "info": "Via browser: INFO",
+        "warn": "Via browser: WARN",
+        "err": "Via browser: ERR"
+      },
+      "vue": {
+        "info": "Via Vue: INFO",
+        "warn": "Via Vue: WARN",
+        "err": "Via Vue: ERR"
+      }
     }
   },
 

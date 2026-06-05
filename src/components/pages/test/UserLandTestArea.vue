@@ -3,11 +3,16 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { useLogger } from 'vue-logger-plugin';
+
+import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
+const log = useLogger();
 const { t } = useI18n();
+
 const count: Ref<number> = ref(0);
 const canSpin: Ref<boolean> = ref(true);
 
@@ -48,6 +53,35 @@ const startSpinner = () => {
 const stopSpinner = () => {
   canSpin.value = false;
 };
+
+/** Sends message to standard browser console. */
+const logBrowser = (level: EnMessageLevel) => {
+  switch (level) {
+    case EnMessageLevel.Info:
+      console.info('Log info data via browser console.');
+      break;
+    case EnMessageLevel.Warning:
+      console.warn('Log warn data via browser console.');
+      break;
+    case EnMessageLevel.Error:
+      console.error('Log error data via browser console.');
+      break;
+  }
+};
+/** Sends message to vue logger. */
+const logVue = (level: EnMessageLevel) => {
+  switch (level) {
+    case EnMessageLevel.Info:
+      log.info('Log info data via browser console.');
+      break;
+    case EnMessageLevel.Warning:
+      log.warn('Log warn data via browser console.');
+      break;
+    case EnMessageLevel.Error:
+      log.error('Log error data via browser console.');
+      break;
+  }
+};
 </script>
 
 <template>
@@ -62,6 +96,17 @@ const stopSpinner = () => {
     </fieldset>
   </div>
   <div class="testArea-wrapper">
+    <fieldset>
+      <legend>{{ t('testArea.logs.legend') }}</legend>
+      <div class="items-vertical">
+        <button @click="logBrowser(EnMessageLevel.Info)">{{ t('testArea.logs.browser.info') }}</button>
+        <button @click="logBrowser(EnMessageLevel.Warning)">{{ t('testArea.logs.browser.warn') }}</button>
+        <button @click="logBrowser(EnMessageLevel.Error)">{{ t('testArea.logs.browser.err') }}</button>
+        <button @click="logVue(EnMessageLevel.Info)">{{ t('testArea.logs.vue.info') }}</button>
+        <button @click="logVue(EnMessageLevel.Warning)">{{ t('testArea.logs.vue.warn') }}</button>
+        <button @click="logVue(EnMessageLevel.Error)">{{ t('testArea.logs.vue.err') }}</button>
+      </div>
+    </fieldset>
     <fieldset>
       <legend>{{ t('testArea.msgButtons.legend') }}</legend>
       <div class="items-vertical">

@@ -49,8 +49,8 @@ const callActivationApi = async () => {
 
 //
 
+/** Automatically call once user enters page. */
 onMounted(() => {
-  // automatically call once user enters page
   callActivationApi();
 });
 </script>

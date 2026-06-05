@@ -2,7 +2,9 @@
 /** User management page. Shows table with users and allows editing selected user. */
 import { onMounted, reactive, ref, watch } from 'vue';
 import type { Ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
@@ -22,6 +24,9 @@ import AdminUserEditor from '@/components/pages/admin/user/main/AdminUserEditor.
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
+
+const userEventStore = useUserEventStore();
+const { userUpdatedTrigger, userData } = storeToRefs(userEventStore);
 
 /** User table filtering form data. */
 const form: UserTableFilterForm = reactive({
@@ -145,8 +150,14 @@ const processEntry = (entry: UserTableEntry) => {
 
 //
 
+/** React on user data being updated. */
+watch(userUpdatedTrigger, async () => {
+  if (userData.value.username !== null || userData.value.email !== null)
+    await handleReload();
+});
+
+/** Automatically call once user enters page. */
 onMounted(async () => {
-  // automatically call once user enters page
   await handleReload();
 });
 </script>

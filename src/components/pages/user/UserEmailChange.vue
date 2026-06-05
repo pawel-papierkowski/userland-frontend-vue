@@ -74,8 +74,8 @@ const callEmailChangeApi = async () => {
 
 //
 
+/** Automatically call once user enters page. */
 onMounted(() => {
-  // automatically call once user enters page
   callEmailChangeApi();
 });
 </script>

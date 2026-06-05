@@ -117,8 +117,8 @@ const getInputClass = (msgError: string | null): string => {
 
 //
 
+/** Automatically call once user enters page. */
 onMounted(() => {
-  // automatically call once user enters page
   verifyToken();
 });
 </script>

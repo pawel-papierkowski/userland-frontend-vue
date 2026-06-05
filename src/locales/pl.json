@@ -557,6 +557,19 @@
       "warning": "To jest wiadomość - <b>ostrzeżenie</b>.",
       "failure": "To jest wiadomość o <b>niepowodzeniu</b>.",
       "error": "To jest wiadomość o <b>błędzie</b>."
+    },
+    "logs": {
+      "legend": "Informacje w konsoli",
+      "browser": {
+        "info": "Przez przeglądarkę: INFO",
+        "warn": "Przez przeglądarkę: WARN",
+        "err": "Przez przeglądarkę: ERR"
+      },
+      "vue": {
+        "info": "Przez Vue: INFO",
+        "warn": "Przez Vue: WARN",
+        "err": "Przez Vue: ERR"
+      }
     }
   },
 

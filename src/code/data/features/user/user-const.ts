@@ -1,7 +1,19 @@
 import type { ColumnData } from "@/code/data/features/common.ts";
-import type { UserTableResp, UserHistoryTableResp, UserPermissionTableResp, UserConfigTableResp, UserTokenTableResp, UserJwtTableResp } from '@/code/data/features/user/admin-user.ts';
+import type { UserFullDataForm, UserTableResp, UserHistoryTableResp, UserPermissionTableResp, UserConfigTableResp, UserTokenTableResp, UserJwtTableResp } from '@/code/data/features/user/admin-user.ts';
 
 // USER TABLE
+
+/** Null user form. */
+export const emptyUserForm: UserFullDataForm = {
+  createdAt: '',
+  modifiedAt: '',
+  username: null,
+  email: null,
+  status: '',
+  locked: null,
+  lang: null,
+  name: null,
+  surname: null };
 
 /** Empty user table. */
 export const emptyUserTable: UserTableResp = { entries: [], tableMeta: {pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: "", sortOrder: ""}};
