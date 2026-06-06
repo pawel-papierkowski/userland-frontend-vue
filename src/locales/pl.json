@@ -502,6 +502,9 @@
   },
 
   "memberArea": {
+    "title": "Strefa członków",
+    "welcome": "Ta strona jest dostępna tylko dla członków.",
+    "description": "Oznacza to, że musisz być zalogowany, by wejść na tę stronę. Nie musisz posiadać żadnych innych uprawnień. Jeśli spróbujesz wejść na tę stronę będąc wylogowany, system przekieruje cię na stronę logowania.",
     "msg": {
       "mustBeLogged": {
         "title": "Niepowodzenie",

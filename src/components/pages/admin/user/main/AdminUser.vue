@@ -26,7 +26,7 @@ import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
 const userEventStore = useUserEventStore();
-const { userUpdatedTrigger, userData } = storeToRefs(userEventStore);
+const { userUpdatedTrigger, diffUserData } = storeToRefs(userEventStore);
 
 /** User table filtering form data. */
 const form: UserTableFilterForm = reactive({
@@ -152,7 +152,7 @@ const processEntry = (entry: UserTableEntry) => {
 
 /** React on user data being updated. */
 watch(userUpdatedTrigger, async () => {
-  if (userData.value.username !== null || userData.value.email !== null)
+  if (diffUserData.value.username !== null || diffUserData.value.email !== null)
     await handleReload();
 });
 

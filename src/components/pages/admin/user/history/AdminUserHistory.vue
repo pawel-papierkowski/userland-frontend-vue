@@ -5,11 +5,14 @@
  * Properties:
  * - v-model - Holds selected user.
  */
-import { reactive } from 'vue';
+import { onActivated, ref, reactive, watch } from 'vue';
+import type { Ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type {
   UserTableEntry,
   UserHistoryTableFilterForm,
@@ -21,6 +24,9 @@ import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminUserHistoryFilter.vue';
 
+const userEventStore = useUserEventStore();
+const { userUpdatedTrigger } = storeToRefs(userEventStore);
+
 const selUserRecord = defineModel<UserTableEntry | null>();
 
 const form: UserHistoryTableFilterForm = reactive({
@@ -31,6 +37,18 @@ const form: UserHistoryTableFilterForm = reactive({
   createdToAt: null,
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
+
+/** Needed for proper definition of tabRef because AdminUserTab uses generics. */
+interface AdminUserTabExpose {
+  handleReload: () => Promise<void>;
+}
+
+/** Reference to tab component. */
+const tabRef = ref<AdminUserTabExpose | null>(null);
+/** True if table should be reloaded. */
+const shouldReload: Ref<boolean> = ref(false);
+
+//
 
 /**
  * Convert form data to request data.
@@ -59,10 +77,27 @@ const processEntry = (entry: UserHistoryTableEntry) => {
     entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
   }
 };
+
+//
+
+/** When user switches to this tab. */
+onActivated(() => {
+  if (shouldReload.value) {
+    shouldReload.value = false;
+    tabRef.value?.handleReload();
+  }
+});
+
+/** React on user data being updated. */
+watch(userUpdatedTrigger, async () => {
+  // We do not want to reload history right away, but when user goes to this tab.
+  shouldReload.value = true;
+});
 </script>
 
 <template>
   <AdminUserTab
+    ref="tabRef"
     v-model="selUserRecord"
     v-model:form="form"
     :columns="userHistoryTableColumns"

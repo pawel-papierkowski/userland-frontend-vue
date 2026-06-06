@@ -13,13 +13,13 @@ export const useUserEventStore = defineStore('user-events', () => {
   /** Trigger for user data update. Increment to notify. */
   const userUpdatedTrigger = ref(0);
   /** Changed user data. Fields that weren't changed will be null. */
-  const userData: Ref<UserFullDataForm> = ref(emptyUserForm);
+  const diffUserData: Ref<UserFullDataForm> = ref(emptyUserForm);
 
   /** Notify that user data has been updated. */
   function notifyUserUpdated(diffData: UserFullDataForm) {
     userUpdatedTrigger.value++;
-    userData.value = diffData;
+    diffUserData.value = diffData;
   }
 
-  return { userUpdatedTrigger, userData, notifyUserUpdated };
+  return { userUpdatedTrigger, diffUserData, notifyUserUpdated };
 });

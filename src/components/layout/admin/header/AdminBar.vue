@@ -7,7 +7,7 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 const { t } = useI18n();
 
 const canShowUser = () => {
-  return AppLoginer.hasPermission('user_view');
+  return AppLoginer.hasPermissionsAny(['role_admin', 'user_view']);
 }
 </script>
 

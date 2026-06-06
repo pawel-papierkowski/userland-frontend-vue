@@ -1,4 +1,3 @@
-<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
 /**
  * View/edit of single, selected user.
@@ -25,9 +24,9 @@ import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 const { t } = useI18n();
 
 /** User data for form. */
-const form: UserFullDataForm = reactive(emptyUserForm);
-/** To mark which fields were actually changed. */
-const diffForm: Ref<UserFullDataForm> = ref(emptyUserForm);
+const form: UserFullDataForm = reactive({ ...emptyUserForm });
+/** Version of form just after load or update to determine differences. */
+const diffForm: Ref<UserFullDataForm> = ref({ ...emptyUserForm });
 
 /** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
@@ -51,7 +50,9 @@ const loadUserData = async () => {
   clearForm();
   const data = await resolveUserData();
   if (data === null) return null; // no user selected or failed to load user data
+
   fillFormData(data);
+  diffForm.value = { ...form }; // remember loaded state
 };
 
 /** Retrieve all available data about selected user from backend. */
@@ -82,8 +83,10 @@ const handleUserUpdate = async () => {
   const data = await saveUserData();
   if (data === null) return; // failed to update user
 
-  fillFormData(data); // Update local form.
-  AppUserEventer.notifyUserUpdated(diffForm.value);
+  fillFormData(data);
+  diffFormData();
+  if (diffForm.value.modifiedAt !== null) AppUserEventer.notifyUserUpdated(diffForm.value);
+  diffForm.value = { ...form }; // remember updated state
 }
 
 /**
@@ -134,7 +137,8 @@ const handleUserLock = async () => {
   const data = await flipLock(newLocked);
   if (data === null) return; // failed to update user
 
-  fillFormData(data); // Update local form.
+  fillFormData(data);
+  diffForm.value = { ...form }; // remember updated state
 }
 
 /**
@@ -195,32 +199,34 @@ const clearForm = () => {
  * @param data Response from endpoint.
  */
 const fillFormData = (data: UserFullDataResp) => {
-  diffForm.value = { ...emptyUserForm }; // Reset diff
-
   form.createdAt = data.createdAt;
   form.modifiedAt = data.modifiedAt;
-  updateFormField(data, 'username');
-  updateFormField(data, 'email');
+  form.username = data.username;
+  form.email = data.email;
   form.status = data.status;
-  updateFormField(data, 'locked');
-  updateFormField(data, 'lang');
+  form.locked = data.locked;
+  form.lang = data.lang;
   form.name = data.profile.name;
   form.surname = data.profile.surname;
 };
 
+/** Nullifies certain fields of diffForm that are same as form. */
+const diffFormData = () => {
+  resetDiffField('modifiedAt'); // modifiedAt === null means nothing changed at all
+  resetDiffField('username');
+  resetDiffField('email');
+  // We do not care about rest of fields.
+}
+
 /**
- * Dynamically update form data and remember which fields changed.
- * @param data Response from endpoint.
+ * Compare form and diffForm field. Unchanged field is nulled.
  * @param fieldName Name of field to update.
  */
-const updateFormField = (data: UserFullDataResp, fieldName: string) => {
-  // Cast fieldName to a valid key of the form type
-  const key = fieldName as keyof UserFullDataForm;
-  const value = (data as any)[key];
-
-  if (form[key] !== value) {
-    (form as any)[key] = value;
-    (diffForm.value as any)[key] = value;
+const resetDiffField = (fieldName: string) => {
+  const key = fieldName as keyof UserFullDataForm; // Cast fieldName to a valid key of the form type.
+  if (form[key] === diffForm.value[key]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (diffForm.value as any)[key] = null;
   }
 }
 
@@ -237,7 +243,7 @@ const isYourOwnAccount = (): boolean => {
  * @returns True if we can edit users, otherwise false.
  */
 const canEditUsers = (): boolean => {
-  return AppLoginer.hasPermission('user_edit');
+  return AppLoginer.hasPermissionsAny(['role_admin', 'user_edit'])
 }
 
 /**

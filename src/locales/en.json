@@ -502,6 +502,9 @@
   },
 
   "memberArea": {
+    "title": "Member Area",
+    "welcome": "This page is available only for members.",
+    "description": "This means that you must be logged in to have access to this page. You do not have to have any other permissions. If you try to enter this page while not being logged in, system will redirect you to login page.",
     "msg": {
       "mustBeLogged": {
         "title": "Failure",

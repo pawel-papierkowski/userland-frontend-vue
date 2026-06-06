@@ -84,6 +84,11 @@ router.beforeEach((to) => {
   }
 
   if (isAuthenticated) {
+    // Is authenicated and on login page?
+    if (to.name?.toString() === 'login') {
+      return { name: 'home' }; // Redirects to home page.
+    }
+
     // Is authenticated, but not authorized?
     if (!checkAccessPermissions(to.meta)) {
       return { name: 'home' }; // Redirects to the normal login route.
