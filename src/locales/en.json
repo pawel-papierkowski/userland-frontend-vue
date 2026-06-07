@@ -492,12 +492,17 @@
   },
 
   "homeArea": {
-    "title": "UserLand",
     "welcome": "Welcome to demonstration project <b>UserLand</b>!",
     "description": "This portfolio project demonstrates basic knowledge about backend and frontend programming (fullstack).",
     "techstack": {
       "backend": "Backend tech stack:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
       "frontend": "Frontend tech stack:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
+    },
+    "features": {
+      "": ""
+    },
+    "components": {
+      "": ""
     }
   },
 

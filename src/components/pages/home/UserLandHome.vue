@@ -1,25 +1,24 @@
 <script setup lang="ts">
 /** This is home area. Everyone can access it. */
-import { useI18n } from 'vue-i18n';
+import SlideShow from '@/components/base/layout/SlideShow.vue';
 
-const { t } = useI18n();
+import HomeDescr from '@/components/pages/home/HomeDescr.vue';
+import HomeTechStack from '@/components/pages/home/HomeTechStack.vue';
+import HomeFeatures from '@/components/pages/home/HomeFeatures.vue';
+import HomeComponents from '@/components/pages/home/HomeComponents.vue';
+
 </script>
 
 <template>
   <article>
-    <h1>{{ t('homeArea.title') }}</h1>
-    <p v-html="t('homeArea.welcome')" />
-    <p v-html="t('homeArea.description')" />
-    <div class="items-horizontal">
-      <p class="wide" v-html="t('homeArea.techstack.backend')" />
-      <p class="wide" v-html="t('homeArea.techstack.frontend')" />
-    </div>
+    <SlideShow>
+    </SlideShow>
+
+    <HomeDescr />
+    <HomeTechStack />
+    <HomeFeatures />
+    <HomeComponents />
   </article>
 </template>
 
-<style scoped>
-
-.wide {
-  width: 100%;
-}
-</style>
+<style scoped></style>

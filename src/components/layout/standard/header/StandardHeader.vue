@@ -2,7 +2,7 @@
 /** Header. */
 import StandardMenu from '@/components/layout/standard/header/StandardMenu.vue';
 import StandardBar from '@/components/layout/standard/header/StandardBar.vue';
-import UserLandLang from '@/components/common/layout/UserLandLang.vue';
+import UserLandLang from '@/components/common/other/UserLandLang.vue';
 </script>
 
 <template>

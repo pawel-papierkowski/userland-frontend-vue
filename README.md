@@ -28,7 +28,7 @@ This project fully manages user on frontend side.
 
 ### Features
 
-Frontend is split into two parts: **user website** and **admin panel**. Each one is separate Single Page Application (SPA).
+Frontend is split into two parts: **user website** and **admin panel**. Website as a whole is Single Page Application (SPA).
 
 - **User website**: Available to everyone.
   - **Main page**: This is what you see when you enter website. Looks differently depending on if you are logged in or not.
@@ -52,6 +52,18 @@ Frontend is split into two parts: **user website** and **admin panel**. Each one
 - **Other features**
   - Multiple languages support
   - Nice error messages from backend endpoints leveraging Problem Details
+
+### Custom components
+
+- General purpose components:
+  - **ComboBox**: HTML equivalent (`<select>` and `<options>`) is very CSS-unfriendly - very few things can be changed.
+  - **DateTimePicker**: Nice picker for date/time selection.
+  - **SlideShow**: Shows assigned components in rotation.
+- Dedicated components:
+  - **MessageContainer** and **MessageBox**: Shows timed messages on side of screen that hide themselves after some time.
+  - **TableWrapper**, **TablePage** and **TablePaginer**: For showing and handling tables. Used in administration panel.
+- Decorative components:
+  - **SpinnerTorus**: To show frontend being busy with something (usually communication with backend).
 
 ## Environment
 
@@ -79,7 +91,7 @@ Stop server via `Ctrl+C`.
 
 ## Deployment
 
-Done using GitHub actions.
+Done using **GitHub Actions**. See `.github/workflows/deploy.yml`.
 
 
 ## Tech stack
@@ -89,8 +101,12 @@ Done using GitHub actions.
 
 ### Additional packages
 
-- **Cypress** as end-to-end testing package.
+Besides Vue itself, we use additional libraries.
 - General libraries
   - **vueuse/core** for useful utilities
   - **vue-i18n** for translations
   - **axios** for HTTP client
+  - **jwt-decode** for easier handling of JWT
+
+- Development only
+  - **Cypress** as end-to-end testing package.
