@@ -19,7 +19,7 @@ Features:
 
 Properties:
 - v-model - Variable holding selected value.
-- :options - Array of options, will be shown.
+- :options - Array of options, will be shown after user clicks on component.
 - disabled - If true, acts as disabled component. Optional, default is false.
 - langPrefix - Prefix, used for auto-translating entries in dropdown list.
 - placeholder - Translated text to use if nothing is selected.
@@ -34,19 +34,24 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const props = defineProps({
+  /** Variable holding selected value. */
   modelValue: [String, null], // null means nothing is selected
-  disabled: {
-    type: Boolean,
-    default: false
-  },
+  /** Array of options, will be shown after user clicks on component. */
   options: {
     type: Array<string|null>,
     default: () => []
   },
+  /** If true, acts as disabled component. Optional, default is false. */
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  /** Prefix, used for auto-translating entries in dropdown list. */
   langPrefix: {
     type: String,
     default: ''
   },
+  /** Translated text to use if nothing is selected. */
   placeholder: {
     type: String,
     default: 'tags.combobox.placeholder'

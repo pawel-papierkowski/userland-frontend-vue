@@ -28,10 +28,15 @@ const { t } = useI18n();
 const currDateTime = defineModel<Date | null>({ required: true }); // Date and time. Null means it is unset.
 
 const props = withDefaults(defineProps<{
+  /** Used for identification in form. */
   ident: string;
+  /** Mode of operation. Optional, default is datetime. */
   mode?: 'date' | 'time' | 'datetime';
+  /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
   disabled?: boolean,
+  /** If not null, defines earliest allowed date. Optional, default is null. */
   dateTimeMin?: Date|null;
+  /** If not null, defines latest allowed date. Optional, default is null. */
   dateTimeMax?: Date|null;
 }>(), {
   mode: 'datetime',
