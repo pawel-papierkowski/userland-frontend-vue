@@ -9,36 +9,36 @@
 </script>
 
 <template>
-  <div class="dropdown" ref="dropdown">
+  <div class="dropdown-wrapper" ref="dropdown">
     <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="nav-major">
       <slot name="trigger" />
     </div>
 
-    <div v-if="isOpen" class="dropdown-wrap" @click="isOpen = false">
+    <div v-if="isOpen" class="dropdown-slot" @click="isOpen = false">
       <slot name="content" />
     </div>
   </div>
 </template>
 
 <style scoped>
-  .dropdown {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-    user-select: none;
-  }
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
 
-  .dropdown-wrap {
-    position: absolute;
+.dropdown-slot {
+  position: absolute;
 
-    top: 100%;
-    left: 0;
+  top: 100%;
+  left: 0;
 
-    background: var(--header-background);
-    border: var(--header-border);
-    box-shadow: var(--header-box-shadow);
+  background: var(--dropdown-background);
+  border: var(--dropdown-border);
+  box-shadow: var(--dropdown-box-shadow);
 
-    min-width: 200px;
-    z-index: 100;
-  }
+  min-width: 200px;
+  z-index: 100;
+}
 </style>

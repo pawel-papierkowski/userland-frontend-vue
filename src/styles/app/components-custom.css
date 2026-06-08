@@ -1,0 +1,12 @@
+/*** Styles specific to this application: custom components. ***/
+
+/* Note: most custom components has classes in their scoped style section. */
+
+/* Dropdown menu. */
+
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  padding: 1px 4px;
+}
+

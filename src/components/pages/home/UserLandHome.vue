@@ -12,12 +12,19 @@ import HomeComponents from '@/components/pages/home/HomeComponents.vue';
 <template>
   <article>
     <SlideShow>
+      <template #descr>
+        <HomeDescr />
+      </template>
+      <template #techStack>
+        <HomeTechStack />
+      </template>
+      <template #features>
+        <HomeFeatures />
+      </template>
+      <template #components>
+        <HomeComponents />
+      </template>
     </SlideShow>
-
-    <HomeDescr />
-    <HomeTechStack />
-    <HomeFeatures />
-    <HomeComponents />
   </article>
 </template>
 

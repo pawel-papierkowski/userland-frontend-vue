@@ -21,6 +21,8 @@
 
 /* App-specific styles. */
 @import url("app/app.css");
+@import url("app/components-custom.css");
+@import url("app/components.css");
 @import url("app/form.css");
 @import url("app/layout.css");
 @import url("app/table.css");

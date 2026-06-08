@@ -1,6 +1,19 @@
 /*** Variables: custom components. ***/
 
 :root {
+  /** Custom layout components. **/
+
+  /* DropdownMenu specific vars. */
+
+  --dropdown-background: var(--header-background);
+  --dropdown-border: var(--header-border);
+  --dropdown-box-shadow: var(--header-box-shadow);
+
+  /* SlideShow specific vars. */
+  
+
+  /** Custom input components. **/
+
   /* ComboBox specific vars. */
   --combobox-color: var(--input-color);
   --combobox-background: var(--input-background);

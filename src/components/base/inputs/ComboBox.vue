@@ -83,12 +83,12 @@ const selectOption = (option: string|null) => {
 
 <template>
   <div class="combobox" :class="{ disabled: disabled }" ref="combobox" tabindex="0" @blur="isOpen = false">
-    <div class="selected" @click="openOptions()">
-      <span class="selected-text">{{ selectedOption ? t(langPrefix+'.'+selectedOption) : t(placeholder) }}</span>
-      <span class="arrow" :class="arrowClass"></span>
+    <div class="combobox-selected" @click="openOptions()">
+      <span class="combobox-selected-text">{{ selectedOption ? t(langPrefix+'.'+selectedOption) : t(placeholder) }}</span>
+      <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
-    <div class="options" v-show="isOpen">
-      <div v-for="(option, index) in options" :key="index" class="option"
+    <div class="combobox-options" v-show="isOpen">
+      <div v-for="(option, index) in options" :key="index" class="combobox-option"
         @click="selectOption(option)">
         {{ t(langPrefix+'.'+option) }}
       </div>
@@ -125,7 +125,7 @@ const selectOption = (option: string|null) => {
 
 /**/
 
-.selected {
+.combobox-selected {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,12 +134,12 @@ const selectOption = (option: string|null) => {
   cursor: pointer;
 }
 
-.selected-text {
+.combobox-selected-text {
   flex: 1;
 }
 
 /* Down arrow. */
-.arrow {
+.combobox-arrow {
   width: 0;
   height: 0;
   border-left: 5px solid transparent;
@@ -148,13 +148,13 @@ const selectOption = (option: string|null) => {
   transition: transform 0.2s;
 }
 
-.arrow.open {
+.combobox-arrow.open {
   transform: rotate(180deg);
 }
 
 /**/
 
-.options {
+.combobox-options {
   position: absolute;
   top: 100%;
   left: 0;
@@ -173,12 +173,12 @@ const selectOption = (option: string|null) => {
   z-index: 10010;
 }
 
-.option {
+.combobox-option {
   padding: 1px;
   cursor: pointer;
 }
 
-.option:hover {
+.combobox-option:hover {
   color: var(--combobox-option-text-hover);
   background-color: var(--combobox-option-background-hover);
 }

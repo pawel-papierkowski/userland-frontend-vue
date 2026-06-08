@@ -23,7 +23,7 @@ const handleLogout = async () => {
     </template>
 
     <template #content>
-      <div class="dropdown-menu">
+      <div class="dropdown-content">
         <router-link class="nav-major" :to="{ name: 'admin-profile' }">{{ t('header.user.profile') }}</router-link>
         <hr />
         <div class="nav-major" @click="handleLogout()">{{ t('header.user.logout') }}</div>

@@ -2,9 +2,10 @@
 
 :root {
   /* Colors. */
-  --color-primary: #3498db;
   --color-text: #111111;
+  --color-text-primary: #3498db;
   --color-background: #ffffff;
+  --color-background-primary: #ffeebb;
 
   /* Spacings. */
   --spacing-xxs: 2px;

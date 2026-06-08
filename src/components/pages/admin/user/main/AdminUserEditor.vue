@@ -87,7 +87,7 @@ const resolveClass = (tab: TabData) => {
 }
 
 .tab-entry.active {
-  border-bottom: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-text-primary);
   font-weight: bold;
 }
 

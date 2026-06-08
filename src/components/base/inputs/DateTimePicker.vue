@@ -366,7 +366,7 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
   font-weight: bold;
   font-size: 0.8em;
   padding-bottom: var(--spacing-xs);
-  color: var(--color-primary);
+  color: var(--color-text-primary);
 }
 
 .day {

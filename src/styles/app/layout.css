@@ -113,14 +113,6 @@
   text-shadow: var(--nav-minor-hover-text-shadow);
 }
 
-/* Dropdown menu. */
-
-.dropdown-menu {
-  display: flex;
-  flex-direction: column;
-  padding: 1px 4px;
-}
-
 /*** Local layout. ***/
 
 /* Layout for items. */
