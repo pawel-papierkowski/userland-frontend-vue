@@ -86,6 +86,11 @@ const messageStore = useMessageStore();
 
 .msg-list-leave-active {
   transition: all 0.3s ease-in;
+  /* Ensure all messages below slids up (instead of jumping up) when current message leaves. */
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  width: auto;
 }
 
 .msg-list-move {

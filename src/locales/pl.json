@@ -493,16 +493,43 @@
 
   "homeArea": {
     "welcome": "Witamy w projekcie demonstracyjnym <b>UserLand</b>!",
-    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack).",
+    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz README.md w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itp.",
     "techstack": {
+      "title": "Technikalia",
       "backend": "Stos technologiczny backendu:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
       "frontend": "Stos technologiczny frontendu:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
     },
     "features": {
-      "": ""
+      "title": "Cechy",
+      "website": {
+        "descr": "<b>Główna strona</b> jest dostępna dla każdego. Możesz odwiedzić:",
+        "home": "Stronę domową dostępną dla wszystkich - jesteś tutaj.",
+        "member": "Strefę członków dostępną tylko dla zalogowanych użytkowników.",
+        "test": "Strefę testów pokazującą mniejsze komponenty.",
+        "debug": "Strefę debugu pokazującą dane JWT i przyciski do wywołania pewnych endpointów backendu."
+      },
+      "user": {
+        "descr": "<b>Użytkownik</b> jest is main focus of this project. Możesz:",
+        "register": "Zarejestrować konto użytkownika.",
+        "login": "Zalogować/wylogować się.",
+        "edit": "Edytować profil użytkownika.",
+        "email": "Zmienić email.",
+        "reset": "Zresetować hasło.",
+        "delete": "Usunąć konto użytkownika."
+      },
+      "admin": {
+        "descr": "<b>Panel administracyjny</b>, na który można wejść tylko będąc użytkownikiem z odpowiednimi uprawnieniami. Możesz:",
+        "user": "Przeglądać tabelę użytkowników, zobaczyć szczegóły wybranego użytkownika (włącznie z pod-tabelami jak historia) oraz edytować dane użytkownika."
+      }
     },
     "components": {
-      "": ""
+      "title": "Komponenty",
+      "ComboBox":"<code>ComboBox</code> jest komponentem zastępującym <code>Select</code> i <code>Options</code>.",
+      "DateTimePicker":"<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
+      "SlideShow":"Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
+      "MessageContainer":"<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",
+      "Table":"Rodzina komponentów <code>Table*</code> obsługuje pokazywanie i edycję tabeli. Używane w panelu administracyjnym.",
+      "SpinnerTorus":"<code>SpinnerTorus</code> sygnalizuje aktywność, gdy czekasz, aż frontend zakończy operację, taką jak np. wywołanie backendu."
     }
   },
 

@@ -6,6 +6,7 @@ const { t } = useI18n();
 </script>
 
 <template>
+  <h4 v-html="t('homeArea.techstack.title')" />
   <div class="items-horizontal">
     <p class="wide" v-html="t('homeArea.techstack.backend')" />
     <p class="wide" v-html="t('homeArea.techstack.frontend')" />

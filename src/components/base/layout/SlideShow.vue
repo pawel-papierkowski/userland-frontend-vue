@@ -127,13 +127,17 @@ onUnmounted(() => {
   <div class="slideshow-wrapper" @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()">
     <div class="slideshow-selection">
       <!-- Loop through all slot names passed to this component. -->
-      <div v-for="slotName in activeSlots" :key="slotName" class="slideshow-selection-entry">
-        <div @click="selectSlot(slotName)" class="slideshow-entry" :class="getEntryClass(slotName)"></div>
+      <div v-for="slotName in activeSlots" :key="slotName" class="slideshow-selection-entry" @click="selectSlot(slotName)">
+        <div class="slideshow-entry" :class="getEntryClass(slotName)"></div>
       </div>
     </div>
 
     <div class="slideshow-slot-section">
-      <slot :name="selectedSlot" />
+      <Transition name="slide" mode="out-in">
+        <div :key="selectedSlot" class="slideshow-slide">
+          <slot :name="selectedSlot" />
+        </div>
+      </Transition>
     </div>
   </div>
 </template>
@@ -180,5 +184,26 @@ onUnmounted(() => {
 .slideshow-slot-section {
   margin: var(--spacing-xs);
   padding: var(--spacing-sm);
+  overflow: hidden; /* Prevents layout overflow during translation */
+}
+
+.slideshow-slide {
+  width: 100%;
+}
+
+/* Slide/Fade Transition */
+.slide-enter-active,
+.slide-leave-active {
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
 }
 </style>

@@ -38,7 +38,8 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
   - **Account deletion**: From link in mail. Shows warning about irreversibility of this action and button to confirm account deletion.
   - **Email change**: From link in mail. Shows info about new email and button to confirm change.
   - **Members-only area**: Available only after logging in, though you do not need any special permissions. If you are unlogged, redirects to main page.
-  - **Test area**: Contains various buttons that generate messages based on various things. Many of them calls `/api/check` endpoints.
+  - **Test area**: Contains various components to show them. Also has buttons that generate messages, spinner etc.
+  - **Debug area**: Contains various debug information. You also can call backend.
 - **Administration panel**: If unlogged, only page available is Login page. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
   - **Login**: works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
   - **Main page**.
@@ -92,7 +93,6 @@ Stop server via `Ctrl+C`.
 ## Deployment
 
 Done using **GitHub Actions**. See `.github/workflows/deploy.yml`.
-
 
 ## Tech stack
 
