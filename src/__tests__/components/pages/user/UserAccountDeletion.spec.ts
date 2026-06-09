@@ -12,7 +12,8 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
-const jwt = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+const jwt =
+  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -24,7 +25,7 @@ vi.mock('@/services/features/api-users', () => ({
 const mockPush = vi.fn<(to: any) => void>();
 const mockRoute = {
   query: {
-    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
+    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
   },
 };
 
@@ -67,18 +68,20 @@ describe('UserAccountDeletion', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.accountDeleteConfirm).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
-    }));
+    expect(backendApiUser.accountDeleteConfirm).toHaveBeenCalledWith(
+      expect.objectContaining({
+        token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(2);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("User account was deleted.");
+    expect(messageStore.messages[0].title).toBe('Success');
+    expect(messageStore.messages[0].content).toBe('User account was deleted.');
     expect(messageStore.messages[1].level).toBe(EnMessageLevel.Info);
-    expect(messageStore.messages[1].title).toBe("User logged out successfully");
-    expect(messageStore.messages[1].content).toBe("");
+    expect(messageStore.messages[1].title).toBe('User logged out successfully');
+    expect(messageStore.messages[1].content).toBe('');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -94,14 +97,14 @@ describe('UserAccountDeletion', () => {
       response: {
         status: 404,
         data: {
-          "detail": "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-          "instance": "/api/users/password/confirm",
-          "status": 404,
-          "title": "User token is missing.",
-          "type": "https://api.userland.org/errors/user/token/missing",
-          "errCode": "user_0012"
-        }
-      }
+          detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
+          instance: '/api/users/password/confirm',
+          status: 404,
+          title: 'User token is missing.',
+          type: 'https://api.userland.org/errors/user/token/missing',
+          errCode: 'user_0011',
+        },
+      },
     };
     vi.mocked(backendApiUser.accountDeleteConfirm).mockRejectedValue(errorResponse);
 
@@ -119,8 +122,8 @@ describe('UserAccountDeletion', () => {
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("Token is missing.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe('User token is missing.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -144,8 +147,10 @@ describe('UserAccountDeletion', () => {
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("You must be logged in to delete user account. Log in, then use link from email again.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe(
+      'You must be logged in to delete user account. Log in, then use link from email again.',
+    );
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
@@ -171,8 +176,8 @@ describe('UserAccountDeletion', () => {
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe("Invalid token");
-    expect(messageStore.messages[0].content).toBe("No token provided or it is malformed.");
+    expect(messageStore.messages[0].title).toBe('Invalid token');
+    expect(messageStore.messages[0].content).toBe('No token provided or it is malformed.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

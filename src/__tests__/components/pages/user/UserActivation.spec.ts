@@ -21,7 +21,7 @@ vi.mock('@/services/features/api-users', () => ({
 const mockPush = vi.fn<(to: any) => void>();
 const mockRoute = {
   query: {
-    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
+    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
   },
 };
 
@@ -59,16 +59,18 @@ describe('UserActivation', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
-      frontend: 'VUE'
-    }));
+    expect(backendApiUser.activate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
+        frontend: 'VUE',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("User activated successfully");
-    expect(messageStore.messages[0].content).toBe("You can now log in.");
+    expect(messageStore.messages[0].title).toBe('User activated successfully');
+    expect(messageStore.messages[0].content).toBe('You can now log in.');
 
     // Assert: verify redirection to login page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
@@ -93,8 +95,8 @@ describe('UserActivation', () => {
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe("Invalid token");
-    expect(messageStore.messages[0].content).toBe("No token provided or it is malformed.");
+    expect(messageStore.messages[0].title).toBe('Invalid token');
+    expect(messageStore.messages[0].content).toBe('No token provided or it is malformed.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -108,13 +110,13 @@ describe('UserActivation', () => {
         status: 404,
         data: {
           detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-          instance: "/api/users/activate",
+          instance: '/api/users/activate',
           status: 404,
-          title: "User token is missing.",
-          type: "https://api.userland.org/errors/user/token/missing",
-          errCode: "user_0012"
-        }
-      }
+          title: 'User token is missing.',
+          type: 'https://api.userland.org/errors/user/token/missing',
+          errCode: 'user_0011',
+        },
+      },
     };
     vi.mocked(backendApiUser.activate).mockRejectedValue(errorResponse);
 
@@ -126,16 +128,18 @@ describe('UserActivation', () => {
     await flushPromises();
 
     // Assert: verify API call.
-    expect(backendApiUser.activate).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
-      frontend: 'VUE'
-    }));
+    expect(backendApiUser.activate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
+        frontend: 'VUE',
+      }),
+    );
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("Token is missing.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe('User token is missing.');
 
     // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();

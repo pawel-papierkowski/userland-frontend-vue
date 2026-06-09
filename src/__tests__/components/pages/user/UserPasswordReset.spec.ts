@@ -21,12 +21,12 @@ vi.mock('@/services/features/api-users', () => ({
 const mockPush = vi.fn<(to: any) => void>();
 const mockRoute = {
   query: {
-    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs'
+    token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
   },
 };
 
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: mockPush, }),
+  useRouter: () => ({ push: mockPush }),
   useRoute: () => mockRoute,
 }));
 
@@ -64,16 +64,18 @@ describe('UserPasswordReset', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.passwordResetConfirm).toHaveBeenCalledWith(expect.objectContaining({
-      token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
-      password: 'n3wP@s5w0rD'
-    }));
+    expect(backendApiUser.passwordResetConfirm).toHaveBeenCalledWith(
+      expect.objectContaining({
+        token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
+        password: 'n3wP@s5w0rD',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("New password was set successfully.");
+    expect(messageStore.messages[0].title).toBe('Success');
+    expect(messageStore.messages[0].content).toBe('New password was set successfully.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -86,14 +88,14 @@ describe('UserPasswordReset', () => {
       response: {
         status: 404,
         data: {
-          "detail": "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-          "instance": "/api/users/password/confirm",
-          "status": 404,
-          "title": "User token is missing.",
-          "type": "https://api.userland.org/errors/user/token/missing",
-          "errCode": "user_0012"
-        }
-      }
+          detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
+          instance: '/api/users/password/confirm',
+          status: 404,
+          title: 'User token is missing.',
+          type: 'https://api.userland.org/errors/user/token/missing',
+          errCode: 'user_0011',
+        },
+      },
     };
     vi.mocked(backendApiUser.passwordResetConfirm).mockRejectedValue(errorResponse);
 
@@ -115,8 +117,8 @@ describe('UserPasswordReset', () => {
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("Token is missing.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe('User token is missing.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -138,7 +140,7 @@ describe('UserPasswordReset', () => {
     // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userPasswordReset.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(2);
-    errorMessages.forEach(msg => {
+    errorMessages.forEach((msg) => {
       expect(msg.text()).not.toBe('');
     });
 
@@ -194,8 +196,8 @@ describe('UserPasswordReset', () => {
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe("Invalid token");
-    expect(messageStore.messages[0].content).toBe("No token provided or it is malformed.");
+    expect(messageStore.messages[0].title).toBe('Invalid token');
+    expect(messageStore.messages[0].content).toBe('No token provided or it is malformed.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

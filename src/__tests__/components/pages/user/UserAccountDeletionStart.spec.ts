@@ -105,7 +105,7 @@ describe('UserAccountDeletionStart', () => {
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("Token already exists.");
+    expect(messageStore.messages[0].content).toBe("User token already exists.");
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();

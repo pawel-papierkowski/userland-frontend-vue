@@ -35,6 +35,6 @@ async function createWrapper() {
 describe('App', () => {
   it('mounts renders properly', async () => {
     const wrapperApp = await createWrapper();
-    expect(wrapperApp.text()).toContain('HOME PLACEHOLDER');
+    expect(wrapperApp.text()).toContain('© 2026 Paweł Papierkowski');
   });
 });
