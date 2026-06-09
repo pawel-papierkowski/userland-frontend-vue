@@ -57,11 +57,25 @@
   justify-self: start;
 }
 
+/******************/
+/*** Semi-wide form. ***/
+
+.form-semiwide {
+  min-width: 50%;
+  margin: 0 auto;
+  padding: var(--form-padding);
+
+  background: var(--form-background);
+  border: var(--form-border);
+  border-radius: var(--form-border-radius);
+}
+
 /************************/
 /*** Standalone form. ***/
 
 .form-alone {
-  width: var(--form-alone-width);
+  min-width: var(--form-alone-width);
+  max-width: 30%;
   margin: 0 auto;
   padding: var(--form-alone-padding);
 

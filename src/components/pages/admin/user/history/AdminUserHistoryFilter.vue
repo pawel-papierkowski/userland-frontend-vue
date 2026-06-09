@@ -15,7 +15,7 @@ import type { UserHistoryTableFilterForm } from '@/code/data/features/user/admin
 import { enUserHistoryWho, enUserHistoryWhat } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
-import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
+import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
 
 const { t } = useI18n();
 
@@ -39,7 +39,7 @@ const emit = defineEmits(['reload']);
  */
 const isBtnDisabled = () => {
   return props.isBusy || props.disabled;
-}
+};
 </script>
 
 <template>

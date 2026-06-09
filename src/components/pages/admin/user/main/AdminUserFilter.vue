@@ -14,7 +14,7 @@ import type { UserTableFilterForm } from '@/code/data/features/user/admin-user.t
 import { enUserStatus } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
-import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
+import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
 
 const { t } = useI18n();
 

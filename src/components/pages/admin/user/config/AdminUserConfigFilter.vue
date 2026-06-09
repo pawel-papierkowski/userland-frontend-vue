@@ -13,7 +13,7 @@ import { useI18n } from 'vue-i18n';
 
 import type { UserConfigTableFilterForm } from '@/code/data/features/user/admin-user.ts';
 
-import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
+import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
 
 const { t } = useI18n();
 
@@ -37,7 +37,7 @@ const emit = defineEmits(['reload']);
  */
 const isBtnDisabled = () => {
   return props.isBusy || props.disabled;
-}
+};
 </script>
 
 <template>

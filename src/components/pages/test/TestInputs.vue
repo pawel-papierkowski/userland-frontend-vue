@@ -7,7 +7,7 @@ import { enTestComboBox } from '@/code/data/other/test-area.ts';
 import type { TestAreaInputForm } from '@/code/data/other/test-area.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
-import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
+import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
 
 const { t } = useI18n();
 
@@ -16,14 +16,13 @@ const form: Ref<TestAreaInputForm> = ref({
   comboBox: null,
   dateTime: null,
   date: null,
-  time: null
+  time: null,
 });
-
 </script>
 
 <template>
   <div class="testArea-wrapper">
-    <div class="form-alone">
+    <div class="form-semiwide">
       <div class="form-subform">
         <label for="inputText">{{ t('testArea.inputs.inputText') }}:</label>
         <input id="inputText" type="text" v-model="form.inputText" autocomplete="off" />
@@ -37,23 +36,11 @@ const form: Ref<TestAreaInputForm> = ref({
         />
 
         <label for="dateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
-        <DateTimePicker
-          v-model="form.dateTime"
-          ident="dateTimePicker"
-          mode="datetime"
-        />
+        <DateTimePicker v-model="form.dateTime" ident="dateTimePicker" mode="datetime" />
         <label for="datePicker">{{ t('testArea.inputs.datePicker') }}:</label>
-        <DateTimePicker
-          v-model="form.date"
-          ident="datePicker"
-          mode="date"
-        />
+        <DateTimePicker v-model="form.date" ident="datePicker" mode="date" />
         <label for="timePicker">{{ t('testArea.inputs.timePicker') }}:</label>
-        <DateTimePicker
-          v-model="form.time"
-          ident="timePicker"
-          mode="time"
-        />
+        <DateTimePicker v-model="form.time" ident="timePicker" mode="time" />
       </div>
     </div>
   </div>

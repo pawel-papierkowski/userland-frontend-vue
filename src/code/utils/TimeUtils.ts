@@ -72,6 +72,19 @@ export class TimeUtils {
   }
 
   /**
+   * Format time.
+   * @param date Date. Can be null.
+   * @returns Formatted time as string. If null, will return empty string.
+   */
+  public static formatTime(date: Date | null): string {
+    if (!date) return '';
+
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minute = date.getMinutes().toString().padStart(2, '0');
+    return `${hour}:${minute}`;
+  }
+
+  /**
    * Get how many days are present in given year and month.
    * @param year Year.
    * @param month Month.

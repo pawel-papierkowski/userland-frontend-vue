@@ -834,7 +834,10 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "RRRR-MM-DD",
+    "placeholder": {
+      "date": "RRRR-MM-DD",
+      "time": "gg:mm"
+    },
     "dayOfWeek": {
       "mon": "Pon",
       "tue": "Wt",

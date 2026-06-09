@@ -834,7 +834,10 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "YYYY-MM-DD",
+    "placeholder": {
+      "date": "YYYY-MM-DD",
+      "time": "hh:mm"
+    },
     "dayOfWeek": {
       "mon": "Mon",
       "tue": "Tue",

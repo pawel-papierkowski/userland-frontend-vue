@@ -1,20 +1,12 @@
 <script setup lang="ts">
-/** This is date&time picker. Uses Date class for both input and output.
- *
- * Features:
- * - Can pick date, time or both date and time.
- * - Accept null (not set) value.
- * - Input is not editable.
- *
- * TODO: Right now it handles only date.
+/** Dedicated date picker. Do not use it directly. Use DateTimePicker with attribute mode="date".
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset.
  *
  * Properties:
  * - ident - Used for identification in form.
- * - mode - Mode of operation. Optional, default is datetime.
- * - disabled - If true, acts as disabled component (calendar panel does not show). Optional, default is false.
+ * - disabled - If true, acts as disabled component. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
@@ -32,8 +24,6 @@ const currDateTime = defineModel<Date | null>({ required: true });
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
   ident: string;
-  /** Mode of operation. Optional, default is datetime. */
-  mode?: 'date' | 'time' | 'datetime';
   /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
   disabled?: boolean,
   /** If not null, defines earliest allowed date. Optional, default is null. */
@@ -41,25 +31,25 @@ const props = withDefaults(defineProps<{
   /** If not null, defines latest allowed date. Optional, default is null. */
   dateTimeMax?: Date|null;
 }>(), {
-  mode: 'datetime',
   disabled: false,
   dateTimeMin: null,
   dateTimeMax: null
 });
 
 const isCalendarVisible = ref(false);
-const pickerRef = ref(null);
 const calendarContainerRef = ref<HTMLElement | null>(null);
-const viewDate = ref(new Date()); // Date used for viewing month/year in picker.
+const viewDate = ref(new Date()); // Date used for viewing month/year in calendar.
 
 const containerStyle = ref({
   left: '0',
   right: 'auto'
 });
 
-onClickOutside(pickerRef, () => {
-  isCalendarVisible.value = false;
+onClickOutside(calendarContainerRef, () => {
+  hidePanel();
 });
+
+// COMPUTATIONS.
 
 /** Compute currently displayed date value in date input. */
 const displayDateValue = computed(() => {
@@ -67,9 +57,9 @@ const displayDateValue = computed(() => {
   if (!formattedDate) return null;
   return '📅 ' + formattedDate;
 });
-/** Compute placeholder value. */
+/** Compute placeholder value for date input. */
 const placeholderDateValue = computed(() => {
-  return '📅 ' + t('dateTimePicker.placeholder');
+  return '📅 ' + t('dateTimePicker.placeholder.date');
 });
 
 /** Compute current month name. */
@@ -80,7 +70,7 @@ const currentMonthName = computed(() => {
 
 /** Compute current year. */
 const currentYear = computed(() => viewDate.value.getFullYear());
-
+/** Shortcuts for days of week used in lang keys. */
 const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 /** Recalculate days shown in calendar. */
@@ -129,13 +119,19 @@ const calendarDays = computed(() => {
   return days;
 });
 
-/** If you disable picker, calendar panel will close. */
+// WATCHES
+
+/** If you disable picker, panel will close. */
 watch(() => props.disabled, () => {
-  if (props.disabled) isCalendarVisible.value = false;
+  if (props.disabled) {
+    isCalendarVisible.value = false;
+  }
 });
 
-/** Toggle visibility of picker panel. */
-const toggleVisibility = async () => {
+// FUNCTIONS.
+
+/** Toggle visibility of date picker panel. */
+const toggleDatePickerVisibility = async () => {
   if (isCalendarVisible.value) {
     isCalendarVisible.value = false;
   } else {
@@ -215,11 +211,11 @@ const canPick = (date: Date): boolean => {
  * Find out class of day cell in calendar grid.
  * @param pickableDay Date.
  */
-const resolveClass = (pickableDay: DatePick) => {
+const resolveDayClass = (pickableDay: DatePick) => {
   return {
     'not-current': !pickableDay.isCurrentMonth,
     'today': isToday(pickableDay),
-    'selected': isSelected(pickableDay),
+    'selected': isDaySelected(pickableDay),
     'disabled': isDayDisabled(pickableDay)
   }
 };
@@ -241,7 +237,7 @@ const isToday = (pickableDay: DatePick): boolean => {
  * Check if given date is selected.
  * @param pickableDay Date.
  */
-const isSelected = (pickableDay: DatePick): boolean => {
+const isDaySelected = (pickableDay: DatePick): boolean => {
   if (!currDateTime.value) return false;
   return (
     pickableDay.day === currDateTime.value.getDate() &&
@@ -258,23 +254,35 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
   const givenDay = pickableDayToDate(pickableDay);
   return !canPick(givenDay);
 };
+
+//
+
+/** Hide panel. */
+const hidePanel = () => {
+  isCalendarVisible.value = false;
+};
+
+defineExpose({
+  hidePanel
+});
 </script>
 
 <template>
-  <div class="picker" ref="pickerRef">
+  <div class="picker">
     <input
-      :id="ident"
-      :data-testid="ident"
+      :id="ident+'_date'"
+      :data-testid="ident+'_date'"
       type="text"
-      class="picker-input"
+      class="picker-input-date"
       :value="displayDateValue"
-      readonly
-      :disabled="disabled"
-      autocomplete="off"
-      @click="toggleVisibility"
       :placeholder="placeholderDateValue"
+      :disabled="disabled"
+      readonly
+      autocomplete="off"
+      @click="toggleDatePickerVisibility"
     />
 
+    <!-- Date picker panel. -->
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
       <div class="calendar-header">
         <div class="header-nav">
@@ -297,7 +305,7 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
           v-for="(pickableDay, index) in calendarDays"
           :key="index"
           class="day"
-          :class="resolveClass(pickableDay)"
+          :class="resolveDayClass(pickableDay)"
           @click="selectDay(pickableDay)"
         >
           {{ pickableDay.day }}
@@ -305,39 +313,44 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped>
 .picker {
   display: inline-block;
   position: relative;
-  width: var(--datetimepicker-width);
+  width: var(--datetimepicker-date-width);
   user-select: none;
 }
 
-.picker-input {
-  width: var(--datetimepicker-width);
+/** Date input field. **/
+
+.picker-input-date {
+  width: var(--datetimepicker-date-width);
   cursor: pointer;
   caret-color: transparent;
   user-select: none;
 }
-.picker-input::selection {
+.picker-input-date::selection {
   background: transparent; /** Prevents highlight when you double-click. */
 }
+
+/** Calendar panel to pick date. **/
 
 .calendar-container {
   position: absolute;
   top: 100%;
   left: 0;
 
-  margin: var(--datetimepicker-offset);
+  margin: var(--datetimepicker-calendar-offset);
   padding: var(--spacing-sm);
   min-width: 280px;
 
-  background: var(--datetimepicker-background);
-  border: var(--datetimepicker-border);
-  border-radius: var(--datetimepicker-border-radius);
-  box-shadow: var(--datetimepicker-shadow);
+  background: var(--datetimepicker-calendar-background);
+  border: var(--datetimepicker-calendar-border);
+  border-radius: var(--datetimepicker-calendar-border-radius);
+  box-shadow: var(--datetimepicker-calendar-shadow);
 
   z-index: 1000;
 }
