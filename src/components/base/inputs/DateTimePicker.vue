@@ -1,21 +1,23 @@
 <script setup lang="ts">
-/* This is date&time picker. Uses Date class for both input and output.
-
-Features:
-- Can pick date, time or both date and time.
-- Accept null (not set) value.
-- Input is not editable.
-
-TODO: Right now it handles only date.
-
-Properties:
-- ident - Used for identification in form.
-- mode - Mode of operation. Optional, default is datetime.
-- disabled - If true, acts as disabled component (calendar panel does not show). Optional, default is false.
-- dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
-- dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
-*/
-
+/** This is date&time picker. Uses Date class for both input and output.
+ *
+ * Features:
+ * - Can pick date, time or both date and time.
+ * - Accept null (not set) value.
+ * - Input is not editable.
+ *
+ * TODO: Right now it handles only date.
+ *
+ * Models:
+ * - v-model - Currently selected date and time. Null means it is unset.
+ *
+ * Properties:
+ * - ident - Used for identification in form.
+ * - mode - Mode of operation. Optional, default is datetime.
+ * - disabled - If true, acts as disabled component (calendar panel does not show). Optional, default is false.
+ * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
+ * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
+ */
 import { ref, computed, nextTick, watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
@@ -25,7 +27,7 @@ import type { DatePick } from '@/code/data/general/datetime-types.ts';
 
 const { t } = useI18n();
 
-const currDateTime = defineModel<Date | null>({ required: true }); // Date and time. Null means it is unset.
+const currDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
@@ -61,7 +63,13 @@ onClickOutside(pickerRef, () => {
 
 /** Compute currently displayed date value in date input. */
 const displayDateValue = computed(() => {
-  return TimeUtils.formatDate(currDateTime.value);
+  const formattedDate = TimeUtils.formatDate(currDateTime.value);
+  if (!formattedDate) return null;
+  return '📅 ' + formattedDate;
+});
+/** Compute placeholder value. */
+const placeholderDateValue = computed(() => {
+  return '📅 ' + t('dateTimePicker.placeholder');
 });
 
 /** Compute current month name. */
@@ -264,7 +272,7 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
       :disabled="disabled"
       autocomplete="off"
       @click="toggleVisibility"
-      :placeholder="t('dateTimePicker.placeholder')"
+      :placeholder="placeholderDateValue"
     />
 
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">

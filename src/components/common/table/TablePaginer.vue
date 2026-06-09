@@ -1,12 +1,16 @@
 <script setup lang="ts">
-/** Bar that contains paging options like arrows, page number etc. */
+/** Bar that contains paging options like arrows, page number etc.
+ *
+ * Properties:
+ * - meta - Table metadata.
+ */
 import { ref, watch } from 'vue';
 import type { TableMetaResp } from "@/code/data/features/common.ts";
 
 const currPage = defineModel<number>('currPage', { required: true }); // Currently selected page.
 
 const props = defineProps<{
-  meta: TableMetaResp; // Table metadata.
+  meta: TableMetaResp;
 }>();
 
 /** Local page for input (1-indexed). */

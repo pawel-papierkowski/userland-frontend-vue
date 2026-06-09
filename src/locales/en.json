@@ -546,64 +546,80 @@
   },
 
   "testArea": {
-    "generalButtons": {
-      "legend": "Button visuals",
-      "standard": "Standard",
-      "danger": "Danger",
-      "disabled": "Disabled"
+    "tabs": {
+      "messages": "Messages",
+      "inputs": "Inputs",
+      "other": "Other"
     },
-    "msgButtons": {
-      "legend": "Tests of temporary messages",
-      "info": {
-        "label": "Generate info message",
-        "title": "Info",
-        "content": "This is informational message. Number: {count}."
+    "messages": {
+      "msgButtons": {
+        "legend": "Tests of temporary messages",
+        "info": {
+          "label": "Generate info message",
+          "title": "Info",
+          "content": "This is informational message. Number: {count}."
+        },
+        "success": {
+          "label": "Generate success message",
+          "title": "Success",
+          "content": "This is success message. Number: {count}."
+        },
+        "warning": {
+          "label": "Generate warning message",
+          "title": "Warning",
+          "content": "This is warning message. Number: {count}."
+        },
+        "failure": {
+          "label": "Generate failure message",
+          "title": "Failure",
+          "content": "This is failure message. Number: {count}."
+        },
+        "error": {
+          "label": "Generate error message",
+          "title": "Error",
+          "content": "This is error message. Number: {count}."
+        }
       },
-      "success": {
-        "label": "Generate success message",
-        "title": "Success",
-        "content": "This is success message. Number: {count}."
+      "inMessages": {
+        "legend": "Permanent messages",
+        "info": "This is <b>info</b> message.",
+        "success": "This is <b>success</b> message.",
+        "warning": "This is <b>warning</b> message.",
+        "failure": "This is <b>failure</b> message.",
+        "error": "This is <b>error</b> message."
       },
-      "warning": {
-        "label": "Generate warning message",
-        "title": "Warning",
-        "content": "This is warning message. Number: {count}."
-      },
-      "failure": {
-        "label": "Generate failure message",
-        "title": "Failure",
-        "content": "This is failure message. Number: {count}."
-      },
-      "error": {
-        "label": "Generate error message",
-        "title": "Error",
-        "content": "This is error message. Number: {count}."
+      "logs": {
+        "legend": "Logging to console",
+        "browser": {
+          "info": "Via browser: INFO",
+          "warn": "Via browser: WARN",
+          "err": "Via browser: ERR"
+        },
+        "vue": {
+          "info": "Via Vue: INFO",
+          "warn": "Via Vue: WARN",
+          "err": "Via Vue: ERR"
+        }
       }
     },
-    "spinner": {
-      "legend": "Spinner",
-      "start": "Start",
-      "stop": "Stop"
+    "inputs": {
+      "inputText": "Normal input field",
+      "comboBox": "Combo box",
+      "dateTimePicker": "Date/time picker",
+      "datePicker": "Date picker",
+      "timePicker": "Time picker"
     },
-    "inMessages": {
-      "legend": "Permanent messages",
-      "info": "This is <b>info</b> message.",
-      "success": "This is <b>success</b> message.",
-      "warning": "This is <b>warning</b> message.",
-      "failure": "This is <b>failure</b> message.",
-      "error": "This is <b>error</b> message."
-    },
-    "logs": {
-      "legend": "Logging to console",
-      "browser": {
-        "info": "Via browser: INFO",
-        "warn": "Via browser: WARN",
-        "err": "Via browser: ERR"
+    "other": {
+      "generalButtons": {
+        "legend": "Button visuals",
+        "standard": "Standard",
+        "danger": "Danger",
+        "disabled": "Disabled"
       },
-      "vue": {
-        "info": "Via Vue: INFO",
-        "warn": "Via Vue: WARN",
-        "err": "Via Vue: ERR"
+      "spinner": {
+        "legend": "Spinner",
+        "start": "Start",
+        "stop": "Stop"
       }
     }
   },
@@ -818,7 +834,7 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "📅 YYYY-MM-DD",
+    "placeholder": "YYYY-MM-DD",
     "dayOfWeek": {
       "mon": "Mon",
       "tue": "Tue",

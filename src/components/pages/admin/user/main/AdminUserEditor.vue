@@ -1,6 +1,5 @@
 <script setup lang="ts">
-/**
- * View/edit of single, selected user.
+/** View/edit of single, selected user.
  *
  * Properties:
  * - v-model - Holds selected user.
@@ -72,17 +71,18 @@ const resolveClass = (tab: TabData) => {
 
 <style scoped>
 .tab-wrapper {
-
+  display: flex;
+  flex-direction: column;
 }
 
 .tab-header {
   display: flex;
 
-  margin-bottom: 5px;
+  margin-bottom: var(--spacing-sm);
 }
 
 .tab-entry {
-  margin: 0px 5px;
+  margin: 0px var(--spacing-xs);
   cursor: pointer;
 }
 

@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/** Dropdown menu.
+ *
+ * Slots:
+ * - trigger - Place to click so dropdown will show.
+ * - content - Actual content of dropdown.
+ */
   import { ref } from 'vue';
   import { onClickOutside } from '@vueuse/core';
 

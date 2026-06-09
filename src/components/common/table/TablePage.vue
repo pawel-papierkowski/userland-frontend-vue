@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="E extends Record<string, any>">
-/**
- * Component that shows any table.
+/** Component that shows any table.
+ * 
  * Features:
  * - Selecting/deselecting record.
  * - Pagination.
@@ -10,12 +10,19 @@
  * - E: Type of table entry.
  *
  * Models:
- * - v-model - Holds selected record.
+ * - v-model - Selected record. Null means nothing is selected.
+ * - currPage - Currently selected page.
+ * - currSortBy - Current sort column.
+ * - currSortOrder - Current sort order.
  *
  * Properties:
- * - :columns - Array of columns. First column must be unique key.
- * - :data - Array of data.
- * - empty - I18n key for empty table.
+ * - columns - Data about columns. First column must be unique key.
+ * - data - Content of table itself.
+ * - meta - Table metadata.
+ * - canSelect - If true, can select row in table. Optional, defaults to true.
+ * - isLoading - If true, show spinner instead of table content.
+ * - canSpin - If true, spinner can spin.
+ * - empty - I18n key to show when table is empty. Optional.
  */
 import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -27,19 +34,19 @@ import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const { t } = useI18n();
 
-const selRecord = defineModel<E | null>({ required: true }); // Selected record, null means nothing is selected.
-const currPage = defineModel<number>('currPage', { required: true }); // Currently selected page.
-const currSortBy = defineModel<string|null>('currSortBy', { required: true }); // Current sort column.
-const currSortOrder = defineModel<string|null>('currSortOrder', { required: true }); // Current sort order.
+const selRecord = defineModel<E | null>({ required: true });
+const currPage = defineModel<number>('currPage', { required: true });
+const currSortBy = defineModel<string|null>('currSortBy', { required: true });
+const currSortOrder = defineModel<string|null>('currSortOrder', { required: true });
 
 const props = withDefaults(defineProps<{
-  columns: ColumnData[]; // Data about columns.
-  data: E[]; // Content of table itself.
-  meta: TableMetaResp; // Table metadata.
-  canSelect?: boolean; // If true, can select row in table. Optional, defaults to true.
-  isLoading: boolean; // If true, show spinner instead of table content.
-  canSpin: boolean; // If true, can spin.
-  empty?: string; // I18n key to show when table is empty. Optional.
+  columns: ColumnData[];
+  data: E[];
+  meta: TableMetaResp;
+  canSelect?: boolean;
+  isLoading: boolean;
+  canSpin: boolean;
+  empty?: string;
 }>(), {
   canSelect: true,
   empty: ''

@@ -32,6 +32,9 @@ import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/featur
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
+const selUserRecord = defineModel<UserTableEntry | null>();
+const form = defineModel<F>('form', { required: true });
+
 const props = defineProps<{
   columns: ColumnData[];
   fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
@@ -40,9 +43,6 @@ const props = defineProps<{
   emptyText: string;
   emptyNoUserText: string;
 }>();
-
-const selUserRecord = defineModel<UserTableEntry | null>();
-const form = defineModel<F>('form', { required: true });
 
 /** Loaded page of data. */
 const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({

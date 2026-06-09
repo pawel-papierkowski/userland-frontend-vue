@@ -546,64 +546,80 @@
   },
 
   "testArea": {
-    "generalButtons": {
-      "legend": "Wygląd przycisków",
-      "standard": "Standardowy",
-      "danger": "Niebezpieczny",
-      "disabled": "Zablokowany"
+    "tabs": {
+      "messages": "Wiadomości",
+      "inputs": "Pola formularza",
+      "other": "Inne"
     },
-    "msgButtons": {
-      "legend": "Testy wiadomości tymczasowych",
-      "info": {
-        "label": "Wygeneruj wiadomość informacyjną",
-        "title": "Informacja",
-        "content": "To jest wiadomość informacyjna. Numer: {count}."
+    "messages": {
+      "msgButtons": {
+        "legend": "Testy wiadomości tymczasowych",
+        "info": {
+          "label": "Wygeneruj wiadomość informacyjną",
+          "title": "Informacja",
+          "content": "To jest wiadomość informacyjna. Numer: {count}."
+        },
+        "success": {
+          "label": "Wygeneruj wiadomość o sukcesie",
+          "title": "Sukces",
+          "content": "To jest wiadomość o sukcesie. Numer: {count}."
+        },
+        "warning": {
+          "label": "Wygeneruj ostrzeżenie",
+          "title": "Ostrzeżenie",
+          "content": "To jest wiadomość - ostrzeżenie. Numer: {count}."
+        },
+        "failure": {
+          "label": "Wygeneruj wiadomość o niepowodzeniu",
+          "title": "Niepowodzenie",
+          "content": "To jest wiadomość o niepowodzeniu. Numer: {count}."
+        },
+        "error": {
+          "label": "Wygeneruj wiadomość o błędzie",
+          "title": "Błąd",
+          "content": "To jest wiadomość o błędzie. Numer: {count}."
+        }
       },
-      "success": {
-        "label": "Wygeneruj wiadomość o sukcesie",
-        "title": "Sukces",
-        "content": "To jest wiadomość o sukcesie. Numer: {count}."
+      "inMessages": {
+        "legend": "Stałe wiadomości",
+        "info": "To jest wiadomość <b>informacyjna</b>.",
+        "success": "To jest wiadomość o <b>sukcesie</b>.",
+        "warning": "To jest wiadomość - <b>ostrzeżenie</b>.",
+        "failure": "To jest wiadomość o <b>niepowodzeniu</b>.",
+        "error": "To jest wiadomość o <b>błędzie</b>."
       },
-      "warning": {
-        "label": "Wygeneruj ostrzeżenie",
-        "title": "Ostrzeżenie",
-        "content": "To jest wiadomość - ostrzeżenie. Numer: {count}."
-      },
-      "failure": {
-        "label": "Wygeneruj wiadomość o niepowodzeniu",
-        "title": "Niepowodzenie",
-        "content": "To jest wiadomość o niepowodzeniu. Numer: {count}."
-      },
-      "error": {
-        "label": "Wygeneruj wiadomość o błędzie",
-        "title": "Błąd",
-        "content": "To jest wiadomość o błędzie. Numer: {count}."
+      "logs": {
+        "legend": "Informacje w konsoli",
+        "browser": {
+          "info": "Przez przeglądarkę: INFO",
+          "warn": "Przez przeglądarkę: WARN",
+          "err": "Przez przeglądarkę: ERR"
+        },
+        "vue": {
+          "info": "Przez Vue: INFO",
+          "warn": "Przez Vue: WARN",
+          "err": "Przez Vue: ERR"
+        }
       }
     },
-    "spinner": {
-      "legend": "Kręciołek",
-      "start": "Start",
-      "stop": "Stop"
+    "inputs": {
+      "inputText": "Pole do wpisania tekstu",
+      "comboBox": "Lista rozwijana",
+      "dateTimePicker": "Wybór daty/czasu",
+      "datePicker": "Wybór daty",
+      "timePicker": "Wybór czasu"
     },
-    "inMessages": {
-      "legend": "Stałe wiadomości",
-      "info": "To jest wiadomość <b>informacyjna</b>.",
-      "success": "To jest wiadomość o <b>sukcesie</b>.",
-      "warning": "To jest wiadomość - <b>ostrzeżenie</b>.",
-      "failure": "To jest wiadomość o <b>niepowodzeniu</b>.",
-      "error": "To jest wiadomość o <b>błędzie</b>."
-    },
-    "logs": {
-      "legend": "Informacje w konsoli",
-      "browser": {
-        "info": "Przez przeglądarkę: INFO",
-        "warn": "Przez przeglądarkę: WARN",
-        "err": "Przez przeglądarkę: ERR"
+    "other": {
+      "generalButtons": {
+        "legend": "Wygląd przycisków",
+        "standard": "Standardowy",
+        "danger": "Niebezpieczny",
+        "disabled": "Zablokowany"
       },
-      "vue": {
-        "info": "Przez Vue: INFO",
-        "warn": "Przez Vue: WARN",
-        "err": "Przez Vue: ERR"
+      "spinner": {
+        "legend": "Kręciołek",
+        "start": "Start",
+        "stop": "Stop"
       }
     }
   },
@@ -818,7 +834,7 @@
   },
 
   "dateTimePicker": {
-    "placeholder": "📅 RRRR-MM-DD",
+    "placeholder": "RRRR-MM-DD",
     "dayOfWeek": {
       "mon": "Pon",
       "tue": "Wt",

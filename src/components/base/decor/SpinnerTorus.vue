@@ -13,8 +13,11 @@
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(defineProps<{
+  /** True if can spin, false if it cannot spin. */
   canSpin?: boolean,
+  /** You can set CSS display property directly. */
   display?: string,
+  /** Size of the spinner (e.g., "1rem", "100px"). */
   size?: string;
 }>(), {
   canSpin: true,

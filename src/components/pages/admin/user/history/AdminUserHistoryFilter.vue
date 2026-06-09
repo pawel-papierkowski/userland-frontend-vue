@@ -2,9 +2,12 @@
 /**
  * Filter for user history table.
  *
- * Properties:
+ * Models:
  * - v-model - Holds filter form data.
+ *
+ * Properties:
  * - isBusy - If true, show filter button as disabled and busy.
+ * - disabled - If true, entire filter form is disabled.
  */
 import { useI18n } from 'vue-i18n';
 
@@ -17,7 +20,7 @@ import DateTimePicker from '@/components/base/inputs/DateTimePicker.vue';
 const { t } = useI18n();
 
 const form = defineModel<UserHistoryTableFilterForm>({ required: true });
- 
+
 const props = withDefaults(
   defineProps<{
     isBusy: boolean;

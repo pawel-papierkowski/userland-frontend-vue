@@ -5,6 +5,9 @@
  * - Automatic rotation of slots.
  * - User can select slot and it will be shown for some time without rotation.
  *
+ * Slots:
+ * - Any number of slots representing slides in slideshow.
+ *
  * Properties:
  * - autoplay - Whether the slideshow should rotate automatically.
  * - interval - Interval between slot rotations in seconds.
@@ -78,7 +81,6 @@ const stopAutoplay = () => {
  * @param slotName Name of slot.
  */
 const selectSlot = (slotName: string) => {
-  console.warn(`Called selectSlot(${slotName})`)
   selectedSlot.value = slotName;
   if (props.delay > 0) stopSlideShow();
   else startAutoplay(); // reset state
@@ -125,10 +127,10 @@ onUnmounted(() => {
 
 <template>
   <div class="slideshow-wrapper" @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()">
-    <div class="slideshow-selection">
+    <div class="slideshow-header">
       <!-- Loop through all slot names passed to this component. -->
-      <div v-for="slotName in activeSlots" :key="slotName" class="slideshow-selection-entry" @click="selectSlot(slotName)">
-        <div class="slideshow-entry" :class="getEntryClass(slotName)"></div>
+      <div v-for="slotName in activeSlots" :key="slotName" class="slideshow-selection" @click="selectSlot(slotName)">
+        <div class="slideshow-selection-entry" :class="getEntryClass(slotName)"></div>
       </div>
     </div>
 
@@ -151,21 +153,23 @@ onUnmounted(() => {
   border-radius: 8px;
 }
 
-.slideshow-selection {
+/* Header: bar on top with dots. */
+
+.slideshow-header {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.slideshow-selection-entry {
+.slideshow-selection {
   margin: var(--spacing-xs);
   padding: var(--spacing-xs);
 
   cursor: pointer;
 }
 
-/* Shaped as dot. */
-.slideshow-entry {
+.slideshow-selection-entry {
+  /* Shaped as dot. */
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -173,13 +177,15 @@ onUnmounted(() => {
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.slideshow-entry:hover {
+.slideshow-selection-entry:hover {
   transform: scale(1.2);
 }
 
-.slideshow-entry.active {
+.slideshow-selection-entry.active {
   background-color: var(--color-text-primary);
 }
+
+/* Content of slot. */
 
 .slideshow-slot-section {
   margin: var(--spacing-xs);

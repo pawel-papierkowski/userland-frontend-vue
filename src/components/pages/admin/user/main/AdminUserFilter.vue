@@ -2,8 +2,10 @@
 /**
  * Filter for user table.
  *
- * Properties:
+ * Models:
  * - v-model - Holds filter form data.
+ *
+ * Properties:
  * - isBusy - If true, show filter button as disabled and busy.
  */
 import { useI18n } from 'vue-i18n';
