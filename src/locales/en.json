@@ -605,6 +605,7 @@
     "inputs": {
       "inputText": "Normal input field",
       "comboBox": "Combo box",
+      "checkbox": "Check box",
       "dateTimePicker": "Date/time picker",
       "datePicker": "Date picker",
       "timePicker": "Time picker"
@@ -838,6 +839,8 @@
       "date": "YYYY-MM-DD",
       "time": "hh:mm"
     },
+    "hour": "Hour",
+    "minute": "Minute",
     "dayOfWeek": {
       "mon": "Mon",
       "tue": "Tue",

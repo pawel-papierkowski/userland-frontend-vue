@@ -192,10 +192,17 @@ const selectDay = (pickableDay: DatePick) => {
   if (!canPick(newDate)) return;
 
   if (TimeUtils.formatDate(currDateTime.value) === TimeUtils.formatDate(newDate)) {
-    // Deselect.
+    // Deselect date.
     currDateTime.value = null;
   } else {
-    // Select.
+    // Select new date without touching time.
+    const prevDateTime = currDateTime.value;
+    if (prevDateTime) {
+      newDate.setHours(prevDateTime.getHours());
+      newDate.setMinutes(prevDateTime.getMinutes());
+      newDate.setSeconds(prevDateTime.getSeconds());
+      newDate.setMilliseconds(prevDateTime.getMilliseconds());
+    }
     currDateTime.value = newDate;
   }
   isCalendarVisible.value = false;
@@ -277,8 +284,7 @@ const hidePanel = () => {
       :disabled="disabled"
       readonly
       autocomplete="off"
-      @click="toggleDatePickerVisibility"
-    />
+      @click="toggleDatePickerVisibility" />
 
     <!-- Date picker panel. -->
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">

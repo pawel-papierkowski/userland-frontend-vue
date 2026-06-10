@@ -6,6 +6,7 @@ export const enTestComboBox: (string|null)[] = [ null, 'PENDING', 'ACTIVE', 'DEM
 export type TestAreaInputForm = {
   inputText: string | null;
   comboBox: string | null;
+  checkbox: boolean | null;
   dateTime: Date | null;
   date: Date | null;
   time: Date | null;

@@ -605,6 +605,7 @@
     "inputs": {
       "inputText": "Pole do wpisania tekstu",
       "comboBox": "Lista rozwijana",
+      "checkbox": "Wybór tak/nie",
       "dateTimePicker": "Wybór daty/czasu",
       "datePicker": "Wybór daty",
       "timePicker": "Wybór czasu"
@@ -838,6 +839,8 @@
       "date": "RRRR-MM-DD",
       "time": "gg:mm"
     },
+    "hour": "Godzina",
+    "minute": "Minuta",
     "dayOfWeek": {
       "mon": "Pon",
       "tue": "Wt",

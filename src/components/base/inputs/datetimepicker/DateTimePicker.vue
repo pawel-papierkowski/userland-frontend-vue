@@ -4,14 +4,14 @@
  * Features:
  * - Can pick date, time or both date and time.
  * - Accept null (not set) value.
- * - Input is not editable.
+ * - Input fields are not editable. You set value via picker panels.
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset.
  *
  * Properties:
  * - ident - Used for identification in form.
- * - mode - Mode of operation. Optional, default is datetime.
+ * - mode - Mode of operation. Optional, default is 'datetime'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.

@@ -30,7 +30,17 @@ const props = withDefaults(defineProps<{
 const isClockVisible = ref(false);
 const pickerRef = ref<HTMLElement | null>(null);
 const clockContainerRef = ref<HTMLElement | null>(null);
-const viewTime = ref(new Date()); // Date used for viewing hour/minute in clock.
+
+const hourRef = ref<HTMLElement | null>(null);
+const minuteRef = ref<HTMLElement | null>(null);
+
+const hours = Array.from({ length: 24 }, (_, i) => i);
+const minutes = Array.from({ length: 60 }, (_, i) => i);
+
+const viewHour = ref<number|null>(null);
+const viewMinute = ref<number|null>(null);
+const selectedHour = ref<number|null>(null);
+const selectedMinute = ref<number|null>(null);
 
 const containerStyle = ref({
   left: '0',
@@ -57,10 +67,23 @@ const placeholderTimeValue = computed(() => {
 
 // WATCHES
 
+/** If currDateTime model changes, also change certain fields. */
+watch(currDateTime, () => {
+  selectedHour.value = currDateTime.value?.getHours() ?? null;
+  selectedMinute.value = currDateTime.value?.getMinutes() ?? null;
+});
+
 /** If you disable picker, panel will close. */
 watch(() => props.disabled, () => {
   if (props.disabled) {
     isClockVisible.value = false;
+  }
+});
+
+/** If picker panel is opened, scroll to actual hour and minute. */
+watch(isClockVisible, (visible) => {
+  if (visible) {
+    scrollToSelected();
   }
 });
 
@@ -71,9 +94,8 @@ const toggleTimePickerVisibility = async () => {
   if (isClockVisible.value) {
     isClockVisible.value = false;
   } else {
-    // If null, set viewTime to current date
-    viewTime.value = currDateTime.value ? new Date(currDateTime.value) : new Date();
     isClockVisible.value = true;
+    findCurrentTime();
 
     await nextTick();
     // Adjust picker position if needed to prevent window overflow.
@@ -88,7 +110,70 @@ const toggleTimePickerVisibility = async () => {
   }
 };
 
+/** Find and set current time. */
+const findCurrentTime = () => {
+  if (currDateTime.value !== null) return;
+  const date = new Date();
+  viewHour.value = date.getHours();
+  viewMinute.value = date.getMinutes();
+}
+
+/** Select hour. */
+const selectHour = (h: number) => {
+  const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
+  if (!currDateTime.value) date.setSeconds(0, 0);
+  date.setHours(h);
+  currDateTime.value = date;
+};
+
+/** Select minute. */
+const selectMinute = (m: number) => {
+  const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
+  if (!currDateTime.value) date.setSeconds(0, 0);
+  date.setMinutes(m);
+  currDateTime.value = date;
+};
+
+/** Scroll to selected hour and minute. */
+const scrollToSelected = () => {
+  nextTick(() => {
+    let selectedHour: Element | null = null;
+    let selectedMinute: Element | null = null;
+    if (currDateTime.value === null) {
+      if (hourRef.value) selectedHour = hourRef.value.querySelector('.curr');
+      if (minuteRef.value) selectedMinute = minuteRef.value.querySelector('.curr');
+    } else {
+      if (hourRef.value) selectedHour = hourRef.value.querySelector('.selected');
+      if (minuteRef.value) selectedMinute = minuteRef.value.querySelector('.selected');
+    }
+    if (selectedHour) selectedHour.scrollIntoView({ block: 'center' });
+    if (selectedMinute) selectedMinute.scrollIntoView({ block: 'center' });
+  });
+};
+
 //
+
+/**
+ * Resolve class of hour item.
+ * @param h Hour.
+ */
+const resolveHourClass = (h: number) => {
+  return {
+    selected: selectedHour.value === h,
+    curr: viewHour.value === h
+  };
+}
+
+/**
+ * Resolve class of minute item.
+ * @param m Minute.
+ */
+const resolveMinuteClass = (m: number) => {
+  return {
+    selected: selectedMinute.value === m,
+    curr: viewMinute.value === m
+  };
+}
 
 /** Hide panel. */
 const hidePanel = () => {
@@ -108,12 +193,35 @@ const hidePanel = () => {
       :disabled="disabled"
       readonly
       autocomplete="off"
-      @click="toggleTimePickerVisibility"
-    />
+      @click="toggleTimePickerVisibility" />
 
     <!-- Time picker panel. -->
     <div v-if="isClockVisible" class="clock-container" ref="clockContainerRef" :style="containerStyle">
-      TIME PICKER PANEL PLACEHOLDER
+      <div class="clock-columns">
+
+        <!-- Hours scroller. -->
+        <div class="clock-column" ref="hourRef">
+          <div class="column-header">{{ t('dateTimePicker.hour') }}</div>
+          <div v-for="h in hours" :key="h"
+               class="time-item"
+               :class="resolveHourClass(h)"
+               @click="selectHour(h)">
+            {{ h.toString().padStart(2, '0') }}
+          </div>
+        </div>
+
+        <!-- Minutes scroller. -->
+        <div class="clock-column" ref="minuteRef">
+          <div class="column-header">{{ t('dateTimePicker.minute') }}</div>
+          <div v-for="m in minutes" :key="m"
+               class="time-item"
+               :class="resolveMinuteClass(m)"
+               @click="selectMinute(m)">
+            {{ m.toString().padStart(2, '0') }}
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
@@ -147,7 +255,7 @@ const hidePanel = () => {
 
   margin: var(--datetimepicker-clock-offset);
   padding: var(--spacing-sm);
-  min-width: 280px;
+  min-width: 160px;
 
   background: var(--datetimepicker-clock-background);
   border: var(--datetimepicker-clock-border);
@@ -155,5 +263,89 @@ const hidePanel = () => {
   box-shadow: var(--datetimepicker-clock-shadow);
 
   z-index: 1000;
+}
+
+.clock-columns {
+  display: flex;
+  height: 200px;
+}
+
+/* Define single clock column with time (hour or minute). Uses nice scrollbars. */
+
+.clock-column {
+  flex: 1;
+  overflow-y: auto;
+
+  /* Sleek scrollbar for Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Sleek scrollbar for Chrome, Edge, and Safari */
+.clock-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.clock-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.clock-column::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.clock-column::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.clock-column::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.column-header {
+  position: sticky;
+  top: 0;
+  font-weight: bold;
+  font-size: 0.8em;
+
+  color: var(--color-text-primary);
+  background: var(--datetimepicker-clock-background);
+
+  padding: var(--spacing-xs) 0;
+  text-align: center;
+}
+
+.time-item {
+  padding: var(--spacing-xs) 0;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 2px;
+  color: var(--datetimepicker-time-color);
+}
+
+.time-item.curr {
+  color: var(--datetimepicker-time-curr-color);
+  background: var(--datetimepicker-time-curr-background);
+  box-shadow: var(--datetimepicker-time-curr-shadow);
+}
+
+.time-item.selected {
+  color: var(--datetimepicker-time-selected-color);
+  background: var(--datetimepicker-time-selected-background);
+}
+
+.time-item:hover {
+  color: var(--datetimepicker-time-hover-color);
+  background: var(--datetimepicker-time-hover-background);
+}
+
+.time-item.curr:hover {
+  color: var(--datetimepicker-time-hover-color);
+  background: var(--datetimepicker-time-hover-background);
 }
 </style>

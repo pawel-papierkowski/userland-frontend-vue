@@ -1,5 +1,7 @@
 # Vue 3 Frontend Project Instructions
 
+UserLand is portfolio project for frontend in Vue.
+
 ## Tech Stack & Architecture
 - **Framework:** Vue 3 using the Composition API exclusively. 
 - **Script Setup:** Always use `<script setup>` syntax for components. Do NOT use the Options API or standard `setup()` functions.
