@@ -16,9 +16,6 @@
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
-import { ref } from 'vue';
-import { onClickOutside } from '@vueuse/core';
-
 import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
@@ -42,24 +39,11 @@ const props = withDefaults(defineProps<{
   dateTimeMin: null,
   dateTimeMax: null
 });
-
-/** Reference to general picker element. */
-const pickerRef = ref(null);
-/** Reference to date picker. */
-const datePickerRef = ref<InstanceType<typeof DatePicker> | null>(null);
-/** Reference to time picker. */
-const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null);
-
-onClickOutside(pickerRef, () => {
-  // Hide panels in both pickers. TODO looks like it is not needed?
-  //datePickerRef.value?.hidePanel();
-  //timePickerRef.value?.hidePanel();
-});
 </script>
 
 <template>
-  <div class="picker-general" ref="pickerRef">
-    <DatePicker ref="datePickerRef" v-if="mode === 'datetime' || mode === 'date'"
+  <div class="picker-general">
+    <DatePicker v-if="mode === 'datetime' || mode === 'date'"
       v-model="currDateTime"
       :ident="ident+'_date'"
       :disabled="disabled"
@@ -67,7 +51,7 @@ onClickOutside(pickerRef, () => {
       :dateTimeMax="dateTimeMax"
     />
 
-    <TimePicker ref="timePickerRef" v-if="mode === 'datetime' || mode === 'time'"
+    <TimePicker v-if="mode === 'datetime' || mode === 'time'"
       v-model="currDateTime"
       :ident="ident+'_time'"
       :disabled="disabled"

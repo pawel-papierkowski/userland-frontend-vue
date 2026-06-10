@@ -5,9 +5,3 @@ export type DatePick = {
   year: number;
   isCurrentMonth: boolean;
 }
-
-/** Dedicated time-only (hour, minute) type. */
-export type TimePick = {
-  hour: number;
-  minute: number;
-}

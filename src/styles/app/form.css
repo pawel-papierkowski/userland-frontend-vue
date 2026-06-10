@@ -89,11 +89,11 @@
   flex-direction: column;
 }
 .form-entry-inline {
-  margin-bottom: 6px;
   display: flex;
   flex-direction: row;
   gap: 1rem;
 
+  margin-bottom: 6px;
   align-items: center;
 
   white-space: nowrap;

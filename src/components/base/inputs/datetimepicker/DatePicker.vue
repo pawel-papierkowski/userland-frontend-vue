@@ -37,6 +37,7 @@ const props = withDefaults(defineProps<{
 });
 
 const isCalendarVisible = ref(false);
+const pickerRef = ref<HTMLElement | null>(null);
 const calendarContainerRef = ref<HTMLElement | null>(null);
 const viewDate = ref(new Date()); // Date used for viewing month/year in calendar.
 
@@ -45,7 +46,8 @@ const containerStyle = ref({
   right: 'auto'
 });
 
-onClickOutside(calendarContainerRef, () => {
+onClickOutside(pickerRef, () => {
+  // note we use pickerRef, not calendarContainerRef, as it would cause issues
   hidePanel();
 });
 
@@ -261,14 +263,10 @@ const isDayDisabled = (pickableDay: DatePick): boolean => {
 const hidePanel = () => {
   isCalendarVisible.value = false;
 };
-
-defineExpose({
-  hidePanel
-});
 </script>
 
 <template>
-  <div class="picker">
+  <div class="picker" ref="pickerRef">
     <input
       :id="ident+'_date'"
       :data-testid="ident+'_date'"
@@ -282,33 +280,35 @@ defineExpose({
       @click="toggleDatePickerVisibility"
     />
 
-    <!-- Date picker panel. -->
-    <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
-      <div class="calendar-header">
-        <div class="header-nav">
-          <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
-          <div class="header-navbtn" @click="changeMonth(-1)">◀️</div>
+    <div v-if="isCalendarVisible">
+      <!-- Date picker panel. -->
+      <div class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
+        <div class="calendar-header">
+          <div class="header-nav">
+            <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
+            <div class="header-navbtn" @click="changeMonth(-1)">◀️</div>
+          </div>
+          <div class="header-title">
+            <span class="year">{{ currentYear }}</span>
+            <span class="month">{{ currentMonthName }}</span>
+          </div>
+          <div class="header-nav">
+            <div class="header-navbtn" @click="changeMonth(1)">▶️</div>
+            <div class="header-navbtn" @click="changeYear(1)">⏩</div>
+          </div>
         </div>
-        <div class="header-title">
-          <span class="year">{{ currentYear }}</span>
-          <span class="month">{{ currentMonthName }}</span>
-        </div>
-        <div class="header-nav">
-          <div class="header-navbtn" @click="changeMonth(1)">▶️</div>
-          <div class="header-navbtn" @click="changeYear(1)">⏩</div>
-        </div>
-      </div>
 
-      <div class="calendar-grid">
-        <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
-        <div
-          v-for="(pickableDay, index) in calendarDays"
-          :key="index"
-          class="day"
-          :class="resolveDayClass(pickableDay)"
-          @click="selectDay(pickableDay)"
-        >
-          {{ pickableDay.day }}
+        <div class="calendar-grid">
+          <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
+          <div
+            v-for="(pickableDay, index) in calendarDays"
+            :key="index"
+            class="day"
+            :class="resolveDayClass(pickableDay)"
+            @click="selectDay(pickableDay)"
+          >
+            {{ pickableDay.day }}
+          </div>
         </div>
       </div>
     </div>

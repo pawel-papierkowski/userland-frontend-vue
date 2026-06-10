@@ -13,7 +13,6 @@ import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
 import { TimeUtils } from '@/code/utils/TimeUtils';
-import type { TimePick } from '@/code/data/general/datetime-types.ts';
 
 const { t } = useI18n();
 
@@ -29,6 +28,7 @@ const props = withDefaults(defineProps<{
 });
 
 const isClockVisible = ref(false);
+const pickerRef = ref<HTMLElement | null>(null);
 const clockContainerRef = ref<HTMLElement | null>(null);
 const viewTime = ref(new Date()); // Date used for viewing hour/minute in clock.
 
@@ -37,7 +37,8 @@ const containerStyle = ref({
   right: 'auto'
 });
 
-onClickOutside(clockContainerRef, () => {
+onClickOutside(pickerRef, () => {
+  // note we use pickerRef, not clockContainerRef, as it would cause issues
   hidePanel();
 });
 
@@ -94,14 +95,10 @@ const toggleTimePickerVisibility = async () => {
 const hidePanel = () => {
   isClockVisible.value = false;
 };
-
-defineExpose({
-  hidePanel
-});
 </script>
 
 <template>
-  <div class="picker">
+  <div class="picker" ref="pickerRef">
     <input
       :id="ident+'_time'"
       :data-testid="ident+'_time'"
@@ -115,9 +112,11 @@ defineExpose({
       @click="toggleTimePickerVisibility"
     />
 
-    <!-- Time picker panel. -->
-    <div v-if="isClockVisible" class="clock-container" ref="clockContainerRef" :style="containerStyle">
-      TIME PICKER PANEL PLACEHOLDER
+    <div v-if="isClockVisible">
+      <!-- Time picker panel. -->
+      <div class="clock-container" ref="clockContainerRef" :style="containerStyle">
+        TIME PICKER PANEL PLACEHOLDER
+      </div>
     </div>
   </div>
 </template>
