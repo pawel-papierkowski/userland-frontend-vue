@@ -88,7 +88,6 @@ const toggleTimePickerVisibility = async () => {
   }
 };
 
-
 //
 
 /** Hide panel. */
@@ -112,11 +111,9 @@ const hidePanel = () => {
       @click="toggleTimePickerVisibility"
     />
 
-    <div v-if="isClockVisible">
-      <!-- Time picker panel. -->
-      <div class="clock-container" ref="clockContainerRef" :style="containerStyle">
-        TIME PICKER PANEL PLACEHOLDER
-      </div>
+    <!-- Time picker panel. -->
+    <div v-if="isClockVisible" class="clock-container" ref="clockContainerRef" :style="containerStyle">
+      TIME PICKER PANEL PLACEHOLDER
     </div>
   </div>
 </template>

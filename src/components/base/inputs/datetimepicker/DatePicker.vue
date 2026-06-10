@@ -280,35 +280,33 @@ const hidePanel = () => {
       @click="toggleDatePickerVisibility"
     />
 
-    <div v-if="isCalendarVisible">
-      <!-- Date picker panel. -->
-      <div class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
-        <div class="calendar-header">
-          <div class="header-nav">
-            <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
-            <div class="header-navbtn" @click="changeMonth(-1)">◀️</div>
-          </div>
-          <div class="header-title">
-            <span class="year">{{ currentYear }}</span>
-            <span class="month">{{ currentMonthName }}</span>
-          </div>
-          <div class="header-nav">
-            <div class="header-navbtn" @click="changeMonth(1)">▶️</div>
-            <div class="header-navbtn" @click="changeYear(1)">⏩</div>
-          </div>
+    <!-- Date picker panel. -->
+    <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
+      <div class="calendar-header">
+        <div class="header-nav">
+          <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
+          <div class="header-navbtn" @click="changeMonth(-1)">◀️</div>
         </div>
+        <div class="header-title">
+          <span class="year">{{ currentYear }}</span>
+          <span class="month">{{ currentMonthName }}</span>
+        </div>
+        <div class="header-nav">
+          <div class="header-navbtn" @click="changeMonth(1)">▶️</div>
+          <div class="header-navbtn" @click="changeYear(1)">⏩</div>
+        </div>
+      </div>
 
-        <div class="calendar-grid">
-          <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
-          <div
-            v-for="(pickableDay, index) in calendarDays"
-            :key="index"
-            class="day"
-            :class="resolveDayClass(pickableDay)"
-            @click="selectDay(pickableDay)"
-          >
-            {{ pickableDay.day }}
-          </div>
+      <div class="calendar-grid">
+        <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
+        <div
+          v-for="(pickableDay, index) in calendarDays"
+          :key="index"
+          class="day"
+          :class="resolveDayClass(pickableDay)"
+          @click="selectDay(pickableDay)"
+        >
+          {{ pickableDay.day }}
         </div>
       </div>
     </div>
