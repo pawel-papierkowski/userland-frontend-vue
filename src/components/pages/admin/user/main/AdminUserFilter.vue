@@ -10,7 +10,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import type { UserTableFilterForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserTableFilterForm } from '@/code/data/features/user/admin-user-type.ts';
 import { enUserStatus } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';

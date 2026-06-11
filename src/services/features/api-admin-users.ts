@@ -1,12 +1,21 @@
 // Handles calling user feature endpoints.
 import backendApi from '@/services/api-common.ts';
-import type { UserTableReq, UserTableResp, UserFullDataReq, UserFullDataResp,
-  UserHistoryTableReq, UserHistoryTableResp,
-  UserPermissionTableReq, UserPermissionTableResp,
-  UserConfigTableReq, UserConfigTableResp,
-  UserTokenTableReq, UserTokenTableResp,
-  UserJwtTableReq, UserJwtTableResp
-} from '@/code/data/features/user/admin-user';
+import type {
+  UserTableReq,
+  UserTableResp,
+  UserFullDataReq,
+  UserFullDataResp,
+  UserHistoryTableReq,
+  UserHistoryTableResp,
+  UserPermissionTableReq,
+  UserPermissionTableResp,
+  UserConfigTableReq,
+  UserConfigTableResp,
+  UserTokenTableReq,
+  UserTokenTableResp,
+  UserJwtTableReq,
+  UserJwtTableResp,
+} from '@/code/data/features/user/admin-user-type.ts';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/admin');
@@ -29,7 +38,7 @@ export default {
    * @returns Result of call.
    */
   loadUserData(userId: number) {
-    return apiClient.get<UserFullDataResp>('/user/'+userId);
+    return apiClient.get<UserFullDataResp>('/user/' + userId);
   },
 
   /**

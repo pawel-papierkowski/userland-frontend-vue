@@ -16,7 +16,7 @@ import type {
   UserTableReq,
   UserTableResp,
   UserTableEntry,
-} from '@/code/data/features/user/admin-user.ts';
+} from '@/code/data/features/user/admin-user-type.ts';
 import { userTableColumns, emptyUserTable } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserFilter from '@/components/pages/admin/user/main/AdminUserFilter.vue';
@@ -152,8 +152,7 @@ const processEntry = (entry: UserTableEntry) => {
 
 /** React on user data being updated. */
 watch(userUpdatedTrigger, async () => {
-  if (diffUserData.value.username !== null || diffUserData.value.email !== null)
-    await handleReload();
+  if (diffUserData.value.username !== null || diffUserData.value.email !== null) await handleReload();
 });
 
 /** Automatically call once user enters page. */

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 
-import type { UserFullDataForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserFullDataForm } from '@/code/data/features/user/admin-user-type.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
 /**

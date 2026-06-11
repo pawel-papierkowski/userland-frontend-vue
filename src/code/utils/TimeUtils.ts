@@ -1,3 +1,4 @@
+/** Time-related utility functions. */
 export class TimeUtils {
   /**
    * Converts a Date to a local ISO string describing full date and time (YYYY-MM-DDThh:mm:ss.SSS).

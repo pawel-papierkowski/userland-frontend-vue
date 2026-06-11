@@ -13,7 +13,12 @@ import { useI18n } from 'vue-i18n';
 import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
-import type { UserTableEntry, UserFullDataReq, UserFullDataResp, UserFullDataForm } from '@/code/data/features/user/admin-user.ts';
+import type {
+  UserTableEntry,
+  UserFullDataReq,
+  UserFullDataResp,
+  UserFullDataForm,
+} from '@/code/data/features/user/admin-user-type.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -87,13 +92,13 @@ const handleUserUpdate = async () => {
   diffFormData();
   if (diffForm.value.modifiedAt !== null) AppUserEventer.notifyUserUpdated(diffForm.value);
   diffForm.value = { ...form }; // remember updated state
-}
+};
 
 /**
  * Save user data.
  * @returns Updated user data or null if something failed.
  */
-const saveUserData = async (): Promise<UserFullDataResp|null> => {
+const saveUserData = async (): Promise<UserFullDataResp | null> => {
   if (!selUserRecord.value) return null;
   isBusy.value = true;
 
@@ -139,14 +144,14 @@ const handleUserLock = async () => {
 
   fillFormData(data);
   diffForm.value = { ...form }; // remember updated state
-}
+};
 
 /**
  * Lock or unlock user.
  * @param locked New value of 'locked' field.
  * @returns Updated user data or null if something failed.
  */
-const flipLock = async (locked: boolean): Promise<UserFullDataResp|null> => {
+const flipLock = async (locked: boolean): Promise<UserFullDataResp | null> => {
   if (!selUserRecord.value) return null;
   isBusy.value = true;
 
@@ -175,7 +180,7 @@ const convertLockToReq = (locked: boolean): UserFullDataReq => {
     email: null,
     locked: locked,
     lang: null,
-    profile: null
+    profile: null,
   };
 };
 
@@ -216,7 +221,7 @@ const diffFormData = () => {
   resetDiffField('username');
   resetDiffField('email');
   // We do not care about rest of fields.
-}
+};
 
 /**
  * Compare form and diffForm field. Unchanged field is nulled.
@@ -228,7 +233,7 @@ const resetDiffField = (fieldName: string) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (diffForm.value as any)[key] = null;
   }
-}
+};
 
 /**
  * Check if we are looking at your own account.
@@ -236,15 +241,15 @@ const resetDiffField = (fieldName: string) => {
  */
 const isYourOwnAccount = (): boolean => {
   return AppLoginer.getEmail() === form.email;
-}
+};
 
 /**
  * Check if we have permission to edit users in general.
  * @returns True if we can edit users, otherwise false.
  */
 const canEditUsers = (): boolean => {
-  return AppLoginer.hasPermissionsAny(['role_admin', 'user_edit'])
-}
+  return AppLoginer.hasPermissionsAny(['role_admin', 'user_edit']);
+};
 
 /**
  * Check if inputs should be disabled.
@@ -260,7 +265,7 @@ const isInputDisabled = (): boolean => {
  */
 const isBtnDisabled = (): boolean => {
   return isBusy.value || selUserRecord.value === null || isYourOwnAccount();
-}
+};
 </script>
 
 <template>
@@ -337,15 +342,24 @@ const isBtnDisabled = (): boolean => {
         </div>
       </div>
 
-      <div class="onpage-msg info" v-if="canEditUsers() && isYourOwnAccount()" v-html="t('admin.user.msg.info.cannotEditYourself')" />
+      <div
+        class="onpage-msg info"
+        v-if="canEditUsers() && isYourOwnAccount()"
+        v-html="t('admin.user.msg.info.cannotEditYourself')"
+      />
 
       <div class="items-horizontal" v-if="canEditUsers()">
         <button data-testid="btn-update" :disabled="isBtnDisabled()" @click="handleUserUpdate()">
           {{ isBusy ? t('admin.user.main.button.busy') : t('admin.user.main.button.update') }}
         </button>
         <button data-testid="btn-lock" class="danger" :disabled="isBtnDisabled()" @click="handleUserLock()">
-          {{ isBusy ? t('admin.user.main.button.busy') :
-              form.locked ? t('admin.user.main.button.unlock') : t('admin.user.main.button.lock') }}
+          {{
+            isBusy
+              ? t('admin.user.main.button.busy')
+              : form.locked
+                ? t('admin.user.main.button.unlock')
+                : t('admin.user.main.button.lock')
+          }}
         </button>
       </div>
     </form>

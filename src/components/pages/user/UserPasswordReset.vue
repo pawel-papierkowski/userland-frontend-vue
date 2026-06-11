@@ -12,7 +12,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user';
+import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user-type';
 
 const log = useLogger();
 const route = useRoute();

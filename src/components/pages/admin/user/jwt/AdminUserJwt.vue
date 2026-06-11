@@ -15,7 +15,7 @@ import type {
   UserJwtTableFilterForm,
   UserJwtTableReq,
   UserJwtTableEntry,
-} from '@/code/data/features/user/admin-user.ts';
+} from '@/code/data/features/user/admin-user-type.ts';
 import { userJwtTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';

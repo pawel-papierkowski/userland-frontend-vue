@@ -26,8 +26,9 @@ import type { Ref } from 'vue';
 import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
-import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
-import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/features/common.ts';
+import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
+import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/features/common/type.ts';
+import { EnColumnKind } from '@/code/data/features/common/const.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
@@ -154,7 +155,7 @@ watch(currSortOrder, (newVal, oldVal) => {
 
 /** Allow calling handleReload from outside. */
 defineExpose({
-  handleReload
+  handleReload,
 });
 </script>
 
@@ -176,7 +177,16 @@ defineExpose({
         :canSpin="canSpin"
         :canSelect="false"
         :empty="resolveEmptyText()"
-      />
+      >
+        <!-- Slot forwarding: forward only columns with kind = Custom if they exist in $slots -->
+        <template
+          v-for="col in columns.filter((c) => c.kind === EnColumnKind.Custom && $slots['column_' + c.name])"
+          :key="col.name"
+          #[`column_${col.name}`]="slotData"
+        >
+          <slot :name="`column_${col.name}`" v-bind="slotData || {}" />
+        </template>
+      </TablePage>
     </template>
     <template #entryEditor> </template>
   </TableWrapper>

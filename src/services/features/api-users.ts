@@ -12,7 +12,7 @@ import type {
   UserEmailChangeReq,
   UserAccountDeleteLinkReq,
   UserAccountDeleteReq,
-} from '@/code/data/features/user/user';
+} from '@/code/data/features/user/user-type';
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');

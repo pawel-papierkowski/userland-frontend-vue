@@ -11,7 +11,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import type { UserHistoryTableFilterForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserHistoryTableFilterForm } from '@/code/data/features/user/admin-user-type.ts';
 import { enUserHistoryWho, enUserHistoryWhat } from '@/code/data/features/user/user-const.ts';
 
 import ComboBox from '@/components/base/inputs/ComboBox.vue';

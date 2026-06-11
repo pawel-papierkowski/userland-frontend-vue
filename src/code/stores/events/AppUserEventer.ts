@@ -1,6 +1,6 @@
 import { useUserEventStore } from '@/stores/events/user-events.ts';
 
-import type { UserFullDataForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserFullDataForm } from '@/code/data/features/user/admin-user-type.ts';
 
 /**
  * Class for notifying about application-wide user-related events.

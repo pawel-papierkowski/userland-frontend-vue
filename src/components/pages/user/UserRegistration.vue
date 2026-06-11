@@ -12,7 +12,7 @@ import { defDuration } from '@/stores/messages.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user';
+import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
 const log = useLogger();
 const router = useRouter();
@@ -94,7 +94,7 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', defDuration*2);
+  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', defDuration * 2);
   log.debug('Registered user using form data:', { ...form });
 };
 

@@ -11,7 +11,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import type { UserConfigTableFilterForm } from '@/code/data/features/user/admin-user.ts';
+import type { UserConfigTableFilterForm } from '@/code/data/features/user/admin-user-type.ts';
 
 import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
 

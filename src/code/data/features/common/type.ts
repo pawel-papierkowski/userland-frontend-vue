@@ -2,6 +2,8 @@
 
 import type { Component } from 'vue';
 
+import type { EnColumnKind } from '@/code/data/features/common/const.ts';
+
 // //////
 // EDITOR
 
@@ -16,10 +18,16 @@ export type TabData = {
 
 /** Column data for TablePage component. */
 export type ColumnData = {
+  /** Name of column. */
   name: string,
-  defSort: string, // Default sort for this column. Allowed values: ASC, DESC.
+  /** Default sort for this column. Allowed values: 'ASC', 'DESC' or '' (no sorting enabled for this column). */
+  defSort: string,
+  /** Translation key for column header. */
   translation: string,
-  visible: boolean
+  /** Is column visible? */
+  visible: boolean,
+  /** Kind of column. */
+  kind: EnColumnKind,
 };
 
 /** Table metadata request for pagination and sorting. */
@@ -39,4 +47,20 @@ export type TableMetaResp = {
   page: number; // Page number.
   sortBy: string; // Name of field to sort by. If null/empty, will sort by default field (usually createdAt).
   sortOrder: string; // Sort order for sortBy. If null/empty, will use descending order.
+};
+
+/** Entry metadata response. */
+export type EntryMeta = {
+  /** Options available for this entry. */
+  options: Record<string, EntryOption>|null,
+  /** Other metadata. */
+  data: Record<string, string>|null
+};
+
+/** Entry metadata option. */
+export type EntryOption = {
+  /** Access rules. */
+  access: 'INVISIBLE'|'DISABLED'|'ENABLED',
+  /** Reason for state of option as language key. */
+  reason: string|null,
 };

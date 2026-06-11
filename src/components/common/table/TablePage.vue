@@ -1,6 +1,6 @@
 <script setup lang="ts" generic="E extends Record<string, any>">
 /** Component that shows any table.
- * 
+ *
  * Features:
  * - Selecting/deselecting record.
  * - Pagination.
@@ -23,65 +23,65 @@
  * - isLoading - If true, show spinner instead of table content.
  * - canSpin - If true, spinner can spin.
  * - empty - I18n key to show when table is empty. Optional.
+ *
+ * Slots:
+ * - custom slots defined in colums for kind === EnColumnKind.Custom, with name 'column_[column name]'. These have 'entry' available.
  */
 import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ColumnData, TableMetaResp } from "@/code/data/features/common.ts";
+import type { ColumnData, TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import TablePaginer from '@/components/common/table/TablePaginer.vue';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
+import { EnColumnKind } from '@/code/data/features/common/const';
 
 const { t } = useI18n();
 
 const selRecord = defineModel<E | null>({ required: true });
 const currPage = defineModel<number>('currPage', { required: true });
-const currSortBy = defineModel<string|null>('currSortBy', { required: true });
-const currSortOrder = defineModel<string|null>('currSortOrder', { required: true });
+const currSortBy = defineModel<string | null>('currSortBy', { required: true });
+const currSortOrder = defineModel<string | null>('currSortOrder', { required: true });
 
-const props = withDefaults(defineProps<{
-  columns: ColumnData[];
-  data: E[];
-  meta: TableMetaResp;
-  canSelect?: boolean;
-  isLoading: boolean;
-  canSpin: boolean;
-  empty?: string;
-}>(), {
-  canSelect: true,
-  empty: ''
-});
+const props = withDefaults(
+  defineProps<{
+    columns: ColumnData[];
+    data: E[];
+    meta: TableMetaResp;
+    canSelect?: boolean;
+    isLoading: boolean;
+    canSpin: boolean;
+    empty?: string;
+  }>(),
+  {
+    canSelect: true,
+    empty: '',
+  },
+);
 
 const visibleColumnsCount = computed(() => {
-  return props.columns.filter(c => c.visible).length;
+  return props.columns.filter((c) => c.visible).length;
 });
 
 /** If you disable selection abiliy, automatically deselect. */
-watch(() => props.canSelect, () => {
-  if (!props.canSelect) selRecord.value = null;
-});
+watch(
+  () => props.canSelect,
+  () => {
+    if (!props.canSelect) selRecord.value = null;
+  },
+);
+
+// Table column handling.
 
 /**
- * Select entry. If this entry is already selected, it is deselected.
- * @param entry Entry to select.
+ * Find out additional classes for column header.
+ * @param column Column data.
  */
-const selectEntry = (entry: E) => {
-  if (!props.canSelect) return;
-  // This automatically emits 'update:modelValue' to the parent.
-  if (selRecord.value === entry) selRecord.value = null;
-  else selRecord.value = entry;
-}
-
-const changeSort = (column: ColumnData) => {
-  if (currSortBy.value === column.name) {
-    if (currSortOrder.value === 'DESC') currSortOrder.value = 'ASC';
-    else currSortOrder.value = 'DESC';
-    return;
+const columHeaderClass = (column: ColumnData) => {
+  return {
+    sortable: column.defSort !== ''
   }
-  // Different column to sort.
-  currSortBy.value = column.name;
-  currSortOrder.value = column.defSort;
-}
+};
 
 /**
  * Determine class for sort marker, if any.
@@ -94,7 +94,28 @@ const sortMarker = (column: ColumnData) => {
   }
   if (currSortOrder.value === 'DESC') return 'arrow-desc';
   return 'arrow-asc';
-}
+};
+
+/**
+ * Change sorting for this column.
+ * @param column Column data.
+ */
+const changeSort = (column: ColumnData) => {
+  if (column.defSort === '') return; // No sorting enabled here.
+
+  // Table is already sorted by this column, we reverse direction of sorting.
+  if (currSortBy.value === column.name) {
+    if (currSortOrder.value === 'DESC') currSortOrder.value = 'ASC';
+    else currSortOrder.value = 'DESC';
+    return;
+  }
+
+  // We choose different column to sort.
+  currSortBy.value = column.name;
+  currSortOrder.value = column.defSort;
+};
+
+// Table row.
 
 /**
  * Determine class for table row.
@@ -107,22 +128,32 @@ const rowClass = (entry: E, rowIndex: number) => {
   return {
     unselectable: !props.canSelect,
     selected: selected,
-    odd: rowIndex%2 === 0
+    odd: rowIndex % 2 === 0,
   };
-}
+};
+
+/**
+ * Select entry. If this entry is already selected, it is deselected.
+ * @param entry Entry to select.
+ */
+const selectEntry = (entry: E) => {
+  if (!props.canSelect) return;
+  // This automatically emits 'update:modelValue' to the parent.
+  if (selRecord.value === entry) selRecord.value = null;
+  else selRecord.value = entry;
+};
 </script>
 
 <template>
   <div class="table-container" role="table" :style="{ '--col-count': visibleColumnsCount }">
-
     <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
       <div class="table-header-row" role="row">
         <template v-for="(column, colIndex) in columns" :key="colIndex">
-          <div v-if="column.visible" class="table-header-cell" role="columnheader"
+          <div v-if="column.visible" class="table-header-cell" :class="columHeaderClass(column)" role="columnheader"
             @click="changeSort(column)">
             {{ t(column.translation) }}
-            <span :class="sortMarker(column)"></span>
+            <span v-if="column.defSort !== ''" :class="sortMarker(column)"></span>
           </div>
         </template>
       </div>
@@ -140,14 +171,21 @@ const rowClass = (entry: E, rowIndex: number) => {
     <template v-else>
       <!-- TABLE ROWS -->
       <div class="table-row-group" role="rowgroup">
-        <div v-for="(entry, rowIndex) in data" :key="rowIndex"
-              class="table-row" :class="rowClass(entry, rowIndex)"
-              role="row" @click="selectEntry(entry)">
-
+        <div
+          v-for="(entry, rowIndex) in data"
+          :key="rowIndex"
+          class="table-row"
+          :class="rowClass(entry, rowIndex)"
+          role="row"
+          @click="selectEntry(entry)"
+        >
           <!-- CELLS FOR SINGLE TABLE ROW -->
           <template v-for="(column, colIndex) in columns" :key="colIndex">
             <div v-if="column.visible" class="table-cell" role="cell">
-              <span class="cell-value">{{ entry[column.name] }}</span>
+              <div v-if="column.kind === EnColumnKind.Data" class="cell-value">{{ entry[column.name] }}</div>
+              <template v-else-if="column.kind === EnColumnKind.Custom">
+                <slot :name="'column_'+column.name" :entry="entry" />
+              </template>
             </div>
           </template>
         </div>

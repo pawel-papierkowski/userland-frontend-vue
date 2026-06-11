@@ -8,4 +8,7 @@
   --tablepaginer-navbtn-filter: none;
   --tablepaginer-navbtn-hover-filter: brightness(1.3);
 
+  --table-entry-btn-filter: none;
+  --table-entry-btn-hover-filter: brightness(1.3);
+
 }

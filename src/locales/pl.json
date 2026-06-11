@@ -390,7 +390,14 @@
             "id": "Id",
             "createdAt": "Utworzony",
             "name": "Nazwa",
-            "value": "Wartość"
+            "value": "Wartość",
+            "options": "Opcje"
+          },
+          "tooltip": {
+            "delete": {
+              "action": "Usuń wpis konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis"
+            }
           }
         }
       },

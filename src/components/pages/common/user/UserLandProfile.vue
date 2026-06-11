@@ -10,7 +10,7 @@ import { useLoginStore } from '@/stores/login.ts';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user.ts';
+import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';

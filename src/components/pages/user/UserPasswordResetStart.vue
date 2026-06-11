@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import type { UserPasswordResetLinkForm, UserPasswordResetLinkReq } from '@/code/data/features/user/user';
+import type { UserPasswordResetLinkForm, UserPasswordResetLinkReq } from '@/code/data/features/user/user-type';
 
 const log = useLogger();
 const router = useRouter();

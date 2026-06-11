@@ -11,7 +11,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import type { UserEmailChangeReq } from '@/code/data/features/user/user';
+import type { UserEmailChangeReq } from '@/code/data/features/user/user-type';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';

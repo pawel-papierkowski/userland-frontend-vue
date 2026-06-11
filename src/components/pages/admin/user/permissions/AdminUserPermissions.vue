@@ -15,7 +15,7 @@ import type {
   UserPermissionTableFilterForm,
   UserPermissionTableReq,
   UserPermissionTableEntry,
-} from '@/code/data/features/user/admin-user.ts';
+} from '@/code/data/features/user/admin-user-type.ts';
 import { userPermissionsTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';

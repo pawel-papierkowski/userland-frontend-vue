@@ -8,8 +8,8 @@ import { shallowRef } from 'vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { TabData } from '@/code/data/features/common.ts';
-import type { UserTableEntry } from '@/code/data/features/user/admin-user.ts';
+import type { TabData } from '@/code/data/features/common/type.ts';
+import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 
 import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';
 import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
@@ -20,7 +20,7 @@ import AdminUserJwt from '@/components/pages/admin/user/jwt/AdminUserJwt.vue';
 
 const { t } = useI18n();
 
-const selRecord = defineModel<UserTableEntry|null>();
+const selRecord = defineModel<UserTableEntry | null>();
 
 const activeTab: Component = shallowRef(AdminUserMain);
 const tabs: TabData[] = [
@@ -29,7 +29,7 @@ const tabs: TabData[] = [
   { id: 'permissions', label: 'admin.user.permissions.tab', component: AdminUserPermissions },
   { id: 'config', label: 'admin.user.config.tab', component: AdminUserConfig },
   { id: 'tokens', label: 'admin.user.tokens.tab', component: AdminUserTokens },
-  { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserJwt }
+  { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserJwt },
 ];
 
 /**
@@ -37,8 +37,8 @@ const tabs: TabData[] = [
  * @param tab Tab to use.
  */
 const selectTab = (tab: TabData) => {
-  activeTab.value = tab.component
-}
+  activeTab.value = tab.component;
+};
 
 /**
  * Determine CSS classes that this tab header should have.
@@ -46,16 +46,15 @@ const selectTab = (tab: TabData) => {
  */
 const resolveClass = (tab: TabData) => {
   return {
-    'active': activeTab.value === tab.component
+    active: activeTab.value === tab.component,
   };
-}
+};
 </script>
 
 <template>
   <div class="tab-wrapper">
     <div class="tab-header">
-      <div v-for="tab in tabs" :key="tab.id" class="tab-entry" :class="resolveClass(tab)"
-        @click="selectTab(tab)">
+      <div v-for="tab in tabs" :key="tab.id" class="tab-entry" :class="resolveClass(tab)" @click="selectTab(tab)">
         {{ t(tab.label) }}
       </div>
     </div>
@@ -92,7 +91,5 @@ const resolveClass = (tab: TabData) => {
 }
 
 .tab-content {
-
 }
-
 </style>

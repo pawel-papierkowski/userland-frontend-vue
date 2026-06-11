@@ -12,7 +12,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
-import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user';
+import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user-type';
 
 const log = useLogger();
 const router = useRouter();

@@ -1,6 +1,6 @@
 // All types for admin user feature.
-import type { TableMetaReq, TableMetaResp } from '@/code/data/features/common.ts';
-import type { UserProfileData } from '@/code/data/features/user/user.ts';
+import type { TableMetaReq, TableMetaResp, EntryMeta } from '@/code/data/features/common/type.ts';
+import type { UserProfileData } from '@/code/data/features/user/user-type';
 
 // USER TABLE
 
@@ -45,11 +45,11 @@ export type UserTableEntry = {
 /** User full data request. */
 export type UserFullDataReq = {
   id: number; // Identificator of user.
-  username: string|null;
-  email: string|null;
-  locked: boolean|null;
-  lang: string|null;
-  profile: UserProfileData|null;
+  username: string | null;
+  email: string | null;
+  locked: boolean | null;
+  lang: string | null;
+  profile: UserProfileData | null;
 };
 
 /** User full data response. */
@@ -175,6 +175,7 @@ export type UserConfigTableEntry = {
   createdAt: string;
   name: string;
   value: string;
+  meta: EntryMeta|null;
 };
 
 // USER TOKENS TABLE
@@ -230,7 +231,8 @@ export type UserJwtTableReq = {
 
 /** User JWT table load response: page. */
 export type UserJwtTableResp = {
-  entries: UserJwtTableEntry[]; // All entries for single page from user JWT table.
+  /** All entries for single page from user JWT table. */
+  entries: UserJwtTableEntry[];
   tableMeta: TableMetaResp;
 };
 
