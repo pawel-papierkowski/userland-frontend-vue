@@ -143,6 +143,7 @@ export type UserPermissionTableEntry = {
   createdAt: string;
   name: string;
   value: string;
+  meta: EntryMeta|null;
 };
 
 // USER CONFIG TABLE
@@ -243,3 +244,10 @@ export type UserJwtTableEntry = {
   expiresAt: string;
   token: string;
 };
+
+// OTHER
+
+/** Needed for proper definition of tabRef because AdminUserTab uses generics. */
+export interface AdminUserTabExpose {
+  handleReload: () => Promise<void>;
+}

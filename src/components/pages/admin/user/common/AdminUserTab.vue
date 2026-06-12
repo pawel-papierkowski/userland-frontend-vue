@@ -153,6 +153,8 @@ watch(currSortOrder, (newVal, oldVal) => {
   handleReload();
 });
 
+//
+
 /** Allow calling handleReload from outside. */
 defineExpose({
   handleReload,

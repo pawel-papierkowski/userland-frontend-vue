@@ -72,6 +72,14 @@ export default {
     return apiClient.post<UserPermissionTableResp>('/user/permissions', payload);
   },
 
+  /**
+   * Delete user permission entry.
+   * @param id Id of user permission entry.
+   */
+  deletePermissionEntry(id: number) {
+    return apiClient.delete(`/user/permission/${id}`);
+  },
+
   // USER CONFIGS TABLE
 
   /**
@@ -81,6 +89,14 @@ export default {
    */
   loadConfigPage(payload: UserConfigTableReq) {
     return apiClient.post<UserConfigTableResp>('/user/configs', payload);
+  },
+
+  /**
+   * Delete user config entry.
+   * @param id Id of user config entry.
+   */
+  deleteConfigEntry(id: number) {
+    return apiClient.delete(`/user/config/${id}`);
   },
 
   // USER TOKENS TABLE

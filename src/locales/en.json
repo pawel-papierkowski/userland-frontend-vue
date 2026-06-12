@@ -370,7 +370,40 @@
             "id": "Id",
             "createdAt": "Created",
             "name": "Name",
-            "value": "Value"
+            "value": "Value",
+            "options": "Options"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Add permission entry.",
+              "notYourself": "You cannot add your own permission.",
+              "adminOnly": "You need administration permissions to add permission entry."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edit permission entry.",
+              "notYourself": "You cannot edit your own permissions.",
+              "adminOnly": "You need administration permissions to edit permission entry."
+            },
+            "delete": {
+              "button": "❌",
+              "action": "Delete configuration entry.",
+              "notYourself": "You cannot delete your own permissions.",
+              "adminOnly": "You need administration permissions to delete permission entry."
+            }
+          },
+          "msg": {
+            "delete": {
+              "success": {
+                "title": "Success",
+                "content": "User permission entry was deleted."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to delete user permission entry!"
+              }
+            }
           }
         }
       },
@@ -393,10 +426,36 @@
             "value": "Value",
             "options": "Options"
           },
-          "tooltip": {
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Add configuration entry.",
+              "notYourself": "You cannot add your own configuration.",
+              "adminOnly": "You need administration permissions to add configuration entry."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edit configuration entry.",
+              "notYourself": "You cannot edit your own configuration.",
+              "adminOnly": "You need administration permissions to edit configuration entry."
+            },
             "delete": {
+              "button": "❌",
               "action": "Delete configuration entry.",
-              "adminOnly": "You need administration permissions to delete entry."
+              "notYourself": "You cannot delete your own configuration.",
+              "adminOnly": "You need administration permissions to delete configuration entry."
+            }
+          },
+          "msg": {
+            "delete": {
+              "success": {
+                "title": "Success",
+                "content": "User config entry was deleted."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to delete user config entry!"
+              }
             }
           }
         }

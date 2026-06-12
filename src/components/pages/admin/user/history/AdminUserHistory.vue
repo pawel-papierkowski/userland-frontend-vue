@@ -18,6 +18,7 @@ import type {
   UserHistoryTableFilterForm,
   UserHistoryTableReq,
   UserHistoryTableEntry,
+  AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts';
 
@@ -37,11 +38,6 @@ const form: UserHistoryTableFilterForm = reactive({
   createdToAt: null,
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
-
-/** Needed for proper definition of tabRef because AdminUserTab uses generics. */
-interface AdminUserTabExpose {
-  handleReload: () => Promise<void>;
-}
 
 /** Reference to tab component. */
 const tabRef = ref<AdminUserTabExpose | null>(null);

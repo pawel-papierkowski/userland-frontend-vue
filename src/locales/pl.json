@@ -370,7 +370,40 @@
             "id": "Id",
             "createdAt": "Utworzony",
             "name": "Nazwa",
-            "value": "Wartość"
+            "value": "Wartość",
+            "options": "Opcje"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Dodaj wpis uprawnień.",
+              "notYourself": "Nie możesz dodawać swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis uprawnienia."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Zmodyfikuj wpis uprawnień.",
+              "notYourself": "Nie możesz edytować swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis uprawnienia."
+            },
+            "delete": {
+              "button": "❌",
+              "action": "Usuń wpis uprawnień.",
+              "notYourself": "Nie możesz usuwać swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis uprawnienia."
+            }
+          },
+          "msg": {
+            "delete": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis uprawnień użytkownika został usunięty."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się usunąć wpisu uprawnień użytkownika!"
+              }
+            }
           }
         }
       },
@@ -393,10 +426,36 @@
             "value": "Wartość",
             "options": "Opcje"
           },
-          "tooltip": {
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Dodaj wpis konfiguracji.",
+              "notYourself": "Nie możesz dodawać swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis konfiguracji."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Zmodyfikuj wpis konfiguracji.",
+              "notYourself": "Nie możesz edytować swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis konfiguracji."
+            },
             "delete": {
+              "button": "❌",
               "action": "Usuń wpis konfiguracji.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis"
+              "notYourself": "Nie możesz usuwać swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis konfiguracji."
+            }
+          },
+          "msg": {
+            "delete": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis konfiguracji użytkownika został usunięty."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się usunąć wpisu konfiguracji użytkownika!"
+              }
             }
           }
         }

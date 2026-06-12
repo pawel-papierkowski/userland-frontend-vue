@@ -2,28 +2,29 @@
 /**
  * View/edit of user's configuration.
  *
- * Properties:
+ * Models:
  * - v-model - Holds selected user.
  */
-import { reactive } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { ref, reactive } from 'vue';
+import type { Ref } from 'vue';
 
+import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
-import { TableUtils } from '@/code/utils/TableUtils.ts';
 
 import type {
   UserTableEntry,
   UserConfigTableFilterForm,
   UserConfigTableReq,
   UserConfigTableEntry,
+  AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userConfigTableColumns } from '@/code/data/features/user/user-const.ts';
 
+import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserConfigFilter from '@/components/pages/admin/user/config/AdminUserConfigFilter.vue';
-
-const { t } = useI18n();
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
@@ -33,6 +34,13 @@ const form: UserConfigTableFilterForm = reactive({
   createdToAt: null,
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
+
+/** Reference to tab component. */
+const tabRef = ref<AdminUserTabExpose | null>(null);
+/** True if busy executing options. */
+const isBusyOptions: Ref<boolean> = ref(false);
+
+//
 
 /**
  * Convert form data to request data.
@@ -62,63 +70,55 @@ const processEntry = (entry: UserConfigTableEntry) => {
   }
 };
 
-// OPTIONS
+//
 
 /**
- * Get dynamic class of delete button.
- * @param entry Entry.
+ * Add new entry.
+ * @param entry Table entry.
  */
-const deleteBtnClass = (entry: UserConfigTableEntry) => {
-  return {
-    disabled: !canDelete(entry)
+const addEntry = async () => {
+  // TODO
+  console.warn(`Should execute option addEntry() for config entry.`);
+}
+
+/**
+ * Edit given entry.
+ * @param entry Table entry.
+ */
+const editEntry = async (entry: UserConfigTableEntry) => {
+  // TODO
+  console.warn(`Should execute option editEntry() for config entry.`);
+}
+
+/**
+ * Delete given entry.
+ * @param entry Table entry.
+ */
+const deleteEntry = async (entry: UserConfigTableEntry) => {
+  isBusyOptions.value = true;
+
+  try {
+    await backendApiAdminUser.deleteConfigEntry(entry.id);
+    tabRef.value?.handleReload();
+    AppMessager.successT('admin.user.config.table.msg.delete.success.title', 'admin.user.config.table.msg.delete.success.content');
+  } catch (error) {
+    AppMessager.errorT(error, 'admin.user.config.table.msg.delete.fail.title', 'admin.user.config.table.msg.delete.fail.content');
+    backendApi.logError(error, 'Failed to delete user config entry!');
+  } finally {
+    isBusyOptions.value = false;
   }
-};
+}
 
-/**
- * Check if can delete entry.
- * @param entry Entry.
- * @returns True if can delete, otherwise false.
- */
-const canDelete = (entry: UserConfigTableEntry): boolean => {
-  const option = TableUtils.ExtractOption(entry.meta, 'delete');
-  if (option == null) return false;
-  return option.access === 'ENABLED';
-};
-
-/**
- * Check if delete button is visible.
- * @param entry Entry.
- * @returns True if can see delete button, otherwise false.
- */
-const canSee = (entry: UserConfigTableEntry): boolean => {
-  const option = TableUtils.ExtractOption(entry.meta, 'delete');
-  if (option == null) return false;
-  return option.access !== 'INVISIBLE';
-};
-
-/**
- * Resolve tooltip for delete button.
- * @param entry Entry.
- */
-const deleteTooltip = (entry: UserConfigTableEntry): string => {
-  const option = TableUtils.ExtractOption(entry.meta, 'delete');
-  const reason = option?.reason ? option.reason : 'action';
-  return 'admin.user.config.table.tooltip.delete.' + reason;
-};
-
-/**
- * Delete config entry.
- * @param entry Entry to delete.
- */
-const deleteConfig = async (entry: UserConfigTableEntry) => {
-  if (!canDelete(entry)) return;
-  // TODO actually delete, for now just acknowledge
-  console.warn('Should delete entry and reload table');
-};
+/** Actions for EntryOptions. */
+const actions: Record<string, (entry: UserConfigTableEntry) => Promise<void>> = reactive({
+  edit: editEntry,
+  delete: deleteEntry,
+});
 </script>
 
 <template>
   <AdminUserTab
+    ref="tabRef"
     v-model="selUserRecord"
     v-model:form="form"
     :columns="userConfigTableColumns"
@@ -133,12 +133,8 @@ const deleteConfig = async (entry: UserConfigTableEntry) => {
     </template>
     <!-- Custom slots. -->
     <template #column_options="{ entry }">
-      <div class="entry-content">
-        <div class="entry-btn" :class="deleteBtnClass(entry)" :title="t(deleteTooltip(entry))"
-          v-if="canSee(entry)" @click="deleteConfig(entry)">
-          ❌
-        </div>
-      </div>
+      <EntryOptions :meta="entry.meta" :entry="entry" :actions="actions" :isBusy="isBusyOptions"
+        langPrefix="admin.user.config.table.texts" />
     </template>
   </AdminUserTab>
 </template>

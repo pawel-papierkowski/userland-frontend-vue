@@ -272,6 +272,5 @@
   opacity: 0.5; /* Makes it look faded */
   color: #9ca3af; /* For regular text */
 
-  pointer-events: none;
   cursor: default;
 }

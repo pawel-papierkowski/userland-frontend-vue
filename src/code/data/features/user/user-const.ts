@@ -169,6 +169,13 @@ export const userPermissionsTableColumns: ColumnData[] = [
     visible: true,
     kind: EnColumnKind.Data,
   },
+  {
+    name: 'options',
+    defSort: '',
+    translation: 'admin.user.permissions.table.col.options',
+    visible: true,
+    kind: EnColumnKind.Custom,
+  },
 ];
 
 // USER CONFIG TABLE
