@@ -851,6 +851,10 @@
       "title": "Failure",
       "content": "User config entry is missing."
     },
+    "user_0022": {
+      "title": "Failure",
+      "content": "Same user config entry already exists."
+    },
     "user_0031": {
       "title": "Failure",
       "content": "User permission entry is missing."

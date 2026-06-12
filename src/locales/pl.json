@@ -851,6 +851,10 @@
       "title": "Niepowodzenie",
       "content": "Zmienna konfiguracji użytkownika nie istnieje."
     },
+    "user_0022": {
+      "title": "Niepowodzenie",
+      "content": "Ta sama zmienna konfiguracji użytkownika już istnieje."
+    },
     "user_0031": {
       "title": "Niepowodzenie",
       "content": "Zmienna uprawnień użytkownika nie istnieje."
