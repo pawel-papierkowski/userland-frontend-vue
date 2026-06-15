@@ -77,10 +77,10 @@ const processEntry = (entry: UserHistoryTableEntry) => {
 //
 
 /** When user switches to this tab. */
-onActivated(() => {
+onActivated(async () => {
   if (shouldReload.value) {
     shouldReload.value = false;
-    tabRef.value?.handleReload();
+    await tabRef.value?.handleReload();
   }
 });
 

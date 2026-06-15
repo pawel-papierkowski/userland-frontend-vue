@@ -20,20 +20,24 @@
  * - emptyText - Text to show when table is empty.
  * - emptyNoUserText - Text to show when table is empty because no user was selected.
  */
-import { ref, watch, computed, shallowRef } from 'vue';
+import { ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
 
 import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
-import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/features/common/type.ts';
+import type { ColumnData, TableMetaReq, TableMetaResp, TablePageExpose } from '@/code/data/features/common/type.ts';
 import { EnColumnKind } from '@/code/data/features/common/const.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
+/** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
+/** Selected entry record. */
+const selEntryRecord = defineModel<E | null>('entry', { required: true });
+/** Form data. */
 const form = defineModel<F>('form', { required: true });
 
 const props = defineProps<{
@@ -51,8 +55,6 @@ const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({
   tableMeta: { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' },
 });
 
-/** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
-const selEntryRecord = shallowRef<E | null>(null);
 /** Current page. */
 const currPage: Ref<number> = ref(0);
 /** Current sort column. Null means default sorting. */
@@ -60,6 +62,8 @@ const currSortBy: Ref<string | null> = ref(null);
 /** Current sort order. Null means default sort order. */
 const currSortOrder: Ref<string | null> = ref(null);
 
+/** Reference to tab component. */
+const tablePageRef = ref<TablePageExpose | null>(null);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isBusy: Ref<boolean> = ref(false);
 /** True if data load is in progress, otherwise false. */
@@ -68,6 +72,8 @@ const isLoading: Ref<boolean> = ref(false);
 const canSpin: Ref<boolean> = ref(true);
 
 const isDisabled = computed(() => selUserRecord.value === null);
+
+//
 
 /** Handle reload of table with filtering. */
 const handleReload = async () => {
@@ -155,9 +161,21 @@ watch(currSortOrder, (newVal, oldVal) => {
 
 //
 
+/**
+ * Select entry. If this entry is already selected, it is deselected.
+ * @param entry Entry to select.
+ * @param force If true, ignore props.canSelect.
+ */
+const selectEntry = (entry: E, force: boolean) => {
+  tablePageRef.value?.selectEntry(entry, force);
+};
+
+//
+
 /** Allow calling handleReload from outside. */
 defineExpose({
   handleReload,
+  selectEntry,
 });
 </script>
 
@@ -167,7 +185,7 @@ defineExpose({
       <slot name="filter" :isBusy="isBusy" :isDisabled="isDisabled" :handleReload="handleReload" />
     </template>
     <template #tablePanel>
-      <TablePage
+      <TablePage ref="tablePageRef"
         v-model="selEntryRecord"
         v-model:currPage="currPage"
         v-model:currSortBy="currSortBy"

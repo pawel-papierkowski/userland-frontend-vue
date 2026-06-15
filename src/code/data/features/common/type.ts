@@ -26,6 +26,8 @@ export type ColumnData = {
   translation: string,
   /** Is column visible? */
   visible: boolean,
+  /** Is column editable? Applies only to in-place editing. */
+  editable: boolean,
   /** Kind of column. */
   kind: EnColumnKind,
 };
@@ -64,3 +66,11 @@ export type EntryOption = {
   /** Reason for state of option as language key. */
   reason: string|null,
 };
+
+// OTHER
+
+/** Needed for proper definition of tablePageRef because TablePage uses generics. */
+export interface TablePageExpose {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  selectEntry: (entry: Record<string, any>, force: boolean) => Promise<void>;
+}

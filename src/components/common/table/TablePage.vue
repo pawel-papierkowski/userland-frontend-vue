@@ -135,13 +135,21 @@ const rowClass = (entry: E, rowIndex: number) => {
 /**
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select.
+ * @param force If true, ignore props.canSelect.
  */
-const selectEntry = (entry: E) => {
-  if (!props.canSelect) return;
+const selectEntry = (entry: E, force: boolean) => {
+  if (!force && !props.canSelect) return;
   // This automatically emits 'update:modelValue' to the parent.
   if (selRecord.value === entry) selRecord.value = null;
   else selRecord.value = entry;
 };
+
+//
+
+/** Allow calling selectEntry from outside. */
+defineExpose({
+  selectEntry,
+});
 </script>
 
 <template>
@@ -177,7 +185,7 @@ const selectEntry = (entry: E) => {
           class="table-row"
           :class="rowClass(entry, rowIndex)"
           role="row"
-          @click="selectEntry(entry)"
+          @click="selectEntry(entry, false)"
         >
           <!-- CELLS FOR SINGLE TABLE ROW -->
           <template v-for="(column, colIndex) in columns" :key="colIndex">

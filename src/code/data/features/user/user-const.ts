@@ -41,6 +41,7 @@ export const userTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -48,6 +49,7 @@ export const userTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -55,6 +57,7 @@ export const userTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.table.col.username',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -62,6 +65,7 @@ export const userTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.table.col.email',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
 ];
@@ -99,6 +103,7 @@ export const userHistoryTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.history.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -106,6 +111,7 @@ export const userHistoryTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.history.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -113,6 +119,7 @@ export const userHistoryTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.history.table.col.who',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -120,6 +127,7 @@ export const userHistoryTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.history.table.col.what',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -127,6 +135,7 @@ export const userHistoryTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.history.table.col.params',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
 ];
@@ -146,6 +155,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.permissions.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -153,6 +163,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.permissions.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -160,6 +171,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.permissions.table.col.name',
     visible: true,
+    editable: true,
     kind: EnColumnKind.Data,
   },
   {
@@ -167,6 +179,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.permissions.table.col.value',
     visible: true,
+    editable: true,
     kind: EnColumnKind.Data,
   },
   {
@@ -174,6 +187,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
     defSort: '',
     translation: 'admin.user.permissions.table.col.options',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Custom,
   },
 ];
@@ -193,6 +207,7 @@ export const userConfigTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.config.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -200,6 +215,7 @@ export const userConfigTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.config.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -207,6 +223,7 @@ export const userConfigTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.config.table.col.name',
     visible: true,
+    editable: true,
     kind: EnColumnKind.Data,
   },
   {
@@ -214,6 +231,7 @@ export const userConfigTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.config.table.col.value',
     visible: true,
+    editable: true,
     kind: EnColumnKind.Data,
   },
   {
@@ -221,6 +239,7 @@ export const userConfigTableColumns: ColumnData[] = [
     defSort: '',
     translation: 'admin.user.config.table.col.options',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Custom,
   },
 ];
@@ -240,6 +259,7 @@ export const userTokensTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.tokens.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -247,6 +267,7 @@ export const userTokensTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.tokens.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -254,6 +275,7 @@ export const userTokensTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.tokens.table.col.expiresAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -261,6 +283,7 @@ export const userTokensTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.tokens.table.col.token',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -268,6 +291,7 @@ export const userTokensTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.tokens.table.col.payload',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
 ];
@@ -287,6 +311,7 @@ export const userJwtTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.jwt.table.col.id',
     visible: false,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -294,6 +319,7 @@ export const userJwtTableColumns: ColumnData[] = [
     defSort: 'DESC',
     translation: 'admin.user.jwt.table.col.createdAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -301,6 +327,7 @@ export const userJwtTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.jwt.table.col.expiresAt',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
   {
@@ -308,6 +335,7 @@ export const userJwtTableColumns: ColumnData[] = [
     defSort: 'ASC',
     translation: 'admin.user.jwt.table.col.token',
     visible: true,
+    editable: false,
     kind: EnColumnKind.Data,
   },
 ];

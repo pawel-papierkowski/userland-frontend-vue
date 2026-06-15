@@ -380,6 +380,14 @@
               "notYourself": "You cannot add your own permission.",
               "adminOnly": "You need administration permissions to add permission entry."
             },
+            "save": {
+              "button": "💾",
+              "action": "Save permission entry."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Cancel editing the permission entry."
+            },
             "edit": {
               "button": "✏️",
               "action": "Edit permission entry.",
@@ -387,13 +395,23 @@
               "adminOnly": "You need administration permissions to edit permission entry."
             },
             "delete": {
-              "button": "❌",
+              "button": "🗑️",
               "action": "Delete configuration entry.",
               "notYourself": "You cannot delete your own permissions.",
               "adminOnly": "You need administration permissions to delete permission entry."
             }
           },
           "msg": {
+            "save": {
+              "success": {
+                "title": "Success",
+                "content": "User permission entry was saved."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to saved user permission entry!"
+              }
+            },
             "delete": {
               "success": {
                 "title": "Success",
@@ -433,6 +451,14 @@
               "notYourself": "You cannot add your own configuration.",
               "adminOnly": "You need administration permissions to add configuration entry."
             },
+            "save": {
+              "button": "💾",
+              "action": "Save configuration entry."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Cancel editing the configuration entry."
+            },
             "edit": {
               "button": "✏️",
               "action": "Edit configuration entry.",
@@ -440,13 +466,23 @@
               "adminOnly": "You need administration permissions to edit configuration entry."
             },
             "delete": {
-              "button": "❌",
+              "button": "🗑️",
               "action": "Delete configuration entry.",
               "notYourself": "You cannot delete your own configuration.",
               "adminOnly": "You need administration permissions to delete configuration entry."
             }
           },
           "msg": {
+            "save": {
+              "success": {
+                "title": "Success",
+                "content": "User config entry was saved."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to save user config entry!"
+              }
+            },
             "delete": {
               "success": {
                 "title": "Success",

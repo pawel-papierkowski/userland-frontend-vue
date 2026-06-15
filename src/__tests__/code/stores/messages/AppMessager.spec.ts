@@ -28,7 +28,7 @@ describe('AppMessager', () => {
     const messageStore = useMessageStore();
 
     // Act: create translated message.
-    AppMessager.infoT('testArea.msgButtons.info.title', 'testArea.msgButtons.info.content');
+    AppMessager.infoT('testArea.messages.msgButtons.info.title', 'testArea.messages.msgButtons.info.content');
 
     // Assert: message exists in store.
     expect(messageStore.messages).toHaveLength(1);

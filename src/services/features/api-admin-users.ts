@@ -9,8 +9,10 @@ import type {
   UserHistoryTableResp,
   UserPermissionTableReq,
   UserPermissionTableResp,
+  UserPermissionEntryEditReq,
   UserConfigTableReq,
   UserConfigTableResp,
+  UserConfigEntryEditReq,
   UserTokenTableReq,
   UserTokenTableResp,
   UserJwtTableReq,
@@ -73,6 +75,14 @@ export default {
   },
 
   /**
+   * Edit user permission entry.
+   * @param payload User config entry edit request.
+   */
+  editPermissionEntry(payload: UserPermissionEntryEditReq) {
+    return apiClient.patch(`/user/permission`, payload);
+  },
+
+  /**
    * Delete user permission entry.
    * @param id Id of user permission entry.
    */
@@ -89,6 +99,14 @@ export default {
    */
   loadConfigPage(payload: UserConfigTableReq) {
     return apiClient.post<UserConfigTableResp>('/user/configs', payload);
+  },
+
+  /**
+   * Edit user config entry.
+   * @param payload User config entry edit request.
+   */
+  editConfigEntry(payload: UserConfigEntryEditReq) {
+    return apiClient.patch(`/user/config`, payload);
   },
 
   /**

@@ -146,6 +146,20 @@ export type UserPermissionTableEntry = {
   meta: EntryMeta|null;
 };
 
+/** User permission table entry edit form. */
+export type UserPermissionEntryEditForm = {
+  name: string;
+  value: string;
+};
+
+/** User permission table entry edit request. */
+export type UserPermissionEntryEditReq = {
+  id: number|null; // Null if new entry, otherwise edit existing entry.
+  userId: number;
+  name: string;
+  value: string;
+};
+
 // USER CONFIG TABLE
 
 /** User config table filter form. */
@@ -177,6 +191,20 @@ export type UserConfigTableEntry = {
   name: string;
   value: string;
   meta: EntryMeta|null;
+};
+
+/** User config table entry edit form. */
+export type UserConfigEntryEditForm = {
+  name: string;
+  value: string;
+};
+
+/** User config table entry edit request. */
+export type UserConfigEntryEditReq = {
+  id: number|null; // Null if new entry, otherwise edit existing entry.
+  userId: number;
+  name: string;
+  value: string;
 };
 
 // USER TOKENS TABLE
@@ -250,4 +278,6 @@ export type UserJwtTableEntry = {
 /** Needed for proper definition of tabRef because AdminUserTab uses generics. */
 export interface AdminUserTabExpose {
   handleReload: () => Promise<void>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  selectEntry: (entry: Record<string, any>, force: boolean) => Promise<void>;
 }

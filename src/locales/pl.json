@@ -380,20 +380,38 @@
               "notYourself": "Nie możesz dodawać swoich własnych uprawnień.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis uprawnienia."
             },
+            "save": {
+              "button": "💾",
+              "action": "Zapisz wpis uprawnień."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Anuluj edycję wpisu uprawnień."
+            },
             "edit": {
               "button": "✏️",
-              "action": "Zmodyfikuj wpis uprawnień.",
+              "action": "Edytuj wpis uprawnień.",
               "notYourself": "Nie możesz edytować swoich własnych uprawnień.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis uprawnienia."
             },
             "delete": {
-              "button": "❌",
+              "button": "🗑️",
               "action": "Usuń wpis uprawnień.",
               "notYourself": "Nie możesz usuwać swoich własnych uprawnień.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis uprawnienia."
             }
           },
           "msg": {
+            "save": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis uprawnień użytkownika został zapisany."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się zapisać wpisu uprawnień użytkownika!"
+              }
+            },
             "delete": {
               "success": {
                 "title": "Sukces",
@@ -433,20 +451,38 @@
               "notYourself": "Nie możesz dodawać swojej własnej konfiguracji.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis konfiguracji."
             },
+            "save": {
+              "button": "💾",
+              "action": "Zapisz wpis konfiguracji."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Anuluj edycję wpisu konfiguracji."
+            },
             "edit": {
               "button": "✏️",
-              "action": "Zmodyfikuj wpis konfiguracji.",
+              "action": "Edytuj wpis konfiguracji.",
               "notYourself": "Nie możesz edytować swojej własnej konfiguracji.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis konfiguracji."
             },
             "delete": {
-              "button": "❌",
+              "button": "🗑️",
               "action": "Usuń wpis konfiguracji.",
               "notYourself": "Nie możesz usuwać swojej własnej konfiguracji.",
               "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis konfiguracji."
             }
           },
           "msg": {
+            "save": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis konfiguracji użytkownika został zapisany."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się zapisać wpisu konfiguracji użytkownika!"
+              }
+            },
             "delete": {
               "success": {
                 "title": "Sukces",
