@@ -17,6 +17,7 @@
  * - fetchData - Function that fetches data from backend to table.
  * - convertToReq - Function that converts filter form to API request.
  * - processEntry - Function that processes given entry for showing in table. Optional.
+ * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - emptyText - Text to show when table is empty.
  * - emptyNoUserText - Text to show when table is empty because no user was selected.
  */
@@ -36,18 +37,21 @@ import TablePage from '@/components/common/table/TablePage.vue';
 /** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
 /** Selected entry record. */
-const selEntryRecord = defineModel<E | null>('entry', { required: true });
+const selEntryRecord = defineModel<E | null>('entry', { required: false });
 /** Form data. */
 const form = defineModel<F>('form', { required: true });
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   columns: ColumnData[];
   fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
   convertToReq: (form: F, userId: number) => R;
   processEntry?: (entry: E) => void;
+  inlineEdit?: boolean;
   emptyText: string;
   emptyNoUserText: string;
-}>();
+}>(), {
+  inlineEdit: false,
+});
 
 /** Loaded page of data. */
 const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({

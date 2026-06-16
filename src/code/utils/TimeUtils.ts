@@ -1,6 +1,36 @@
 /** Time-related utility functions. */
 export class TimeUtils {
   /**
+   * Convert UTC date to date with local timezone applied.
+   * @param dateStr Date as string in format 'YYYY-MM-DDThh:mm:ss' without timezone. Accepts '.SSS' if present.
+   * @returns Date as string with timezone applied in format 'YYYY-MM-DD hh:mm:ss'.
+   */
+  public static zoned(dateStr: string|null): string {
+    if (dateStr == null) return '';
+
+    // Parse as UTC by adding 'Z' (standard ISO 8601 expects 'T' separator).
+    const dateFixedStr = dateStr.replace('T', ' ') || dateStr;
+    const date = new Date(dateFixedStr + 'Z');
+
+    if (isNaN(date.getTime())) return dateStr; // If parsing fails, return original.
+
+    // Note that parsing will take timezone in account, so we do not have to do anything else.
+    // JS automatically applies the offset that was valid ON THAT DATE.
+    // If date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
+    const YYYY = date.getFullYear();
+    const MM = this.pad(date.getMonth() + 1);
+    const DD = this.pad(date.getDate());
+    const hh = this.pad(date.getHours());
+    const mm = this.pad(date.getMinutes());
+    const ss = this.pad(date.getSeconds());
+    const zonedDateStr = `${YYYY}-${MM}-${DD} ${hh}:${mm}:${ss}`;
+
+    return zonedDateStr;
+  }
+
+  //
+
+  /**
    * Converts a Date to a local ISO string describing full date and time (YYYY-MM-DDThh:mm:ss.SSS).
    * We ignore timezone.
    * @param date Date/time Javascript class instance.

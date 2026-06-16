@@ -90,9 +90,7 @@ const convertEditToReq = (form: UserConfigEntryEditForm, id: number|null, userId
  * @param entry Table entry.
  */
 const processEntry = (entry: UserConfigTableEntry) => {
-  if (entry.createdAt) {
-    entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
-  }
+  entry.createdAt = TimeUtils.zoned(entry.createdAt);
 };
 
 //
@@ -219,6 +217,7 @@ const metaForEntry = (entry: UserConfigTableEntry): EntryMeta|null => {
     :fetchData="backendApiAdminUser.loadConfigPage"
     :convertToReq="convertFilterToReq"
     :processEntry="processEntry"
+    :inlineEdit="true"
     emptyText="admin.user.config.table.empty"
     emptyNoUserText="admin.user.config.table.emptyNoUser"
   >

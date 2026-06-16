@@ -10,6 +10,9 @@ export default mergeConfig(
       exclude: [...configDefaults.exclude, 'e2e/**'],
       root: fileURLToPath(new URL('./', import.meta.url)),
       disableConsoleIntercept: true, // prevent messing with log output
+      env: {
+        TZ: 'Europe/Warsaw' // Ensure tests are in this timezone regardless of where they are executed.
+      }
     },
   }),
 )

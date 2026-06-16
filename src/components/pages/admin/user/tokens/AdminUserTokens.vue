@@ -53,12 +53,8 @@ const convertToReq = (form: UserTokenTableFilterForm, userId: number): UserToken
  * @param entry Table entry.
  */
 const processEntry = (entry: UserTokenTableEntry) => {
-  if (entry.createdAt) {
-    entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
-  }
-  if (entry.expiresAt) {
-    entry.expiresAt = entry.expiresAt.replace('T', ' ').split('.')[0] || entry.expiresAt;
-  }
+  entry.createdAt = TimeUtils.zoned(entry.createdAt);
+  entry.expiresAt = TimeUtils.zoned(entry.expiresAt);
 };
 </script>
 

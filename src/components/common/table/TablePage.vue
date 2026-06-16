@@ -38,7 +38,7 @@ import { EnColumnKind } from '@/code/data/features/common/const';
 
 const { t } = useI18n();
 
-const selRecord = defineModel<E | null>({ required: true });
+const selRecord = defineModel<E | null>({ required: false });
 const currPage = defineModel<number>('currPage', { required: true });
 const currSortBy = defineModel<string | null>('currSortBy', { required: true });
 const currSortOrder = defineModel<string | null>('currSortOrder', { required: true });
@@ -124,7 +124,7 @@ const changeSort = (column: ColumnData) => {
  */
 const rowClass = (entry: E, rowIndex: number) => {
   const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
-  const selected = selRecord.value === null ? false : selRecord.value[key] === entry[key];
+  const selected = (!selRecord.value) ? false : selRecord.value[key] === entry[key];
   return {
     unselectable: !props.canSelect,
     selected: selected,

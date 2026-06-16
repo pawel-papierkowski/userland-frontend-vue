@@ -143,9 +143,7 @@ const processData = (data: UserTableResp) => {
  * @param entry Table entry.
  */
 const processEntry = (entry: UserTableEntry) => {
-  if (entry.createdAt) {
-    entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
-  }
+  entry.createdAt = TimeUtils.zoned(entry.createdAt);
 };
 
 //

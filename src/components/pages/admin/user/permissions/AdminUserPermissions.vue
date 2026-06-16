@@ -90,9 +90,7 @@ const convertEditToReq = (form: UserPermissionEntryEditForm, id: number|null, us
  * @param entry Table entry.
  */
 const processEntry = (entry: UserPermissionTableEntry) => {
-  if (entry.createdAt) {
-    entry.createdAt = entry.createdAt.replace('T', ' ').split('.')[0] || entry.createdAt;
-  }
+  entry.createdAt = TimeUtils.zoned(entry.createdAt);
 };
 
 //
@@ -219,6 +217,7 @@ const metaForEntry = (entry: UserPermissionTableEntry): EntryMeta|null => {
     :fetchData="backendApiAdminUser.loadPermissionsPage"
     :convertToReq="convertFilterToReq"
     :processEntry="processEntry"
+    :inlineEdit="true"
     emptyText="admin.user.permissions.table.empty"
     emptyNoUserText="admin.user.permissions.table.emptyNoUser"
   >
