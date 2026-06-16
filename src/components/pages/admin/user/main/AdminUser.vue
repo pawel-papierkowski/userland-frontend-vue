@@ -57,6 +57,8 @@ const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
 const canSpin: Ref<boolean> = ref(true);
 
+// WATCHES
+
 watch(currPage, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -64,6 +66,7 @@ watch(currPage, (newVal, oldVal) => {
   else form.tableMeta.page = currPage.value;
   handleReload();
 });
+
 watch(currSortBy, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -75,6 +78,7 @@ watch(currSortBy, (newVal, oldVal) => {
   }
   handleReload();
 });
+
 watch(currSortOrder, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -86,6 +90,8 @@ watch(currSortOrder, (newVal, oldVal) => {
   }
   handleReload();
 });
+
+//
 
 /** Handle reload of user table with filtering. */
 const handleReload = async () => {

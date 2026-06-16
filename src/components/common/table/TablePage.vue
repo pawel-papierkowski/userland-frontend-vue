@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="E extends Record<string, any>">
+<script setup lang="ts" generic="E extends Record<string, any>, FE extends Record<string, any>">
 /** Component that shows any table.
  *
  * Features:
@@ -8,18 +8,21 @@
  *
  * Generics:
  * - E: Type of table entry.
+ * - FE: Form for entry.
  *
  * Models:
  * - v-model - Selected record. Null means nothing is selected.
- * - currPage - Currently selected page.
- * - currSortBy - Current sort column.
- * - currSortOrder - Current sort order.
+ * - v-model:formEntry - Form for entry. Used in in-line edit.
+ * - v-model:currPage - Currently selected page.
+ * - v-model:currSortBy - Current sort column.
+ * - v-model:currSortOrder - Current sort order.
  *
  * Properties:
  * - columns - Data about columns. First column must be unique key.
  * - data - Content of table itself.
  * - meta - Table metadata.
- * - canSelect - If true, can select row in table. Optional, defaults to true.
+ * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
+ * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - isLoading - If true, show spinner instead of table content.
  * - canSpin - If true, spinner can spin.
  * - empty - I18n key to show when table is empty. Optional.
@@ -31,14 +34,16 @@ import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, TableMetaResp } from '@/code/data/features/common/type.ts';
+import { EnColumnKind } from '@/code/data/features/common/const';
 
+import TableCell from '@/components/common/table/TableCell.vue';
 import TablePaginer from '@/components/common/table/TablePaginer.vue';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
-import { EnColumnKind } from '@/code/data/features/common/const';
 
 const { t } = useI18n();
 
 const selRecord = defineModel<E | null>({ required: false });
+const formEntry = defineModel<FE | null>('formEntry', { required: false });
 const currPage = defineModel<number>('currPage', { required: true });
 const currSortBy = defineModel<string | null>('currSortBy', { required: true });
 const currSortOrder = defineModel<string | null>('currSortOrder', { required: true });
@@ -49,12 +54,14 @@ const props = withDefaults(
     data: E[];
     meta: TableMetaResp;
     canSelect?: boolean;
+    inlineEdit?: boolean;
     isLoading: boolean;
     canSpin: boolean;
     empty?: string;
   }>(),
   {
     canSelect: true,
+    inlineEdit: false,
     empty: '',
   },
 );
@@ -134,13 +141,14 @@ const rowClass = (entry: E, rowIndex: number) => {
 
 /**
  * Select entry. If this entry is already selected, it is deselected.
- * @param entry Entry to select.
+ * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
  */
-const selectEntry = (entry: E, force: boolean) => {
+const selectEntry = (entry: E|null, force: boolean) => {
   if (!force && !props.canSelect) return;
   // This automatically emits 'update:modelValue' to the parent.
-  if (selRecord.value === entry) selRecord.value = null;
+  if (entry === null) selRecord.value = null;
+  else if (selRecord.value === entry) selRecord.value = null;
   else selRecord.value = entry;
 };
 
@@ -189,12 +197,21 @@ defineExpose({
         >
           <!-- CELLS FOR SINGLE TABLE ROW -->
           <template v-for="(column, colIndex) in columns" :key="colIndex">
-            <div v-if="column.visible" class="table-cell" role="cell">
-              <div v-if="column.kind === EnColumnKind.Data" class="cell-value">{{ entry[column.name] }}</div>
-              <template v-else-if="column.kind === EnColumnKind.Custom">
-                <slot :name="'column_'+column.name" :entry="entry" />
+            <TableCell
+              v-model="selRecord"
+              v-model:formEntry="formEntry"
+              :column="column"
+              :entry="entry"
+              :inlineEdit="inlineEdit"
+            >
+              <!-- Slot forwarding: forward only column with kind = Custom if it exists in $slots -->
+              <template
+                v-if="column.kind === EnColumnKind.Custom && $slots['column_' + column.name]"
+                #[`column_${column.name}`]="slotData"
+              >
+                <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
               </template>
-            </div>
+            </TableCell>
           </template>
         </div>
       </div>

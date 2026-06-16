@@ -279,5 +279,5 @@ export type UserJwtTableEntry = {
 export interface AdminUserTabExpose {
   handleReload: () => Promise<void>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectEntry: (entry: Record<string, any>, force: boolean) => Promise<void>;
+  selectEntry: (entry: Record<string, any>|null, force: boolean) => Promise<void>;
 }

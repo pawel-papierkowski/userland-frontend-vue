@@ -4,12 +4,14 @@
  * Properties:
  * - v-model - Holds selected user.
  */
-import { shallowRef } from 'vue';
+import { shallowRef, watch } from 'vue';
 import type { Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { TabData } from '@/code/data/features/common/type.ts';
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
+
+import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 
 import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';
 import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
@@ -31,6 +33,15 @@ const tabs: TabData[] = [
   { id: 'tokens', label: 'admin.user.tokens.tab', component: AdminUserTokens },
   { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserJwt },
 ];
+
+//
+
+/** Change in selection. */
+watch(selRecord, () => {
+  AppUserEventer.notifyUserSelected();
+});
+
+//
 
 /**
  * Select given tab, making it active.

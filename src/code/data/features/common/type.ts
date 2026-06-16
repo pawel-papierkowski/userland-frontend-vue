@@ -72,5 +72,5 @@ export type EntryOption = {
 /** Needed for proper definition of tablePageRef because TablePage uses generics. */
 export interface TablePageExpose {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectEntry: (entry: Record<string, any>, force: boolean) => Promise<void>;
+  selectEntry: (entry: Record<string, any>|null, force: boolean) => Promise<void>;
 }

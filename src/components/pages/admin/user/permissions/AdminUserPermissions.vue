@@ -5,14 +5,16 @@
  * Models:
  * - v-model - Holds selected user.
  */
-import { ref, reactive, shallowRef } from 'vue';
+import { ref, reactive, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts';
 import type {
   UserTableEntry,
@@ -29,11 +31,14 @@ import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserPermissionsFilter from '@/components/pages/admin/user/permissions/AdminUserPermissionsFilter.vue';
 
+const userEventStore = useUserEventStore();
+const { userSelectedTrigger } = storeToRefs(userEventStore);
+
 const selUserRecord = defineModel<UserTableEntry | null>();
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
 const selEntryRecord = shallowRef<UserPermissionTableEntry | null>(null);
 
-const form: UserPermissionTableFilterForm = reactive({
+const formFilter: UserPermissionTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
   createdToAt: null,
@@ -41,8 +46,8 @@ const form: UserPermissionTableFilterForm = reactive({
 });
 
 const formEntry: UserPermissionEntryEditForm = reactive({
-  name: 'role',
-  value: 'bb'
+  name: '',
+  value: ''
 });
 
 /** Reference to tab component. */
@@ -100,6 +105,8 @@ const processEntry = (entry: UserPermissionTableEntry) => {
  * @param entry Table entry.
  */
 const addEntry = async () => {
+  formEntry.name = '';
+  formEntry.value = '';
   // TODO
   console.warn(`Should execute option addEntry() for permission entry.`);
 }
@@ -117,9 +124,9 @@ const saveEntry = async (entry: UserPermissionTableEntry) => {
     await backendApiAdminUser.editPermissionEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();
-    AppMessager.successT('admin.user.permission.table.msg.save.success.title', 'admin.user.permission.table.msg.save.success.content');
+    AppMessager.successT('admin.user.permissions.table.msg.save.success.title', 'admin.user.permissions.table.msg.save.success.content');
   } catch (error) {
-    AppMessager.errorT(error, 'admin.user.permission.table.msg.save.fail.title', 'admin.user.permission.table.msg.save.fail.content');
+    AppMessager.errorT(error, 'admin.user.permissions.table.msg.save.fail.title', 'admin.user.permissions.table.msg.save.fail.content');
     backendApi.logError(error, 'Failed to save user permission entry!');
   } finally {
     isBusyOptions.value = false;
@@ -139,6 +146,8 @@ const cancelEntry = async (entry: UserPermissionTableEntry) => {
  * @param entry Table entry.
  */
 const editEntry = async (entry: UserPermissionTableEntry) => {
+  formEntry.name = entry.name;
+  formEntry.value = entry.value;
   await tabRef.value?.selectEntry(entry, true);
 }
 
@@ -205,6 +214,14 @@ const metaForEntry = (entry: UserPermissionTableEntry): EntryMeta|null => {
   }
   return entry.meta;
 }
+
+//
+
+/** React on user being (de)selected. */
+watch(userSelectedTrigger, async () => {
+  // Deselect anything in subtable.
+  await tabRef.value?.selectEntry(null, true);
+});
 </script>
 
 <template>
@@ -212,7 +229,8 @@ const metaForEntry = (entry: UserPermissionTableEntry): EntryMeta|null => {
     ref="tabRef"
     v-model="selUserRecord"
     v-model:entry="selEntryRecord"
-    v-model:form="form"
+    v-model:formFilter="formFilter"
+    v-model:formEntry="formEntry"
     :columns="userPermissionsTableColumns"
     :fetchData="backendApiAdminUser.loadPermissionsPage"
     :convertToReq="convertFilterToReq"
@@ -222,7 +240,7 @@ const metaForEntry = (entry: UserPermissionTableEntry): EntryMeta|null => {
     emptyNoUserText="admin.user.permissions.table.emptyNoUser"
   >
     <template #filter="{ isBusy, isDisabled, handleReload }">
-      <AdminUserPermissionsFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
+      <AdminUserPermissionsFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
     <!-- Custom slots. -->
     <template #column_options="{ entry }">

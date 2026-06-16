@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="F extends { tableMeta: TableMetaReq | null }, E extends Record<string, any>, R">
+<script setup lang="ts" generic="F extends { tableMeta: TableMetaReq | null }, E extends Record<string, any>, FE extends Record<string, any>, R">
 /**
  * Generic component for admin user tabs (History, Config, etc.).
  * Handles data fetching, pagination, sorting, and user selection changes.
@@ -6,11 +6,14 @@
  * Generics:
  * - F: Type of filter form.
  * - E: Type of table entry.
+ * - FE: Form for entry itself.
  * - R: Type of API request used in fetchData.
  *
  * Models:
  * - v-model - Selected user record.
- * - v-model:form - Filter form state.
+ * - v-model:entry - Selected entry.
+ * - v-model:formFilter - Filter form state.
+ * - v-model:formEntry - Form for entry. Used in in-line edit.
  *
  * Props:
  * - columns - Data about columns.
@@ -34,12 +37,10 @@ import { EnColumnKind } from '@/code/data/features/common/const.ts';
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
-/** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
-/** Selected entry record. */
 const selEntryRecord = defineModel<E | null>('entry', { required: false });
-/** Form data. */
-const form = defineModel<F>('form', { required: true });
+const formFilter = defineModel<F>('formFilter', { required: true });
+const formEntry = defineModel<FE | null>('formEntry', { required: false });
 
 const props = withDefaults(defineProps<{
   columns: ColumnData[];
@@ -92,7 +93,7 @@ const handleReload = async () => {
   canSpin.value = true;
 
   try {
-    const req = props.convertToReq(form.value, selUserRecord.value.id);
+    const req = props.convertToReq(formFilter.value, selUserRecord.value.id);
     const result = await props.fetchData(req);
     const resp = result.data;
 
@@ -133,20 +134,20 @@ watch(
 watch(currPage, (newVal, oldVal) => {
   if (oldVal === null) return;
 
-  if (!form.value.tableMeta)
-    form.value.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
-  else form.value.tableMeta.page = currPage.value;
+  if (!formFilter.value.tableMeta)
+    formFilter.value.tableMeta = { pageSize: null, page: currPage.value, sortBy: null, sortOrder: null };
+  else formFilter.value.tableMeta.page = currPage.value;
   handleReload();
 });
 
 watch(currSortBy, (newVal, oldVal) => {
   if (oldVal === null) return;
 
-  if (!form.value.tableMeta)
-    form.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  if (!formFilter.value.tableMeta)
+    formFilter.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
   else {
-    form.value.tableMeta.sortBy = currSortBy.value;
-    form.value.tableMeta.sortOrder = currSortOrder.value;
+    formFilter.value.tableMeta.sortBy = currSortBy.value;
+    formFilter.value.tableMeta.sortOrder = currSortOrder.value;
   }
   handleReload();
 });
@@ -154,11 +155,11 @@ watch(currSortBy, (newVal, oldVal) => {
 watch(currSortOrder, (newVal, oldVal) => {
   if (oldVal === null) return;
 
-  if (!form.value.tableMeta)
-    form.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+  if (!formFilter.value.tableMeta)
+    formFilter.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
   else {
-    form.value.tableMeta.sortBy = currSortBy.value;
-    form.value.tableMeta.sortOrder = currSortOrder.value;
+    formFilter.value.tableMeta.sortBy = currSortBy.value;
+    formFilter.value.tableMeta.sortOrder = currSortOrder.value;
   }
   handleReload();
 });
@@ -167,10 +168,10 @@ watch(currSortOrder, (newVal, oldVal) => {
 
 /**
  * Select entry. If this entry is already selected, it is deselected.
- * @param entry Entry to select.
+ * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
  */
-const selectEntry = (entry: E, force: boolean) => {
+const selectEntry = (entry: E|null, force: boolean) => {
   tablePageRef.value?.selectEntry(entry, force);
 };
 
@@ -191,6 +192,7 @@ defineExpose({
     <template #tablePanel>
       <TablePage ref="tablePageRef"
         v-model="selEntryRecord"
+        v-model:formEntry="formEntry"
         v-model:currPage="currPage"
         v-model:currSortBy="currSortBy"
         v-model:currSortOrder="currSortOrder"
@@ -200,6 +202,7 @@ defineExpose({
         :isLoading="isLoading"
         :canSpin="canSpin"
         :canSelect="false"
+        :inlineEdit="inlineEdit"
         :empty="resolveEmptyText()"
       >
         <!-- Slot forwarding: forward only columns with kind = Custom if they exist in $slots -->

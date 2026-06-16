@@ -5,14 +5,16 @@
  * Models:
  * - v-model - Holds selected user.
  */
-import { ref, reactive, shallowRef } from 'vue';
+import { ref, reactive, shallowRef, watch } from 'vue';
 import type { Ref } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts';
 import type {
   UserTableEntry,
@@ -29,11 +31,14 @@ import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserConfigFilter from '@/components/pages/admin/user/config/AdminUserConfigFilter.vue';
 
+const userEventStore = useUserEventStore();
+const { userSelectedTrigger } = storeToRefs(userEventStore);
+
 const selUserRecord = defineModel<UserTableEntry | null>();
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
 const selEntryRecord = shallowRef<UserConfigTableEntry | null>(null);
 
-const form: UserConfigTableFilterForm = reactive({
+const formFilter: UserConfigTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
   createdToAt: null,
@@ -41,8 +46,8 @@ const form: UserConfigTableFilterForm = reactive({
 });
 
 const formEntry: UserConfigEntryEditForm = reactive({
-  name: 'aa',
-  value: 'bb'
+  name: '',
+  value: ''
 });
 
 /** Reference to tab component. */
@@ -100,6 +105,8 @@ const processEntry = (entry: UserConfigTableEntry) => {
  * @param entry Table entry.
  */
 const addEntry = async () => {
+  formEntry.name = '';
+  formEntry.value = '';
   // TODO
   console.warn(`Should execute option addEntry() for config entry.`);
 }
@@ -139,6 +146,8 @@ const cancelEntry = async (entry: UserConfigTableEntry) => {
  * @param entry Table entry.
  */
 const editEntry = async (entry: UserConfigTableEntry) => {
+  formEntry.name = entry.name;
+  formEntry.value = entry.value;
   await tabRef.value?.selectEntry(entry, true);
 }
 
@@ -205,6 +214,14 @@ const metaForEntry = (entry: UserConfigTableEntry): EntryMeta|null => {
   }
   return entry.meta;
 }
+
+//
+
+/** React on user being (de)selected. */
+watch(userSelectedTrigger, async () => {
+  // Deselect anything in subtable.
+  await tabRef.value?.selectEntry(null, true);
+});
 </script>
 
 <template>
@@ -212,7 +229,8 @@ const metaForEntry = (entry: UserConfigTableEntry): EntryMeta|null => {
     ref="tabRef"
     v-model="selUserRecord"
     v-model:entry="selEntryRecord"
-    v-model:form="form"
+    v-model:formFilter="formFilter"
+    v-model:formEntry="formEntry"
     :columns="userConfigTableColumns"
     :fetchData="backendApiAdminUser.loadConfigPage"
     :convertToReq="convertFilterToReq"
@@ -222,7 +240,7 @@ const metaForEntry = (entry: UserConfigTableEntry): EntryMeta|null => {
     emptyNoUserText="admin.user.config.table.emptyNoUser"
   >
     <template #filter="{ isBusy, isDisabled, handleReload }">
-      <AdminUserConfigFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
+      <AdminUserConfigFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
     <!-- Custom slots. -->
     <template #column_options="{ entry }">

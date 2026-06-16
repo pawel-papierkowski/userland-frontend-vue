@@ -30,7 +30,7 @@ const { userUpdatedTrigger } = storeToRefs(userEventStore);
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
-const form: UserHistoryTableFilterForm = reactive({
+const formFilter: UserHistoryTableFilterForm = reactive({
   userId: -1,
   who: null,
   what: null,
@@ -93,7 +93,7 @@ watch(userUpdatedTrigger, async () => {
   <AdminUserTab
     ref="tabRef"
     v-model="selUserRecord"
-    v-model:form="form"
+    v-model:formFilter="formFilter"
     :columns="userHistoryTableColumns"
     :fetchData="backendApiAdminUser.loadHistoryPage"
     :convertToReq="convertToReq"
@@ -102,7 +102,7 @@ watch(userUpdatedTrigger, async () => {
     emptyNoUserText="admin.user.history.table.emptyNoUser"
   >
     <template #filter="{ isBusy, isDisabled, handleReload }">
-      <AdminUserHistoryFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
+      <AdminUserHistoryFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

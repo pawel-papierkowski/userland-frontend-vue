@@ -23,7 +23,7 @@ import AdminUserTokensFilter from '@/components/pages/admin/user/tokens/AdminUse
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
-const form: UserTokenTableFilterForm = reactive({
+const formFilter: UserTokenTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
   createdToAt: null,
@@ -61,7 +61,7 @@ const processEntry = (entry: UserTokenTableEntry) => {
 <template>
   <AdminUserTab
     v-model="selUserRecord"
-    v-model:form="form"
+    v-model:formFilter="formFilter"
     :columns="userTokensTableColumns"
     :fetchData="backendApiAdminUser.loadTokensPage"
     :convertToReq="convertToReq"
@@ -70,7 +70,7 @@ const processEntry = (entry: UserTokenTableEntry) => {
     emptyNoUserText="admin.user.tokens.table.emptyNoUser"
   >
     <template #filter="{ isBusy, isDisabled, handleReload }">
-      <AdminUserTokensFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
+      <AdminUserTokensFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

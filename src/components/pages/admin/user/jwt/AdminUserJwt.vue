@@ -23,7 +23,7 @@ import AdminUserJwtFilter from '@/components/pages/admin/user/jwt/AdminUserJwtFi
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
-const form: UserJwtTableFilterForm = reactive({
+const formFilter: UserJwtTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
   createdToAt: null,
@@ -61,7 +61,7 @@ const processEntry = (entry: UserJwtTableEntry) => {
 <template>
   <AdminUserTab
     v-model="selUserRecord"
-    v-model:form="form"
+    v-model:formFilter="formFilter"
     :columns="userJwtTableColumns"
     :fetchData="backendApiAdminUser.loadJwtPage"
     :convertToReq="convertToReq"
@@ -70,7 +70,7 @@ const processEntry = (entry: UserJwtTableEntry) => {
     emptyNoUserText="admin.user.jwt.table.emptyNoUser"
   >
     <template #filter="{ isBusy, isDisabled, handleReload }">
-      <AdminUserJwtFilter v-model="form" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
+      <AdminUserJwtFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
   </AdminUserTab>
 </template>

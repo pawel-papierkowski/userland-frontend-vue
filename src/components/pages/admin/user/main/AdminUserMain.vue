@@ -143,6 +143,8 @@ const handleUserLock = async () => {
   if (data === null) return; // failed to update user
 
   fillFormData(data);
+  diffFormData();
+  if (diffForm.value.modifiedAt !== null) AppUserEventer.notifyUserUpdated(diffForm.value);
   diffForm.value = { ...form }; // remember updated state
 };
 
@@ -220,6 +222,7 @@ const diffFormData = () => {
   resetDiffField('modifiedAt'); // modifiedAt === null means nothing changed at all
   resetDiffField('username');
   resetDiffField('email');
+  resetDiffField('locked');
   // We do not care about rest of fields.
 };
 
