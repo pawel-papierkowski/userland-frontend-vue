@@ -51,7 +51,7 @@ onClickOutside(pickerRef, () => {
   hidePanel();
 });
 
-// COMPUTATIONS.
+// COMPUTATIONS
 
 /** Compute currently displayed date value in date input. */
 const displayDateValue = computed(() => {

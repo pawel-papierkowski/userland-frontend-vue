@@ -21,6 +21,9 @@
   --input-err-background: #ffe8e8;
   --input-err-border: 1px solid #aa4444;
 
+  --input-padding-small: 1px 2px;
+  --input-text-small: 0.8em;
+
   /* Buttons. */
   --button-margin: 0;
   --button-padding: 6px;

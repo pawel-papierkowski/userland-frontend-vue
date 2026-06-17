@@ -19,10 +19,10 @@
  *
  * Properties:
  * - v-model - Variable holding selected value.
- * - options - Array of options, will be shown after user clicks on component.
+ * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
- * - langPrefix - Prefix, used for auto-translating entries in dropdown list.
- * - placeholder - Translated text to use if nothing is selected.
+ * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
+ * - placeholder - Translated text to use if nothing is selected and for 'unselected' option.
  *
  * Notes:
  * - ComboBox is integrated with vue-i18n.
@@ -36,7 +36,7 @@ const { t } = useI18n();
 const props = defineProps({
   /** Variable holding selected value. */
   modelValue: [String, null], // null means nothing is selected
-  /** Array of options, will be shown after user clicks on component. */
+  /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
   options: {
     type: Array<string|null>,
     default: () => []
@@ -46,15 +46,15 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
-  /** Prefix, used for auto-translating entries in dropdown list. */
+  /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
   langPrefix: {
     type: String,
     default: ''
   },
-  /** Translated text to use if nothing is selected. */
+  /** Translated text to use if nothing is selected and for 'unselected' option. */
   placeholder: {
     type: String,
-    default: 'tags.combobox.placeholder'
+    default: 'combobox.placeholder'
   }
 });
 
@@ -79,23 +79,36 @@ const openOptions = () => {
   isOpen.value = !isOpen.value;
 }
 
-/** User clicked on option. */
+/**
+ * User clicked on option.
+ * @param option Clicked option.
+ */
 const selectOption = (option: string|null) => {
   selectedOption.value = option;
   isOpen.value = false;
+}
+
+/**
+ * Show text of option.
+ * @param option Option to show.
+ */
+const showOption = (option: string|null): string|null => {
+  if (option === null) return t(props.placeholder);
+  if (props.langPrefix) return t(props.langPrefix+'.'+option);
+  return option;
 }
 </script>
 
 <template>
   <div class="combobox" :class="{ disabled: disabled }" ref="combobox" tabindex="0" @blur="isOpen = false">
     <div class="combobox-selected" @click="openOptions()">
-      <span class="combobox-selected-text">{{ selectedOption ? t(langPrefix+'.'+selectedOption) : t(placeholder) }}</span>
+      <span class="combobox-selected-text">{{ selectedOption ? showOption(selectedOption) : t(placeholder) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
     <div class="combobox-options" v-show="isOpen">
       <div v-for="(option, index) in options" :key="index" class="combobox-option"
         @click="selectOption(option)">
-        {{ t(langPrefix+'.'+option) }}
+        {{ showOption(option) }}
       </div>
     </div>
   </div>
@@ -135,7 +148,7 @@ const selectOption = (option: string|null) => {
   justify-content: space-between;
   align-items: center;
 
-  padding: 0px 4px;
+  padding: var(--combobox-selected-padding);
   cursor: pointer;
 }
 

@@ -52,7 +52,7 @@ onClickOutside(pickerRef, () => {
   hidePanel();
 });
 
-// COMPUTATIONS.
+// COMPUTATIONS
 
 /** Compute currently displayed time value in time input. */
 const displayTimeValue = computed(() => {

@@ -31,6 +31,11 @@
   --combobox-option-background-hover: #e8e8e8;
   --combobox-option-text-hover: #111827;
 
+  --combobox-selected-padding: 0px 4px;
+
+  --combobox-selected-padding-small: 1px 1px;
+  --combobox-text-small: 0.8em;
+
   /* DateTimePicker specific vars. */
   --datetimepicker-date-width: 145px;
   --datetimepicker-time-width: 90px;

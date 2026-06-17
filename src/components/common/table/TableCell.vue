@@ -13,6 +13,9 @@
  * - column - Data about column.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  */
+import { computed } from 'vue';
+import type { VNode } from 'vue';
+
 import type { ColumnData } from '@/code/data/features/common/type.ts';
 import { EnColumnKind } from '@/code/data/features/common/const';
 
@@ -30,28 +33,46 @@ const props = withDefaults(
   },
 );
 
+defineSlots<{
+  [key: string]: (props: {
+    entry: E,
+    isEditMode?: boolean,
+    formEntry?: FE | null
+  }) => VNode[] // result of rendering slot
+}>();
+
 //
 
-const isEditMode = (): boolean => {
+/** Determine if this cell should be in edit mode. */
+const isEditMode = computed(() => {
   if (!props.inlineEdit) return false; // no editing at all
   if (!props.column.editable) return false; // this column cannot be edited
   if (props.entry !== selRecord.value) return false; // not selected
   return true;
-}
+});
 </script>
 
 <template>
   <div v-if="column.visible" class="table-cell" role="cell">
-    <div v-if="column.kind === EnColumnKind.Data" class="cell-value">
-      <template v-if="isEditMode() && formEntry">
-        <input :id="column.name" :data-testid="column.name" type="text"
-          v-model="formEntry[column.name]" autocomplete="off" />
+    <div v-if="column.kind === EnColumnKind.Data" :class="{ 'cell-value': !isEditMode }">
+      <template v-if="$slots['column_' + column.name]">
+        <!-- If slot with matching name is provided, it is used instead. -->
+        <slot :name="'column_' + column.name" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" />
       </template>
       <template v-else>
-        {{ entry[column.name] }}
+        <!-- Default column handling. -->
+        <template v-if="isEditMode && formEntry">
+          <input :id="column.name" :data-testid="column.name" type="text"
+            v-model="formEntry[column.name]" autocomplete="off" />
+        </template>
+        <template v-else>
+          {{ entry[column.name] }}
+        </template>
       </template>
+
     </div>
     <template v-else-if="column.kind === EnColumnKind.Custom">
+      <!-- Custom columns always use slot. -->
       <slot :name="'column_'+column.name" :entry="entry" />
     </template>
   </div>

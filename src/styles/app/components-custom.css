@@ -20,3 +20,9 @@
   padding: 1px 4px;
 }
 
+/* ComboBox. */
+
+.table-cell .combobox {
+  font-size: var(--combobox-text-small);
+  padding: var(--combobox-selected-padding-small);
+}

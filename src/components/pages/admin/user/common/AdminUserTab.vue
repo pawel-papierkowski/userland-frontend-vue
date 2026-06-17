@@ -32,7 +32,6 @@ import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 import type { ColumnData, TableMetaReq, TableMetaResp, TablePageExpose } from '@/code/data/features/common/type.ts';
-import { EnColumnKind } from '@/code/data/features/common/const.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
@@ -102,6 +101,8 @@ const handleReload = async () => {
     }
     data.value = resp;
 
+    selEntryRecord.value = null; // always deselect subtable entry
+
     currSortBy.value = data.value.tableMeta.sortBy;
     currSortOrder.value = data.value.tableMeta.sortOrder;
     isLoading.value = false;
@@ -122,7 +123,7 @@ const resolveEmptyText = () => {
 
 // WATCHERS
 
-/** Change in selection requires reload of form. */
+/** Change in user selection requires reload of form. */
 watch(
   selUserRecord,
   () => {
@@ -131,6 +132,7 @@ watch(
   { immediate: true },
 );
 
+/** Update filter with current page number. */
 watch(currPage, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -140,6 +142,7 @@ watch(currPage, (newVal, oldVal) => {
   handleReload();
 });
 
+/** Update filter with current sort by field. */
 watch(currSortBy, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -152,6 +155,7 @@ watch(currSortBy, (newVal, oldVal) => {
   handleReload();
 });
 
+/** Update filter with current sort order. */
 watch(currSortOrder, (newVal, oldVal) => {
   if (oldVal === null) return;
 
@@ -205,12 +209,10 @@ defineExpose({
         :inlineEdit="inlineEdit"
         :empty="resolveEmptyText()"
       >
-        <!-- Slot forwarding: forward only columns with kind = Custom if they exist in $slots -->
+        <!-- Slot forwarding: forward all columns that exists in $slots. -->
         <template
-          v-for="col in columns.filter((c) => c.kind === EnColumnKind.Custom && $slots['column_' + c.name])"
-          :key="col.name"
-          #[`column_${col.name}`]="slotData"
-        >
+          v-for="col in columns.filter((c) => $slots['column_' + c.name])"
+          :key="col.name" #[`column_${col.name}`]="slotData">
           <slot :name="`column_${col.name}`" v-bind="slotData || {}" />
         </template>
       </TablePage>

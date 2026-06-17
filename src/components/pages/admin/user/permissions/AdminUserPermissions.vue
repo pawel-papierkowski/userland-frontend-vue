@@ -25,8 +25,9 @@ import type {
   UserPermissionEntryEditReq,
   AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
-import { userPermissionsTableColumns } from '@/code/data/features/user/user-const.ts';
+import { userPermissionsTableColumns, enUserPermissionName } from '@/code/data/features/user/user-const.ts';
 
+import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserPermissionsFilter from '@/components/pages/admin/user/permissions/AdminUserPermissionsFilter.vue';
@@ -246,6 +247,20 @@ watch(userSelectedTrigger, async () => {
     <template #column_options="{ entry }">
       <EntryOptions :meta="metaForEntry(entry)" :entry="entry" :actions="actions" :isBusy="isBusyForEntry(entry)"
         langPrefix="admin.user.permissions.table.texts" />
+    </template>
+    <template #column_name="{ entry, isEditMode, formEntry }">
+      <template v-if="isEditMode && formEntry">
+        <ComboBox
+          data-testid="permission-name"
+          v-model="formEntry.name"
+          :options="enUserPermissionName"
+          langPrefix=""
+          placeholder="tech.user.permissionName.null"
+        />
+      </template>
+      <template v-else>
+        {{ entry.name }}
+      </template>
     </template>
   </AdminUserTab>
 </template>

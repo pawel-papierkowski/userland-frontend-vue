@@ -3,26 +3,36 @@
  *
  * Properties:
  * - meta - Table metadata.
+ * - isDisabled - If true, disable paginer. Optional.
  */
 import { ref, watch } from 'vue';
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 const currPage = defineModel<number>('currPage', { required: true }); // Currently selected page.
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   meta: TableMetaResp;
-}>();
+  isDisabled?: boolean;
+}>(), {
+  isDisabled: false,
+});
 
-/** Local page for input (1-indexed). */
+/** Local page number. This is number shown in input (1-indexed). */
 const localPage = ref(currPage.value + 1);
-/** Sync local page when model changes from outside (e.g. arrows). */
+
+//
+
+/** Sync local page number when model changes (like clicking on arrows). */
 watch(currPage, (newVal) => {
   localPage.value = newVal + 1;
 });
 
+//
+
 /** Update model from local page value. */
 const applyPage = () => {
-  if (props.meta.pageCount === 0) return;
+  if (props.isDisabled || props.meta.pageCount === 0) return;
+
   let page = Number(localPage.value) - 1;
   if (isNaN(page)) {
     localPage.value = currPage.value + 1;
@@ -37,41 +47,41 @@ const applyPage = () => {
 
 /** Go to first page of results. */
 const goFirstPage = () => {
-  if (currPage.value === 0) return;
+  if (props.isDisabled || currPage.value === 0) return;
   currPage.value = 0;
 };
 /** Go to previous page of results. */
 const goPrevPage = () => {
-  if (currPage.value === 0) return;
+  if (props.isDisabled || currPage.value === 0) return;
   currPage.value--;
 };
 /** Go to next page of results. */
 const goNextPage = () => {
-  if (currPage.value === props.meta.pageCount - 1) return;
+  if (props.isDisabled || currPage.value === props.meta.pageCount - 1) return;
   currPage.value++;
 };
 /** Go to last page of results. */
 const goLastPage = () => {
-  if (currPage.value === props.meta.pageCount - 1) return;
+  if (props.isDisabled || currPage.value === props.meta.pageCount - 1) return;
   currPage.value = props.meta.pageCount - 1;
 };
 
 /** Style of first/previous page button. */
 const stylePrevPage = () => {
   return {
-    disabled: currPage.value === 0 || props.meta.pageCount === 0,
+    disabled: props.isDisabled || currPage.value === 0 || props.meta.pageCount === 0,
   };
 };
 /** Style of next/last page button. */
 const styleNextPage = () => {
   return {
-    disabled: currPage.value === props.meta.pageCount - 1 || props.meta.pageCount === 0,
+    disabled: props.isDisabled || currPage.value === props.meta.pageCount - 1 || props.meta.pageCount === 0,
   };
 };
 
 /** Is input disabled? */
 const pageInputDisabled = () => {
-  return props.meta.pageCount === 0;
+  return props.isDisabled || props.meta.pageCount === 0;
 };
 </script>
 

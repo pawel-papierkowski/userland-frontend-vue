@@ -34,7 +34,6 @@ import { computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, TableMetaResp } from '@/code/data/features/common/type.ts';
-import { EnColumnKind } from '@/code/data/features/common/const';
 
 import TableCell from '@/components/common/table/TableCell.vue';
 import TablePaginer from '@/components/common/table/TablePaginer.vue';
@@ -66,19 +65,63 @@ const props = withDefaults(
   },
 );
 
+//
+
 const visibleColumnsCount = computed(() => {
   return props.columns.filter((c) => c.visible).length;
 });
 
+//
+
 /** If you disable selection abiliy, automatically deselect. */
 watch(
-  () => props.canSelect,
-  () => {
+  () => props.canSelect, () => {
     if (!props.canSelect) selRecord.value = null;
   },
 );
 
+/** React to end of loading. */
+watch(() => props.isLoading, (newVal) => {
+  if (newVal) return;
+  // We know we stopped loading. Ensure page data is consistent.
+  // Remember, currPage is zero-indexed.
+
+  if (currPage.value === 0) return; // do not touch if we are on first page
+
+  if (props.meta.pageCount === 0) {
+    currPage.value = 0; // reset currPage to ensure it will always try to load first page
+    return;
+  }
+
+  // Check if current page is too large.
+  const offPageNumber = currPage.value + 1; // one-indexed
+  if (props.meta.pageCount < offPageNumber) {
+    currPage.value = props.meta.pageCount - 1;
+    if (currPage.value < 0) currPage.value = 0;
+    return;
+  }
+});
+
 // Table column handling.
+
+/**
+ * Check if given column can be sorted.
+ * @param column Given column.
+ * @returns True if column should be sortable, otherwise false.
+ */
+const canSortColumn = (column: ColumnData): boolean => {
+  if (selRecord.value !== null && props.inlineEdit) return false;
+  return column.defSort !== '';
+}
+
+/**
+ * Check if paginer should be disabled.
+ * @returns True if paginer should be disabled, otherwise false.
+ */
+const canDisablePaginer = (): boolean => {
+  if (selRecord.value !== null && props.inlineEdit) return true;
+  return false;
+}
 
 /**
  * Find out additional classes for column header.
@@ -86,7 +129,7 @@ watch(
  */
 const columHeaderClass = (column: ColumnData) => {
   return {
-    sortable: column.defSort !== ''
+    sortable: canSortColumn(column)
   }
 };
 
@@ -108,7 +151,7 @@ const sortMarker = (column: ColumnData) => {
  * @param column Column data.
  */
 const changeSort = (column: ColumnData) => {
-  if (column.defSort === '') return; // No sorting enabled here.
+  if (!canSortColumn(column)) return; // No sorting enabled here.
 
   // Table is already sorted by this column, we reverse direction of sorting.
   if (currSortBy.value === column.name) {
@@ -175,7 +218,9 @@ defineExpose({
       </div>
     </div>
 
-    <div class="table-entire-row"><TablePaginer v-model:currPage="currPage" :meta="meta" /></div>
+    <div class="table-entire-row">
+      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()" />
+    </div>
 
     <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
     <template v-if="isLoading">
@@ -204,11 +249,8 @@ defineExpose({
               :entry="entry"
               :inlineEdit="inlineEdit"
             >
-              <!-- Slot forwarding: forward only column with kind = Custom if it exists in $slots -->
-              <template
-                v-if="column.kind === EnColumnKind.Custom && $slots['column_' + column.name]"
-                #[`column_${column.name}`]="slotData"
-              >
+              <!-- Slot forwarding: forward all columns that exists in $slots. -->
+              <template v-if="$slots['column_' + column.name]" #[`column_${column.name}`]="slotData">
                 <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
               </template>
             </TableCell>
@@ -217,7 +259,9 @@ defineExpose({
       </div>
     </template>
 
-    <div class="table-entire-row"><TablePaginer v-model:currPage="currPage" :meta="meta" /></div>
+    <div class="table-entire-row">
+      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()" />
+    </div>
   </div>
 </template>
 

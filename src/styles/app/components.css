@@ -33,6 +33,11 @@ input.err {
   border: var(--input-err-border);
 }
 
+.table-cell input {
+  padding: var(--input-padding-small);
+  font-size: var(--input-text-small);
+}
+
 /* Buttons. */
 
 button {

@@ -589,6 +589,9 @@
         "LOGIN": "Zalogowanie",
         "LOGOUT": "Wylogowanie",
         "PROLONG": "Przedłużenie sesji"
+      },
+      "permissionName": {
+        "null": "Wybierz uprawnienie z listy"
       }
     }
   },

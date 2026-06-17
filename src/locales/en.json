@@ -589,6 +589,9 @@
         "LOGIN": "Login",
         "LOGOUT": "Logout",
         "PROLONG": "Session prolong"
+      },
+      "permissionName": {
+        "null": "Select permission from list"
       }
     }
   },
@@ -938,6 +941,10 @@
         "content": "Fallback content."
       }
     }
+  },
+
+  "combobox": {
+    "placeholder": "-"
   },
 
   "dateTimePicker": {
