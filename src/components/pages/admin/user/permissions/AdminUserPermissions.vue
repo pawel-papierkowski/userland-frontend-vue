@@ -255,6 +255,7 @@ watch(userSelectedTrigger, async () => {
     v-model:entry="selEntryRecord"
     v-model:formFilter="formFilter"
     v-model:formEntry="formEntry"
+    tableId="userPermissions"
     :columns="userPermissionsTableColumns"
     :fetchData="backendApiAdminUser.loadPermissionsPage"
     :convertToReq="convertFilterToReq"

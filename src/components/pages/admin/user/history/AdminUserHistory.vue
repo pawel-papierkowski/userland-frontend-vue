@@ -94,6 +94,7 @@ watch(userUpdatedTrigger, async () => {
     ref="tabRef"
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    tableId="userHistory"
     :columns="userHistoryTableColumns"
     :fetchData="backendApiAdminUser.loadHistoryPage"
     :convertToReq="convertToReq"

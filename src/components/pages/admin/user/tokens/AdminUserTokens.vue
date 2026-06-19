@@ -62,6 +62,7 @@ const processEntry = (entry: UserTokenTableEntry) => {
   <AdminUserTab
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    tableId="userTokens"
     :columns="userTokensTableColumns"
     :fetchData="backendApiAdminUser.loadTokensPage"
     :convertToReq="convertToReq"

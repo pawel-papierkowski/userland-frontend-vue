@@ -10,6 +10,7 @@
  * - v-model:formEntry - Form for entry. Used in in-line edit.
  *
  * Properties:
+ * - tableId - Identificator of table.
  * - column - Data about column.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  */
@@ -24,7 +25,9 @@ const formEntry = defineModel<FE | null>('formEntry', { required: false });
 
 const props = withDefaults(
   defineProps<{
+    tableId: string;
     column: ColumnData;
+    rowIndex: number;
     entry: E|null;
     inlineEdit?: boolean;
   }>(),
@@ -50,6 +53,10 @@ const isEditMode = computed(() => {
   if (props.entry !== null && props.entry !== selRecord.value) return false; // not selected
   return true;
 });
+
+const dataTestId = computed(() => {
+  return `cell_${props.tableId}_${props.rowIndex}_${props.column.name}`;
+});
 </script>
 
 <template>
@@ -62,7 +69,7 @@ const isEditMode = computed(() => {
       <template v-else>
         <!-- Default column handling. -->
         <template v-if="isEditMode && formEntry">
-          <input :id="column.name" :data-testid="column.name" type="text"
+          <input :id="column.name" :data-testid="dataTestId" type="text"
             v-model="formEntry[column.name]" autocomplete="off" />
         </template>
         <template v-else>

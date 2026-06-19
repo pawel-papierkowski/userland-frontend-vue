@@ -18,6 +18,7 @@
  * - v-model:currSortOrder - Current sort order.
  *
  * Properties:
+ * - tableId - Identificator of table.
  * - columns - Data about columns. First column must be unique key.
  * - data - Content of table itself.
  * - meta - Table metadata.
@@ -51,6 +52,7 @@ const currSortOrder = defineModel<string | null>('currSortOrder', { required: tr
 
 const props = withDefaults(
   defineProps<{
+    tableId: string;
     columns: ColumnData[];
     data: E[];
     meta: TableMetaResp;
@@ -216,7 +218,8 @@ defineExpose({
 </script>
 
 <template>
-  <div class="table-container" role="table" :style="{ '--col-count': visibleColumnsCount }">
+  <div class="table-container" role="table" :data-testid="`table_${props.tableId}`"
+    :style="{ '--col-count': visibleColumnsCount }">
     <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
       <div class="table-header-row" role="row">
@@ -253,7 +256,9 @@ defineExpose({
           <TableRow
             v-model="selRecord"
             v-model:formEntry="formEntry"
+            :tableId="tableId"
             :columns="columns"
+            :rowIndex="-1"
             :entry="null"
             :inlineEdit="inlineEdit"
           >
@@ -276,7 +281,9 @@ defineExpose({
           <TableRow
             v-model="selRecord"
             v-model:formEntry="formEntry"
+            :tableId="tableId"
             :columns="columns"
+            :rowIndex="rowIndex"
             :entry="entry"
             :inlineEdit="inlineEdit"
           >

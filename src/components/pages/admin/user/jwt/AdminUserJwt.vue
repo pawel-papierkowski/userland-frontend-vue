@@ -62,6 +62,7 @@ const processEntry = (entry: UserJwtTableEntry) => {
   <AdminUserTab
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    tableId="userJwt"
     :columns="userJwtTableColumns"
     :fetchData="backendApiAdminUser.loadJwtPage"
     :convertToReq="convertToReq"

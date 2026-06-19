@@ -16,6 +16,7 @@
  * - v-model:formEntry - Form for entry. Used in in-line edit.
  *
  * Props:
+ * - tableId - Identificator of table.
  * - columns - Data about columns.
  * - fetchData - Function that fetches data from backend to table.
  * - convertToReq - Function that converts filter form to API request.
@@ -44,6 +45,7 @@ const formFilter = defineModel<F>('formFilter', { required: true });
 const formEntry = defineModel<FE | null>('formEntry', { required: false });
 
 const props = withDefaults(defineProps<{
+  tableId: string;
   columns: ColumnData[];
   fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
   convertToReq: (form: F, userId: number) => R;
@@ -211,6 +213,7 @@ defineExpose({
         v-model:currPage="currPage"
         v-model:currSortBy="currSortBy"
         v-model:currSortOrder="currSortOrder"
+        :tableId="tableId"
         :columns="columns"
         :data="data.entries"
         :meta="data.tableMeta"

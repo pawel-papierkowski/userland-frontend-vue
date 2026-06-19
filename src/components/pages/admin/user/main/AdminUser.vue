@@ -176,6 +176,7 @@ onMounted(async () => {
         v-model:currPage="currPage"
         v-model:currSortBy="currSortBy"
         v-model:currSortOrder="currSortOrder"
+        tableId="users"
         :columns="userTableColumns"
         :data="data.entries"
         :meta="data.tableMeta"

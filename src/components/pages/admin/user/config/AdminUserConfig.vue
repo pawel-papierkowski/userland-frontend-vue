@@ -254,6 +254,7 @@ watch(userSelectedTrigger, async () => {
     v-model:entry="selEntryRecord"
     v-model:formFilter="formFilter"
     v-model:formEntry="formEntry"
+    tableId="userConfig"
     :columns="userConfigTableColumns"
     :fetchData="backendApiAdminUser.loadConfigPage"
     :convertToReq="convertFilterToReq"
