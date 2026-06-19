@@ -22,7 +22,7 @@
  * - convertToReq - Function that converts filter form to API request.
  * - processEntry - Function that processes given entry for showing in table. Optional.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
- * - addEdit - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
+ * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - emptyText - Text to show when table is empty.
  * - emptyNoUserText - Text to show when table is empty because no user was selected.
  */
@@ -51,12 +51,12 @@ const props = withDefaults(defineProps<{
   convertToReq: (form: F, userId: number) => R;
   processEntry?: (entry: E) => void;
   inlineEdit?: boolean;
-  addEdit?: boolean;
+  addNewEntry?: boolean;
   emptyText: string;
   emptyNoUserText: string;
 }>(), {
   inlineEdit: false,
-  addEdit: false,
+  addNewEntry: false,
 });
 
 /** Loaded page of data. */
@@ -221,7 +221,7 @@ defineExpose({
         :canSpin="canSpin"
         :canSelect="false"
         :inlineEdit="inlineEdit"
-        :addEdit="addEdit"
+        :addNewEntry="addNewEntry"
         :empty="resolveEmptyText()"
       >
         <!-- Forwarding paginer options slot, if it exists. -->

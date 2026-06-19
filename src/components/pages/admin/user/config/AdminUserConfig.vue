@@ -53,7 +53,7 @@ const formEntry: UserConfigEntryEditForm = reactive({
 /** Reference to tab component. */
 const tabRef = ref<AdminUserTabExpose | null>(null);
 /** True if adding new entry. */
-const addEdit: Ref<boolean> = ref(false);
+const addNewEntry: Ref<boolean> = ref(false);
 /** True if busy executing options. */
 const isBusyOptions: Ref<boolean> = ref(false);
 
@@ -107,11 +107,11 @@ const processEntry = (entry: UserConfigTableEntry) => {
  * @param entry Table entry.
  */
 const addEntry = async () => {
-  if (addEdit.value) return; // already in add entry mode
+  if (addNewEntry.value) return; // already in add entry mode
   formEntry.name = '';
   formEntry.value = '';
   await tabRef.value?.selectEntry(null, true); // deselect in case something is selected
-  addEdit.value = true;
+  addNewEntry.value = true;
 }
 
 /**
@@ -127,7 +127,7 @@ const saveEntry = async (entry: UserConfigTableEntry|null) => {
     await backendApiAdminUser.editConfigEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();
-    addEdit.value = false;
+    addNewEntry.value = false;
     AppMessager.successT('admin.user.config.table.msg.save.success.title', 'admin.user.config.table.msg.save.success.content');
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.config.table.msg.save.fail.title', 'admin.user.config.table.msg.save.fail.content');
@@ -142,7 +142,7 @@ const saveEntry = async (entry: UserConfigTableEntry|null) => {
  * @param entry Table entry.
  */
 const cancelEntry = async (entry: UserConfigTableEntry|null) => {
-  addEdit.value = false;
+  addNewEntry.value = false;
   await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
 }
 
@@ -190,11 +190,14 @@ const actions: Record<string, (entry: UserConfigTableEntry|null) => Promise<void
 
 /**
  * Check if current entry is considered busy, therefore its options should be disabled.
+ * @param paginer If true, we ask about paginer options.
  * @param entry Entry.
  */
-const isBusyForEntry = (entry: UserConfigTableEntry|null): boolean => {
+const isBusyForEntry = (paginer: boolean, entry: UserConfigTableEntry|null): boolean => {
   if (isBusyOptions.value) return true;
-  if (addEdit.value && entry !== null) return true;
+  if (paginer && addNewEntry.value) return true;
+
+  if (addNewEntry.value && entry !== null) return true;
   if (selEntryRecord.value !== null && entry?.id !== selEntryRecord.value?.id) return true;
   return false;
 }
@@ -260,7 +263,7 @@ watch(userSelectedTrigger, async () => {
     :convertToReq="convertFilterToReq"
     :processEntry="processEntry"
     :inlineEdit="true"
-    :addEdit="addEdit"
+    :addNewEntry="addNewEntry"
     emptyText="admin.user.config.table.empty"
     emptyNoUserText="admin.user.config.table.emptyNoUser"
   >
@@ -270,12 +273,12 @@ watch(userSelectedTrigger, async () => {
     </template>
     <!-- Paginer options. -->
     <template #paginer_options>
-      <EntryOptions :meta="metaGeneral()" :entry="null" :actions="actions" :isBusy="isBusyForEntry(null)"
+      <EntryOptions :meta="metaGeneral()" :entry="null" :actions="actions" :isBusy="isBusyForEntry(true, null)"
         langPrefix="admin.user.config.table.texts" />
     </template>
     <!-- Custom slots: options. -->
     <template #column_options="{ entry }">
-      <EntryOptions :meta="metaForEntry(entry)" :entry="entry" :actions="actions" :isBusy="isBusyForEntry(entry)"
+      <EntryOptions :meta="metaForEntry(entry)" :entry="entry" :actions="actions" :isBusy="isBusyForEntry(false, entry)"
         langPrefix="admin.user.config.table.texts" />
     </template>
   </AdminUserTab>

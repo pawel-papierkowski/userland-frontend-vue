@@ -24,7 +24,7 @@
  * - meta - Table metadata.
  * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
- * - addEdit - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
+ * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - isLoading - If true, show spinner instead of table content.
  * - canSpin - If true, spinner can spin.
  * - empty - I18n key to show when table is empty. Optional.
@@ -58,7 +58,7 @@ const props = withDefaults(
     meta: TableMetaResp;
     canSelect?: boolean;
     inlineEdit?: boolean;
-    addEdit?: boolean;
+    addNewEntry?: boolean;
     isLoading: boolean;
     canSpin: boolean;
     empty?: string;
@@ -66,7 +66,7 @@ const props = withDefaults(
   {
     canSelect: true,
     inlineEdit: false,
-    addEdit: false,
+    addNewEntry: false,
     empty: '',
   },
 );
@@ -242,7 +242,6 @@ defineExpose({
       </TablePaginer>
     </div>
 
-    <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
     <template v-if="isLoading">
       <div class="spinner-container table-entire-row">
         <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
@@ -251,7 +250,7 @@ defineExpose({
 
     <template v-else>
       <!-- ADD NEW IN-LINE ENTRY -->
-      <div v-if="addEdit && inlineEdit" class="table-row-group" role="rowgroup">
+      <div v-if="addNewEntry && inlineEdit" class="table-row-group" role="rowgroup">
         <div class="table-row" :class="rowClass(null, 0)" role="row" >
           <TableRow
             v-model="selRecord"
@@ -295,6 +294,8 @@ defineExpose({
         </div>
       </div>
     </template>
+
+    <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
 
     <div class="table-entire-row">
       <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()" />
