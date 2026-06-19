@@ -21,10 +21,11 @@
  * - convertToReq - Function that converts filter form to API request.
  * - processEntry - Function that processes given entry for showing in table. Optional.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
+ * - addEdit - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - emptyText - Text to show when table is empty.
  * - emptyNoUserText - Text to show when table is empty because no user was selected.
  */
-import { ref, watch, computed } from 'vue';
+import { useSlots, ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
 
 import backendApi from '@/services/api-common.ts';
@@ -36,6 +37,7 @@ import type { ColumnData, TableMetaReq, TableMetaResp, TablePageExpose } from '@
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
+const slots = useSlots();
 const selUserRecord = defineModel<UserTableEntry | null>();
 const selEntryRecord = defineModel<E | null>('entry', { required: false });
 const formFilter = defineModel<F>('formFilter', { required: true });
@@ -47,10 +49,12 @@ const props = withDefaults(defineProps<{
   convertToReq: (form: F, userId: number) => R;
   processEntry?: (entry: E) => void;
   inlineEdit?: boolean;
+  addEdit?: boolean;
   emptyText: string;
   emptyNoUserText: string;
 }>(), {
   inlineEdit: false,
+  addEdit: false,
 });
 
 /** Loaded page of data. */
@@ -74,6 +78,13 @@ const isBusy: Ref<boolean> = ref(false);
 const isLoading: Ref<boolean> = ref(false);
 /** Can spinner spin? */
 const canSpin: Ref<boolean> = ref(true);
+
+// COMPUTATIONS
+
+/** Get list of all columns that have slots. */
+const slottedColumns = computed(() => {
+  return props.columns.filter((c) => slots['column_' + c.name]);
+});
 
 const isDisabled = computed(() => selUserRecord.value === null);
 
@@ -207,12 +218,15 @@ defineExpose({
         :canSpin="canSpin"
         :canSelect="false"
         :inlineEdit="inlineEdit"
+        :addEdit="addEdit"
         :empty="resolveEmptyText()"
       >
-        <!-- Slot forwarding: forward all columns that exists in $slots. -->
-        <template
-          v-for="col in columns.filter((c) => $slots['column_' + c.name])"
-          :key="col.name" #[`column_${col.name}`]="slotData">
+        <!-- Forwarding paginer options slot, if it exists. -->
+        <template v-if="$slots['paginer_options']" #[`paginer_options`]="slotData">
+          <slot name="paginer_options" v-bind="slotData || {}" />
+        </template>
+        <!-- Slot forwarding: forward all slots that match columns. -->
+        <template v-for="col in slottedColumns" :key="col.name" #[`column_${col.name}`]="slotData">
           <slot :name="`column_${col.name}`" v-bind="slotData || {}" />
         </template>
       </TablePage>

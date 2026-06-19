@@ -32,6 +32,7 @@ const props = withDefaults(
   }
 );
 
+/** Defined slots. */
 const slots = useSlots();
 /** Extracted names (keys) of the slots that were actually provided. */
 const activeSlots = computed(() => Object.keys(slots));

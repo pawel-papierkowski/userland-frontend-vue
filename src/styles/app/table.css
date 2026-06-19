@@ -183,13 +183,29 @@
 /* Table paginer classes. */
 
 .table-paginer {
+  position: relative;
+  background-color: #e3e3e3;
+}
+
+.table-paginer-options {
+  position: absolute;
+  display: flex;
+  align-items: center;
+
+  top: 0;
+  bottom: 0;
+  right: 2px;
+  padding: 2px;
+  z-index: 1;
+}
+
+.table-paginer-grid {
   display: grid;
   grid-template-columns: 1fr auto auto auto auto auto 1fr;
   gap: 0.3rem;
 
   padding: 2px;
 
-  background-color: #e3e3e3;
 
   justify-items: center;
   align-items: center;

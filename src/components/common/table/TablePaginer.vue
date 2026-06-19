@@ -87,25 +87,30 @@ const pageInputDisabled = () => {
 
 <template>
   <div class="table-paginer">
-    <div class="table-paginer-side"></div>
-    <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goFirstPage()">⏮️</div>
-    <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goPrevPage()">◀️</div>
-    <div class="table-paginer-entry">
-      <input
-        type="number"
-        v-model="localPage"
-        class="input-paginer"
-        :disabled="pageInputDisabled()"
-        min="1"
-        :max="meta.pageCount"
-        @blur="applyPage"
-        @keyup.enter="applyPage"
-      />
-      / {{ meta.pageCount }}
+    <div class="table-paginer-grid">
+      <div class="table-paginer-side"></div>
+      <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goFirstPage()">⏮️</div>
+      <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goPrevPage()">◀️</div>
+      <div class="table-paginer-entry">
+        <input
+          type="number"
+          v-model="localPage"
+          class="input-paginer"
+          :disabled="pageInputDisabled()"
+          min="1"
+          :max="meta.pageCount"
+          @blur="applyPage"
+          @keyup.enter="applyPage"
+        />
+        / {{ meta.pageCount }}
+      </div>
+      <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">▶️</div>
+      <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">⏭️</div>
+      <div class="table-paginer-side"></div>
     </div>
-    <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">▶️</div>
-    <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">⏭️</div>
-    <div class="table-paginer-side"></div>
+    <div class="table-paginer-options">
+      <slot name="paginer_options" />
+    </div>
   </div>
 </template>
 

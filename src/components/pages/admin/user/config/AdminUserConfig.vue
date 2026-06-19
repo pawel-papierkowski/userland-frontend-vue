@@ -52,6 +52,8 @@ const formEntry: UserConfigEntryEditForm = reactive({
 
 /** Reference to tab component. */
 const tabRef = ref<AdminUserTabExpose | null>(null);
+/** True if adding new entry. */
+const addEdit: Ref<boolean> = ref(false);
 /** True if busy executing options. */
 const isBusyOptions: Ref<boolean> = ref(false);
 
@@ -105,25 +107,27 @@ const processEntry = (entry: UserConfigTableEntry) => {
  * @param entry Table entry.
  */
 const addEntry = async () => {
+  if (addEdit.value) return; // already in add entry mode
   formEntry.name = '';
   formEntry.value = '';
-  // TODO
-  console.warn(`Should execute option addEntry() for config entry.`);
+  await tabRef.value?.selectEntry(null, true); // deselect in case something is selected
+  addEdit.value = true;
 }
 
 /**
  * Save given entry.
  * @param entry Table entry.
  */
-const saveEntry = async (entry: UserConfigTableEntry) => {
+const saveEntry = async (entry: UserConfigTableEntry|null) => {
   isBusyOptions.value = true;
   // Note we do not check if config entry with same name already exists - error from backend is clear enough.
 
   try {
-    const req = convertEditToReq(formEntry, entry.id, selUserRecord.value?.id || -1);
+    const req = convertEditToReq(formEntry, entry?.id || null, selUserRecord.value?.id || -1);
     await backendApiAdminUser.editConfigEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();
+    addEdit.value = false;
     AppMessager.successT('admin.user.config.table.msg.save.success.title', 'admin.user.config.table.msg.save.success.content');
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.config.table.msg.save.fail.title', 'admin.user.config.table.msg.save.fail.content');
@@ -137,7 +141,8 @@ const saveEntry = async (entry: UserConfigTableEntry) => {
  * Cancel editing given entry.
  * @param entry Table entry.
  */
-const cancelEntry = async (entry: UserConfigTableEntry) => {
+const cancelEntry = async (entry: UserConfigTableEntry|null) => {
+  addEdit.value = false;
   await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
 }
 
@@ -145,7 +150,8 @@ const cancelEntry = async (entry: UserConfigTableEntry) => {
  * Edit given entry.
  * @param entry Table entry.
  */
-const editEntry = async (entry: UserConfigTableEntry) => {
+const editEntry = async (entry: UserConfigTableEntry|null) => {
+  if (entry === null) return;
   formEntry.name = entry.name;
   formEntry.value = entry.value;
   await tabRef.value?.selectEntry(entry, true);
@@ -155,7 +161,8 @@ const editEntry = async (entry: UserConfigTableEntry) => {
  * Delete given entry.
  * @param entry Table entry.
  */
-const deleteEntry = async (entry: UserConfigTableEntry) => {
+const deleteEntry = async (entry: UserConfigTableEntry|null) => {
+  if (entry === null) return;
   isBusyOptions.value = true;
 
   try {
@@ -171,7 +178,8 @@ const deleteEntry = async (entry: UserConfigTableEntry) => {
 }
 
 /** Actions for EntryOptions. */
-const actions: Record<string, (entry: UserConfigTableEntry) => Promise<void>> = reactive({
+const actions: Record<string, (entry: UserConfigTableEntry|null) => Promise<void>> = reactive({
+  add: addEntry,
   save: saveEntry,
   cancel: cancelEntry,
   edit: editEntry,
@@ -184,19 +192,34 @@ const actions: Record<string, (entry: UserConfigTableEntry) => Promise<void>> = 
  * Check if current entry is considered busy, therefore its options should be disabled.
  * @param entry Entry.
  */
-const isBusyForEntry = (entry: UserConfigTableEntry): boolean => {
+const isBusyForEntry = (entry: UserConfigTableEntry|null): boolean => {
   if (isBusyOptions.value) return true;
-  if (selEntryRecord.value !== null && entry.id !== selEntryRecord.value?.id) return true;
+  if (addEdit.value && entry !== null) return true;
+  if (selEntryRecord.value !== null && entry?.id !== selEntryRecord.value?.id) return true;
   return false;
+}
+
+/** Determine available general options. */
+const metaGeneral = (): EntryMeta|null => {
+  const options: Record<string, EntryOption> = {
+    add: {
+      access: 'ENABLED',
+      reason: null
+    }
+  }
+  return {
+    options: options,
+    data: null
+  };
 }
 
 /**
  * Determine available options for given entry.
  * @param entry Entry.
  */
-const metaForEntry = (entry: UserConfigTableEntry): EntryMeta|null => {
-  if (selEntryRecord.value !== null && entry.id === selEntryRecord.value?.id) {
-    // We have entry selected. We need custom metadata for editing entry.
+const metaForEntry = (entry: UserConfigTableEntry|null): EntryMeta|null => {
+  if (entry === null || selEntryRecord.value !== null && entry.id === selEntryRecord.value?.id) {
+    // We have new entry to add OR entry selected. We need custom metadata for editing entry.
     const options: Record<string, EntryOption> = {
       save: {
         access: 'ENABLED',
@@ -236,13 +259,20 @@ watch(userSelectedTrigger, async () => {
     :convertToReq="convertFilterToReq"
     :processEntry="processEntry"
     :inlineEdit="true"
+    :addEdit="addEdit"
     emptyText="admin.user.config.table.empty"
     emptyNoUserText="admin.user.config.table.emptyNoUser"
   >
+    <!-- Filter panel. -->
     <template #filter="{ isBusy, isDisabled, handleReload }">
       <AdminUserConfigFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
-    <!-- Custom slots. -->
+    <!-- Paginer options. -->
+    <template #paginer_options>
+      <EntryOptions :meta="metaGeneral()" :entry="null" :actions="actions" :isBusy="isBusyForEntry(null)"
+        langPrefix="admin.user.config.table.texts" />
+    </template>
+    <!-- Custom slots: options. -->
     <template #column_options="{ entry }">
       <EntryOptions :meta="metaForEntry(entry)" :entry="entry" :actions="actions" :isBusy="isBusyForEntry(entry)"
         langPrefix="admin.user.config.table.texts" />

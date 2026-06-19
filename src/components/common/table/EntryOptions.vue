@@ -20,9 +20,9 @@ const { t } = useI18n();
 
 const props = defineProps<{
     meta: EntryMeta|null;
-    entry: E;
+    entry: E|null;
     langPrefix: string;
-    actions: Record<string, (entry: E) => void | Promise<void>>;
+    actions: Record<string, (entry: E|null) => void | Promise<void>>;
     isBusy: boolean;
   }>();
 

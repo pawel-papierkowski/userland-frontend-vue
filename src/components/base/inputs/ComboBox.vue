@@ -120,7 +120,7 @@ const showOption = (option: string|null): string|null => {
   display: inline-block;
 
   margin: 0px;
-  padding: 2px;
+  padding: var(--spacing-xxs);
   min-width: 125px;
 
   color: var(--combobox-color);
@@ -160,6 +160,7 @@ const showOption = (option: string|null): string|null => {
 .combobox-arrow {
   width: 0;
   height: 0;
+  margin-left: var(--spacing-xs);
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 6px solid var(--combobox-color);

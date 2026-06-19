@@ -23,24 +23,26 @@
  * - meta - Table metadata.
  * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
+ * - addEdit - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - isLoading - If true, show spinner instead of table content.
  * - canSpin - If true, spinner can spin.
  * - empty - I18n key to show when table is empty. Optional.
  *
  * Slots:
- * - custom slots defined in colums for kind === EnColumnKind.Custom, with name 'column_[column name]'. These have 'entry' available.
+ * - custom slots defined for colums, with name 'column_[column name]'.
  */
-import { computed, watch } from 'vue';
+import { useSlots, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, TableMetaResp } from '@/code/data/features/common/type.ts';
 
-import TableCell from '@/components/common/table/TableCell.vue';
+import TableRow from '@/components/common/table/TableRow.vue';
 import TablePaginer from '@/components/common/table/TablePaginer.vue';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const { t } = useI18n();
 
+const slots = useSlots();
 const selRecord = defineModel<E | null>({ required: false });
 const formEntry = defineModel<FE | null>('formEntry', { required: false });
 const currPage = defineModel<number>('currPage', { required: true });
@@ -54,6 +56,7 @@ const props = withDefaults(
     meta: TableMetaResp;
     canSelect?: boolean;
     inlineEdit?: boolean;
+    addEdit?: boolean;
     isLoading: boolean;
     canSpin: boolean;
     empty?: string;
@@ -61,17 +64,24 @@ const props = withDefaults(
   {
     canSelect: true,
     inlineEdit: false,
+    addEdit: false,
     empty: '',
   },
 );
 
-//
+// COMPUTATIONS
 
+/** Find out count of visible columns. */
 const visibleColumnsCount = computed(() => {
   return props.columns.filter((c) => c.visible).length;
 });
 
-//
+/** Get list of all columns that have slots. */
+const slottedColumns = computed(() => {
+  return props.columns.filter((c) => slots['column_' + c.name]);
+});
+
+// WATCHES
 
 /** If you disable selection abiliy, automatically deselect. */
 watch(
@@ -169,12 +179,14 @@ const changeSort = (column: ColumnData) => {
 
 /**
  * Determine class for table row.
- * @param entry Entry.
+ * @param entry Entry. Can be null if it is row for new entry.
  * @param rowIndex Row index.
  */
-const rowClass = (entry: E, rowIndex: number) => {
+const rowClass = (entry: E|null, rowIndex: number) => {
   const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
-  const selected = (!selRecord.value) ? false : selRecord.value[key] === entry[key];
+  let selected = false;
+  if (selRecord.value && entry !== null) selected = selRecord.value[key] === entry[key];
+
   return {
     unselectable: !props.canSelect,
     selected: selected,
@@ -219,7 +231,12 @@ defineExpose({
     </div>
 
     <div class="table-entire-row">
-      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()" />
+      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()">
+        <!-- Forwarding paginer options slot, if it exists. -->
+        <template v-if="$slots['paginer_options']" #[`paginer_options`]="slotData">
+          <slot name="paginer_options" v-bind="slotData || {}" />
+        </template>
+      </TablePaginer>
     </div>
 
     <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
@@ -230,31 +247,44 @@ defineExpose({
     </template>
 
     <template v-else>
+      <!-- ADD NEW IN-LINE ENTRY -->
+      <div v-if="addEdit && inlineEdit" class="table-row-group" role="rowgroup">
+        <div class="table-row" :class="rowClass(null, 0)" role="row" >
+          <TableRow
+            v-model="selRecord"
+            v-model:formEntry="formEntry"
+            :columns="columns"
+            :entry="null"
+            :inlineEdit="inlineEdit"
+          >
+            <!-- Slot forwarding: forward all slots that match columns. -->
+            <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">
+              <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
+            </template>
+          </TableRow>
+        </div>
+      </div>
+
       <!-- TABLE ROWS -->
       <div class="table-row-group" role="rowgroup">
         <div
-          v-for="(entry, rowIndex) in data"
-          :key="rowIndex"
-          class="table-row"
-          :class="rowClass(entry, rowIndex)"
+          v-for="(entry, rowIndex) in data" :key="rowIndex"
+          class="table-row" :class="rowClass(entry, rowIndex)"
           role="row"
           @click="selectEntry(entry, false)"
         >
-          <!-- CELLS FOR SINGLE TABLE ROW -->
-          <template v-for="(column, colIndex) in columns" :key="colIndex">
-            <TableCell
-              v-model="selRecord"
-              v-model:formEntry="formEntry"
-              :column="column"
-              :entry="entry"
-              :inlineEdit="inlineEdit"
-            >
-              <!-- Slot forwarding: forward all columns that exists in $slots. -->
-              <template v-if="$slots['column_' + column.name]" #[`column_${column.name}`]="slotData">
-                <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
-              </template>
-            </TableCell>
-          </template>
+          <TableRow
+            v-model="selRecord"
+            v-model:formEntry="formEntry"
+            :columns="columns"
+            :entry="entry"
+            :inlineEdit="inlineEdit"
+          >
+            <!-- Slot forwarding: forward all slots that match columns. -->
+            <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">
+              <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
+            </template>
+          </TableRow>
         </div>
       </div>
     </template>

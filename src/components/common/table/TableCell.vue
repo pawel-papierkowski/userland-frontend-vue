@@ -25,7 +25,7 @@ const formEntry = defineModel<FE | null>('formEntry', { required: false });
 const props = withDefaults(
   defineProps<{
     column: ColumnData;
-    entry: E;
+    entry: E|null;
     inlineEdit?: boolean;
   }>(),
   {
@@ -35,7 +35,7 @@ const props = withDefaults(
 
 defineSlots<{
   [key: string]: (props: {
-    entry: E,
+    entry: E|null,
     isEditMode?: boolean,
     formEntry?: FE | null
   }) => VNode[] // result of rendering slot
@@ -47,7 +47,7 @@ defineSlots<{
 const isEditMode = computed(() => {
   if (!props.inlineEdit) return false; // no editing at all
   if (!props.column.editable) return false; // this column cannot be edited
-  if (props.entry !== selRecord.value) return false; // not selected
+  if (props.entry !== null && props.entry !== selRecord.value) return false; // not selected
   return true;
 });
 </script>
@@ -66,7 +66,7 @@ const isEditMode = computed(() => {
             v-model="formEntry[column.name]" autocomplete="off" />
         </template>
         <template v-else>
-          {{ entry[column.name] }}
+          {{ entry === null ? '' : entry[column.name] }}
         </template>
       </template>
 
