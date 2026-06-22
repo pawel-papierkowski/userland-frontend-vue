@@ -246,6 +246,12 @@ const hidePanel = () => {
   background: transparent; /** Prevents highlight when you double-click. */
 }
 
+.picker-general.err .picker-input-time {
+  color: var(--input-err-color);
+  background: var(--input-err-background);
+  border: var(--input-err-border);
+}
+
 /** Clock panel to pick time. **/
 
 .clock-container {

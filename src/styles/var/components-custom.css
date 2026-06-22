@@ -20,6 +20,10 @@
   --combobox-border: var(--input-border);
   --combobox-border-radius: var(--input-border-radius);
 
+  --combobox-err-color: var(--input-err-color);
+  --combobox-err-background: var(--input-err-background);
+  --combobox-err-border: var(--input-err-border);
+
   --combobox-disabled-color: var(--input-disabled-color);
   --combobox-disabled-background: var(--input-disabled-background);
 

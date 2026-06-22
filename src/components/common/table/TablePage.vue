@@ -35,7 +35,7 @@
 import { useSlots, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import type { ColumnData, TableMetaResp } from '@/code/data/features/common/type.ts';
+import type { ColumnData, RowMeta, TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import TableRow from '@/components/common/table/TableRow.vue';
 import TablePaginer from '@/components/common/table/TablePaginer.vue';
@@ -56,6 +56,7 @@ const props = withDefaults(
     columns: ColumnData[];
     data: E[];
     meta: TableMetaResp;
+    resolveRowMeta?: (entry: E|null) => RowMeta|null;
     canSelect?: boolean;
     inlineEdit?: boolean;
     addNewEntry?: boolean;
@@ -260,6 +261,7 @@ defineExpose({
             :rowIndex="-1"
             :entry="null"
             :inlineEdit="inlineEdit"
+            :rowMeta="resolveRowMeta ? resolveRowMeta(null) : null"
           >
             <!-- Slot forwarding: forward all slots that match columns. -->
             <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">
@@ -285,6 +287,7 @@ defineExpose({
             :rowIndex="rowIndex"
             :entry="entry"
             :inlineEdit="inlineEdit"
+            :rowMeta="resolveRowMeta ? resolveRowMeta(entry) : null"
           >
             <!-- Slot forwarding: forward all slots that match columns. -->
             <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">

@@ -115,6 +115,11 @@
 
 /*** Local layout. ***/
 
+hr {
+  margin: var(--spacing-xs);
+  opacity: 0.2;
+}
+
 /* Layout for items. */
 
 .items-vertical {

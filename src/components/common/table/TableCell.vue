@@ -17,7 +17,7 @@
 import { computed } from 'vue';
 import type { VNode } from 'vue';
 
-import type { ColumnData } from '@/code/data/features/common/type.ts';
+import type { ColumnData, FieldMeta } from '@/code/data/features/common/type.ts';
 import { EnColumnKind } from '@/code/data/features/common/const';
 
 const selRecord = defineModel<E | null>({ required: false });
@@ -30,9 +30,11 @@ const props = withDefaults(
     rowIndex: number;
     entry: E|null;
     inlineEdit?: boolean;
+    fieldMeta?: FieldMeta|null;
   }>(),
   {
     inlineEdit: false,
+    fieldMeta: null,
   },
 );
 
@@ -41,6 +43,7 @@ defineSlots<{
     entry: E|null,
     isEditMode?: boolean,
     formEntry?: FE | null
+    fieldMeta?: FieldMeta|null;
   }) => VNode[] // result of rendering slot
 }>();
 
@@ -57,6 +60,11 @@ const isEditMode = computed(() => {
 const dataTestId = computed(() => {
   return `cell_${props.tableId}_${props.rowIndex}_${props.column.name}`;
 });
+
+const cellClass = computed(() => {
+  if (props.fieldMeta) return props.fieldMeta.css;
+  return '';
+});
 </script>
 
 <template>
@@ -64,12 +72,12 @@ const dataTestId = computed(() => {
     <div v-if="column.kind === EnColumnKind.Data" :class="{ 'cell-value': !isEditMode }">
       <template v-if="$slots['column_' + column.name]">
         <!-- If slot with matching name is provided, it is used instead. -->
-        <slot :name="'column_' + column.name" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" />
+        <slot :name="'column_' + column.name" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
       </template>
       <template v-else>
         <!-- Default column handling. -->
         <template v-if="isEditMode && formEntry">
-          <input :id="column.name" :data-testid="dataTestId" type="text"
+          <input :id="column.name" :data-testid="dataTestId" type="text" :class="cellClass"
             v-model="formEntry[column.name]" autocomplete="off" />
         </template>
         <template v-else>

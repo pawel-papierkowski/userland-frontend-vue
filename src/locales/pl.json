@@ -410,6 +410,14 @@
               "fail": {
                 "title": "Niepowodzenie",
                 "content": "Nie udało się zapisać wpisu uprawnień użytkownika!"
+              },
+              "badName": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa nazwa uprawnienia."
+              },
+              "badValue":  {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa wartość uprawnienia."
               }
             },
             "delete": {
@@ -481,6 +489,14 @@
               "fail": {
                 "title": "Niepowodzenie",
                 "content": "Nie udało się zapisać wpisu konfiguracji użytkownika!"
+              },
+              "badName": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa nazwa konfiguracji."
+              },
+              "badValue":  {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa wartość konfiguracji."
               }
             },
             "delete": {
@@ -708,6 +724,7 @@
       }
     },
     "inputs": {
+      "errorMode": "Tryb błędu",
       "inputText": "Pole do wpisania tekstu",
       "comboBox": "Lista rozwijana",
       "checkbox": "Wybór tak/nie",

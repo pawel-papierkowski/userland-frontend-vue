@@ -4,6 +4,7 @@ export const enTestComboBox: (string|null)[] = [ null, 'PENDING', 'ACTIVE', 'DEM
 
 /** Form for test area. */
 export type TestAreaInputForm = {
+  errorMode: boolean;
   inputText: string | null;
   comboBox: string | null;
   checkbox: boolean | null;

@@ -141,6 +141,12 @@ const showOption = (option: string|null): string|null => {
   background: var(--combobox-disabled-background);
 }
 
+.combobox.err {
+  color: var(--combobox-err-color);
+  background: var(--combobox-err-background);
+  border: var(--combobox-err-border);
+}
+
 /**/
 
 .combobox-selected {

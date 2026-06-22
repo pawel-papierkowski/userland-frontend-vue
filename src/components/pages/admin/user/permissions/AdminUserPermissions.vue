@@ -15,7 +15,7 @@ import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
 import { useUserEventStore } from '@/stores/events/user-events.ts';
-import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts';
+import type { EntryMeta, EntryOption, RowMeta } from '@/code/data/features/common/type.ts';
 import type {
   UserTableEntry,
   UserPermissionTableFilterForm,
@@ -120,8 +120,8 @@ const addEntry = async () => {
  * @param entry Table entry.
  */
 const saveEntry = async (entry: UserPermissionTableEntry|null) => {
+  if (!verifyForm()) return;
   isBusyOptions.value = true;
-  // Note we do not check if permission entry with same name/value already exists - error from backend is clear enough.
 
   try {
     const req = convertEditToReq(formEntry, entry?.id || null, selUserRecord.value?.id || -1);
@@ -137,6 +137,20 @@ const saveEntry = async (entry: UserPermissionTableEntry|null) => {
     isBusyOptions.value = false;
   }
 }
+
+/** Verify form state. */
+const verifyForm = (): boolean => {
+  // Note we do not check if permission entry with same name/value already exists - error from backend is clear enough.
+  if (!formEntry.name) {
+    AppMessager.failureT('admin.user.permissions.table.msg.save.badName.title', 'admin.user.permissions.table.msg.save.badName.content');
+    return false;
+  }
+  if (!formEntry.value) {
+    AppMessager.failureT('admin.user.permissions.table.msg.save.badValue.title', 'admin.user.permissions.table.msg.save.badValue.content');
+    return false;
+  }
+  return true;
+};
 
 /**
  * Cancel editing given entry.
@@ -249,6 +263,25 @@ watch(userSelectedTrigger, async () => {
   // Deselect anything in subtable.
   await tabRef.value?.selectEntry(null, true);
 });
+
+//
+
+/**
+ * Provide row metadata for given entry.
+ * @param entry Entry or null if new entry.
+ * @param rowIndex Row index.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const resolveRowMeta = (entry: UserPermissionTableEntry|null): RowMeta|null => {
+  return {
+    'name': {
+      css: (formEntry.name === '' ? 'err' : ''),
+    },
+    'value': {
+      css: (formEntry.value === '' ? 'err' : ''),
+    }
+  }
+}
 </script>
 
 <template>
@@ -263,6 +296,7 @@ watch(userSelectedTrigger, async () => {
     :fetchData="backendApiAdminUser.loadPermissionsPage"
     :convertToReq="convertFilterToReq"
     :processEntry="processEntry"
+    :resolveRowMeta="resolveRowMeta"
     :inlineEdit="true"
     :addNewEntry="addNewEntry"
     emptyText="admin.user.permissions.table.empty"
@@ -282,10 +316,10 @@ watch(userSelectedTrigger, async () => {
       <EntryOptions :meta="metaForEntry(entry)" :entry="entry" :actions="actions" :isBusy="isBusyForEntry(false, entry)"
         langPrefix="admin.user.permissions.table.texts" />
     </template>
-    <template #column_name="{ entry, isEditMode, formEntry }">
+    <template #column_name="{ entry, isEditMode, formEntry, fieldMeta }">
       <template v-if="isEditMode && formEntry">
-        <ComboBox
-          data-testid="permission-name"
+        <ComboBox data-testid="permission-name"
+          :class="fieldMeta?.css"
           v-model="formEntry.name"
           :options="enUserPermissionName"
           langPrefix=""

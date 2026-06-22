@@ -410,6 +410,14 @@
               "fail": {
                 "title": "Failure",
                 "content": "Failed to saved user permission entry!"
+              },
+              "badName": {
+                "title": "Failed to save",
+                "content": "Invalid permission name."
+              },
+              "badValue":  {
+                "title": "Failed to save",
+                "content": "Invalid permission value."
               }
             },
             "delete": {
@@ -481,6 +489,14 @@
               "fail": {
                 "title": "Failure",
                 "content": "Failed to save user config entry!"
+              },
+              "badName": {
+                "title": "Failed to save",
+                "content": "Invalid config name."
+              },
+              "badValue":  {
+                "title": "Failed to save",
+                "content": "Invalid config value."
               }
             },
             "delete": {
@@ -708,6 +724,7 @@
       }
     },
     "inputs": {
+      "errorMode": "Error mode",
       "inputText": "Normal input field",
       "comboBox": "Combo box",
       "checkbox": "Check box",

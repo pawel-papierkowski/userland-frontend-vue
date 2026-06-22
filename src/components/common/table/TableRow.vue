@@ -10,19 +10,19 @@
  * - columns - Data about columns. First column must be unique key.
  * - entry - Single entry of table. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
+ * - rowMeta - Row metadata. Contains field metadata keyed by column name. Optional.
  *
  * Slots:
  * - custom slots defined for colums, with name 'column_[column name]'.
  */
 
-import type { ColumnData } from '@/code/data/features/common/type.ts';
+import type { ColumnData, FieldMeta, RowMeta } from '@/code/data/features/common/type.ts';
 
 import TableCell from '@/components/common/table/TableCell.vue';
 
 const selRecord = defineModel<E | null>({ required: false });
 const formEntry = defineModel<FE | null>('formEntry', { required: false });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(
   defineProps<{
     tableId: string;
@@ -30,12 +30,24 @@ const props = withDefaults(
     rowIndex: number;
     entry: E|null;
     inlineEdit?: boolean;
+    rowMeta?: RowMeta|null;
   }>(),
   {
     inlineEdit: false,
+    rowMeta: null,
   },
 );
 
+//
+
+/**
+ * Retrieve correct field metadata for given column.
+ * @param column Column.
+ */
+const resolveFieldMeta = (column: ColumnData): FieldMeta|null => {
+  if (!props.rowMeta) return null;
+  return props.rowMeta[column.name] || null;
+}
 </script>
 
 <template>
@@ -50,6 +62,7 @@ const props = withDefaults(
         :column="column"
         :entry="entry"
         :inlineEdit="inlineEdit"
+        :fieldMeta="resolveFieldMeta(column)"
       >
         <!-- Slot forwarding: forward all slots that match columns. -->
         <template v-if="$slots[`column_${column.name}`]" #[`column_${column.name}`]="slotData">

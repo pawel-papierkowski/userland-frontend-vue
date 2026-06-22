@@ -32,6 +32,17 @@ export type ColumnData = {
   kind: EnColumnKind,
 };
 
+/** Metadata for given row. */
+export type RowMeta = Record<string, FieldMeta>;
+
+/** Metadata for given field. */
+export type FieldMeta = {
+  /** CSS class for field. */
+  css: string;
+};
+
+//
+
 /** Table metadata request for pagination and sorting. */
 export type TableMetaReq = {
   pageSize: number|null; // Size of page.

@@ -33,7 +33,7 @@ import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
-import type { ColumnData, TableMetaReq, TableMetaResp, TablePageExpose } from '@/code/data/features/common/type.ts';
+import type { ColumnData, RowMeta, TableMetaReq, TableMetaResp, TablePageExpose } from '@/code/data/features/common/type.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
@@ -50,6 +50,7 @@ const props = withDefaults(defineProps<{
   fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
   convertToReq: (form: F, userId: number) => R;
   processEntry?: (entry: E) => void;
+  resolveRowMeta?: (entry: E|null) => RowMeta|null;
   inlineEdit?: boolean;
   addNewEntry?: boolean;
   emptyText: string;
@@ -146,7 +147,7 @@ watch(
 );
 
 /** Update filter with current page number. */
-watch(currPage, (newVal, oldVal) => {
+watch(currPage, (_, oldVal) => {
   if (oldVal === null) return;
 
   if (!formFilter.value.tableMeta)
@@ -156,7 +157,7 @@ watch(currPage, (newVal, oldVal) => {
 });
 
 /** Update filter with current sort by field. */
-watch(currSortBy, (newVal, oldVal) => {
+watch(currSortBy, (_, oldVal) => {
   if (oldVal === null) return;
 
   if (!formFilter.value.tableMeta)
@@ -169,7 +170,7 @@ watch(currSortBy, (newVal, oldVal) => {
 });
 
 /** Update filter with current sort order. */
-watch(currSortOrder, (newVal, oldVal) => {
+watch(currSortOrder, (_, oldVal) => {
   if (oldVal === null) return;
 
   if (!formFilter.value.tableMeta)
@@ -217,6 +218,7 @@ defineExpose({
         :columns="columns"
         :data="data.entries"
         :meta="data.tableMeta"
+        :resolveRowMeta="resolveRowMeta"
         :isLoading="isLoading"
         :canSpin="canSpin"
         :canSelect="false"
