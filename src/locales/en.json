@@ -640,12 +640,14 @@
       },
       "admin": {
         "descr": "<b>Administration panel</b> can be accessed only by users with correct permissions. You can:",
-        "user": "View user table, view details of selected user (including sub-tables like history) and edit user data."
+        "user": "View user table, view details of selected user and edit user data.",
+        "userSub": "View subtables for user like history and edit some of them, like configuration or permissions."
       }
     },
     "components": {
       "title": "Components",
-      "ComboBox":"<code>ComboBox</code> is custom component replacing <code>Select</code> and <code>Options</code>.",
+      "ComboBox":"<code>ComboBox</code> is custom component replacing <code>select</code> and <code>options</code>.",
+      "CheckBox":"<code>CheckBox</code> is custom component replacing <code>input</code> with <code>type='checkbox'</code>.",
       "DateTimePicker":"<code>DateTimePicker</code> allows picking date and/or time.",
       "SlideShow":"You can see <code>SlideShow</code>! This is where you see this text.",
       "MessageContainer":"<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
@@ -724,10 +726,22 @@
       }
     },
     "inputs": {
-      "errorMode": "Error mode",
+      "mode": {
+        "name": "Mode",
+        "0": "Standard",
+        "1": "Disabled",
+        "2": "Error"
+      },
       "inputText": "Normal input field",
-      "comboBox": "Combo box",
-      "checkbox": "Check box",
+      "comboBox": "Combobox",
+      "checkBox": "Checkbox",
+      "radioBox": {
+        "label": "Radiobox",
+        "null": "Option UNSELECTED (null)",
+        "one": "Option One",
+        "two": "Option Two",
+        "three": "Option Three"
+      },
       "dateTimePicker": "Date/time picker",
       "datePicker": "Date picker",
       "timePicker": "Time picker"

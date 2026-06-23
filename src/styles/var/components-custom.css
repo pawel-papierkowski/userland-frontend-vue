@@ -33,12 +33,52 @@
   --combobox-option-border: 1px solid #444444;
   --combobox-option-background: #f8f8f8;
   --combobox-option-background-hover: #e8e8e8;
-  --combobox-option-text-hover: #111827;
+  --combobox-option-color-hover: #111827;
+
+  --combobox-option-err-background: var(--input-err-background);
+  --combobox-option-err-color-hover: var(--combobox-err-color);
+  --combobox-option-err-background-hover: #ffc8c8;
 
   --combobox-selected-padding: 0px 4px;
 
   --combobox-selected-padding-small: 1px 1px;
-  --combobox-text-small: 0.8em;
+  --combobox-color-small: 0.8em;
+
+  /* CheckBox specific vars. */
+  --checkbox-color: var(--input-color);
+  --checkbox-background: var(--input-background);
+  --checkbox-border: var(--input-border);
+  --checkbox-border-radius: 4px;
+
+  --checkbox-err-color: var(--input-err-color);
+  --checkbox-err-background: var(--input-err-background);
+  --checkbox-err-border: var(--input-err-border);
+
+  --checkbox-disabled-color: var(--input-disabled-color);
+  --checkbox-disabled-background: var(--input-disabled-background);
+
+  --checkbox-hover-color: var(--input-hover-color);
+  --checkbox-hover-background: #f6f6f6;
+
+  /* RadioBox specific vars. */
+  --radiobox-color: var(--input-color);
+  --radiobox-background: var(--input-background);
+  --radiobox-border: var(--input-border);
+  --radiobox-border-radius: 50%;
+
+  --radiobox-err-color: var(--input-err-color);
+  --radiobox-err-background: var(--input-err-background);
+  --radiobox-err-border: var(--input-err-border);
+
+  --radiobox-disabled-color: var(--input-disabled-color);
+  --radiobox-disabled-background: var(--input-disabled-background);
+
+  --radiobox-hover-color: var(--input-hover-color);
+  --radiobox-hover-background: #f6f6f6;
+
+  --radiobox-inside-background: var(--radiobox-color);
+  --radiobox-inside-border-radius: 50%;
+  --radiobox-inside-err-background: var(--radiobox-err-color);
 
   /* DateTimePicker specific vars. */
   --datetimepicker-date-width: 145px;

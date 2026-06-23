@@ -9,6 +9,7 @@ const { t } = useI18n();
   <h4 v-html="t('homeArea.components.title')" />
   <ul>
     <li v-html="t('homeArea.components.ComboBox')"></li>
+    <li v-html="t('homeArea.components.CheckBox')"></li>
     <li v-html="t('homeArea.components.DateTimePicker')"></li>
     <li v-html="t('homeArea.components.SlideShow')"></li>
     <li v-html="t('homeArea.components.MessageContainer')"></li>

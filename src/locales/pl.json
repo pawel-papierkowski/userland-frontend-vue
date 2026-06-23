@@ -640,12 +640,14 @@
       },
       "admin": {
         "descr": "<b>Panel administracyjny</b>, na który można wejść tylko będąc użytkownikiem z odpowiednimi uprawnieniami. Możesz:",
-        "user": "Przeglądać tabelę użytkowników, zobaczyć szczegóły wybranego użytkownika (włącznie z pod-tabelami jak historia) oraz edytować dane użytkownika."
+        "user": "Przeglądać tabelę użytkowników, zobaczyć szczegóły wybranego użytkownika oraz edytować dane użytkownika.",
+        "userSub": "Przeglądać podtabele dla użytkownika takie jak historia oraz edytować niektóre z nich jak konfiguracja lub uprawnienia."
       }
     },
     "components": {
       "title": "Komponenty",
-      "ComboBox":"<code>ComboBox</code> jest komponentem zastępującym <code>Select</code> i <code>Options</code>.",
+      "ComboBox":"<code>ComboBox</code> jest komponentem zastępującym <code>select</code> i <code>options</code>.",
+      "CheckBox":"<code>CheckBox</code> jest komponentem zastępującym <code>input</code> z <code>type='checkbox'</code>.",
       "DateTimePicker":"<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
       "SlideShow":"Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
       "MessageContainer":"<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",
@@ -724,10 +726,22 @@
       }
     },
     "inputs": {
-      "errorMode": "Tryb błędu",
+      "mode": {
+        "name": "Tryb",
+        "0": "Standardowy",
+        "1": "Zablokowany",
+        "2": "Błąd"
+      },
       "inputText": "Pole do wpisania tekstu",
       "comboBox": "Lista rozwijana",
-      "checkbox": "Wybór tak/nie",
+      "checkBox": "Wybór tak/nie",
+      "radioBox": {
+        "label": "Wybór jeden z wielu",
+        "null": "Opcja BRAK (null)",
+        "one": "Opcja Jeden",
+        "two": "Opcja Dwa",
+        "three": "Opcja Trzy"
+      },
       "dateTimePicker": "Wybór daty/czasu",
       "datePicker": "Wybór daty",
       "timePicker": "Wybór czasu"

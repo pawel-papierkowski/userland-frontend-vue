@@ -279,6 +279,7 @@ const hidePanel = () => {
       :data-testid="ident+'_date'"
       type="text"
       class="picker-input-date"
+      :class="{ disabled: disabled }"
       :value="displayDateValue"
       :placeholder="placeholderDateValue"
       :disabled="disabled"
@@ -338,6 +339,10 @@ const hidePanel = () => {
 }
 .picker-input-date::selection {
   background: transparent; /** Prevents highlight when you double-click. */
+}
+
+.picker-input-date.disabled {
+  cursor: default;
 }
 
 .picker-general.err .picker-input-date {

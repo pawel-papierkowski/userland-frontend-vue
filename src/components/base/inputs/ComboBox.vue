@@ -6,26 +6,28 @@
  * Component uses CSS variables to set up look&feel of combobox. Variables:
  *   --combobox-border: Border of combobox field.
  *   --combobox-background: Background color of combobox field.
- *   --combobox-text: Text color of combobox field.
+ *   --combobox-color: Text color of combobox field.
  *   --combobox-background-hover: Background color of combobox field when mouse hovers over it.
- *   --combobox-text-hover: Text color of combobox field when mouse hovers over it.
+ *   --combobox-color-hover: Text color of combobox field when mouse hovers over it.
  *   --combobox-option-border: Border of dropdown list.
  *   --combobox-option-background: Color of background.
  *   --combobox-option-background-hover: Background color of dropdown option when mouse hovers over it.
- *   --combobox-option-text-hover: Text color of dropdown option when mouse hovers over it.
+ *   --combobox-option-color-hover: Text color of dropdown option when mouse hovers over it.
  *
  * Features:
- * - Accept null (not set) value.
+ * - Accept number (so also enums), string or null (not set) value.
+ * - Component is integrated with vue-i18n.
+ *
+ * Models:
+ * - v-model - Variable holding selected value.
  *
  * Properties:
- * - v-model - Variable holding selected value.
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
  * - placeholder - Translated text to use if nothing is selected and for 'unselected' option.
  *
  * Notes:
- * - ComboBox is integrated with vue-i18n.
  * - Null value is supported as option. Example: const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
  */
 import { ref, computed, watch } from 'vue';
@@ -35,10 +37,10 @@ const { t } = useI18n();
 
 const props = defineProps({
   /** Variable holding selected value. */
-  modelValue: [String, null], // null means nothing is selected
+  modelValue: [Number, String, null], // null means nothing is selected
   /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
   options: {
-    type: Array<string|null>,
+    type: Array<number|string|null>,
     default: () => []
   },
   /** If true, acts as disabled component. Optional, default is false. */
@@ -63,6 +65,8 @@ const emit = defineEmits(['update:modelValue']);
 const isOpen = ref(false);
 const arrowClass = computed(() => ({ open: isOpen.value }));
 
+//
+
 const selectedOption = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value)
@@ -72,6 +76,8 @@ const selectedOption = computed({
 watch(() => props.disabled, () => {
   if (props.disabled) isOpen.value = false;
 });
+
+//
 
 /** User clicked on input. */
 const openOptions = () => {
@@ -83,7 +89,7 @@ const openOptions = () => {
  * User clicked on option.
  * @param option Clicked option.
  */
-const selectOption = (option: string|null) => {
+const selectOption = (option: number|string|null) => {
   selectedOption.value = option;
   isOpen.value = false;
 }
@@ -92,7 +98,7 @@ const selectOption = (option: string|null) => {
  * Show text of option.
  * @param option Option to show.
  */
-const showOption = (option: string|null): string|null => {
+const showOption = (option: number|string|null): number|string|null => {
   if (option === null) return t(props.placeholder);
   if (props.langPrefix) return t(props.langPrefix+'.'+option);
   return option;
@@ -136,15 +142,15 @@ const showOption = (option: string|null): string|null => {
   background-color: var(--combobox-hover-background);
 }
 
-.combobox.disabled {
-  color: var(--combobox-disabled-color);
-  background: var(--combobox-disabled-background);
-}
-
 .combobox.err {
   color: var(--combobox-err-color);
   background: var(--combobox-err-background);
   border: var(--combobox-err-border);
+}
+
+.combobox.disabled {
+  color: var(--combobox-disabled-color);
+  background: var(--combobox-disabled-background);
 }
 
 /**/
@@ -156,6 +162,10 @@ const showOption = (option: string|null): string|null => {
 
   padding: var(--combobox-selected-padding);
   cursor: pointer;
+}
+
+.combobox.disabled .combobox-selected {
+  cursor: unset;
 }
 
 .combobox-selected-text {
@@ -175,6 +185,14 @@ const showOption = (option: string|null): string|null => {
 
 .combobox-arrow.open {
   transform: rotate(180deg);
+}
+
+.combobox.disabled .combobox-arrow {
+  border-top: 6px solid var(--combobox-disabled-color);
+}
+
+.combobox.err .combobox-arrow {
+  border-top: 6px solid var(--combobox-err-color);
 }
 
 /**/
@@ -197,6 +215,9 @@ const showOption = (option: string|null): string|null => {
   overflow-y: auto;
   z-index: 10010;
 }
+.combobox.err .combobox-options {
+  background: var(--combobox-option-err-background);
+}
 
 .combobox-option {
   padding: 1px;
@@ -204,7 +225,11 @@ const showOption = (option: string|null): string|null => {
 }
 
 .combobox-option:hover {
-  color: var(--combobox-option-text-hover);
+  color: var(--combobox-option-color-hover);
   background-color: var(--combobox-option-background-hover);
+}
+.combobox.err .combobox-option:hover {
+  color: var(--combobox-option-err-color-hover);
+  background-color: var(--combobox-option-err-background-hover);
 }
 </style>

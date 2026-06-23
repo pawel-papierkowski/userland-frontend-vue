@@ -23,6 +23,6 @@
 /* ComboBox. */
 
 .table-cell .combobox {
-  font-size: var(--combobox-text-small);
+  font-size: var(--combobox-color-small);
   padding: var(--combobox-selected-padding-small);
 }

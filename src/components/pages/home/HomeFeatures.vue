@@ -32,6 +32,7 @@ const { t } = useI18n();
       <div v-html="t('homeArea.features.admin.descr')"></div>
       <ul>
         <li v-html="t('homeArea.features.admin.user')" />
+        <li v-html="t('homeArea.features.admin.userSub')" />
       </ul>
     </li>
   </ul>

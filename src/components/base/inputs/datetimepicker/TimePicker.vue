@@ -21,7 +21,7 @@ const currDateTime = defineModel<Date | null>({ required: true });
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
   ident: string;
-  /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
+  /**  If true, acts as disabled component (clock panel does not show). Optional, default is false. */
   disabled?: boolean
 }>(), {
   disabled: false
@@ -188,6 +188,7 @@ const hidePanel = () => {
       :data-testid="ident+'_time'"
       type="text"
       class="picker-input-time"
+      :class="{ disabled: disabled }"
       :value="displayTimeValue"
       :placeholder="placeholderTimeValue"
       :disabled="disabled"
@@ -244,6 +245,10 @@ const hidePanel = () => {
 }
 .picker-input-time::selection {
   background: transparent; /** Prevents highlight when you double-click. */
+}
+
+.picker-input-time.disabled {
+  cursor: default;
 }
 
 .picker-general.err .picker-input-time {

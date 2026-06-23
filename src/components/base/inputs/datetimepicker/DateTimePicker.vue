@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<{
   ident: string;
   /** Mode of operation. Optional, default is datetime. */
   mode?: 'date' | 'time' | 'datetime';
-  /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
+  /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
   disabled?: boolean,
   /** If not null, defines earliest allowed date. Optional, default is null. */
   dateTimeMin?: Date|null;
