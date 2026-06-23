@@ -54,7 +54,7 @@ const selectedOption = computed({
  * User clicked on option.
  * @param option Clicked option.
  */
-const selectOption = (option: string|null) => {
+const selectOption = (option: number|string|null) => {
   if (props.disabled) return;
   selectedOption.value = option;
 }
@@ -63,7 +63,7 @@ const selectOption = (option: string|null) => {
  * Show text of option.
  * @param option Option to show.
  */
-const showOption = (option: string|null): string|null => {
+const showOption = (option: number|string|null): number|string|null => {
   if (props.langPrefix) return t(props.langPrefix+'.'+option);
   return option;
 }
