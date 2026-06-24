@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<{
   /** Does this checkbox allow setting null value? */
   allowNull?: boolean;
   /**  If true, acts as disabled component. Optional, default is false. */
-  disabled?: boolean,
+  disabled?: boolean;
 }>(), {
   allowNull: false,
   disabled: false

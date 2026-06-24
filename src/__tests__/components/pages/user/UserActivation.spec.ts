@@ -31,7 +31,7 @@ vi.mock('vue-router', () => ({
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserActivation, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -48,12 +48,14 @@ describe('UserActivation', () => {
   });
 
   it('activates user successfully', async () => {
+    // Ensures that after successful action user gets feedback and redirection.
+
     // Arrange: mock successful API response.
     vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
@@ -79,12 +81,14 @@ describe('UserActivation', () => {
   //
 
   it('fails when no token is provided', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: set token to invalid value.
     mockRoute.query.token = '';
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();
@@ -103,6 +107,8 @@ describe('UserActivation', () => {
   });
 
   it('fails when endpoint returns error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: mock API returning error about non-existing token.
     const errorResponse = {
       isAxiosError: true,
@@ -122,7 +128,7 @@ describe('UserActivation', () => {
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();

@@ -20,11 +20,11 @@ vi.mock('@/services/features/api-users', () => ({
 
 const mockPush = vi.fn<(to: any) => void>();
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: mockPush, }),
+  useRouter: () => ({ push: mockPush }),
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserPasswordResetStart, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -40,7 +40,9 @@ describe('UserPasswordResetStart', () => {
   });
 
   it('is correctly filled and submits successfully', async () => {
-    const userPasswordResetStart = createWrapper();
+    // Ensures that after successful action user gets feedback.
+
+    const userPasswordResetStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
@@ -55,39 +57,45 @@ describe('UserPasswordResetStart', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.passwordResetLink).toHaveBeenCalledWith(expect.objectContaining({
-      email: 'test@example.com'
-    }));
+    expect(backendApiUser.passwordResetLink).toHaveBeenCalledWith(
+      expect.objectContaining({
+        email: 'test@example.com',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("Check your inbox in a few minutes for a email with link to password change.");
+    expect(messageStore.messages[0].title).toBe('Success');
+    expect(messageStore.messages[0].content).toBe(
+      'Check your inbox in a few minutes for a email with link to password change.',
+    );
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 
   it('shows error message when server returns 404 error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: mock API returning 404 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
         status: 404,
         data: {
-          "detail": "User with email 'test@example.com' does not exist.",
-          "instance": "/api/users/password/link",
-          "status": 404,
-          "title": "User cannot be found.",
-          "type": "https://api.userland.org/errors/user/doesNotExist",
-          "errCode": "user_0001"
-        }
-      }
+          detail: "User with email 'test@example.com' does not exist.",
+          instance: '/api/users/password/link',
+          status: 404,
+          title: 'User cannot be found.',
+          type: 'https://api.userland.org/errors/user/doesNotExist',
+          errCode: 'user_0001',
+        },
+      },
     };
     vi.mocked(backendApiUser.passwordResetLink).mockRejectedValue(errorResponse);
 
-    const userPasswordResetStart = createWrapper();
+    const userPasswordResetStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields correctly.
@@ -104,8 +112,8 @@ describe('UserPasswordResetStart', () => {
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("User not found.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe('User not found.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -114,7 +122,9 @@ describe('UserPasswordResetStart', () => {
   //
 
   it('form is empty', async () => {
-    const userPasswordResetStart = createWrapper();
+    // Ensures that after failed action user gets feedback.
+
+    const userPasswordResetStart = createComponent();
     const messageStore = useMessageStore();
 
     // No arrange here - form is untouched.
@@ -127,7 +137,7 @@ describe('UserPasswordResetStart', () => {
     // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userPasswordResetStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    errorMessages.forEach(msg => {
+    errorMessages.forEach((msg) => {
       expect(msg.text()).not.toBe('');
     });
 
@@ -140,7 +150,9 @@ describe('UserPasswordResetStart', () => {
   });
 
   it('shows error when invalid email is entered', async () => {
-    const userPasswordResetStart = createWrapper();
+    // Ensures that after failed action user gets feedback.
+
+    const userPasswordResetStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields with invalid email.

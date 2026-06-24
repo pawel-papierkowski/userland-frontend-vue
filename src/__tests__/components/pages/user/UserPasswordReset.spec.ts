@@ -31,7 +31,7 @@ vi.mock('vue-router', () => ({
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserPasswordReset, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -48,7 +48,9 @@ describe('UserPasswordReset', () => {
   });
 
   it('is correctly filled and submits successfully', async () => {
-    const userPasswordReset = createWrapper();
+    // Ensures that after successful action user gets feedback and redirection.
+
+    const userPasswordReset = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
@@ -82,6 +84,8 @@ describe('UserPasswordReset', () => {
   });
 
   it('shows error message when server returns 404 error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: mock API returning 404 error.
     const errorResponse = {
       isAxiosError: true,
@@ -99,7 +103,7 @@ describe('UserPasswordReset', () => {
     };
     vi.mocked(backendApiUser.passwordResetConfirm).mockRejectedValue(errorResponse);
 
-    const userPasswordReset = createWrapper();
+    const userPasswordReset = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields correctly.
@@ -127,7 +131,9 @@ describe('UserPasswordReset', () => {
   //
 
   it('form is empty', async () => {
-    const userPasswordReset = createWrapper();
+    // Ensures that after failed action user gets feedback.
+
+    const userPasswordReset = createComponent();
     const messageStore = useMessageStore();
 
     // No arrange here - form is untouched.
@@ -153,7 +159,9 @@ describe('UserPasswordReset', () => {
   });
 
   it('shows error when passwords do not match', async () => {
-    const userPasswordReset = createWrapper();
+    // Ensures that after failed action user gets feedback.
+
+    const userPasswordReset = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields with mismatching passwords.
@@ -180,12 +188,14 @@ describe('UserPasswordReset', () => {
   });
 
   it('fails when no token is provided', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: set token to undefined for this test.
     mockRoute.query.token = undefined as any;
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userPasswordReset = createWrapper();
+    const userPasswordReset = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();

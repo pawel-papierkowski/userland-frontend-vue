@@ -20,11 +20,11 @@ vi.mock('@/services/features/api-users', () => ({
 
 const mockPush = vi.fn<(to: any) => void>();
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: mockPush, }),
+  useRouter: () => ({ push: mockPush }),
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserAccountDeletionStart, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -40,7 +40,9 @@ describe('UserAccountDeletionStart', () => {
   });
 
   it('is correctly filled and submits successfully', async () => {
-    const userAccountDeletionStart = createWrapper();
+    // Ensures that after successful action user gets feedback.
+
+    const userAccountDeletionStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
@@ -55,39 +57,45 @@ describe('UserAccountDeletionStart', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.accountDeleteLink).toHaveBeenCalledWith(expect.objectContaining({
-      password: '5trOnGP@ssw0rd'
-    }));
+    expect(backendApiUser.accountDeleteLink).toHaveBeenCalledWith(
+      expect.objectContaining({
+        password: '5trOnGP@ssw0rd',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("Check your inbox in a few minutes for a email with link to confirm your account deletion.");
+    expect(messageStore.messages[0].title).toBe('Success');
+    expect(messageStore.messages[0].content).toBe(
+      'Check your inbox in a few minutes for a email with link to confirm your account deletion.',
+    );
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 
   it('shows error message when server returns 409 error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: mock API returning 409 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
         status: 409,
         data: {
-          "detail": "Token of type 'DELETE' already exists and is still valid. You cannot do this action twice in row.",
-          "instance": "/api/users/delete/link",
-          "status": 409,
-          "title": "Required token already exists.",
-          "type": "https://api.userland.org/errors/user/doesNotExist",
-          "errCode": "user_0013"
-        }
-      }
+          detail: "Token of type 'DELETE' already exists and is still valid. You cannot do this action twice in row.",
+          instance: '/api/users/delete/link',
+          status: 409,
+          title: 'Required token already exists.',
+          type: 'https://api.userland.org/errors/user/doesNotExist',
+          errCode: 'user_0013',
+        },
+      },
     };
     vi.mocked(backendApiUser.accountDeleteLink).mockRejectedValue(errorResponse);
 
-    const userAccountDeletionStart = createWrapper();
+    const userAccountDeletionStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields correctly.
@@ -104,8 +112,8 @@ describe('UserAccountDeletionStart', () => {
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Failure");
-    expect(messageStore.messages[0].content).toBe("User token already exists.");
+    expect(messageStore.messages[0].title).toBe('Failure');
+    expect(messageStore.messages[0].content).toBe('User token already exists.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -114,7 +122,9 @@ describe('UserAccountDeletionStart', () => {
   //
 
   it('form is empty', async () => {
-    const userAccountDeletionStart = createWrapper();
+    // Ensures that after failed action user gets feedback.
+
+    const userAccountDeletionStart = createComponent();
     const messageStore = useMessageStore();
 
     // No arrange here - form is untouched.
@@ -127,7 +137,7 @@ describe('UserAccountDeletionStart', () => {
     // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userAccountDeletionStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    errorMessages.forEach(msg => {
+    errorMessages.forEach((msg) => {
       expect(msg.text()).not.toBe('');
     });
 
@@ -140,7 +150,9 @@ describe('UserAccountDeletionStart', () => {
   });
 
   it('shows error when invalid password is entered', async () => {
-    const userAccountDeletionStart = createWrapper();
+    // Ensures that after failed action user gets feedback.
+    
+    const userAccountDeletionStart = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields.

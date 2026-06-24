@@ -736,11 +736,7 @@
       "comboBox": "Combobox",
       "checkBox": "Checkbox",
       "radioBox": {
-        "label": "Radiobox",
-        "null": "Option UNSELECTED (null)",
-        "one": "Option One",
-        "two": "Option Two",
-        "three": "Option Three"
+        "label": "Radiobox"
       },
       "dateTimePicker": "Date/time picker",
       "datePicker": "Date picker",
@@ -971,6 +967,12 @@
         "title": "Fallback title",
         "content": "Fallback content."
       }
+    },
+    "radioBox": {
+      "null": "Option UNSELECTED (null)",
+      "one": "Option One",
+      "two": "Option Two",
+      "three": "Option Three"
     }
   },
 

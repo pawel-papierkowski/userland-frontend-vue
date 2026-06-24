@@ -20,11 +20,11 @@ vi.mock('@/services/features/api-users', () => ({
 
 const mockPush = vi.fn<(to: any) => void>();
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: mockPush, }),
+  useRouter: () => ({ push: mockPush }),
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserRegistration, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -40,7 +40,9 @@ describe('UserRegistration', () => {
   });
 
   it('is correctly filled and submits successfully', async () => {
-    const userRegistration = createWrapper();
+    // Ensures that after successful registration user gets feedback and redirection.
+
+    const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
@@ -58,36 +60,42 @@ describe('UserRegistration', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Assert: verify API call.
-    expect(backendApiUser.register).toHaveBeenCalledWith(expect.objectContaining({
-      username: 'testuser',
-      email: 'test@example.com',
-      password: 'Password123!',
-      lang: 'en',
-      frontend: 'VUE'
-    }));
+    expect(backendApiUser.register).toHaveBeenCalledWith(
+      expect.objectContaining({
+        username: 'testuser',
+        email: 'test@example.com',
+        password: 'Password123!',
+        lang: 'en',
+        frontend: 'VUE',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("User registered successfully");
-    expect(messageStore.messages[0].content).toBe("Please check your mailbox. You will need to confirm registration by clicking on link in email.");
+    expect(messageStore.messages[0].title).toBe('User registered successfully');
+    expect(messageStore.messages[0].content).toBe(
+      'Please check your mailbox. You will need to confirm registration by clicking on link in email.',
+    );
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
   });
 
   it('shows error message when server returns 500 error', async () => {
+    // Ensures that after failed registration user gets feedback.
+
     // Arrange: mock API returning 500 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
         status: 500,
-        data: {}
-      }
+        data: {},
+      },
     };
     vi.mocked(backendApiUser.register).mockRejectedValue(errorResponse);
 
-    const userRegistration = createWrapper();
+    const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields correctly.
@@ -107,8 +115,10 @@ describe('UserRegistration', () => {
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe("Internal server error");
-    expect(messageStore.messages[0].content).toBe("The server has encountered a situation it does not know how to handle.");
+    expect(messageStore.messages[0].title).toBe('Internal server error');
+    expect(messageStore.messages[0].content).toBe(
+      'The server has encountered a situation it does not know how to handle.',
+    );
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -117,7 +127,9 @@ describe('UserRegistration', () => {
   //
 
   it('form is empty', async () => {
-    const userRegistration = createWrapper();
+    // Ensures that after failed registration user gets feedback.
+
+    const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
     // No arrange here - form is untouched.
@@ -130,7 +142,7 @@ describe('UserRegistration', () => {
     // Assert: verify that error messages properly shown up for all fields.
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(4);
-    errorMessages.forEach(msg => {
+    errorMessages.forEach((msg) => {
       expect(msg.text()).not.toBe('');
     });
 
@@ -143,7 +155,9 @@ describe('UserRegistration', () => {
   });
 
   it('shows error when passwords do not match', async () => {
-    const userRegistration = createWrapper();
+    // Ensures that after failed registration user gets feedback.
+
+    const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields with mismatching passwords.
@@ -172,7 +186,9 @@ describe('UserRegistration', () => {
   });
 
   it('shows error when invalid email is entered', async () => {
-    const userRegistration = createWrapper();
+    // Ensures that after failed registration user gets feedback.
+    
+    const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: fill form fields with invalid email.

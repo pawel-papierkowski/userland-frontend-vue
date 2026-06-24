@@ -736,11 +736,7 @@
       "comboBox": "Lista rozwijana",
       "checkBox": "Wybór tak/nie",
       "radioBox": {
-        "label": "Wybór jeden z wielu",
-        "null": "Opcja BRAK (null)",
-        "one": "Opcja Jeden",
-        "two": "Opcja Dwa",
-        "three": "Opcja Trzy"
+        "label": "Wybór jeden z wielu"
       },
       "dateTimePicker": "Wybór daty/czasu",
       "datePicker": "Wybór daty",
@@ -971,6 +967,12 @@
         "title": "Fallback title",
         "content": "Fallback content."
       }
+    },
+    "radioBox": {
+      "null": "Opcja BRAK (null)",
+      "one": "Opcja Jeden",
+      "two": "Opcja Dwa",
+      "three": "Opcja Trzy"
     }
   },
 

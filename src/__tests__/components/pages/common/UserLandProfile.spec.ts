@@ -22,12 +22,12 @@ vi.mock('@/services/features/api-users', () => ({
 const mockPush = vi.fn<(to: any) => void>();
 const mockRoute = { name: 'user-profile' };
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: mockPush, }),
+  useRouter: () => ({ push: mockPush }),
   useRoute: () => mockRoute,
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserLandProfile, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -43,19 +43,23 @@ describe('UserLandProfile', () => {
   });
 
   it('is correctly filled and submits successfully', async () => {
+    // Ensures form is correctly filled when you enter page and successful submit results in correct feedback.
+
     // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.view).mockResolvedValue({ data: {
-      username: 'SomeNick',
-      email: 'some.email@test.com',
-      lang: 'en',
-      profile: {
-        name: null,
-        surname: null
-      }
-    } } as any);
+    vi.mocked(backendApiUser.view).mockResolvedValue({
+      data: {
+        username: 'SomeNick',
+        email: 'some.email@test.com',
+        lang: 'en',
+        profile: {
+          name: null,
+          surname: null,
+        },
+      },
+    } as any);
     vi.mocked(backendApiUser.edit).mockResolvedValue({ data: {} } as any);
 
-    const userProfile = createWrapper();
+    const userProfile = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
@@ -77,36 +81,42 @@ describe('UserLandProfile', () => {
 
     // Assert: verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
-    expect(backendApiUser.edit).toHaveBeenCalledWith(expect.objectContaining({
-      username: 'SomeNick',
-      lang: 'en',
-      name: 'John',
-      surname: 'Smith'
-    }));
+    expect(backendApiUser.edit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        username: 'SomeNick',
+        lang: 'en',
+        name: 'John',
+        surname: 'Smith',
+      }),
+    );
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe("Success");
-    expect(messageStore.messages[0].content).toBe("User data updated successfully.");
+    expect(messageStore.messages[0].title).toBe('Success');
+    expect(messageStore.messages[0].content).toBe('User data updated successfully.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('clicks on email change button', async () => {
-    // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.view).mockResolvedValue({ data: {
-      username: 'SomeNick',
-      email: 'some.email@test.com',
-      lang: 'en',
-      profile: {
-        name: null,
-        surname: null
-      }
-    } } as any);
+    // Ensure correct action (redirection) happens when you click on email change button.
 
-    const userProfile = createWrapper();
+    // Arrange: mock successful API response.
+    vi.mocked(backendApiUser.view).mockResolvedValue({
+      data: {
+        username: 'SomeNick',
+        email: 'some.email@test.com',
+        lang: 'en',
+        profile: {
+          name: null,
+          surname: null,
+        },
+      },
+    } as any);
+
+    const userProfile = createComponent();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
@@ -124,18 +134,22 @@ describe('UserLandProfile', () => {
   });
 
   it('clicks on account delete button', async () => {
-    // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.view).mockResolvedValue({ data: {
-      username: 'SomeNick',
-      email: 'some.email@test.com',
-      lang: 'en',
-      profile: {
-        name: null,
-        surname: null
-      }
-    } } as any);
+    // Ensure correct action (redirection) happens when you click on account delete button.
 
-    const userProfile = createWrapper();
+    // Arrange: mock successful API response.
+    vi.mocked(backendApiUser.view).mockResolvedValue({
+      data: {
+        username: 'SomeNick',
+        email: 'some.email@test.com',
+        lang: 'en',
+        profile: {
+          name: null,
+          surname: null,
+        },
+      },
+    } as any);
+
+    const userProfile = createComponent();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
@@ -155,17 +169,19 @@ describe('UserLandProfile', () => {
   //
 
   it('user data loading failed', async () => {
+    // Ensure correct form state when loading user data failed.
+
     // Arrange: mock API returning 500 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
         status: 500,
-        data: {}
-      }
+        data: {},
+      },
     };
     vi.mocked(backendApiUser.view).mockRejectedValue(errorResponse);
 
-    const userProfile = createWrapper();
+    const userProfile = createComponent();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
@@ -184,19 +200,23 @@ describe('UserLandProfile', () => {
   });
 
   it('sends invalid field', async () => {
+    // Ensure correct form state when sending user data failed.
+
     // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.view).mockResolvedValue({ data: {
-      username: 'SomeNick',
-      email: 'some.email@test.com',
-      lang: 'en',
-      profile: {
-        name: null,
-        surname: null
-      }
-    } } as any);
+    vi.mocked(backendApiUser.view).mockResolvedValue({
+      data: {
+        username: 'SomeNick',
+        email: 'some.email@test.com',
+        lang: 'en',
+        profile: {
+          name: null,
+          surname: null,
+        },
+      },
+    } as any);
     vi.mocked(backendApiUser.edit).mockResolvedValue({ data: {} } as any);
 
-    const userProfile = createWrapper();
+    const userProfile = createComponent();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 

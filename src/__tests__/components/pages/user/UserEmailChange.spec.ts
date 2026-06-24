@@ -35,7 +35,7 @@ vi.mock('vue-router', () => ({
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserEmailChange, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -52,6 +52,8 @@ describe('UserEmailChange', () => {
   });
 
   it('changes email successfully', async () => {
+    // Ensures that successful failed action user gets feedback.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
@@ -61,7 +63,7 @@ describe('UserEmailChange', () => {
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
@@ -92,11 +94,13 @@ describe('UserEmailChange', () => {
   //
 
   it('fails when not logged in', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // No arrange here.
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();
@@ -117,6 +121,8 @@ describe('UserEmailChange', () => {
   });
 
   it('fails when no token is provided', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
@@ -126,7 +132,7 @@ describe('UserEmailChange', () => {
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();
@@ -145,6 +151,8 @@ describe('UserEmailChange', () => {
   });
 
   it('fails when endpoint returns error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
@@ -168,7 +176,7 @@ describe('UserEmailChange', () => {
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userActivation = createWrapper();
+    const userActivation = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();

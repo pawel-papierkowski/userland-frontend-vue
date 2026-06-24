@@ -7,7 +7,7 @@ import i18n from '@/code/lang/i18n';
 import { logger } from '@/code/utils/logger';
 import realRouter from '@/router';
 
-import App from '@/App.vue'
+import App from '@/App.vue';
 
 /** Boilerplate code. */
 async function createWrapper() {
@@ -24,8 +24,8 @@ async function createWrapper() {
 
   const wrapper = mount(App, {
     global: {
-      plugins: [logger, pinia, router, i18n]
-    }
+      plugins: [logger, pinia, router, i18n],
+    },
   });
 
   await flushPromises();

@@ -81,7 +81,7 @@ const show = (value: string|boolean|null): string => {
 
         <label for="radiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
         <RadioBox id="radiobox" data-testid="radiobox" v-model="form.radiobox" :options="enTestRadioBox"
-           langPrefix="testArea.inputs.radioBox"
+           langPrefix="test.radioBox"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(form.radiobox) }}</div>
 

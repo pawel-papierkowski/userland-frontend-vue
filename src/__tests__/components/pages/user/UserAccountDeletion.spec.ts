@@ -12,6 +12,7 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
 
+/** Mock JWT. */
 const jwt =
   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
 
@@ -35,7 +36,7 @@ vi.mock('vue-router', () => ({
 }));
 
 /** Boilerplate code. */
-function createWrapper() {
+function createComponent() {
   return mount(UserAccountDeletion, {
     global: {
       plugins: [logger, getActivePinia(), i18n],
@@ -52,11 +53,13 @@ describe('UserAccountDeletion', () => {
   });
 
   it('submits successfully', async () => {
+    // Ensures that after successful action user gets feedback and redirection.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
 
-    const userAccountDelete = createWrapper();
+    const userAccountDelete = createComponent();
     const messageStore = useMessageStore();
 
     // Arrange: mock successful API response.
@@ -74,6 +77,9 @@ describe('UserAccountDeletion', () => {
       }),
     );
 
+    // Assert: we were logged out.
+    expect(AppLoginer.isLogged()).toBe(false);
+
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(2);
     expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
@@ -88,6 +94,8 @@ describe('UserAccountDeletion', () => {
   });
 
   it('shows error message when server returns 404 error', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
@@ -108,7 +116,7 @@ describe('UserAccountDeletion', () => {
     };
     vi.mocked(backendApiUser.accountDeleteConfirm).mockRejectedValue(errorResponse);
 
-    const userAccountDelete = createWrapper();
+    const userAccountDelete = createComponent();
     const messageStore = useMessageStore();
 
     // Act: click on account delete confirmation button.
@@ -132,11 +140,13 @@ describe('UserAccountDeletion', () => {
   //
 
   it('fails when not logged in', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // No arrange here.
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userAccountDelete = createWrapper();
+    const userAccountDelete = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();
@@ -157,6 +167,8 @@ describe('UserAccountDeletion', () => {
   });
 
   it('fails when no token is provided', async () => {
+    // Ensures that after failed action user gets feedback.
+
     // Arrange: login user.
     vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
     AppLoginer.login(jwt);
@@ -165,7 +177,7 @@ describe('UserAccountDeletion', () => {
 
     // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
     // oxlint-disable-next-line no-unused-vars
-    const userAccountDelete = createWrapper();
+    const userAccountDelete = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises();
