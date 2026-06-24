@@ -35,9 +35,10 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+/** Currently selected option. Null means nothing is selected. */
+const selOption = defineModel<number|string|null>({ required: true });
+
 const props = defineProps({
-  /** Variable holding selected value. */
-  modelValue: [Number, String, null], // null means nothing is selected
   /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
   options: {
     type: Array<number|string|null>,
@@ -60,17 +61,10 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue']);
-
 const isOpen = ref(false);
 const arrowClass = computed(() => ({ open: isOpen.value }));
 
 //
-
-const selectedOption = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-});
 
 /** If you disable combobox, list of options will close. */
 watch(() => props.disabled, () => {
@@ -82,6 +76,7 @@ watch(() => props.disabled, () => {
 /** User clicked on input. */
 const openOptions = () => {
   if (props.disabled) return;
+  
   isOpen.value = !isOpen.value;
 }
 
@@ -90,7 +85,9 @@ const openOptions = () => {
  * @param option Clicked option.
  */
 const selectOption = (option: number|string|null) => {
-  selectedOption.value = option;
+  if (props.disabled) return;
+
+  selOption.value = option;
   isOpen.value = false;
 }
 
@@ -108,11 +105,13 @@ const showOption = (option: number|string|null): number|string|null => {
 <template>
   <div class="combobox" :class="{ disabled: disabled }" ref="combobox" tabindex="0" @blur="isOpen = false">
     <div class="combobox-selected" @click="openOptions()">
-      <span class="combobox-selected-text">{{ selectedOption ? showOption(selectedOption) : t(placeholder) }}</span>
+      <span class="combobox-selected-text">{{ selOption ? showOption(selOption) : t(placeholder) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
+
     <div class="combobox-options" v-show="isOpen">
-      <div v-for="(option, index) in options" :key="index" class="combobox-option"
+      <div v-for="(option, index) in options" :key="index"
+        class="combobox-option" :data-testid="'combobox_'+index"
         @click="selectOption(option)">
         {{ showOption(option) }}
       </div>

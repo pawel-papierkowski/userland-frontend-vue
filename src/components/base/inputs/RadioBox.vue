@@ -14,14 +14,14 @@
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
  */
-import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+/** Currently selected option. Null means nothing is selected. */
+const selOption = defineModel<number|string|null>({ required: true });
+
 const props = defineProps({
-  /** Variable holding selected value. */
-  modelValue: [Number, String, null], // null means nothing is selected
   /** Array of options. Can contain null value for 'unselected'. */
   options: {
     type: Array<number|string|null>,
@@ -39,15 +39,6 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue']);
-
-//
-
-const selectedOption = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-});
-
 //
 
 /**
@@ -56,7 +47,8 @@ const selectedOption = computed({
  */
 const selectOption = (option: number|string|null) => {
   if (props.disabled) return;
-  selectedOption.value = option;
+  
+  selOption.value = option;
 }
 
 /**
@@ -72,10 +64,11 @@ const showOption = (option: number|string|null): number|string|null => {
 <template>
   <div class="radiobox-wrapper">
     <div class="radiobox" :class="{disabled: disabled}">
-      <div v-for="(option, index) in options" :key="index" class="radiobox-option"
+      <div v-for="(option, index) in options" :key="index"
+        class="radiobox-option" :data-testid="'radiobox_'+index"
         @click="selectOption(option)">
         <div class="radiobox-circle">
-          <div class="radiobox-inside" :class="{mark: option === selectedOption}"></div>
+          <div class="radiobox-inside" :class="{mark: option === selOption}"></div>
         </div>
         <div class="radiobox-label">{{ showOption(option) }}</div>
       </div>
@@ -139,8 +132,8 @@ const showOption = (option: number|string|null): number|string|null => {
 .radiobox-inside {
   align-self: center;
 
-  width: 0.45em;
-  height: 0.45em;
+  width: 0.46em;
+  height: 0.46em;
 }
 
 .radiobox-inside.mark {

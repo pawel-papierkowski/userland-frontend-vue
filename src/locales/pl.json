@@ -973,6 +973,12 @@
       "one": "Opcja Jeden",
       "two": "Opcja Dwa",
       "three": "Opcja Trzy"
+    },
+    "comboBox": {
+      "null": "Opcja BRAK (null)",
+      "A": "Opcja A",
+      "b": "Opcja B",
+      "c": "Opcja C"
     }
   },
 

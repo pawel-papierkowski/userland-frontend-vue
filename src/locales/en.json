@@ -973,6 +973,12 @@
       "one": "Option One",
       "two": "Option Two",
       "three": "Option Three"
+    },
+    "comboBox": {
+      "null": "Option UNSELECTED (null)",
+      "a": "Option A",
+      "b": "Option B",
+      "c": "Option C"
     }
   },
 
