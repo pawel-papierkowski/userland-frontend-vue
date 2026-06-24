@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -10,6 +10,8 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -30,7 +32,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserLandProfile, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -38,7 +40,8 @@ function createComponent() {
 /** Tests of UserLandProfile component. */
 describe('UserLandProfile', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
   });
 
@@ -92,9 +95,9 @@ describe('UserLandProfile', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe('Success');
-    expect(messageStore.messages[0].content).toBe('User data updated successfully.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0]?.title).toBe('Success');
+    expect(messageStore.messages[0]?.content).toBe('User data updated successfully.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -242,7 +245,7 @@ describe('UserLandProfile', () => {
     expect(userProfile.find('#username').classes()).toContain('err');
     const errorMessages = userProfile.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -10,6 +10,8 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -27,7 +29,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserRegistration, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -35,7 +37,8 @@ function createComponent() {
 /** Tests of UserRegistration component. */
 describe('UserRegistration', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
   });
 
@@ -72,9 +75,9 @@ describe('UserRegistration', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe('User registered successfully');
-    expect(messageStore.messages[0].content).toBe(
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0]?.title).toBe('User registered successfully');
+    expect(messageStore.messages[0]?.content).toBe(
       'Please check your mailbox. You will need to confirm registration by clicking on link in email.',
     );
 
@@ -114,9 +117,9 @@ describe('UserRegistration', () => {
 
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe('Internal server error');
-    expect(messageStore.messages[0].content).toBe(
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+    expect(messageStore.messages[0]?.title).toBe('Internal server error');
+    expect(messageStore.messages[0]?.content).toBe(
       'The server has encountered a situation it does not know how to handle.',
     );
 
@@ -175,7 +178,7 @@ describe('UserRegistration', () => {
     expect(userRegistration.find('#confirmPassword').classes()).toContain('err');
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify API was not called.
     expect(backendApiUser.register).not.toHaveBeenCalled();
@@ -187,7 +190,7 @@ describe('UserRegistration', () => {
 
   it('shows error when invalid email is entered', async () => {
     // Ensures that after failed registration user gets feedback.
-    
+
     const userRegistration = createComponent();
     const messageStore = useMessageStore();
 
@@ -206,7 +209,7 @@ describe('UserRegistration', () => {
     expect(userRegistration.find('#email').classes()).toContain('err');
     const errorMessages = userRegistration.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify API was not called.
     expect(backendApiUser.register).not.toHaveBeenCalled();

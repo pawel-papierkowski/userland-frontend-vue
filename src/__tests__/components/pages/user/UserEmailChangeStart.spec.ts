@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -10,6 +10,8 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserEmailChangeStart from '@/components/pages/user/UserEmailChangeStart.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -27,7 +29,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserEmailChangeStart, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -35,7 +37,8 @@ function createComponent() {
 /** Tests of UserEmailChangeStart component. */
 describe('UserEmailChangeStart', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
   });
 
@@ -67,9 +70,9 @@ describe('UserEmailChangeStart', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe('Success');
-    expect(messageStore.messages[0].content).toBe(
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0]?.title).toBe('Success');
+    expect(messageStore.messages[0]?.content).toBe(
       'Check your inbox in a few minutes for a email with link to confirm email address change.',
     );
 
@@ -114,9 +117,9 @@ describe('UserEmailChangeStart', () => {
 
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe('Failure');
-    expect(messageStore.messages[0].content).toBe('User token already exists.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+    expect(messageStore.messages[0]?.title).toBe('Failure');
+    expect(messageStore.messages[0]?.content).toBe('User token already exists.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -171,7 +174,7 @@ describe('UserEmailChangeStart', () => {
     expect(userEmailChangeStart.find('#newEmail').classes()).toContain('err');
     const errorMessages = userEmailChangeStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify API was not called.
     expect(backendApiUser.emailChangeLink).not.toHaveBeenCalled();
@@ -200,7 +203,7 @@ describe('UserEmailChangeStart', () => {
     expect(userEmailChangeStart.find('#password').classes()).toContain('err');
     const errorMessages = userEmailChangeStart.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify API was not called.
     expect(backendApiUser.emailChangeLink).not.toHaveBeenCalled();

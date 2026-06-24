@@ -67,36 +67,35 @@ const show = (value: string|boolean|null): string => {
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(form.inputText) }}</div>
 
-        <label for="status">{{ t('testArea.inputs.comboBox') }}:</label>
-        <ComboBox id="combobox" data-testid="combobox" v-model="form.comboBox" :options="enTestComboBox"
+        <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
+        <ComboBox id="testCombobox" ident="testCombobox" v-model="form.comboBox" :options="enTestComboBox"
           langPrefix="tech.user.status" placeholder="tech.user.status.null"
-          :class="inputClass" :disabled="disabled"
-        />
+          :class="inputClass" :disabled="disabled" />
         <div>{{ show(form.comboBox) }}</div>
 
-        <label for="checkbox">{{ t('testArea.inputs.checkBox') }}:</label>
-        <CheckBox id="checkbox" data-testid="checkbox" v-model="form.checkbox" :allowNull="true"
+        <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
+        <CheckBox id="testCheckbox" ident="testCheckbox" v-model="form.checkbox" :allowNull="true"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(form.checkbox) }}</div>
 
-        <label for="radiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
-        <RadioBox id="radiobox" data-testid="radiobox" v-model="form.radiobox" :options="enTestRadioBox"
+        <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
+        <RadioBox id="testRadiobox" ident="testRadiobox" v-model="form.radiobox" :options="enTestRadioBox"
            langPrefix="test.radioBox"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(form.radiobox) }}</div>
 
-        <label for="dateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
-        <DateTimePicker v-model="form.dateTime" ident="dateTimePicker" mode="datetime"
+        <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
+        <DateTimePicker id="testDateTimePicker" ident="testDateTimePicker" v-model="form.dateTime" mode="datetime"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
-        <label for="datePicker">{{ t('testArea.inputs.datePicker') }}:</label>
-        <DateTimePicker v-model="form.date" ident="datePicker" mode="date"
+        <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
+        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 
-        <label for="timePicker">{{ t('testArea.inputs.timePicker') }}:</label>
-        <DateTimePicker v-model="form.time" ident="timePicker" mode="time"
+        <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
+        <DateTimePicker id="testTimePicker" ident="testTimePicker" v-model="form.time" mode="time"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(TimeUtils.cnvFull(form.time)) }}</div>
       </div>

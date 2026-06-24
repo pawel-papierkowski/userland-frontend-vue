@@ -19,9 +19,10 @@
  * - Component is integrated with vue-i18n.
  *
  * Models:
- * - v-model - Variable holding selected value.
+ * - v-model - Variable holding selected option.
  *
  * Properties:
+ * - ident - Used for identification in form. Optional.
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
@@ -38,27 +39,22 @@ const { t } = useI18n();
 /** Currently selected option. Null means nothing is selected. */
 const selOption = defineModel<number|string|null>({ required: true });
 
-const props = defineProps({
+const props = withDefaults(defineProps<{
+  /** Used for identification in form. */
+  ident?: string;
   /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
-  options: {
-    type: Array<number|string|null>,
-    default: () => []
-  },
-  /** If true, acts as disabled component. Optional, default is false. */
-  disabled: {
-    type: Boolean,
-    default: false
-  },
+  options: (number|string|null)[];
+  /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
+  disabled?: boolean;
   /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
-  langPrefix: {
-    type: String,
-    default: ''
-  },
-  /** Translated text to use if nothing is selected and for 'unselected' option. */
-  placeholder: {
-    type: String,
-    default: 'combobox.placeholder'
-  }
+  langPrefix?: string;
+  /** Translation key to use if nothing is selected and for 'unselected' option. */
+  placeholder?: string;
+}>(), {
+  ident: '',
+  disabled: false,
+  langPrefix: '',
+  placeholder: 'combobox.placeholder'
 });
 
 const isOpen = ref(false);
@@ -76,7 +72,7 @@ watch(() => props.disabled, () => {
 /** User clicked on input. */
 const openOptions = () => {
   if (props.disabled) return;
-  
+
   isOpen.value = !isOpen.value;
 }
 
@@ -96,7 +92,10 @@ const selectOption = (option: number|string|null) => {
  * @param option Option to show.
  */
 const showOption = (option: number|string|null): number|string|null => {
-  if (option === null) return t(props.placeholder);
+  if (option === null) {
+    if (props.langPrefix) return t(props.placeholder);
+     return props.placeholder;
+  }
   if (props.langPrefix) return t(props.langPrefix+'.'+option);
   return option;
 }

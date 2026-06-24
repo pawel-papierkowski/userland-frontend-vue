@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -10,6 +10,8 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserActivation from '@/components/pages/user/UserActivation.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -34,7 +36,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserActivation, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -42,7 +44,8 @@ function createComponent() {
 /** Tests of UserActivation component. */
 describe('UserActivation', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
     mockRoute.query.token = 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs';
   });
@@ -70,9 +73,9 @@ describe('UserActivation', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe('User activated successfully');
-    expect(messageStore.messages[0].content).toBe('You can now log in.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0]?.title).toBe('User activated successfully');
+    expect(messageStore.messages[0]?.content).toBe('You can now log in.');
 
     // Assert: verify redirection to login page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
@@ -98,9 +101,9 @@ describe('UserActivation', () => {
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe('Invalid token');
-    expect(messageStore.messages[0].content).toBe('No token provided or it is malformed.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0]?.title).toBe('Invalid token');
+    expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -143,9 +146,9 @@ describe('UserActivation', () => {
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe('Failure');
-    expect(messageStore.messages[0].content).toBe('User token is missing.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+    expect(messageStore.messages[0]?.title).toBe('Failure');
+    expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
     // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();

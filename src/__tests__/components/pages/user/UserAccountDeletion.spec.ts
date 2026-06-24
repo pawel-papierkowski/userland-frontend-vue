@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -11,6 +11,8 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 /** Mock JWT. */
 const jwt =
@@ -39,7 +41,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserAccountDeletion, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -47,7 +49,8 @@ function createComponent() {
 /** Tests of UserAccountDeletion component. */
 describe('UserAccountDeletion', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
     mockRoute.query.token = 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs';
   });
@@ -82,12 +85,12 @@ describe('UserAccountDeletion', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(2);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0].title).toBe('Success');
-    expect(messageStore.messages[0].content).toBe('User account was deleted.');
-    expect(messageStore.messages[1].level).toBe(EnMessageLevel.Info);
-    expect(messageStore.messages[1].title).toBe('User logged out successfully');
-    expect(messageStore.messages[1].content).toBe('');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+    expect(messageStore.messages[0]?.title).toBe('Success');
+    expect(messageStore.messages[0]?.content).toBe('User account was deleted.');
+    expect(messageStore.messages[1]?.level).toBe(EnMessageLevel.Info);
+    expect(messageStore.messages[1]?.title).toBe('User logged out successfully');
+    expect(messageStore.messages[1]?.content).toBe('');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -129,9 +132,9 @@ describe('UserAccountDeletion', () => {
 
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe('Failure');
-    expect(messageStore.messages[0].content).toBe('User token is missing.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+    expect(messageStore.messages[0]?.title).toBe('Failure');
+    expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -156,9 +159,9 @@ describe('UserAccountDeletion', () => {
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe('Failure');
-    expect(messageStore.messages[0].content).toBe(
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0]?.title).toBe('Failure');
+    expect(messageStore.messages[0]?.content).toBe(
       'You must be logged in to delete user account. Log in, then use link from email again.',
     );
 
@@ -187,9 +190,9 @@ describe('UserAccountDeletion', () => {
 
     // Assert: verify failure message.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe('Invalid token');
-    expect(messageStore.messages[0].content).toBe('No token provided or it is malformed.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0]?.title).toBe('Invalid token');
+    expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

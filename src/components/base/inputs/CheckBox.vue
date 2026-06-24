@@ -9,17 +9,21 @@
  * - v-model - Variable holding checkbox value. Must be boolean|null.
  *
  * Properties:
+ * - ident - Used for identification in form. Optional.
  * - allowNull - If true, will cycle null value after true and false. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  */
 const currValue = defineModel<boolean | null>({ required: true });
 
 const props = withDefaults(defineProps<{
+  /** Used for identification in form. */
+  ident?: string;
   /** Does this checkbox allow setting null value? */
   allowNull?: boolean;
   /**  If true, acts as disabled component. Optional, default is false. */
   disabled?: boolean;
 }>(), {
+  ident: '',
   allowNull: false,
   disabled: false
 });
@@ -49,7 +53,7 @@ const showSymbol = (): string => {
 </script>
 
 <template>
-  <div class="checkbox-wrapper">
+  <div class="checkbox-wrapper" :data-testid="`checkbox_${ident}`">
     <div class="checkbox" :class="{ disabled: disabled }" @click="cycle()">
       <div class="checkbox-inside">
         {{ showSymbol() }}

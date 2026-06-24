@@ -7,10 +7,11 @@
  * - Component is integrated with vue-i18n.
  *
  * Models:
- * - v-model - Variable holding chosen radio value.
+ * - v-model - Variable holding selected option.
  *
  * Properties:
- * - options - Array of options.
+ * - ident - Used for identification in form. Optional.
+ * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
  */
@@ -21,22 +22,19 @@ const { t } = useI18n();
 /** Currently selected option. Null means nothing is selected. */
 const selOption = defineModel<number|string|null>({ required: true });
 
-const props = defineProps({
+const props = withDefaults(defineProps<{
+  /** Used for identification in form. */
+  ident?: string;
   /** Array of options. Can contain null value for 'unselected'. */
-  options: {
-    type: Array<number|string|null>,
-    default: () => []
-  },
-  /** If true, acts as disabled component. Optional, default is false. */
-  disabled: {
-    type: Boolean,
-    default: false
-  },
+  options: (number|string|null)[];
+  /**  If true, acts as disabled component. Optional, default is false. */
+  disabled?: boolean;
   /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
-  langPrefix: {
-    type: String,
-    default: ''
-  }
+  langPrefix?: string;
+}>(), {
+  ident: '',
+  disabled: false,
+  langPrefix: ''
 });
 
 //
@@ -47,7 +45,7 @@ const props = defineProps({
  */
 const selectOption = (option: number|string|null) => {
   if (props.disabled) return;
-  
+
   selOption.value = option;
 }
 
@@ -62,10 +60,10 @@ const showOption = (option: number|string|null): number|string|null => {
 </script>
 
 <template>
-  <div class="radiobox-wrapper">
+  <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
     <div class="radiobox" :class="{disabled: disabled}">
       <div v-for="(option, index) in options" :key="index"
-        class="radiobox-option" :data-testid="'radiobox_'+index"
+        class="radiobox-option" :data-testid="`radiobox_${ident}${index}`"
         @click="selectOption(option)">
         <div class="radiobox-circle">
           <div class="radiobox-inside" :class="{mark: option === selOption}"></div>

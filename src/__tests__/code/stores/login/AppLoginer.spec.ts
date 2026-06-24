@@ -12,9 +12,9 @@ import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 
 vi.mock('@/services/features/api-users.ts', () => ({
   default: {
-    logout: vi.fn<typeof backendApiUser.logout>(() => Promise.resolve()), // Return a resolved promise
-    prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve()), // Return a resolved promise
-  }
+    logout: vi.fn<typeof backendApiUser.logout>(() => Promise.resolve({} as any)), // Return a resolved promise
+    prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve({} as any)), // Return a resolved promise
+  },
 }));
 
 /** Tests AppLoginer class. */
@@ -53,13 +53,13 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.permissions).toStrictEqual([]);
     });
 
-
     it('as standard user', () => {
       vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
 
       // Arrange: create valid token for user without any permissions.
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      const token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
 
       // Act: log in user using given token.
       AppLoginer.login(token);
@@ -83,7 +83,8 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
 
       // Arrange: create valid token for user with many permissions.
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0Iiwic3ViIjoicGF3ZWwucGFwaWVya293c2tpQGdtYWlsLmNvbSIsImlhdCI6MTc3OTQ2NDkxOCwiZXhwIjoxNzc5NDg2NTE4fQ.tSJ_l785hoinpYkzezJtLRx2ldBb0XQ6DKvKGZvLdw0';
+      const token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0Iiwic3ViIjoicGF3ZWwucGFwaWVya293c2tpQGdtYWlsLmNvbSIsImlhdCI6MTc3OTQ2NDkxOCwiZXhwIjoxNzc5NDg2NTE4fQ.tSJ_l785hoinpYkzezJtLRx2ldBb0XQ6DKvKGZvLdw0';
 
       // Act: log in user using given token.
       AppLoginer.login(token);
@@ -107,7 +108,8 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
 
       // Arrange: create valid token for user without any permissions.
-      const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+      const token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
 
       // Act: log in user using given token.
       AppLoginer.login(token);
@@ -164,7 +166,8 @@ describe('AppLoginer', () => {
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779108592000);
@@ -192,9 +195,9 @@ describe('AppLoginer', () => {
 
       // Assert: verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
-      expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-      expect(messageStore.messages[0].title).toBe("User logged out successfully");
-      expect(messageStore.messages[0].content).toBe("");
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+      expect(messageStore.messages[0]?.title).toBe('User logged out successfully');
+      expect(messageStore.messages[0]?.content).toBe('');
     });
 
     it('when already not logged in', async () => {
@@ -237,14 +240,15 @@ describe('AppLoginer', () => {
         isAxiosError: true,
         response: {
           status: 500,
-          data: {}
-        }
+          data: {},
+        },
       };
       vi.mocked(backendApiUser.logout).mockRejectedValue(errorResponse);
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
@@ -272,9 +276,9 @@ describe('AppLoginer', () => {
 
       // Assert: verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
-      expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-      expect(messageStore.messages[0].title).toBe("User logged out successfully");
-      expect(messageStore.messages[0].content).toBe("");
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+      expect(messageStore.messages[0]?.title).toBe('User logged out successfully');
+      expect(messageStore.messages[0]?.content).toBe('');
     });
   });
 
@@ -287,14 +291,18 @@ describe('AppLoginer', () => {
       const messageStore = useMessageStore();
 
       // Arrange: mock successful API response.
-      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
-      vi.mocked(backendApiUser.prolong).mockResolvedValue({ data: {
-        "jwtToken": newToken
-      } } as any);
+      const newToken =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+      vi.mocked(backendApiUser.prolong).mockResolvedValue({
+        data: {
+          jwtToken: newToken,
+        },
+      } as any);
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
@@ -322,9 +330,9 @@ describe('AppLoginer', () => {
 
       // Assert: verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
-      expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-      expect(messageStore.messages[0].title).toBe("User session prolonged successfully");
-      expect(messageStore.messages[0].content).toBe("");
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+      expect(messageStore.messages[0]?.title).toBe('User session prolonged successfully');
+      expect(messageStore.messages[0]?.content).toBe('');
     });
 
     it('unsuccessfully', async () => {
@@ -337,12 +345,13 @@ describe('AppLoginer', () => {
         isAxiosError: true,
         response: {
           status: 500,
-          data: {}
-        }
+          data: {},
+        },
       };
       vi.mocked(backendApiUser.prolong).mockRejectedValue(errorResponse);
 
-      const oldToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      const oldToken =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
 
       // Arrange: set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
@@ -410,12 +419,16 @@ describe('AppLoginer', () => {
     });
 
     it('should handle concurrent prolong requests with a single promise', async () => {
-      const newToken = 'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+      const newToken =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
 
       // Delay the mock response to ensure concurrency
-      vi.mocked(backendApiUser.prolong).mockImplementation(() => new Promise((resolve) => {
-        setTimeout(() => resolve({ data: { jwtToken: newToken } } as any), 100);
-      }));
+      vi.mocked(backendApiUser.prolong).mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve({ data: { jwtToken: newToken } } as any), 100);
+          }),
+      );
 
       const loginStore = useLoginStore();
       loginStore.loginState.isLogged = true;

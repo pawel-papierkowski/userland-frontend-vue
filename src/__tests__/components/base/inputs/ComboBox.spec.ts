@@ -10,8 +10,8 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 
 /** Boilerplate code. */
 function createComponent(
-  initialModel?: number | string | null,
-  options?: (number | string | null)[],
+  initialModel: number | string | null,
+  options: (number | string | null)[],
   disabled?: boolean,
   langPrefix?: string,
   placeholder?: string,
@@ -47,7 +47,8 @@ describe('ComboBox', () => {
     const comboBox = createComponent('b', createOptions(), false, 'test.comboBox');
 
     // Assert: Options are hidden, as user did not click on combobox yet.
-    expect(comboBox.find('.combobox-options').element.style.display).toBe('none');
+    //expect(comboBox.find('.combobox-options').element.style.display).toBe('none');
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
     // Assert: Combobox main field is present and shows selected option (in this case 'b')
     expect(comboBox.find('.combobox-selected-text').text()).toBe('Option B');
 
@@ -56,17 +57,17 @@ describe('ComboBox', () => {
     await nextTick();
 
     // Assert: Options are now visible.
-    expect(comboBox.find('.combobox-options').element.style.display).toBe('');
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('');
 
     // Assert: Options are present.
     const optionElements = comboBox.findAll('.combobox-option');
     expect(optionElements).toHaveLength(4);
 
     // Assert: all options are shown correctly.
-    expect(optionElements[0].text()).toBe('-'); // default placeholder, as we did not provide any
-    expect(optionElements[1].text()).toBe('Option A');
-    expect(optionElements[2].text()).toBe('Option B');
-    expect(optionElements[3].text()).toBe('Option C');
+    expect(optionElements[0]?.text()).toBe('-'); // default placeholder, as we did not provide any
+    expect(optionElements[1]?.text()).toBe('Option A');
+    expect(optionElements[2]?.text()).toBe('Option B');
+    expect(optionElements[3]?.text()).toBe('Option C');
   });
 
   it('is correctly selected', async () => {
@@ -91,7 +92,7 @@ describe('ComboBox', () => {
     expect(comboBox.emitted('update:modelValue')?.[0]?.[0]).toBe('a');
 
     // Assert: Options are hidden, as user already selected option.
-    expect(comboBox.find('.combobox-options').element.style.display).toBe('none');
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
 
     // Assert: Combobox main field is present and shows selected option (in this case 'a')
     expect(comboBox.find('.combobox-selected-text').text()).toBe('Option A');
@@ -111,6 +112,6 @@ describe('ComboBox', () => {
     expect(comboBox.emitted('update:modelValue')).toBeUndefined();
 
     // Assert: Options are still hidden, as combobox is disabled and won't open options.
-    expect(comboBox.find('.combobox-options').element.style.display).toBe('none');
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
   });
 });

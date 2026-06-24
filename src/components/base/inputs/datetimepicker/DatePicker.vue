@@ -2,10 +2,11 @@
 /** Dedicated date picker. Do not use it directly. Use DateTimePicker with attribute mode="date".
  *
  * Models:
- * - v-model - Currently selected date and time. Null means it is unset.
+ * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
+ *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification in form.
+ * - ident - Used for identification in form. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
@@ -19,11 +20,12 @@ import type { DatePick } from '@/code/data/general/datetime-types.ts';
 
 const { t } = useI18n();
 
+/** Currently selected date and time. Null means it is unset. */
 const currDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
-  ident: string;
+  ident?: string;
   /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
   disabled?: boolean,
   /** If not null, defines earliest allowed date. Optional, default is null. */
@@ -31,6 +33,7 @@ const props = withDefaults(defineProps<{
   /** If not null, defines latest allowed date. Optional, default is null. */
   dateTimeMax?: Date|null;
 }>(), {
+  ident: '',
   disabled: false,
   dateTimeMin: null,
   dateTimeMax: null
@@ -125,9 +128,7 @@ const calendarDays = computed(() => {
 
 /** If you disable picker, panel will close. */
 watch(() => props.disabled, () => {
-  if (props.disabled) {
-    isCalendarVisible.value = false;
-  }
+  if (props.disabled) isCalendarVisible.value = false;
 });
 
 // FUNCTIONS.
@@ -188,6 +189,8 @@ const pickableDayToDate = (pickableDay: DatePick): Date => {
  * @param pickableDay Date.
  */
 const selectDay = (pickableDay: DatePick) => {
+  if (props.disabled) return;
+
   const newDate = pickableDayToDate(pickableDay);
   if (!canPick(newDate)) return;
 
@@ -275,8 +278,8 @@ const hidePanel = () => {
 <template>
   <div class="picker" ref="pickerRef">
     <input
-      :id="ident+'_date'"
-      :data-testid="ident+'_date'"
+      :id="`datepicker_${ident}`"
+      :data-testid="`datepicker_${ident}`"
       type="text"
       class="picker-input-date"
       :class="{ disabled: disabled }"
@@ -306,13 +309,11 @@ const hidePanel = () => {
 
       <div class="calendar-grid">
         <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
-        <div
-          v-for="(pickableDay, index) in calendarDays"
+        <div v-for="(pickableDay, index) in calendarDays"
           :key="index"
           class="day"
           :class="resolveDayClass(pickableDay)"
-          @click="selectDay(pickableDay)"
-        >
+          @click="selectDay(pickableDay)">
           {{ pickableDay.day }}
         </div>
       </div>

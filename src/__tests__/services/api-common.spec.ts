@@ -19,7 +19,7 @@ vi.mock('axios', () => {
     default: {
       create: vi.fn<any>(() => mockAxiosInstance),
     },
-    isAxiosError: vi.fn<any>((err) => err?.isAxiosError === true),
+    isAxiosError: vi.fn<any>((err: any) => err?.isAxiosError === true),
   };
 });
 
@@ -44,7 +44,7 @@ describe('api-common', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     apiCommon.create('/test-base');
-    const mockAxiosInstance = vi.mocked(axios.create).mock.results[0].value;
+    const mockAxiosInstance = vi.mocked(axios.create).mock.results[0]?.value;
     interceptor = mockAxiosInstance.interceptors.request.use.mock.calls[0][0];
   });
 

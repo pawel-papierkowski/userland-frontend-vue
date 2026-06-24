@@ -1,18 +1,20 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import MessageContainer from '@/components/common/messages/MessageContainer.vue';
 
+let pinia: ReturnType<typeof createPinia>;
+
 /** Boilerplate code. */
 function createComponent() {
   return mount(MessageContainer, {
     global: {
-      plugins: [getActivePinia(), i18n],
+      plugins: [pinia, i18n],
     },
   });
 }
@@ -20,7 +22,8 @@ function createComponent() {
 /** Tests of MessageContainer component. */
 describe('MessageContainer', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
   });
 
   it('is empty', () => {
@@ -64,10 +67,10 @@ describe('MessageContainer', () => {
     const messages = messageContainer.findAll('.message-box');
     expect(messages).toHaveLength(5);
     // Assert: ensure they are in correct order.
-    expect(messages[0].find('.message-content').text()).toBe('msg.error.content');
-    expect(messages[1].find('.message-content').text()).toBe('msg.failure.content');
-    expect(messages[2].find('.message-content').text()).toBe('msg.warn.content');
-    expect(messages[3].find('.message-content').text()).toBe('msg.success.content');
-    expect(messages[4].find('.message-content').text()).toBe('msg.info.content');
+    expect(messages[0]?.find('.message-content').text()).toBe('msg.error.content');
+    expect(messages[1]?.find('.message-content').text()).toBe('msg.failure.content');
+    expect(messages[2]?.find('.message-content').text()).toBe('msg.warn.content');
+    expect(messages[3]?.find('.message-content').text()).toBe('msg.success.content');
+    expect(messages[4]?.find('.message-content').text()).toBe('msg.info.content');
   });
 });

@@ -2,10 +2,11 @@
 /** Dedicated time picker. Do not use it directly. Use DateTimePicker with attribute mode="time".
  *
  * Models:
- * - v-model - Currently selected date and time. Null means it is unset.
+ * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
+ *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification in form.
+ * - ident - Used for identification in form. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  */
 import { ref, computed, nextTick, watch } from 'vue';
@@ -16,14 +17,16 @@ import { TimeUtils } from '@/code/utils/TimeUtils';
 
 const { t } = useI18n();
 
+/** Currently selected date and time. Null means it is unset. */
 const currDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
-  ident: string;
-  /**  If true, acts as disabled component (clock panel does not show). Optional, default is false. */
-  disabled?: boolean
+  ident?: string;
+  /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
+  disabled?: boolean;
 }>(), {
+  ident: '',
   disabled: false
 });
 
@@ -39,8 +42,10 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 
 const viewHour = ref<number|null>(null);
 const viewMinute = ref<number|null>(null);
-const selectedHour = ref<number|null>(null);
-const selectedMinute = ref<number|null>(null);
+//const selectedHour = ref<number|null>(null);
+//const selectedMinute = ref<number|null>(null);
+const selectedHour = computed(() => currDateTime.value?.getHours() ?? null);
+const selectedMinute = computed(() => currDateTime.value?.getMinutes() ?? null);
 
 const containerStyle = ref({
   left: '0',
@@ -68,23 +73,20 @@ const placeholderTimeValue = computed(() => {
 // WATCHES
 
 /** If currDateTime model changes, also change certain fields. */
-watch(currDateTime, () => {
+/*watch(currDateTime, () => {
   selectedHour.value = currDateTime.value?.getHours() ?? null;
   selectedMinute.value = currDateTime.value?.getMinutes() ?? null;
-});
+}, { immediate: true });
+*/
 
 /** If you disable picker, panel will close. */
 watch(() => props.disabled, () => {
-  if (props.disabled) {
-    isClockVisible.value = false;
-  }
+  if (props.disabled) isClockVisible.value = false;
 });
 
 /** If picker panel is opened, scroll to actual hour and minute. */
 watch(isClockVisible, (visible) => {
-  if (visible) {
-    scrollToSelected();
-  }
+  if (visible) scrollToSelected();
 });
 
 // FUNCTIONS.
@@ -95,7 +97,7 @@ const toggleTimePickerVisibility = async () => {
     isClockVisible.value = false;
   } else {
     isClockVisible.value = true;
-    findCurrentTime();
+    findViewTime();
 
     await nextTick();
     // Adjust picker position if needed to prevent window overflow.
@@ -110,8 +112,8 @@ const toggleTimePickerVisibility = async () => {
   }
 };
 
-/** Find and set current time. */
-const findCurrentTime = () => {
+/** Find and set view time. */
+const findViewTime = () => {
   if (currDateTime.value !== null) return;
   const date = new Date();
   viewHour.value = date.getHours();
@@ -120,6 +122,8 @@ const findCurrentTime = () => {
 
 /** Select hour. */
 const selectHour = (h: number) => {
+  if (props.disabled) return;
+
   const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
   if (!currDateTime.value) date.setSeconds(0, 0);
   date.setHours(h);
@@ -128,6 +132,8 @@ const selectHour = (h: number) => {
 
 /** Select minute. */
 const selectMinute = (m: number) => {
+  if (props.disabled) return;
+
   const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
   if (!currDateTime.value) date.setSeconds(0, 0);
   date.setMinutes(m);
@@ -137,17 +143,20 @@ const selectMinute = (m: number) => {
 /** Scroll to selected hour and minute. */
 const scrollToSelected = () => {
   nextTick(() => {
-    let selectedHour: Element | null = null;
-    let selectedMinute: Element | null = null;
+    let selHourElement: Element | null = null;
+    let selMinuteElement: Element | null = null;
+
+    // If time is not selected, use current time as scroll target.
+
     if (currDateTime.value === null) {
-      if (hourRef.value) selectedHour = hourRef.value.querySelector('.curr');
-      if (minuteRef.value) selectedMinute = minuteRef.value.querySelector('.curr');
+      if (hourRef.value) selHourElement = hourRef.value.querySelector('.curr');
+      if (minuteRef.value) selMinuteElement = minuteRef.value.querySelector('.curr');
     } else {
-      if (hourRef.value) selectedHour = hourRef.value.querySelector('.selected');
-      if (minuteRef.value) selectedMinute = minuteRef.value.querySelector('.selected');
+      if (hourRef.value) selHourElement = hourRef.value.querySelector('.selected');
+      if (minuteRef.value) selMinuteElement = minuteRef.value.querySelector('.selected');
     }
-    if (selectedHour) selectedHour.scrollIntoView({ block: 'center' });
-    if (selectedMinute) selectedMinute.scrollIntoView({ block: 'center' });
+    if (selHourElement) selHourElement.scrollIntoView({ block: 'center' });
+    if (selMinuteElement) selMinuteElement.scrollIntoView({ block: 'center' });
   });
 };
 
@@ -184,8 +193,8 @@ const hidePanel = () => {
 <template>
   <div class="picker" ref="pickerRef">
     <input
-      :id="ident+'_time'"
-      :data-testid="ident+'_time'"
+      :id="`timepicker_${ident}`"
+      :data-testid="`timepicker_${ident}`"
       type="text"
       class="picker-input-time"
       :class="{ disabled: disabled }"
@@ -204,8 +213,9 @@ const hidePanel = () => {
         <div class="clock-column" ref="hourRef">
           <div class="column-header">{{ t('dateTimePicker.hour') }}</div>
           <div v-for="h in hours" :key="h"
-               class="time-item"
+               class="time-item time-hour"
                :class="resolveHourClass(h)"
+               :data-testid="`timepicker_${ident}_h${h}`"
                @click="selectHour(h)">
             {{ h.toString().padStart(2, '0') }}
           </div>
@@ -215,8 +225,9 @@ const hidePanel = () => {
         <div class="clock-column" ref="minuteRef">
           <div class="column-header">{{ t('dateTimePicker.minute') }}</div>
           <div v-for="m in minutes" :key="m"
-               class="time-item"
+               class="time-item time-minute"
                :class="resolveMinuteClass(m)"
+               :data-testid="`timepicker_${ident}_m${m}`"
                @click="selectMinute(m)">
             {{ m.toString().padStart(2, '0') }}
           </div>

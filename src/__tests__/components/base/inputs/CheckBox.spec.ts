@@ -6,7 +6,7 @@ import CheckBox from '@/components/base/inputs/CheckBox.vue';
 //
 
 /** Boilerplate code. */
-function createComponent(initialModel?: boolean|null, allowNull?: boolean, disabled?: boolean) {
+function createComponent(initialModel: boolean|null, allowNull?: boolean, disabled?: boolean) {
   return mount(CheckBox, {
       props: {
         modelValue: initialModel,

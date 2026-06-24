@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { createPinia, setActivePinia, getActivePinia } from 'pinia';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -11,6 +11,8 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
+
+let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
@@ -30,7 +32,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserLandLogin, {
     global: {
-      plugins: [logger, getActivePinia(), i18n],
+      plugins: [logger, pinia, i18n],
     },
   });
 }
@@ -38,7 +40,8 @@ function createComponent() {
 /** Tests of UserLandLogin component. */
 describe('UserLandLogin', () => {
   beforeEach(() => {
-    setActivePinia(createPinia());
+    pinia = createPinia();
+    setActivePinia(pinia);
     vi.clearAllMocks();
     vi.useFakeTimers();
     mockRoute.name = 'login'; // Reset to default
@@ -84,9 +87,9 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-    expect(messageStore.messages[0].title).toBe('User logged in successfully');
-    expect(messageStore.messages[0].content).toBe('');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+    expect(messageStore.messages[0]?.title).toBe('User logged in successfully');
+    expect(messageStore.messages[0]?.content).toBe('');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -130,9 +133,9 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-    expect(messageStore.messages[0].title).toBe('Admin panel user logged in successfully');
-    expect(messageStore.messages[0].content).toBe('');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+    expect(messageStore.messages[0]?.title).toBe('Admin panel user logged in successfully');
+    expect(messageStore.messages[0]?.content).toBe('');
 
     // Assert: verify redirection to main admin page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'admin-main' });
@@ -179,9 +182,9 @@ describe('UserLandLogin', () => {
 
     // Assert: verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Info);
-    expect(messageStore.messages[0].title).toBe('User logged in successfully');
-    expect(messageStore.messages[0].content).toBe('');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
+    expect(messageStore.messages[0]?.title).toBe('User logged in successfully');
+    expect(messageStore.messages[0]?.content).toBe('');
 
     // Assert: verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
@@ -227,9 +230,9 @@ describe('UserLandLogin', () => {
 
     // Assert: verify failure message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0].title).toBe('Login failure');
-    expect(messageStore.messages[0].content).toBe('User login failed.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+    expect(messageStore.messages[0]?.title).toBe('Login failure');
+    expect(messageStore.messages[0]?.content).toBe('User login failed.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -275,9 +278,9 @@ describe('UserLandLogin', () => {
 
     // Assert: verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0].level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0].title).toBe('Failure');
-    expect(messageStore.messages[0].content).toBe('Invalid password or account.');
+    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+    expect(messageStore.messages[0]?.title).toBe('Failure');
+    expect(messageStore.messages[0]?.content).toBe('Invalid password or account.');
 
     // Assert: verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
@@ -338,7 +341,7 @@ describe('UserLandLogin', () => {
     expect(userLogin.find('#email').classes()).toContain('err');
     const errorMessages = userLogin.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0].text()).not.toBe('');
+    expect(errorMessages[0]?.text()).not.toBe('');
 
     // Assert: verify API was not called.
     expect(backendApiUser.login).not.toHaveBeenCalled();
