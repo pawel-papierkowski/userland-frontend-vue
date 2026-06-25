@@ -18,7 +18,7 @@ export class TimeUtils {
     // JS automatically applies the offset that was valid ON THAT DATE.
     // If date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
     const YYYY = date.getFullYear();
-    const MM = this.pad(date.getMonth() + 1);
+    const MM = this.pad(date.getUTCMonth() + 1);
     const DD = this.pad(date.getDate());
     const hh = this.pad(date.getHours());
     const mm = this.pad(date.getMinutes());
@@ -32,20 +32,20 @@ export class TimeUtils {
 
   /**
    * Converts a Date to a local ISO string describing full date and time (YYYY-MM-DDThh:mm:ss.SSS).
-   * We ignore timezone.
+   * Ignores timezone.
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
   public static cnvFull(date: Date | null): string | null {
     if (date === null) return null;
 
-    const YYYY = date.getFullYear();
-    const MM = this.pad(date.getMonth() + 1);
-    const DD = this.pad(date.getDate());
-    const hh = this.pad(date.getHours());
-    const mm = this.pad(date.getMinutes());
-    const ss = this.pad(date.getSeconds());
-    const ms = this.pad(date.getMilliseconds(), 3);
+    const YYYY = date.getUTCFullYear();
+    const MM = this.pad(date.getUTCMonth() + 1);
+    const DD = this.pad(date.getUTCDate());
+    const hh = this.pad(date.getUTCHours());
+    const mm = this.pad(date.getUTCMinutes());
+    const ss = this.pad(date.getUTCSeconds());
+    const ms = this.pad(date.getUTCMilliseconds(), 3);
 
     let isoStr = `${YYYY}-${MM}-${DD}T${hh}:${mm}:${ss}`;
     if (ms !== '000') isoStr += `.${ms}`;
@@ -54,33 +54,33 @@ export class TimeUtils {
 
   /**
    * Converts a Date to a local ISO string describing date only (YYYY-MM-DD).
-   * We ignore timezone.
+   * Ignores timezone.
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
   public static cnvDate(date: Date | null): string | null {
     if (date === null) return null;
 
-    const YYYY = date.getFullYear();
-    const MM = this.pad(date.getMonth() + 1);
-    const DD = this.pad(date.getDate());
+    const YYYY = date.getUTCFullYear();
+    const MM = this.pad(date.getUTCMonth() + 1);
+    const DD = this.pad(date.getUTCDate());
 
     return `${YYYY}-${MM}-${DD}`;
   }
 
   /**
    * Converts a Date to a local ISO string describing time only (hh:mm:ss.SSS).
-   * We ignore timezone.
+   * Ignores timezone.
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
   public static cnvTime(date: Date | null): string | null {
     if (date === null) return null;
 
-    const hh = this.pad(date.getHours());
-    const mm = this.pad(date.getMinutes());
-    const ss = this.pad(date.getSeconds());
-    const ms = this.pad(date.getMilliseconds(), 3);
+    const hh = this.pad(date.getUTCHours());
+    const mm = this.pad(date.getUTCMinutes());
+    const ss = this.pad(date.getUTCSeconds());
+    const ms = this.pad(date.getUTCMilliseconds(), 3);
 
     let isoStr = `${hh}:${mm}:${ss}`;
     if (ms !== '000') isoStr += `.${ms}`;
@@ -90,49 +90,49 @@ export class TimeUtils {
   //
 
   /**
-   * Format date.
+   * Format date. Ignores timezone.
    * @param date Date. Can be null.
    * @returns Formatted date as string. If null, will return empty string.
    */
-  public static formatDate(date: Date | null): string {
+  public static formatUTCDate(date: Date | null): string {
     if (!date) return '';
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = date.getUTCDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
   /**
-   * Format time.
+   * Format time. Ignores timezone.
    * @param date Date. Can be null.
    * @returns Formatted time as string. If null, will return empty string.
    */
-  public static formatTime(date: Date | null): string {
+  public static formatUTCTime(date: Date | null): string {
     if (!date) return '';
 
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
+    const hour = date.getUTCHours().toString().padStart(2, '0');
+    const minute = date.getUTCMinutes().toString().padStart(2, '0');
     return `${hour}:${minute}`;
   }
 
   /**
-   * Get how many days are present in given year and month.
+   * Get how many days are present in given year and month. Ignores timezone.
    * @param year Year.
    * @param month Month.
    * @returns Count of days in given year and month.
    */
-  public static getDaysInMonth(year: number, month: number): number {
-    return new Date(year, month + 1, 0).getDate();
+  public static getUTCDaysInMonth(year: number, month: number): number {
+    return new Date(year, month + 1, 0).getUTCDate();
   }
 
   /**
-   * Find out first day of month.
+   * Find out first day of month. Ignores timezone.
    * @param year Year.
    * @param month Month.
    * @returns Weekday as number. 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
    */
-  public static getFirstDayOfMonth(year: number, month: number): number {
-    const day = new Date(year, month, 1).getDay();
+  public static getUTCFirstDayOfMonth(year: number, month: number): number {
+    const day = new Date(year, month, 1).getUTCDay();
     return (day + 6) % 7;
   }
 

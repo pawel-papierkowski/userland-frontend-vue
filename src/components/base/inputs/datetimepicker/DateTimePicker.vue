@@ -1,5 +1,6 @@
 <script setup lang="ts">
 /** This is date&time picker. Uses Date class for both input and output.
+ * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
  *
  * Features:
  * - Can pick date, time or both date and time.
@@ -7,8 +8,7 @@
  * - Input fields are not editable. You set value via picker panels.
  *
  * Models:
- * - v-model - Currently selected date and time as UTC. Null means it is unset. Note it is processed as-is.
- *   You are one to adjust result to timezone etc. after getting result.
+ * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
  *
  * Properties:
  * - ident - Used for identification in form. Optional.

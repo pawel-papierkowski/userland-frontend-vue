@@ -21,7 +21,15 @@ function createComponent(initialModel: Date|null, disabled?: boolean) {
     });
 }
 
-function verifyTime(timePicker: VueWrapper, currHour: number|null, currMinute: number|null, selHour: number|null, selMinute: number|null) {
+/**
+ * Verify state of clock panel.
+ * @param timePicker Time picker.
+ * @param currHour Which hour is marked as current.
+ * @param currMinute Which minute is marked as current.
+ * @param selHour Which hour is marked as selected.
+ * @param selMinute Which minute is marked as selected.
+ */
+function verifyPanel(timePicker: VueWrapper, currHour: number|null, currMinute: number|null, selHour: number|null, selMinute: number|null) {
   const hourElements = timePicker.findAll('.time-hour');
   expect(hourElements).toHaveLength(24);
   const minuteElements = timePicker.findAll('.time-minute');
@@ -65,7 +73,10 @@ describe('TimePicker', () => {
   it('has correct presentation when null in general', async () => {
     // Ensures component looks correct when current value is null.
 
-    // Arrange & Act: Create the component.
+    // Arrange: Set up date/time.
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+    // Act: Create the component.
     const timePicker = createComponent(null, false);
 
     // Assert: Input is empty.
@@ -73,29 +84,17 @@ describe('TimePicker', () => {
 
     // Assert: Ensure panel is not present.
     expect(timePicker.find('.clock-container').exists()).toBe(false);
+
+    // Assert: model has correct value.
+    const model = timePicker.props('modelValue') as Date|null;
+    expect(model).toBe(null);
   });
-
-  it('has correct presentation when set in general', async () => {
-    // Ensures component looks correct when current value is set.
-
-    // Arrange & Act: Create the component.
-    const someDate: Date = new Date('2026-05-22T17:50:00Z'); // UTC
-    const timePicker = createComponent(someDate, false);
-
-    // Assert: Input is filled. Note it shows time in local timezone.
-    expect(timePicker.find('.picker-input-time').attributes('value')).toContain('🕜 19:50');
-
-    // Assert: Ensure panel is not present.
-    expect(timePicker.find('.clock-container').exists()).toBe(false);
-  });
-
-  //
 
   it('has correct presentation when null and with panel opened', async () => {
     // Ensures component looks correct when panel is opened.
 
     // Arrange: Set up date/time.
-    vi.setSystemTime(new Date('2026-05-21T04:07:00Z')); // UTC
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
     // Arrange: Create the component.
     const timePicker = createComponent(null, false);
@@ -107,16 +106,45 @@ describe('TimePicker', () => {
     // Assert: Ensure panel is present.
     expect(timePicker.find('.clock-container').exists()).toBe(true);
 
-    // Assert: Panel shows scrollers with hours and minutes.
-    verifyTime(timePicker, 6, 7, null, null); // note local time
+    // Assert: Panel shows scrollers with hours and minutes. Only current time is marked.
+    verifyPanel(timePicker, 4, 7, null, null); // note same time as in arrange
+  });
+
+  //
+
+  it('has correct presentation when set in general', async () => {
+    // Ensures component looks correct when current value is set.
+
+    // Arrange: Set up date/time.
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+    const someDate: Date = new Date('2026-05-22T17:50:00Z');
+
+    // Act: Create the component.
+    const timePicker = createComponent(someDate, false);
+
+    // Assert: Input is filled.
+    expect(timePicker.find('.picker-input-time').attributes('value')).toContain('🕜 17:50');
+
+    // Assert: Ensure panel is not present.
+    expect(timePicker.find('.clock-container').exists()).toBe(false);
+
+    // Assert: model has correct value.
+    const model = timePicker.props('modelValue') as Date|null;
+    expect(model?.getUTCFullYear()).toBe(2026); // date is untouched
+    expect(model?.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
+    expect(model?.getUTCDate()).toBe(22);
+    expect(model?.getUTCHours()).toBe(17);
+    expect(model?.getUTCMinutes()).toBe(50);
+    expect(model?.getUTCSeconds()).toBe(0);
+    expect(model?.getUTCMilliseconds()).toBe(0);
   });
 
   it('has correct presentation when set and with panel opened', async () => {
     // Ensures component looks correct when panel is opened.
 
     // Arrange: Set up date/time.
-    vi.setSystemTime(new Date('2026-05-21T04:07:00Z')); // UTC
-    const someDate: Date = new Date('2026-05-22T16:30:00Z'); // UTC
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+    const someDate: Date = new Date('2026-05-22T16:30:00Z');
 
     // Arrange: Create the component.
     const timePicker = createComponent(someDate, false);
@@ -128,9 +156,8 @@ describe('TimePicker', () => {
     // Assert: Ensure panel is present.
     expect(timePicker.find('.clock-container').exists()).toBe(true);
 
-    // Assert: Panel shows scrollers with hours and minutes.
-    verifyTime(timePicker, null, null, 18, 30); // note local time
-    //verifyTime(timePicker, 6, 7, 18, 30); // note local time
+    // Assert: Panel shows scrollers with hours and minutes. Both current and selected time is marked.
+    verifyPanel(timePicker, 4, 7, 16, 30); // note same time as in arrange
   });
 
   //
@@ -138,17 +165,46 @@ describe('TimePicker', () => {
   it('selects time', async () => {
     // Ensures component correctly selects time.
 
-    // TODO
+    // Arrange: Set up date/time.
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+    // Arrange: Create the component.
+    const timePicker = createComponent(null, false);
+
+    // Act: Open clock panel.
+    await timePicker.find('.picker-input-time').trigger('click');
+    await nextTick();
+
+    // Act: select hour and minute.
+    await timePicker.find('[data-testid="timepicker__h8"]').trigger('click');
+    await nextTick();
+    await timePicker.find('[data-testid="timepicker__m51"]').trigger('click');
+    await nextTick();
+
+    // Assert: date&time from component is correct.
+    const emitted = timePicker.emitted('update:modelValue');
+    expect(emitted).toHaveLength(2);
+    const result = emitted?.at(-1)![0] as Date;
+    expect(result.getUTCFullYear()).toBe(2026);
+    expect(result.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
+    expect(result.getUTCDate()).toBe(21);
+    expect(result.getUTCHours()).toBe(8);
+    expect(result.getUTCMinutes()).toBe(51);
+    expect(result.getUTCSeconds()).toBe(0);
+    expect(result.getUTCMilliseconds()).toBe(0);
   });
 
   it('is disabled', async () => {
     // Ensures component behaves correctly when disabled.
 
-    // Arrange: Create the component.
+    // Arrange: Set up date/time.
+    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
     const someDate: Date = new Date('2026-05-22T17:50:00Z'); // UTC
+
+    // Arrange: Create the component.
     const timePicker = createComponent(someDate, true);
 
-    // Act: Open clock panel.
+    // Act: Try to open clock panel.
     await timePicker.find('.picker-input-time').trigger('click');
     await nextTick();
 

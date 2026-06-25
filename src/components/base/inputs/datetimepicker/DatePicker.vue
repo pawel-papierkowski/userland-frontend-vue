@@ -1,5 +1,6 @@
 <script setup lang="ts">
 /** Dedicated date picker. Do not use it directly. Use DateTimePicker with attribute mode="date".
+ * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
@@ -21,7 +22,7 @@ import type { DatePick } from '@/code/data/general/datetime-types.ts';
 const { t } = useI18n();
 
 /** Currently selected date and time. Null means it is unset. */
-const currDateTime = defineModel<Date | null>({ required: true });
+const selDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
@@ -58,7 +59,7 @@ onClickOutside(pickerRef, () => {
 
 /** Compute currently displayed date value in date input. */
 const displayDateValue = computed(() => {
-  const formattedDate = TimeUtils.formatDate(currDateTime.value);
+  const formattedDate = TimeUtils.formatUTCDate(selDateTime.value);
   if (!formattedDate) return null;
   return '📅 ' + formattedDate;
 });
@@ -67,40 +68,38 @@ const placeholderDateValue = computed(() => {
   return '📅 ' + t('dateTimePicker.placeholder.date');
 });
 
-/** Compute current month name. */
-const currentMonthName = computed(() => {
-  const monthIx = viewDate.value.getMonth();
-  return t('dateTimePicker.month.'+monthIx);
+/** Compute header text (year and name of month). */
+const headerText = computed(() => {
+  const monthIx = viewDate.value.getUTCMonth(); // reminder that for some reason month is zero-indexed
+  return viewDate.value.getUTCFullYear() + ' ' + t('dateTimePicker.month.'+monthIx);
 });
 
-/** Compute current year. */
-const currentYear = computed(() => viewDate.value.getFullYear());
 /** Shortcuts for days of week used in lang keys. */
 const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 /** Recalculate days shown in calendar. */
 const calendarDays = computed(() => {
-  const year = viewDate.value.getFullYear();
-  const month = viewDate.value.getMonth();
+  const year = viewDate.value.getUTCFullYear();
+  const month = viewDate.value.getUTCMonth();
 
-  const firstDay = TimeUtils.getFirstDayOfMonth(year, month);
-  const daysInMonth = TimeUtils.getDaysInMonth(year, month);
+  const firstDay = TimeUtils.getUTCFirstDayOfMonth(year, month);
+  const daysInMonth = TimeUtils.getUTCDaysInMonth(year, month);
 
   const days: DatePick[] = [];
 
-  // Padding for previous month
-  for (let i = firstDay - 1; i >= 0; i--) {
-    const d = new Date(year, month, -i);
+  // Padding for previous month. Note that if month has first day on monday, entire previous week will be shown.
+  for (let i = firstDay; i >= 0; i--) {
+    const d = new Date(Date.UTC(year, month, -i));
     days.push({
-      day: d.getDate(),
-      month: d.getMonth(),
-      year: d.getFullYear(),
+      day: d.getUTCDate(),
+      month: d.getUTCMonth(),
+      year: d.getUTCFullYear(),
       isCurrentMonth: false
     });
   }
 
-  // Current month days
-  for (let i = 1; i <= daysInMonth; i++) {
+  // Current month days.
+  for (let i = 1; i <= daysInMonth+1; i++) {
     days.push({
       day: i,
       month: month,
@@ -112,11 +111,11 @@ const calendarDays = computed(() => {
   // Padding for next month
   const remainingCells = 42 - days.length; // 6 rows * 7 days
   for (let i = 1; i <= remainingCells; i++) {
-    const d = new Date(year, month + 1, i);
+    const d = new Date(Date.UTC(year, month + 1, i));
     days.push({
-      day: d.getDate(),
-      month: d.getMonth(),
-      year: d.getFullYear(),
+      day: d.getUTCDate(),
+      month: d.getUTCMonth(),
+      year: d.getUTCFullYear(),
       isCurrentMonth: false
     });
   }
@@ -138,11 +137,12 @@ const toggleDatePickerVisibility = async () => {
   if (isCalendarVisible.value) {
     isCalendarVisible.value = false;
   } else {
-    // If null, set viewDate to current date
-    viewDate.value = currDateTime.value ? new Date(currDateTime.value) : new Date();
+    // If selected date is null, set viewDate to current date (as in system date of computer).
+    viewDate.value = selDateTime.value ? new Date(selDateTime.value) : new Date();
     isCalendarVisible.value = true;
 
     await nextTick();
+
     // Adjust picker position if needed to prevent window overflow.
     if (calendarContainerRef.value) {
       const rect = calendarContainerRef.value.getBoundingClientRect();
@@ -156,11 +156,12 @@ const toggleDatePickerVisibility = async () => {
 };
 
 /**
- * Change current month.
+ * Change current month. TODO: for some retarded reason +1 (one month forward) is not working, wtf?
  * @param delta How to change month.
  */
 const changeMonth = (delta: number) => {
-  const newDateTime = new Date(viewDate.value.getFullYear(), viewDate.value.getMonth() + delta, 1);
+  console.warn(`changeMonth() called. Delta=${delta}, current month: ${viewDate.value.getUTCMonth()} / ${viewDate.value.getMonth()}`);
+  const newDateTime = new Date(Date.UTC(viewDate.value.getUTCFullYear(), viewDate.value.getUTCMonth() + delta, 1));
   viewDate.value = newDateTime;
 };
 
@@ -169,7 +170,8 @@ const changeMonth = (delta: number) => {
  * @param delta How to change year.
  */
 const changeYear = (delta: number) => {
-  const newDateTime = new Date(viewDate.value.getFullYear() + delta, viewDate.value.getMonth(), 1);
+  console.warn(`changeYear() called. Delta=${delta}, current date: ${viewDate.value.getUTCMonth()}`);
+  const newDateTime = new Date(Date.UTC(viewDate.value.getUTCFullYear() + delta, viewDate.value.getUTCMonth(), 1));
   viewDate.value = newDateTime;
 };
 
@@ -181,7 +183,7 @@ const changeYear = (delta: number) => {
  * @returns Date.
  */
 const pickableDayToDate = (pickableDay: DatePick): Date => {
-  return new Date(pickableDay.year, pickableDay.month, pickableDay.day, 0, 0, 0, 0);
+  return new Date(Date.UTC(pickableDay.year, pickableDay.month, pickableDay.day, 0, 0, 0, 0));
 }
 
 /**
@@ -194,19 +196,19 @@ const selectDay = (pickableDay: DatePick) => {
   const newDate = pickableDayToDate(pickableDay);
   if (!canPick(newDate)) return;
 
-  if (TimeUtils.formatDate(currDateTime.value) === TimeUtils.formatDate(newDate)) {
+  if (TimeUtils.formatUTCDate(selDateTime.value) === TimeUtils.formatUTCDate(newDate)) {
     // Deselect date.
-    currDateTime.value = null;
+    selDateTime.value = null;
   } else {
     // Select new date without touching time.
-    const prevDateTime = currDateTime.value;
+    const prevDateTime = selDateTime.value;
     if (prevDateTime) {
-      newDate.setHours(prevDateTime.getHours());
-      newDate.setMinutes(prevDateTime.getMinutes());
-      newDate.setSeconds(prevDateTime.getSeconds());
-      newDate.setMilliseconds(prevDateTime.getMilliseconds());
+      newDate.setUTCHours(prevDateTime.getUTCHours());
+      newDate.setUTCMinutes(prevDateTime.getUTCMinutes());
+      newDate.setUTCSeconds(prevDateTime.getUTCSeconds());
+      newDate.setUTCMilliseconds(prevDateTime.getUTCMilliseconds());
     }
-    currDateTime.value = newDate;
+    selDateTime.value = newDate;
   }
   isCalendarVisible.value = false;
 };
@@ -239,9 +241,9 @@ const resolveDayClass = (pickableDay: DatePick) => {
 const isToday = (pickableDay: DatePick): boolean => {
   const today = new Date();
   return (
-    pickableDay.day === today.getDate() &&
-    pickableDay.month === today.getMonth() &&
-    pickableDay.year === today.getFullYear()
+    pickableDay.day === today.getUTCDate() &&
+    pickableDay.month === today.getUTCMonth() &&
+    pickableDay.year === today.getUTCFullYear()
   );
 };
 
@@ -250,11 +252,11 @@ const isToday = (pickableDay: DatePick): boolean => {
  * @param pickableDay Date.
  */
 const isDaySelected = (pickableDay: DatePick): boolean => {
-  if (!currDateTime.value) return false;
+  if (!selDateTime.value) return false;
   return (
-    pickableDay.day === currDateTime.value.getDate() &&
-    pickableDay.month === currDateTime.value.getMonth() &&
-    pickableDay.year === currDateTime.value.getFullYear()
+    pickableDay.day === selDateTime.value.getUTCDate() &&
+    pickableDay.month === selDateTime.value.getUTCMonth() &&
+    pickableDay.year === selDateTime.value.getUTCFullYear()
   );
 };
 
@@ -294,16 +296,15 @@ const hidePanel = () => {
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
       <div class="calendar-header">
         <div class="header-nav">
-          <div class="header-navbtn" @click="changeYear(-1)">⏪</div>
-          <div class="header-navbtn" @click="changeMonth(-1)">◀️</div>
+          <div class="header-navbtn" :data-testid="`datepicker_${ident}_yearMinus`" @click="changeYear(-1)">⏪</div>
+          <div class="header-navbtn" :data-testid="`datepicker_${ident}_monthMinus`" @click="changeMonth(-1)">◀️</div>
         </div>
         <div class="header-title">
-          <span class="year">{{ currentYear }}</span>
-          <span class="month">{{ currentMonthName }}</span>
+          {{ headerText }}
         </div>
         <div class="header-nav">
-          <div class="header-navbtn" @click="changeMonth(1)">▶️</div>
-          <div class="header-navbtn" @click="changeYear(1)">⏩</div>
+          <div class="header-navbtn" :data-testid="`datepicker_${ident}_monthPlus`" @click="changeMonth(1)">▶️</div>
+          <div class="header-navbtn" :data-testid="`datepicker_${ident}_yearPlus`" @click="changeYear(1)">⏩</div>
         </div>
       </div>
 
@@ -313,6 +314,7 @@ const hidePanel = () => {
           :key="index"
           class="day"
           :class="resolveDayClass(pickableDay)"
+          :data-testid="`datepicker_${ident}_${index}`"
           @click="selectDay(pickableDay)">
           {{ pickableDay.day }}
         </div>

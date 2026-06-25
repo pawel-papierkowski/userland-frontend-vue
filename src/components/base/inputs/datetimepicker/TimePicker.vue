@@ -1,5 +1,6 @@
 <script setup lang="ts">
 /** Dedicated time picker. Do not use it directly. Use DateTimePicker with attribute mode="time".
+ * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
@@ -18,7 +19,7 @@ import { TimeUtils } from '@/code/utils/TimeUtils';
 const { t } = useI18n();
 
 /** Currently selected date and time. Null means it is unset. */
-const currDateTime = defineModel<Date | null>({ required: true });
+const selDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
@@ -42,10 +43,8 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 
 const viewHour = ref<number|null>(null);
 const viewMinute = ref<number|null>(null);
-//const selectedHour = ref<number|null>(null);
-//const selectedMinute = ref<number|null>(null);
-const selectedHour = computed(() => currDateTime.value?.getHours() ?? null);
-const selectedMinute = computed(() => currDateTime.value?.getMinutes() ?? null);
+const selectedHour = computed(() => selDateTime.value?.getUTCHours() ?? null);
+const selectedMinute = computed(() => selDateTime.value?.getUTCMinutes() ?? null);
 
 const containerStyle = ref({
   left: '0',
@@ -61,7 +60,7 @@ onClickOutside(pickerRef, () => {
 
 /** Compute currently displayed time value in time input. */
 const displayTimeValue = computed(() => {
-  const formattedTime = TimeUtils.formatTime(currDateTime.value);
+  const formattedTime = TimeUtils.formatUTCTime(selDateTime.value);
   if (!formattedTime) return null;
   return '🕜 ' + formattedTime;
 });
@@ -71,13 +70,6 @@ const placeholderTimeValue = computed(() => {
 });
 
 // WATCHES
-
-/** If currDateTime model changes, also change certain fields. */
-/*watch(currDateTime, () => {
-  selectedHour.value = currDateTime.value?.getHours() ?? null;
-  selectedMinute.value = currDateTime.value?.getMinutes() ?? null;
-}, { immediate: true });
-*/
 
 /** If you disable picker, panel will close. */
 watch(() => props.disabled, () => {
@@ -112,32 +104,31 @@ const toggleTimePickerVisibility = async () => {
   }
 };
 
-/** Find and set view time. */
+/** Find and set current time. */
 const findViewTime = () => {
-  if (currDateTime.value !== null) return;
   const date = new Date();
-  viewHour.value = date.getHours();
-  viewMinute.value = date.getMinutes();
+  viewHour.value = date.getUTCHours();
+  viewMinute.value = date.getUTCMinutes();
 }
 
 /** Select hour. */
 const selectHour = (h: number) => {
   if (props.disabled) return;
 
-  const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
-  if (!currDateTime.value) date.setSeconds(0, 0);
-  date.setHours(h);
-  currDateTime.value = date;
+  const date = selDateTime.value ? new Date(selDateTime.value) : new Date();
+  if (!selDateTime.value) date.setUTCSeconds(0, 0);
+  date.setUTCHours(h);
+  selDateTime.value = date;
 };
 
 /** Select minute. */
 const selectMinute = (m: number) => {
   if (props.disabled) return;
 
-  const date = currDateTime.value ? new Date(currDateTime.value) : new Date();
-  if (!currDateTime.value) date.setSeconds(0, 0);
-  date.setMinutes(m);
-  currDateTime.value = date;
+  const date = selDateTime.value ? new Date(selDateTime.value) : new Date();
+  if (!selDateTime.value) date.setUTCSeconds(0, 0);
+  date.setUTCMinutes(m);
+  selDateTime.value = date;
 };
 
 /** Scroll to selected hour and minute. */
@@ -147,8 +138,7 @@ const scrollToSelected = () => {
     let selMinuteElement: Element | null = null;
 
     // If time is not selected, use current time as scroll target.
-
-    if (currDateTime.value === null) {
+    if (selDateTime.value === null) {
       if (hourRef.value) selHourElement = hourRef.value.querySelector('.curr');
       if (minuteRef.value) selMinuteElement = minuteRef.value.querySelector('.curr');
     } else {
