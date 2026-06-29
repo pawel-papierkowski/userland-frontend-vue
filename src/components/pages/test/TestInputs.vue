@@ -90,7 +90,7 @@ const show = (value: string|boolean|null): string => {
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
         <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
-        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date"
+        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date" :showWeeks="true"
           :class="inputClass" :disabled="disabled" />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 

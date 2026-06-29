@@ -2,8 +2,8 @@
 export class TimeUtils {
   /**
    * Convert UTC date to date with local timezone applied.
-   * @param dateStr Date as string in format 'YYYY-MM-DDThh:mm:ss' without timezone. Accepts '.SSS' if present.
-   * @returns Date as string with timezone applied in format 'YYYY-MM-DD hh:mm:ss'.
+   * @param dateStr Date as string in format `YYYY-MM-DDThh:mm:ss` without timezone. Accepts `.SSS` if present.
+   * @returns Date as string with timezone applied in format `YYYY-MM-DD hh:mm:ss`.
    */
   public static zoned(dateStr: string|null): string {
     if (dateStr == null) return '';
@@ -31,8 +31,12 @@ export class TimeUtils {
   //
 
   /**
-   * Converts a Date to a local ISO string describing full date and time (YYYY-MM-DDThh:mm:ss.SSS).
-   * Ignores timezone.
+   * Converts a Date to a local ISO string describing full date and time (`YYYY-MM-DDThh:mm:ss.SSS`).
+   * Ignores timezone. You will need to initialize `Date` using `Date.UTC`. Example:
+   * ```
+   * const date = new Date(Date.UTC(2026, 5, 28, 0, 0, 0, 0));
+   * const result = TimeUtils.cnvFull(date);
+   * ```
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
@@ -53,8 +57,8 @@ export class TimeUtils {
   }
 
   /**
-   * Converts a Date to a local ISO string describing date only (YYYY-MM-DD).
-   * Ignores timezone.
+   * Converts a Date to a local ISO string describing date only (`YYYY-MM-DD`).
+   * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
@@ -69,8 +73,8 @@ export class TimeUtils {
   }
 
   /**
-   * Converts a Date to a local ISO string describing time only (hh:mm:ss.SSS).
-   * Ignores timezone.
+   * Converts a Date to a local ISO string describing time only (`hh:mm:ss.SSS`).
+   * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
    * @param date Date/time Javascript class instance.
    * @returns Date&time as ISO-formatted string without zone.
    */
@@ -134,6 +138,48 @@ export class TimeUtils {
   public static getUTCFirstDayOfMonth(year: number, month: number): number {
     const day = new Date(year, month, 1).getUTCDay();
     return (day + 6) % 7;
+  }
+
+  //
+
+  /**
+   * Calculates week number.
+   * @param date Date.
+   * @returns Week number.
+   */
+  public static getWeekNumberFromDate(date: Date): number {
+    return TimeUtils.getWeekNumber(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  /**
+   * Calculates week number.
+   * Note: ISO 8601 sometimes gives results that look wrong for edge case "week that belongs to previous and next year", so we don't use that.
+   * Used algo always consider first days of January until Sunday as 1st week of that year.
+   * @param year Year.
+   * @param month Month.
+   * @param day Day.
+   * @returns Week number.
+   */
+  public static getWeekNumber(year: number, month: number, day: number): number {
+    const date = new Date(Date.UTC(year, month, day));
+
+    // Find Monday of the current week.
+    const dow = date.getUTCDay() || 7; // day of week
+    const currWeekStart = new Date(date);
+    currWeekStart.setUTCDate(date.getUTCDate() - (dow - 1));
+
+    // Find Monday of the week containing Jan 1.
+    const jan1 = new Date(Date.UTC(year, 0, 1));
+    const jan1Dow = jan1.getUTCDay() || 7;
+    const week1Start = new Date(jan1);
+    week1Start.setUTCDate(jan1.getUTCDate() - (jan1Dow - 1));
+
+    if (currWeekStart < week1Start) {
+      // This week started before Jan 1's week, so it belongs to the previous year.
+      return TimeUtils.getWeekNumber(year-1, month, day);
+    }
+
+    return Math.floor((currWeekStart.getTime() - week1Start.getTime()) / (7 * 86400000)) + 1;
   }
 
   //

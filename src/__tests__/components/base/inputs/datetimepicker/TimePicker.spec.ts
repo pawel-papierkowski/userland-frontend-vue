@@ -9,17 +9,18 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 //
 
 /** Boilerplate code. */
-function createComponent(initialModel: Date|null, disabled?: boolean) {
+function createComponent(modelValue: Date|null, disabled?: boolean) {
   return mount(TimePicker, {
       global: {
         plugins: [i18n],
       },
       props: {
-        modelValue: initialModel,
-        disabled: disabled,
+        modelValue, disabled,
       }
     });
 }
+
+//
 
 /**
  * Verify state of clock panel.

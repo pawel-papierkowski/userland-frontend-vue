@@ -93,6 +93,9 @@
   --datetimepicker-navbtn-filter: hue-rotate(200deg) brightness(1.6);
   --datetimepicker-navbtn-hover-filter: hue-rotate(200deg) brightness(1.9);
 
+  --datetimepicker-week-color: #777777;
+  --datetimepicker-week-background: #eeeeee;
+
   --datetimepicker-day-color: #444444;
   --datetimepicker-day-notcurrent-color: #aaaaaa;
 

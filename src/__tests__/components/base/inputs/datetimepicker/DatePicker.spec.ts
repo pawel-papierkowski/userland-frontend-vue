@@ -9,19 +9,18 @@ import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 //
 
 /** Boilerplate code. */
-function createComponent(initialModel: Date|null, disabled?: boolean, dateTimeMin?: Date|null, dateTimeMax?: Date|null) {
+function createComponent(modelValue: Date|null, disabled: boolean, showWeeks: boolean, dateTimeMin?: Date|null, dateTimeMax?: Date|null) {
   return mount(DatePicker, {
       global: {
         plugins: [i18n],
       },
       props: {
-        modelValue: initialModel,
-        disabled: disabled,
-        dateTimeMin: dateTimeMin,
-        dateTimeMax: dateTimeMax,
+        modelValue, disabled, showWeeks,dateTimeMin, dateTimeMax,
       }
     });
 }
+
+//
 
 /**
  * Verify state of calendar panel.
@@ -29,9 +28,21 @@ function createComponent(initialModel: Date|null, disabled?: boolean, dateTimeMi
  * @param headerTitle Content of header title.
  * @param calendarState Expected calendar state as array of days in calendar table.
  */
-function verifyPanel(datePicker: VueWrapper, headerTitle: string, calendarState: {day: string, class: string[]}[]) {
+function verifyPanel(datePicker: VueWrapper, headerTitle: string, calendarState?: {day: string, class: string[]}[], weekNums?: string[]) {
   const headerElement = datePicker.find('.header-title');
   expect(headerElement.text()).toEqual(headerTitle);
+
+  verifyDays(datePicker, calendarState);
+  verifyWeekNums(datePicker, weekNums);
+}
+
+/**
+ * Verify day cells.
+ * @param datePicker Date picker.
+ * @param calendarState State of all calendar days.
+ */
+function verifyDays(datePicker: VueWrapper, calendarState?: {day: string, class: string[]}[]) {
+  if (!calendarState) return;
 
   const calendarSize = 42; // Calendar always have 42 cells (6 rows * 7 days).
   const dayElements = datePicker.findAll('.day');
@@ -42,11 +53,35 @@ function verifyPanel(datePicker: VueWrapper, headerTitle: string, calendarState:
     const dayElement = datePicker.find(`[data-testid="datepicker__${i}"]`);
     const calendarDay: {day: string, class: string[]}|null = calendarState[i] || null;
 
+    expect(dayElement.exists(), `Day elem ix=${i} should exist`).toBe(true);
     expect(dayElement.text(), `Day elem ix=${i} text is wrong`).toEqual(calendarDay?.day);
     expect(dayElement.classes(), `Day elem ix=${i} classes are wrong`).toEqual(calendarDay?.class);
   }
 }
 
+/**
+ * Verify week cells.
+ * @param datePicker Date picker.
+ * @param weekNums Week numbers that should be present in calendar.
+ */
+function verifyWeekNums(datePicker: VueWrapper, weekNums?: string[]) {
+  const weekElements = datePicker.findAll('.weekNum');
+
+  if (!weekNums) {
+    expect(weekElements).toHaveLength(0);
+    return;
+  }
+
+  expect(weekElements).toHaveLength(6); // Calendar panel always shows 6 weeks.
+
+  for (const ix in weekNums) {
+    const weekNum = weekNums[ix];
+    //const weekNumElement = datePicker.find(`[data-testid="datepicker__w${weekNum}"]`);
+    const weekNumElement = datePicker.find(`[data-testid="datepicker__w${weekNum}"]`);
+    expect(weekNumElement.exists(), `Week number elem ix=${ix} (${weekNum}) should exist`).toBe(true);
+    expect(weekNumElement.text(), `Week number ix=${ix} (${weekNum}) text is wrong`).toEqual(weekNum);
+  }
+}
 
 //
 
@@ -69,7 +104,7 @@ describe('DatePicker', () => {
     vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
     // Act: Create the component.
-    const datePicker = createComponent(null, false);
+    const datePicker = createComponent(null, false, false);
 
     // Assert: Input is empty.
     expect(datePicker.find('.picker-input-date').attributes('value')).toBeUndefined();
@@ -89,7 +124,7 @@ describe('DatePicker', () => {
     vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
 
     // Act: Create the component.
-    const datePicker = createComponent(null, false);
+    const datePicker = createComponent(null, false, false);
 
     // Act: Open calendar panel.
     await datePicker.find('.picker-input-date').trigger('click');
@@ -98,7 +133,7 @@ describe('DatePicker', () => {
     // Assert: Ensure panel is present.
     expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
-    // Assert: Panel shows calendar with all days for given month (February).
+    // Arrange: Data for next assert.
     const calendarState: {day: string, class: string[]}[] = [
       {day: '26', class: ["day", "not-current"]},
       {day: '27', class: ["day", "not-current"]},
@@ -143,7 +178,39 @@ describe('DatePicker', () => {
       {day: '7', class: ["day", "not-current"]},
       {day: '8', class: ["day", "not-current"]},
     ];
+    // Assert: Panel shows calendar with all days for given month (February).
     verifyPanel(datePicker, '2026 February', calendarState);
+  });
+
+  it('has correct presentation when week numbers visible and with panel opened', async () => {
+    // Ensures component looks correct when panel is opened.
+
+    // Arrange: Set up date/time.
+    vi.setSystemTime(new Date('2025-12-14T12:10:00Z')); // last weeks of 2025
+
+    // Act: Create the component.
+    const datePicker = createComponent(null, false, true);
+
+    // Act: Open calendar panel.
+    await datePicker.find('.picker-input-date').trigger('click');
+    await nextTick();
+
+    // Assert: Ensure panel is present.
+    expect(datePicker.find('.calendar-container').exists()).toBe(true);
+
+    // Arrange: Data for next assert.
+    const weekNums1: string[] = [ '48', '49', '50', '51', '52', '53'];
+    // Assert: Panel shows calendar with correct week numbers.
+    verifyPanel(datePicker, '2025 December', undefined, weekNums1);
+
+    // Act: move one month forward. Now it is 2026-01.
+    await datePicker.find('[data-testid="datepicker__monthPlus"]').trigger('click');
+    await nextTick();
+
+    // Arrange: Data for next assert. Notice that same week that previously was 53th now is 1st, this is correct.
+    const weekNums2: string[] = [ '1', '2', '3', '4', '5', '6'];
+    // Assert: Panel shows calendar with correct week numbers.
+    verifyPanel(datePicker, '2026 January', undefined, weekNums2);
   });
 
   //
@@ -156,7 +223,7 @@ describe('DatePicker', () => {
     const someDate: Date = new Date('2026-05-22T23:50:00Z');
 
     // Act: Create the component.
-    const datePicker = createComponent(someDate, false);
+    const datePicker = createComponent(someDate, false, false);
 
     // Assert: Input is filled.
     expect(datePicker.find('.picker-input-date').attributes('value')).toBe('📅 2026-05-22');
@@ -183,7 +250,7 @@ describe('DatePicker', () => {
     const someDate: Date = new Date('2026-06-15T19:30:00Z');
 
     // Act: Create the component.
-    const datePicker = createComponent(someDate, false);
+    const datePicker = createComponent(someDate, false, false);
 
     // Act: Open calendar panel.
     await datePicker.find('.picker-input-date').trigger('click');
@@ -192,7 +259,7 @@ describe('DatePicker', () => {
     // Assert: Ensure panel is present.
     expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
-    // Assert: Panel shows calendar with all days for given month (June).
+    // Arrange: Data for next assert.
     const calendarState: {day:string, class: string[]}[] = [
       {day: '25', class: ["day", "not-current"]},
       {day: '26', class: ["day", "not-current"]},
@@ -237,6 +304,7 @@ describe('DatePicker', () => {
       {day: '4', class: ["day", "not-current"]},
       {day: '5', class: ["day", "not-current"]},
     ];
+    // Assert: Panel shows calendar with all days for given month (June).
     verifyPanel(datePicker, '2026 June', calendarState);
   });
 
@@ -249,7 +317,7 @@ describe('DatePicker', () => {
     vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
 
     // Act: Create the component.
-    const datePicker = createComponent(null, false);
+    const datePicker = createComponent(null, false, false);
 
     // Act: Open calendar panel.
     await datePicker.find('.picker-input-date').trigger('click');
@@ -259,11 +327,11 @@ describe('DatePicker', () => {
     await datePicker.find('[data-testid="datepicker__yearMinus"]').trigger('click');
     await nextTick();
 
-    // Act: Change month. Now it is 2025-03.
-    await datePicker.find('[data-testid="datepicker__monthPlus"]').trigger('click');
+    // Act: Change month. Now it is 2025-01.
+    await datePicker.find('[data-testid="datepicker__monthMinus"]').trigger('click');
     await nextTick();
 
-    // Act: Select day. Now it is 2025-03-15.
+    // Act: Select day. Now it is 2025-01-18.
     await datePicker.find('[data-testid="datepicker__19"]').trigger('click');
     await nextTick();
 
@@ -272,8 +340,8 @@ describe('DatePicker', () => {
     expect(emitted).toHaveLength(1);
     const result = emitted?.at(0)![0] as Date;
     expect(result.getUTCFullYear()).toBe(2025);
-    expect(result.getUTCMonth()).toBe(2); // reminder that months are 0 indexed
-    expect(result.getUTCDate()).toBe(15);
+    expect(result.getUTCMonth()).toBe(0); // reminder that months are 0 indexed
+    expect(result.getUTCDate()).toBe(18);
     expect(result.getUTCHours()).toBe(0);
     expect(result.getUTCMinutes()).toBe(0);
     expect(result.getUTCSeconds()).toBe(0);
@@ -290,7 +358,7 @@ describe('DatePicker', () => {
     const maxDate: Date = new Date('2027-01-22T00:00:00Z');
 
     // Act: Create the component.
-    const datePicker = createComponent(someDate, false, minDate, maxDate);
+    const datePicker = createComponent(someDate, false, false, minDate, maxDate);
 
     // Act: Open calendar panel.
     await datePicker.find('.picker-input-date').trigger('click');
@@ -304,7 +372,7 @@ describe('DatePicker', () => {
     const emitted = datePicker.emitted('update:modelValue');
     expect(emitted).toBeUndefined();
 
-    // Assert: Panel shows calendar with all days for given month (June).
+    // Arrange: Data for next assert.
     const calendarState: {day:string, class: string[]}[] = [
       {day: '28', class: ["day", "not-current", "disabled"]},
       {day: '29', class: ["day", "not-current", "disabled"]},
@@ -349,6 +417,7 @@ describe('DatePicker', () => {
       {day: '6', class: ["day", "not-current", "disabled"]},
       {day: '7', class: ["day", "not-current", "disabled"]},
     ];
+    // Assert: Panel shows calendar with all days for given month (June).
     verifyPanel(datePicker, '2027 January', calendarState);
   });
 
@@ -362,7 +431,7 @@ describe('DatePicker', () => {
     const someDate: Date = new Date('2026-05-22T23:50:00Z');
 
     // Arrange: Create the component.
-    const datePicker = createComponent(someDate, true);
+    const datePicker = createComponent(someDate, true, false);
 
     // Act: Try to open calendar panel.
     await datePicker.find('.picker-input-date').trigger('click');

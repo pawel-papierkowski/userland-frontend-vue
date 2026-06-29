@@ -97,7 +97,7 @@ const stopSlideShow = () => {
   delayTimer = setTimeout(() => resumeSlideShow(), props.delay*1000);
 }
 
-/** Resumes slideshow after delay. */
+/** Resumes slideshow after delay. Note that means actual delay time is actually delay + normal interval. */
 const resumeSlideShow = () => {
   stopped.value = false;
   startAutoplay();

@@ -14,6 +14,7 @@
  * - ident - Used for identification in form. Optional.
  * - mode - Mode of operation. Optional, default is 'datetime'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - showWeeks - If true, show weeks. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
@@ -28,8 +29,10 @@ const props = withDefaults(defineProps<{
   ident?: string;
   /** Mode of operation. Optional, default is datetime. */
   mode?: 'date' | 'time' | 'datetime';
-  /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
+  /** If true, acts as disabled component (panels do not show). Optional, default is false. */
   disabled?: boolean;
+  /** If true, show weeks. Optional, default is false. */
+  showWeeks?: boolean;
   /** If not null, defines earliest allowed date. Optional, default is null. */
   dateTimeMin?: Date|null;
   /** If not null, defines latest allowed date. Optional, default is null. */
@@ -38,6 +41,7 @@ const props = withDefaults(defineProps<{
   ident: '',
   mode: 'datetime',
   disabled: false,
+  showWeeks: false,
   dateTimeMin: null,
   dateTimeMax: null
 });
@@ -49,6 +53,7 @@ const props = withDefaults(defineProps<{
       v-model="currDateTime"
       :ident="ident"
       :disabled="disabled"
+      :showWeeks="showWeeks"
       :dateTimeMin="dateTimeMin"
       :dateTimeMax="dateTimeMax"
     />

@@ -9,6 +9,7 @@
  * Properties:
  * - ident - Used for identification in form. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - showWeeks - If true, show week numbers. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
@@ -16,8 +17,9 @@ import { ref, computed, nextTick, watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
-import { TimeUtils } from '@/code/utils/TimeUtils';
-import type { DatePick } from '@/code/data/general/datetime-types.ts';
+import { TimeUtils } from '@/code/utils/TimeUtils.ts';
+import { EnCalendarCellType } from '@/code/data/general/datetime-types.ts';
+import type { CalendarCell } from '@/code/data/general/datetime-types.ts';
 
 const { t } = useI18n();
 
@@ -27,8 +29,10 @@ const selDateTime = defineModel<Date | null>({ required: true });
 const props = withDefaults(defineProps<{
   /** Used for identification in form. */
   ident?: string;
-  /**  If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
+  /** If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
   disabled?: boolean,
+  /** If true, show weeks. Optional, default is false. */
+  showWeeks?: boolean;
   /** If not null, defines earliest allowed date. Optional, default is null. */
   dateTimeMin?: Date|null;
   /** If not null, defines latest allowed date. Optional, default is null. */
@@ -36,6 +40,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   ident: '',
   disabled: false,
+  showWeeks: false,
   dateTimeMin: null,
   dateTimeMax: null
 });
@@ -77,50 +82,18 @@ const headerText = computed(() => {
 /** Shortcuts for days of week used in lang keys. */
 const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
-/** Recalculate days shown in calendar. */
-const calendarDays = computed(() => {
-  const year = viewDate.value.getUTCFullYear();
-  const month = viewDate.value.getUTCMonth();
+// COMPUTED
 
-  const firstDay = TimeUtils.getUTCFirstDayOfMonth(year, month);
-  const daysInMonth = TimeUtils.getUTCDaysInMonth(year, month);
+/** Find out amount of columns needed for calendar. */
+const gridColumns = computed(() => props.showWeeks ? 8 : 7);
+/** Find out grid style. */
+const gridStyle = computed(() => ({
+  gridTemplateColumns: `repeat(${gridColumns.value || 7}, 1fr)`
+}));
 
-  const days: DatePick[] = [];
-
-  // Padding for previous month. Note that if month has first day on monday, entire previous week will be shown.
-  for (let i = firstDay; i >= 0; i--) {
-    const d = new Date(Date.UTC(year, month, -i));
-    days.push({
-      day: d.getUTCDate(),
-      month: d.getUTCMonth(),
-      year: d.getUTCFullYear(),
-      isCurrentMonth: false
-    });
-  }
-
-  // Current month days.
-  for (let i = 1; i <= daysInMonth+1; i++) {
-    days.push({
-      day: i,
-      month: month,
-      year: year,
-      isCurrentMonth: true
-    });
-  }
-
-  // Padding for next month
-  const remainingCells = 42 - days.length; // 6 rows * 7 days
-  for (let i = 1; i <= remainingCells; i++) {
-    const d = new Date(Date.UTC(year, month + 1, i));
-    days.push({
-      day: d.getUTCDate(),
-      month: d.getUTCMonth(),
-      year: d.getUTCFullYear(),
-      isCurrentMonth: false
-    });
-  }
-
-  return days;
+/** Recalculate cells shown in calendar. */
+const calendarCells = computed(() => {
+  return calcCalendarCells();
 });
 
 // WATCHES
@@ -131,6 +104,99 @@ watch(() => props.disabled, () => {
 });
 
 // FUNCTIONS.
+
+/**
+ * Calculate cells for calendar.
+ * @returns Array of cells for entire calendar.
+ */
+const calcCalendarCells = (): CalendarCell[] => {
+  const cells: CalendarCell[] = calcDays();
+
+  if (props.showWeeks) { // insert week number cells, always six weeks
+    for (let i=0; i<6; i++) {
+      const dayIx = i*8; // always at monday, will be used for splicing at end
+      const firstDayOfWeek: CalendarCell = cells[dayIx]!;
+      // Show week number properly at week common for both years depending on which year is in focus.
+      // For example, last week of December will be (usually) 53th week, while first week of January (exactly same week as last week of December)
+      // is always 1st week.
+      const dayOfWeekIx = viewDate.value.getUTCFullYear() === firstDayOfWeek.year ? dayIx : dayIx + 6;
+      const lastDayOfWeek: CalendarCell = cells[dayOfWeekIx]!;
+
+      const weekNumber = TimeUtils.getWeekNumber(lastDayOfWeek.year, lastDayOfWeek.month, lastDayOfWeek.day);
+      const weekCell: CalendarCell = {
+        testid: `datepicker_${props.ident}_w${weekNumber}`,
+        type: EnCalendarCellType.Week,
+        day: weekNumber,
+        month: 0,
+        year: 0,
+        isCurrentMonth: false
+      };
+      cells.splice(dayIx, 0, weekCell);
+    }
+  }
+  return cells;
+}
+
+/**
+ * Calculate days for calendar.
+ * @returns Array of cells for entire calendar.
+ */
+const calcDays = (): CalendarCell[] => {
+  const year = viewDate.value.getUTCFullYear();
+  const month = viewDate.value.getUTCMonth();
+
+  const firstDay = TimeUtils.getUTCFirstDayOfMonth(year, month);
+  const daysInMonth = TimeUtils.getUTCDaysInMonth(year, month);
+
+  const days: CalendarCell[] = [];
+  let ix = 0;
+
+  // Padding for previous month. Note that if month has first day on monday, entire previous week will be shown.
+  for (let i = firstDay; i >= 0; i--) {
+    const d = new Date(Date.UTC(year, month, -i));
+    days.push({
+      testid: `datepicker_${props.ident}_${ix}`,
+      type: EnCalendarCellType.Date,
+      day: d.getUTCDate(),
+      month: d.getUTCMonth(),
+      year: d.getUTCFullYear(),
+      isCurrentMonth: false
+    });
+    ix++;
+  }
+
+  // Current month days.
+  for (let i = 1; i <= daysInMonth+1; i++) {
+    days.push({
+      testid: `datepicker_${props.ident}_${ix}`,
+      type: EnCalendarCellType.Date,
+      day: i,
+      month: month,
+      year: year,
+      isCurrentMonth: true
+    });
+    ix++;
+  }
+
+  // Padding for next month
+  const remainingCells = 42 - days.length; // 6 rows * 7 days
+  for (let i = 1; i <= remainingCells; i++) {
+    const d = new Date(Date.UTC(year, month + 1, i));
+    days.push({
+      testid: `datepicker_${props.ident}_${ix}`,
+      type: EnCalendarCellType.Date,
+      day: d.getUTCDate(),
+      month: d.getUTCMonth(),
+      year: d.getUTCFullYear(),
+      isCurrentMonth: false
+    });
+    ix++;
+  }
+
+  return days;
+}
+
+//
 
 /** Toggle visibility of date picker panel. */
 const toggleDatePickerVisibility = async () => {
@@ -156,11 +222,10 @@ const toggleDatePickerVisibility = async () => {
 };
 
 /**
- * Change current month. TODO: for some retarded reason +1 (one month forward) is not working, wtf?
+ * Change current month.
  * @param delta How to change month.
  */
 const changeMonth = (delta: number) => {
-  console.warn(`changeMonth() called. Delta=${delta}, current month: ${viewDate.value.getUTCMonth()} / ${viewDate.value.getMonth()}`);
   const newDateTime = new Date(Date.UTC(viewDate.value.getUTCFullYear(), viewDate.value.getUTCMonth() + delta, 1));
   viewDate.value = newDateTime;
 };
@@ -170,7 +235,6 @@ const changeMonth = (delta: number) => {
  * @param delta How to change year.
  */
 const changeYear = (delta: number) => {
-  console.warn(`changeYear() called. Delta=${delta}, current date: ${viewDate.value.getUTCMonth()}`);
   const newDateTime = new Date(Date.UTC(viewDate.value.getUTCFullYear() + delta, viewDate.value.getUTCMonth(), 1));
   viewDate.value = newDateTime;
 };
@@ -182,18 +246,18 @@ const changeYear = (delta: number) => {
  * @param pickableDay Pickable day.
  * @returns Date.
  */
-const pickableDayToDate = (pickableDay: DatePick): Date => {
+const calendarCellToDate = (pickableDay: CalendarCell): Date => {
   return new Date(Date.UTC(pickableDay.year, pickableDay.month, pickableDay.day, 0, 0, 0, 0));
 }
 
 /**
- * Select day.
- * @param pickableDay Date.
+ * User clicks cell in calendar.
+ * @param calendarCell Calendar cell that was clicked.
  */
-const selectDay = (pickableDay: DatePick) => {
-  if (props.disabled) return;
+const selectCell = (calendarCell: CalendarCell) => {
+  if (props.disabled || calendarCell.type !== EnCalendarCellType.Date) return;
 
-  const newDate = pickableDayToDate(pickableDay);
+  const newDate = calendarCellToDate(calendarCell);
   if (!canPick(newDate)) return;
 
   if (TimeUtils.formatUTCDate(selDateTime.value) === TimeUtils.formatUTCDate(newDate)) {
@@ -222,50 +286,55 @@ const canPick = (date: Date): boolean => {
 //
 
 /**
- * Find out class of day cell in calendar grid.
- * @param pickableDay Date.
+ * Find out class of calendar cell in calendar grid.
+ * @param calendarCell Calendar cell.
  */
-const resolveDayClass = (pickableDay: DatePick) => {
+const resolveCellClass = (calendarCell: CalendarCell) => {
+  if (calendarCell.type === EnCalendarCellType.Week) return {'weekNum': true};
   return {
-    'not-current': !pickableDay.isCurrentMonth,
-    'today': isToday(pickableDay),
-    'selected': isDaySelected(pickableDay),
-    'disabled': isDayDisabled(pickableDay)
-  }
+    'day': true,
+    'not-current': !calendarCell.isCurrentMonth,
+    'today': isToday(calendarCell),
+    'selected': isDaySelected(calendarCell),
+    'disabled': isDayDisabled(calendarCell)
+  };
 };
 
 /**
  * Check if given date is today.
- * @param pickableDay Date.
+ * @param calendarCell Calendar cell. Must be Date.
  */
-const isToday = (pickableDay: DatePick): boolean => {
+const isToday = (calendarCell: CalendarCell): boolean => {
+  if (calendarCell.type !== EnCalendarCellType.Date) return false;
   const today = new Date();
   return (
-    pickableDay.day === today.getUTCDate() &&
-    pickableDay.month === today.getUTCMonth() &&
-    pickableDay.year === today.getUTCFullYear()
+    calendarCell.day === today.getUTCDate() &&
+    calendarCell.month === today.getUTCMonth() &&
+    calendarCell.year === today.getUTCFullYear()
   );
 };
 
 /**
  * Check if given date is selected.
- * @param pickableDay Date.
+ * @param calendarCell Calendar cell. Must be Date.
  */
-const isDaySelected = (pickableDay: DatePick): boolean => {
+const isDaySelected = (calendarCell: CalendarCell): boolean => {
+  if (calendarCell.type !== EnCalendarCellType.Date) return false;
   if (!selDateTime.value) return false;
   return (
-    pickableDay.day === selDateTime.value.getUTCDate() &&
-    pickableDay.month === selDateTime.value.getUTCMonth() &&
-    pickableDay.year === selDateTime.value.getUTCFullYear()
+    calendarCell.day === selDateTime.value.getUTCDate() &&
+    calendarCell.month === selDateTime.value.getUTCMonth() &&
+    calendarCell.year === selDateTime.value.getUTCFullYear()
   );
 };
 
 /**
  * Check if given date cannot be picked.
- * @param pickableDay Date.
+ * @param calendarCell Calendar cell. Must be Date.
  */
-const isDayDisabled = (pickableDay: DatePick): boolean => {
-  const givenDay = pickableDayToDate(pickableDay);
+const isDayDisabled = (calendarCell: CalendarCell): boolean => {
+  if (calendarCell.type !== EnCalendarCellType.Date) return false;
+  const givenDay = calendarCellToDate(calendarCell);
   return !canPick(givenDay);
 };
 
@@ -279,17 +348,13 @@ const hidePanel = () => {
 
 <template>
   <div class="picker" ref="pickerRef">
-    <input
-      :id="`datepicker_${ident}`"
-      :data-testid="`datepicker_${ident}`"
+    <input :id="`datepicker_${ident}`" :data-testid="`datepicker_${ident}`"
       type="text"
-      class="picker-input-date"
-      :class="{ disabled: disabled }"
+      class="picker-input-date" :class="{ disabled: disabled }"
       :value="displayDateValue"
       :placeholder="placeholderDateValue"
       :disabled="disabled"
-      readonly
-      autocomplete="off"
+      readonly autocomplete="off"
       @click="toggleDatePickerVisibility" />
 
     <!-- Date picker panel. -->
@@ -308,15 +373,16 @@ const hidePanel = () => {
         </div>
       </div>
 
-      <div class="calendar-grid">
+      <div class="calendar-grid" :style="gridStyle">
+        <!-- This row shows days of week. -->
+        <div v-if="showWeeks"></div>
         <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
-        <div v-for="(pickableDay, index) in calendarDays"
-          :key="index"
-          class="day"
-          :class="resolveDayClass(pickableDay)"
-          :data-testid="`datepicker_${ident}_${index}`"
-          @click="selectDay(pickableDay)">
-          {{ pickableDay.day }}
+
+        <div v-for="(calendarCell, index) in calendarCells" :key="index"
+          :class="resolveCellClass(calendarCell)"
+          :data-testid="calendarCell.testid"
+          @click="selectCell(calendarCell)">
+          {{ calendarCell.day }}
         </div>
       </div>
     </div>
@@ -402,7 +468,7 @@ const hidePanel = () => {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 1fr); /* Will be overridden. */
   text-align: center;
 }
 
@@ -455,5 +521,14 @@ const hidePanel = () => {
   box-shadow: var(--datetimepicker-day-disabled-shadow);
 
   cursor: default;
+}
+
+.weekNum {
+  margin: 1px;
+
+  border-radius: 5px;
+
+  color: var(--datetimepicker-week-color);
+  background: var(--datetimepicker-week-background);
 }
 </style>
