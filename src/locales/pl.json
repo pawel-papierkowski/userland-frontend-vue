@@ -614,7 +614,7 @@
 
   "homeArea": {
     "welcome": "Witamy w projekcie demonstracyjnym <b>UserLand</b>!",
-    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz README.md w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itp.",
+    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz README.md w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itd.",
     "techstack": {
       "title": "Technikalia",
       "backend": "Stos technologiczny backendu:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",

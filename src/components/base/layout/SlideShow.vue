@@ -51,7 +51,8 @@ const stopped: Ref<boolean> = ref(false);
  * Advances the slideshow to the next slot.
  */
 const nextSlot = () => {
-  if (activeSlots.value.length === 0) return;
+  if (activeSlots.value.length <= 1) return; // there is no advancing possible
+
   const currentIndex = activeSlots.value.indexOf(selectedSlot.value);
   const nextIndex = (currentIndex + 1) % activeSlots.value.length;
   selectedSlot.value = activeSlots?.value[nextIndex] || '';
@@ -83,7 +84,7 @@ const stopAutoplay = () => {
  */
 const selectSlot = (slotName: string) => {
   selectedSlot.value = slotName;
-  if (props.delay > 0) stopSlideShow();
+  if (props.delay !== 0) stopSlideShow();
   else startAutoplay(); // reset state
 };
 
