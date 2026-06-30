@@ -1,11 +1,12 @@
 <script setup lang="ts">
 /** Provides tab functionality.
  *
- * Slots:
- * - Any number of slots representing single tab panel.
- *
  * Properties:
- * - langPrefix - Prefix for language key. Together with slot mame will make lang key.
+ * - ident - Used for identification. Optional.
+ * - langPrefix - Prefix for language key. Together with slot name will make lang key.
+ *
+ * Slots:
+ * - Any number of slots, each one representing single tab panel.
  */
 import { useSlots, computed, ref } from 'vue';
 import type { Ref } from 'vue';
@@ -15,8 +16,12 @@ const { t } = useI18n();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(defineProps<{
+  /** Used for identification. */
+  ident?: string;
+  /** Prefix for language key. Together with slot name will make lang key. */
   langPrefix: string;
 }>(), {
+  ident: ''
 });
 
 const slots = useSlots();
@@ -38,10 +43,10 @@ const selectSlot = (slotName: string) => {
 //
 
 /**
- * Resolve class of tab.
+ * Resolve class of tab menu name.
  * @param slotName Name of slot.
  */
-const getEntryClass = (slotName: string) => {
+const getNameClass = (slotName: string) => {
   return {
     'active': selectedSlot.value === slotName
   };
@@ -52,10 +57,10 @@ const getEntryClass = (slotName: string) => {
   <div class="tabgroup-wrapper">
     <div class="tabgroup-header">
       <!-- Loop through all slot names passed to this component. -->
-      <div v-for="slotName in activeSlots" :key="slotName" class="tabgroup-header-entries" @click="selectSlot(slotName)">
-        <div class="tabgroup-header-entry" :class="getEntryClass(slotName)">
-          {{ t(langPrefix + slotName) }}
-        </div>
+      <div v-for="slotName in activeSlots" :key="slotName" @click="selectSlot(slotName)"
+        :data-testid="`tabgroup_${ident}_${slotName}`"
+        class="tabgroup-header-name" :class="getNameClass(slotName)">
+        {{ t(langPrefix + '.' + slotName) }}
       </div>
     </div>
 
@@ -80,17 +85,13 @@ const getEntryClass = (slotName: string) => {
   display: flex;
 }
 
-.tabgroup-header-entries {
+.tabgroup-header-name {
   margin: var(--spacing-xs);
   padding: var(--spacing-xs);
 
   cursor: pointer;
 }
-
-.tabgroup-header-entry {
-}
-
-.tabgroup-header-entry.active {
+.tabgroup-header-name.active {
   border-bottom: 2px solid var(--color-text-primary);
   font-weight: bold;
 }

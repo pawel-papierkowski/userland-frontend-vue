@@ -11,7 +11,7 @@
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - mode - Mode of operation. Optional, default is 'datetime'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - showWeeks - If true, show weeks. Optional, default is false.
@@ -24,32 +24,36 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 const currDateTime = defineModel<Date | null>({ required: true });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** Mode of operation. Optional, default is datetime. */
-  mode?: 'date' | 'time' | 'datetime';
-  /** If true, acts as disabled component (panels do not show). Optional, default is false. */
-  disabled?: boolean;
-  /** If true, show weeks. Optional, default is false. */
-  showWeeks?: boolean;
-  /** If not null, defines earliest allowed date. Optional, default is null. */
-  dateTimeMin?: Date|null;
-  /** If not null, defines latest allowed date. Optional, default is null. */
-  dateTimeMax?: Date|null;
-}>(), {
-  ident: '',
-  mode: 'datetime',
-  disabled: false,
-  showWeeks: false,
-  dateTimeMin: null,
-  dateTimeMax: null
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** Mode of operation. Optional, default is datetime. */
+    mode?: 'date' | 'time' | 'datetime';
+    /** If true, acts as disabled component (panels do not show). Optional, default is false. */
+    disabled?: boolean;
+    /** If true, show weeks. Optional, default is false. */
+    showWeeks?: boolean;
+    /** If not null, defines earliest allowed date. Optional, default is null. */
+    dateTimeMin?: Date | null;
+    /** If not null, defines latest allowed date. Optional, default is null. */
+    dateTimeMax?: Date | null;
+  }>(),
+  {
+    ident: '',
+    mode: 'datetime',
+    disabled: false,
+    showWeeks: false,
+    dateTimeMin: null,
+    dateTimeMax: null,
+  },
+);
 </script>
 
 <template>
   <div class="picker-general">
-    <DatePicker v-if="mode === 'datetime' || mode === 'date'"
+    <DatePicker
+      v-if="mode === 'datetime' || mode === 'date'"
       v-model="currDateTime"
       :ident="ident"
       :disabled="disabled"
@@ -58,7 +62,8 @@ const props = withDefaults(defineProps<{
       :dateTimeMax="dateTimeMax"
     />
 
-    <TimePicker v-if="mode === 'datetime' || mode === 'time'"
+    <TimePicker
+      v-if="mode === 'datetime' || mode === 'time'"
       v-model="currDateTime"
       :ident="ident"
       :disabled="disabled"

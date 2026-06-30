@@ -1,6 +1,11 @@
 /*** Variables: custom components. ***/
 
 :root {
+  /** Custom decoration components. **/
+
+  /* SpinnerTorus specific vars. */
+  --spinnertorus-color: #ff8e3c;
+
   /** Custom layout components. **/
 
   /* DropdownMenu specific vars. */

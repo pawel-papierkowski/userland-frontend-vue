@@ -6,13 +6,16 @@
  * - FE: Form for entry.
  *
  * Models:
- * - v-model - Selected record. Null means nothing is selected.
- * - v-model:formEntry - Form for entry. Used in in-line edit.
+ * - v-model - Selected entry for table page where row with this cell exist. Null means nothing is selected.
+ * - v-model:formEntry - Form for current entry. Used in in-line edit.
  *
  * Properties:
  * - tableId - Identificator of table.
  * - column - Data about column.
+ * - rowIndex - Index of row in table.
+ * - entry - Current entry of table for row with this cell. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
+ * - fieldMeta - If present, defines additional metadata about cell.
  */
 import { computed } from 'vue';
 import type { VNode } from 'vue';
@@ -68,7 +71,7 @@ const cellClass = computed(() => {
 </script>
 
 <template>
-  <div v-if="column.visible" class="table-cell" role="cell">
+  <div v-if="column.visible" class="table-cell" role="cell" :data-testid="dataTestId">
     <div v-if="column.kind === EnColumnKind.Data" :class="{ 'cell-value': !isEditMode }">
       <template v-if="$slots['column_' + column.name]">
         <!-- If slot with matching name is provided, it is used instead. -->
@@ -77,15 +80,15 @@ const cellClass = computed(() => {
       <template v-else>
         <!-- Default column handling. -->
         <template v-if="isEditMode && formEntry">
-          <input :id="column.name" :data-testid="dataTestId" type="text" :class="cellClass"
+          <input :id="column.name" type="text" :class="cellClass"
             v-model="formEntry[column.name]" autocomplete="off" />
         </template>
         <template v-else>
           {{ entry === null ? '' : entry[column.name] }}
         </template>
       </template>
-
     </div>
+
     <template v-else-if="column.kind === EnColumnKind.Custom">
       <!-- Custom columns always use slot. -->
       <slot :name="'column_'+column.name" :entry="entry" />

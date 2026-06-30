@@ -10,7 +10,7 @@ import MessageContainer from '@/components/common/messages/MessageContainer.vue'
 
 let pinia: ReturnType<typeof createPinia>;
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent() {
   return mount(MessageContainer, {
     global: {

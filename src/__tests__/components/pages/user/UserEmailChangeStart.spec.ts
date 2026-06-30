@@ -25,7 +25,7 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: mockPush }),
 }));
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent() {
   return mount(UserEmailChangeStart, {
     global: {

@@ -22,7 +22,7 @@
  * - v-model - Variable holding selected option.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
@@ -37,25 +37,28 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 /** Currently selected option. Null means nothing is selected. */
-const selOption = defineModel<number|string|null>({ required: true });
+const selOption = defineModel<number | string | null>({ required: true });
 
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
-  options: (number|string|null)[];
-  /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
-  disabled?: boolean;
-  /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
-  langPrefix?: string;
-  /** Translation key to use if nothing is selected and for 'unselected' option. */
-  placeholder?: string;
-}>(), {
-  ident: '',
-  disabled: false,
-  langPrefix: '',
-  placeholder: 'combobox.placeholder'
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
+    options: (number | string | null)[];
+    /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
+    disabled?: boolean;
+    /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
+    langPrefix?: string;
+    /** Translation key to use if nothing is selected and for 'unselected' option. */
+    placeholder?: string;
+  }>(),
+  {
+    ident: '',
+    disabled: false,
+    langPrefix: '',
+    placeholder: 'combobox.placeholder',
+  },
+);
 
 const isOpen = ref(false);
 const arrowClass = computed(() => ({ open: isOpen.value }));
@@ -63,9 +66,12 @@ const arrowClass = computed(() => ({ open: isOpen.value }));
 //
 
 /** If you disable combobox, list of options will close. */
-watch(() => props.disabled, () => {
-  if (props.disabled) isOpen.value = false;
-});
+watch(
+  () => props.disabled,
+  () => {
+    if (props.disabled) isOpen.value = false;
+  },
+);
 
 //
 
@@ -74,31 +80,31 @@ const openOptions = () => {
   if (props.disabled) return;
 
   isOpen.value = !isOpen.value;
-}
+};
 
 /**
  * User clicked on option.
  * @param option Clicked option.
  */
-const selectOption = (option: number|string|null) => {
+const selectOption = (option: number | string | null) => {
   if (props.disabled) return;
 
   selOption.value = option;
   isOpen.value = false;
-}
+};
 
 /**
  * Show text of option.
  * @param option Option to show.
  */
-const showOption = (option: number|string|null): number|string|null => {
+const showOption = (option: number | string | null): number | string | null => {
   if (option === null) {
     if (props.langPrefix) return t(props.placeholder);
-     return props.placeholder;
+    return props.placeholder;
   }
-  if (props.langPrefix) return t(props.langPrefix+'.'+option);
+  if (props.langPrefix) return t(props.langPrefix + '.' + option);
   return option;
-}
+};
 </script>
 
 <template>
@@ -109,9 +115,13 @@ const showOption = (option: number|string|null): number|string|null => {
     </div>
 
     <div class="combobox-options" v-show="isOpen">
-      <div v-for="(option, index) in options" :key="index"
-        class="combobox-option" :data-testid="'combobox_'+index"
-        @click="selectOption(option)">
+      <div
+        v-for="(option, index) in options"
+        :key="index"
+        class="combobox-option"
+        :data-testid="'combobox_' + index"
+        @click="selectOption(option)"
+      >
         {{ showOption(option) }}
       </div>
     </div>

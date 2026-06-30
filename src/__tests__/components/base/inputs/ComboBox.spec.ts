@@ -8,9 +8,9 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 
 //
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent(
-  initialModel: number | string | null,
+  modelValue: number | string | null,
   options: (number | string | null)[],
   disabled?: boolean,
   langPrefix?: string,
@@ -21,11 +21,11 @@ function createComponent(
       plugins: [i18n],
     },
     props: {
-      modelValue: initialModel,
-      options: options,
-      disabled: disabled,
-      langPrefix: langPrefix,
-      placeholder: placeholder,
+      modelValue,
+      options,
+      disabled,
+      langPrefix,
+      placeholder,
     },
   });
   return component;
@@ -36,7 +36,7 @@ function createOptions(): (number | string | null)[] {
   return [null, 'a', 'b', 'c'];
 }
 
-//
+// ////////////////////////////////////////////////////////////////////////////
 
 /** Tests of ComboBox component. */
 describe('ComboBox', () => {

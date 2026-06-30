@@ -6,14 +6,16 @@ import SlideShow from '@/components/base/layout/SlideShow.vue';
 
 //
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent(slots: Record<string, string>, autoplay: boolean, interval: number, delay: number) {
   return mount(SlideShow, {
-      props: {
-        autoplay, interval, delay,
-      },
-      slots
-    });
+    props: {
+      autoplay,
+      interval,
+      delay,
+    },
+    slots,
+  });
 }
 
 //
@@ -28,11 +30,11 @@ function verifyDot(slideShow: VueWrapper, count: number, expectedIndex: number) 
   const allDots = slideShow.findAll('.slideshow-selection-entry');
   expect(allDots.length).toBe(count);
 
-  const actualIndex = allDots.findIndex(dot => dot.classes().includes('active'));
+  const actualIndex = allDots.findIndex((dot) => dot.classes().includes('active'));
   expect(actualIndex).toBe(expectedIndex);
 }
 
-//
+// ////////////////////////////////////////////////////////////////////////////
 
 /** Tests of SlideShow component. */
 describe('SlideShow', () => {
@@ -51,7 +53,7 @@ describe('SlideShow', () => {
     // After last slide, next slide will be first one again, completing the loop.
 
     // Arrange&Act: Create component with two slides.
-    const slideShow = createComponent({slide1: 'A', slide2: 'B', slide3: 'C'}, true, 3, 10);
+    const slideShow = createComponent({ slide1: 'A', slide2: 'B', slide3: 'C' }, true, 3, 10);
 
     // Assert: On beginning SlideShow always show first slide.
     expect(slideShow.find('.slideshow-slide').text()).toBe('A');
@@ -91,7 +93,7 @@ describe('SlideShow', () => {
     // Check if slideshow stays on first slide when autoplay is false.
 
     // Arrange&Act: Create component with two slides.
-    const slideShow = createComponent({slide1: 'Slide 1', slide2: 'Slide 2'}, false, 3, 10);
+    const slideShow = createComponent({ slide1: 'Slide 1', slide2: 'Slide 2' }, false, 3, 10);
 
     // Assert: On beginning SlideShow always show first slide.
     expect(slideShow.find('.slideshow-slide').text()).toBe('Slide 1');
@@ -111,7 +113,7 @@ describe('SlideShow', () => {
     // Check if slideshow switches to slide after clicking. Also checks delay in changing slide after click.
 
     // Arrange&Act: Create component with three slides.
-    const slideShow = createComponent({slide1: 'A', slide2: 'B', slide3: 'C'}, true, 3, 10);
+    const slideShow = createComponent({ slide1: 'A', slide2: 'B', slide3: 'C' }, true, 3, 10);
 
     // Act: Click on last dot.
     slideShow.findAll('.slideshow-selection')[2]?.trigger('click');
@@ -140,7 +142,7 @@ describe('SlideShow', () => {
     // Check if slideshow switches to slide after clicking. Also ensure no slide change after click.
 
     // Arrange&Act: Create component with three slides.
-    const slideShow = createComponent({slide1: 'A', slide2: 'B', slide3: 'C'}, true, 3, -1);
+    const slideShow = createComponent({ slide1: 'A', slide2: 'B', slide3: 'C' }, true, 3, -1);
 
     // Act: Click on last dot.
     slideShow.findAll('.slideshow-selection')[2]?.trigger('click');
@@ -162,7 +164,7 @@ describe('SlideShow', () => {
     // If mouse is hovered over slide, it should not change.
 
     // Arrange&Act: Create component with three slides.
-    const slideShow = createComponent({slide1: 'A', slide2: 'B', slide3: 'C'}, true, 3, 10);
+    const slideShow = createComponent({ slide1: 'A', slide2: 'B', slide3: 'C' }, true, 3, 10);
 
     // Assert: On beginning SlideShow always show first slide.
     expect(slideShow.find('.slideshow-slide').text()).toBe('A');

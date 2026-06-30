@@ -979,6 +979,17 @@
       "a": "Option A",
       "b": "Option B",
       "c": "Option C"
+    },
+    "tabGroup": {
+      "a": "Tab A",
+      "b": "Tab B",
+      "c": "Tab C"
+    },
+    "table": {
+      "column": {
+        "name": "Name",
+        "value": "Value"
+      }
     }
   },
 

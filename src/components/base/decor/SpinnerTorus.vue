@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<{
 }
 
 .spinner {
-  color: #ff8e3c;
+  color: var(--spinnertorus-color);
 }
 
 .spins {
@@ -58,7 +58,7 @@ const props = withDefaults(defineProps<{
 }
 
 @keyframes spin {
-  /* Spin the spinner using CSS. */
+  /* Spin the spinner using CSS. Additionally pulsate slightly. */
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
   0%,

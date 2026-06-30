@@ -8,16 +8,26 @@ import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 
 //
 
-/** Boilerplate code. */
-function createComponent(modelValue: Date|null, disabled: boolean, showWeeks: boolean, dateTimeMin?: Date|null, dateTimeMax?: Date|null) {
+/** Convenience function to create component. */
+function createComponent(
+  modelValue: Date | null,
+  disabled: boolean,
+  showWeeks: boolean,
+  dateTimeMin?: Date | null,
+  dateTimeMax?: Date | null,
+) {
   return mount(DatePicker, {
-      global: {
-        plugins: [i18n],
-      },
-      props: {
-        modelValue, disabled, showWeeks,dateTimeMin, dateTimeMax,
-      }
-    });
+    global: {
+      plugins: [i18n],
+    },
+    props: {
+      modelValue,
+      disabled,
+      showWeeks,
+      dateTimeMin,
+      dateTimeMax,
+    },
+  });
 }
 
 //
@@ -28,7 +38,12 @@ function createComponent(modelValue: Date|null, disabled: boolean, showWeeks: bo
  * @param headerTitle Content of header title.
  * @param calendarState Expected calendar state as array of days in calendar table.
  */
-function verifyPanel(datePicker: VueWrapper, headerTitle: string, calendarState?: {day: string, class: string[]}[], weekNums?: string[]) {
+function verifyPanel(
+  datePicker: VueWrapper,
+  headerTitle: string,
+  calendarState?: { day: string; class: string[] }[],
+  weekNums?: string[],
+) {
   const headerElement = datePicker.find('.header-title');
   expect(headerElement.text()).toEqual(headerTitle);
 
@@ -41,7 +56,7 @@ function verifyPanel(datePicker: VueWrapper, headerTitle: string, calendarState?
  * @param datePicker Date picker.
  * @param calendarState State of all calendar days.
  */
-function verifyDays(datePicker: VueWrapper, calendarState?: {day: string, class: string[]}[]) {
+function verifyDays(datePicker: VueWrapper, calendarState?: { day: string; class: string[] }[]) {
   if (!calendarState) return;
 
   const calendarSize = 42; // Calendar always have 42 cells (6 rows * 7 days).
@@ -49,9 +64,9 @@ function verifyDays(datePicker: VueWrapper, calendarState?: {day: string, class:
   expect(dayElements).toHaveLength(calendarSize);
   expect(calendarState.length).toBe(calendarSize);
 
-  for (let i=0; i<calendarSize; i++) {
+  for (let i = 0; i < calendarSize; i++) {
     const dayElement = datePicker.find(`[data-testid="datepicker__${i}"]`);
-    const calendarDay: {day: string, class: string[]}|null = calendarState[i] || null;
+    const calendarDay: { day: string; class: string[] } | null = calendarState[i] || null;
 
     expect(dayElement.exists(), `Day elem ix=${i} should exist`).toBe(true);
     expect(dayElement.text(), `Day elem ix=${i} text is wrong`).toEqual(calendarDay?.day);
@@ -83,7 +98,7 @@ function verifyWeekNums(datePicker: VueWrapper, weekNums?: string[]) {
   }
 }
 
-//
+// ////////////////////////////////////////////////////////////////////////////
 
 /** Tests of DatePicker component. */
 describe('DatePicker', () => {
@@ -113,7 +128,7 @@ describe('DatePicker', () => {
     expect(datePicker.find('.calendar-container').exists()).toBe(false);
 
     // Assert: model has correct value.
-    const model = datePicker.props('modelValue') as Date|null;
+    const model = datePicker.props('modelValue') as Date | null;
     expect(model).toBe(null);
   });
 
@@ -134,49 +149,49 @@ describe('DatePicker', () => {
     expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
     // Arrange: Data for next assert.
-    const calendarState: {day: string, class: string[]}[] = [
-      {day: '26', class: ["day", "not-current"]},
-      {day: '27', class: ["day", "not-current"]},
-      {day: '28', class: ["day", "not-current"]},
-      {day: '29', class: ["day", "not-current"]},
-      {day: '30', class: ["day", "not-current"]},
-      {day: '31', class: ["day", "not-current"]},
-      {day: '1', class: ["day"]},
-      {day: '2', class: ["day"]},
-      {day: '3', class: ["day"]},
-      {day: '4', class: ["day"]},
-      {day: '5', class: ["day"]},
-      {day: '6', class: ["day"]},
-      {day: '7', class: ["day"]},
-      {day: '8', class: ["day"]},
-      {day: '9', class: ["day"]},
-      {day: '10', class: ["day"]},
-      {day: '11', class: ["day"]},
-      {day: '12', class: ["day"]},
-      {day: '13', class: ["day"]},
-      {day: '14', class: ["day"]},
-      {day: '15', class: ["day"]},
-      {day: '16', class: ["day"]},
-      {day: '17', class: ["day"]},
-      {day: '18', class: ["day"]},
-      {day: '19', class: ["day"]},
-      {day: '20', class: ["day"]},
-      {day: '21', class: ["day", "today"]},
-      {day: '22', class: ["day"]},
-      {day: '23', class: ["day"]},
-      {day: '24', class: ["day"]},
-      {day: '25', class: ["day"]},
-      {day: '26', class: ["day"]},
-      {day: '27', class: ["day"]},
-      {day: '28', class: ["day"]},
-      {day: '1', class: ["day", "not-current"]},
-      {day: '2', class: ["day", "not-current"]},
-      {day: '3', class: ["day", "not-current"]},
-      {day: '4', class: ["day", "not-current"]},
-      {day: '5', class: ["day", "not-current"]},
-      {day: '6', class: ["day", "not-current"]},
-      {day: '7', class: ["day", "not-current"]},
-      {day: '8', class: ["day", "not-current"]},
+    const calendarState: { day: string; class: string[] }[] = [
+      { day: '26', class: ['day', 'not-current'] },
+      { day: '27', class: ['day', 'not-current'] },
+      { day: '28', class: ['day', 'not-current'] },
+      { day: '29', class: ['day', 'not-current'] },
+      { day: '30', class: ['day', 'not-current'] },
+      { day: '31', class: ['day', 'not-current'] },
+      { day: '1', class: ['day'] },
+      { day: '2', class: ['day'] },
+      { day: '3', class: ['day'] },
+      { day: '4', class: ['day'] },
+      { day: '5', class: ['day'] },
+      { day: '6', class: ['day'] },
+      { day: '7', class: ['day'] },
+      { day: '8', class: ['day'] },
+      { day: '9', class: ['day'] },
+      { day: '10', class: ['day'] },
+      { day: '11', class: ['day'] },
+      { day: '12', class: ['day'] },
+      { day: '13', class: ['day'] },
+      { day: '14', class: ['day'] },
+      { day: '15', class: ['day'] },
+      { day: '16', class: ['day'] },
+      { day: '17', class: ['day'] },
+      { day: '18', class: ['day'] },
+      { day: '19', class: ['day'] },
+      { day: '20', class: ['day'] },
+      { day: '21', class: ['day', 'today'] },
+      { day: '22', class: ['day'] },
+      { day: '23', class: ['day'] },
+      { day: '24', class: ['day'] },
+      { day: '25', class: ['day'] },
+      { day: '26', class: ['day'] },
+      { day: '27', class: ['day'] },
+      { day: '28', class: ['day'] },
+      { day: '1', class: ['day', 'not-current'] },
+      { day: '2', class: ['day', 'not-current'] },
+      { day: '3', class: ['day', 'not-current'] },
+      { day: '4', class: ['day', 'not-current'] },
+      { day: '5', class: ['day', 'not-current'] },
+      { day: '6', class: ['day', 'not-current'] },
+      { day: '7', class: ['day', 'not-current'] },
+      { day: '8', class: ['day', 'not-current'] },
     ];
     // Assert: Panel shows calendar with all days for given month (February).
     verifyPanel(datePicker, '2026 February', calendarState);
@@ -199,7 +214,7 @@ describe('DatePicker', () => {
     expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
     // Arrange: Data for next assert.
-    const weekNums1: string[] = [ '48', '49', '50', '51', '52', '53'];
+    const weekNums1: string[] = ['48', '49', '50', '51', '52', '53'];
     // Assert: Panel shows calendar with correct week numbers.
     verifyPanel(datePicker, '2025 December', undefined, weekNums1);
 
@@ -208,7 +223,7 @@ describe('DatePicker', () => {
     await nextTick();
 
     // Arrange: Data for next assert. Notice that same week that previously was 53th now is 1st, this is correct.
-    const weekNums2: string[] = [ '1', '2', '3', '4', '5', '6'];
+    const weekNums2: string[] = ['1', '2', '3', '4', '5', '6'];
     // Assert: Panel shows calendar with correct week numbers.
     verifyPanel(datePicker, '2026 January', undefined, weekNums2);
   });
@@ -232,7 +247,7 @@ describe('DatePicker', () => {
     expect(datePicker.find('.calendar-container').exists()).toBe(false);
 
     // Assert: model has correct value.
-    const model = datePicker.props('modelValue') as Date|null;
+    const model = datePicker.props('modelValue') as Date | null;
     expect(model?.getUTCFullYear()).toBe(2026);
     expect(model?.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
     expect(model?.getUTCDate()).toBe(22);
@@ -260,49 +275,49 @@ describe('DatePicker', () => {
     expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
     // Arrange: Data for next assert.
-    const calendarState: {day:string, class: string[]}[] = [
-      {day: '25', class: ["day", "not-current"]},
-      {day: '26', class: ["day", "not-current"]},
-      {day: '27', class: ["day", "not-current"]},
-      {day: '28', class: ["day", "not-current"]},
-      {day: '29', class: ["day", "not-current"]},
-      {day: '30', class: ["day", "not-current"]},
-      {day: '31', class: ["day", "not-current"]},
-      {day: '1', class: ["day"]},
-      {day: '2', class: ["day"]},
-      {day: '3', class: ["day"]},
-      {day: '4', class: ["day"]},
-      {day: '5', class: ["day"]},
-      {day: '6', class: ["day"]},
-      {day: '7', class: ["day"]},
-      {day: '8', class: ["day"]},
-      {day: '9', class: ["day"]},
-      {day: '10', class: ["day"]},
-      {day: '11', class: ["day"]},
-      {day: '12', class: ["day"]},
-      {day: '13', class: ["day"]},
-      {day: '14', class: ["day"]},
-      {day: '15', class: ["day", "selected"]},
-      {day: '16', class: ["day"]},
-      {day: '17', class: ["day"]},
-      {day: '18', class: ["day"]},
-      {day: '19', class: ["day"]},
-      {day: '20', class: ["day"]},
-      {day: '21', class: ["day"]},
-      {day: '22', class: ["day"]},
-      {day: '23', class: ["day"]},
-      {day: '24', class: ["day"]},
-      {day: '25', class: ["day"]},
-      {day: '26', class: ["day"]},
-      {day: '27', class: ["day"]},
-      {day: '28', class: ["day"]},
-      {day: '29', class: ["day"]},
-      {day: '30', class: ["day"]},
-      {day: '1', class: ["day", "not-current"]},
-      {day: '2', class: ["day", "not-current"]},
-      {day: '3', class: ["day", "not-current", "today"]},
-      {day: '4', class: ["day", "not-current"]},
-      {day: '5', class: ["day", "not-current"]},
+    const calendarState: { day: string; class: string[] }[] = [
+      { day: '25', class: ['day', 'not-current'] },
+      { day: '26', class: ['day', 'not-current'] },
+      { day: '27', class: ['day', 'not-current'] },
+      { day: '28', class: ['day', 'not-current'] },
+      { day: '29', class: ['day', 'not-current'] },
+      { day: '30', class: ['day', 'not-current'] },
+      { day: '31', class: ['day', 'not-current'] },
+      { day: '1', class: ['day'] },
+      { day: '2', class: ['day'] },
+      { day: '3', class: ['day'] },
+      { day: '4', class: ['day'] },
+      { day: '5', class: ['day'] },
+      { day: '6', class: ['day'] },
+      { day: '7', class: ['day'] },
+      { day: '8', class: ['day'] },
+      { day: '9', class: ['day'] },
+      { day: '10', class: ['day'] },
+      { day: '11', class: ['day'] },
+      { day: '12', class: ['day'] },
+      { day: '13', class: ['day'] },
+      { day: '14', class: ['day'] },
+      { day: '15', class: ['day', 'selected'] },
+      { day: '16', class: ['day'] },
+      { day: '17', class: ['day'] },
+      { day: '18', class: ['day'] },
+      { day: '19', class: ['day'] },
+      { day: '20', class: ['day'] },
+      { day: '21', class: ['day'] },
+      { day: '22', class: ['day'] },
+      { day: '23', class: ['day'] },
+      { day: '24', class: ['day'] },
+      { day: '25', class: ['day'] },
+      { day: '26', class: ['day'] },
+      { day: '27', class: ['day'] },
+      { day: '28', class: ['day'] },
+      { day: '29', class: ['day'] },
+      { day: '30', class: ['day'] },
+      { day: '1', class: ['day', 'not-current'] },
+      { day: '2', class: ['day', 'not-current'] },
+      { day: '3', class: ['day', 'not-current', 'today'] },
+      { day: '4', class: ['day', 'not-current'] },
+      { day: '5', class: ['day', 'not-current'] },
     ];
     // Assert: Panel shows calendar with all days for given month (June).
     verifyPanel(datePicker, '2026 June', calendarState);
@@ -373,49 +388,49 @@ describe('DatePicker', () => {
     expect(emitted).toBeUndefined();
 
     // Arrange: Data for next assert.
-    const calendarState: {day:string, class: string[]}[] = [
-      {day: '28', class: ["day", "not-current", "disabled"]},
-      {day: '29', class: ["day", "not-current", "disabled"]},
-      {day: '30', class: ["day", "not-current", "disabled"]},
-      {day: '31', class: ["day", "not-current", "disabled"]},
-      {day: '1', class: ["day", "disabled"]},
-      {day: '2', class: ["day", "disabled"]}, // tried to select that date
-      {day: '3', class: ["day", "disabled"]},
-      {day: '4', class: ["day"]},
-      {day: '5', class: ["day"]},
-      {day: '6', class: ["day"]},
-      {day: '7', class: ["day"]},
-      {day: '8', class: ["day"]},
-      {day: '9', class: ["day"]},
-      {day: '10', class: ["day", "selected"]},
-      {day: '11', class: ["day"]},
-      {day: '12', class: ["day"]},
-      {day: '13', class: ["day"]},
-      {day: '14', class: ["day"]},
-      {day: '15', class: ["day"]},
-      {day: '16', class: ["day"]},
-      {day: '17', class: ["day"]},
-      {day: '18', class: ["day"]},
-      {day: '19', class: ["day"]},
-      {day: '20', class: ["day"]},
-      {day: '21', class: ["day"]},
-      {day: '22', class: ["day"]},
-      {day: '23', class: ["day", "disabled"]},
-      {day: '24', class: ["day", "disabled"]},
-      {day: '25', class: ["day", "disabled"]},
-      {day: '26', class: ["day", "disabled"]},
-      {day: '27', class: ["day", "disabled"]},
-      {day: '28', class: ["day", "today", "disabled"]},
-      {day: '29', class: ["day", "disabled"]},
-      {day: '30', class: ["day", "disabled"]},
-      {day: '31', class: ["day", "disabled"]},
-      {day: '1', class: ["day", "not-current", "disabled"]},
-      {day: '2', class: ["day", "not-current", "disabled"]},
-      {day: '3', class: ["day", "not-current", "disabled"]},
-      {day: '4', class: ["day", "not-current", "disabled"]},
-      {day: '5', class: ["day", "not-current", "disabled"]},
-      {day: '6', class: ["day", "not-current", "disabled"]},
-      {day: '7', class: ["day", "not-current", "disabled"]},
+    const calendarState: { day: string; class: string[] }[] = [
+      { day: '28', class: ['day', 'not-current', 'disabled'] },
+      { day: '29', class: ['day', 'not-current', 'disabled'] },
+      { day: '30', class: ['day', 'not-current', 'disabled'] },
+      { day: '31', class: ['day', 'not-current', 'disabled'] },
+      { day: '1', class: ['day', 'disabled'] },
+      { day: '2', class: ['day', 'disabled'] }, // tried to select that date
+      { day: '3', class: ['day', 'disabled'] },
+      { day: '4', class: ['day'] },
+      { day: '5', class: ['day'] },
+      { day: '6', class: ['day'] },
+      { day: '7', class: ['day'] },
+      { day: '8', class: ['day'] },
+      { day: '9', class: ['day'] },
+      { day: '10', class: ['day', 'selected'] },
+      { day: '11', class: ['day'] },
+      { day: '12', class: ['day'] },
+      { day: '13', class: ['day'] },
+      { day: '14', class: ['day'] },
+      { day: '15', class: ['day'] },
+      { day: '16', class: ['day'] },
+      { day: '17', class: ['day'] },
+      { day: '18', class: ['day'] },
+      { day: '19', class: ['day'] },
+      { day: '20', class: ['day'] },
+      { day: '21', class: ['day'] },
+      { day: '22', class: ['day'] },
+      { day: '23', class: ['day', 'disabled'] },
+      { day: '24', class: ['day', 'disabled'] },
+      { day: '25', class: ['day', 'disabled'] },
+      { day: '26', class: ['day', 'disabled'] },
+      { day: '27', class: ['day', 'disabled'] },
+      { day: '28', class: ['day', 'today', 'disabled'] },
+      { day: '29', class: ['day', 'disabled'] },
+      { day: '30', class: ['day', 'disabled'] },
+      { day: '31', class: ['day', 'disabled'] },
+      { day: '1', class: ['day', 'not-current', 'disabled'] },
+      { day: '2', class: ['day', 'not-current', 'disabled'] },
+      { day: '3', class: ['day', 'not-current', 'disabled'] },
+      { day: '4', class: ['day', 'not-current', 'disabled'] },
+      { day: '5', class: ['day', 'not-current', 'disabled'] },
+      { day: '6', class: ['day', 'not-current', 'disabled'] },
+      { day: '7', class: ['day', 'not-current', 'disabled'] },
     ];
     // Assert: Panel shows calendar with all days for given month (June).
     verifyPanel(datePicker, '2027 January', calendarState);

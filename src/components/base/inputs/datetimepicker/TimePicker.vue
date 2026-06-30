@@ -7,7 +7,7 @@
  *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  */
 import { ref, computed, nextTick, watch } from 'vue';
@@ -21,15 +21,18 @@ const { t } = useI18n();
 /** Currently selected date and time. Null means it is unset. */
 const selDateTime = defineModel<Date | null>({ required: true });
 
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
-  disabled?: boolean;
-}>(), {
-  ident: '',
-  disabled: false
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
+    disabled?: boolean;
+  }>(),
+  {
+    ident: '',
+    disabled: false,
+  },
+);
 
 const isClockVisible = ref(false);
 const pickerRef = ref<HTMLElement | null>(null);
@@ -41,14 +44,14 @@ const minuteRef = ref<HTMLElement | null>(null);
 const hours = Array.from({ length: 24 }, (_, i) => i);
 const minutes = Array.from({ length: 60 }, (_, i) => i);
 
-const viewHour = ref<number|null>(null);
-const viewMinute = ref<number|null>(null);
+const viewHour = ref<number | null>(null);
+const viewMinute = ref<number | null>(null);
 const selectedHour = computed(() => selDateTime.value?.getUTCHours() ?? null);
 const selectedMinute = computed(() => selDateTime.value?.getUTCMinutes() ?? null);
 
 const containerStyle = ref({
   left: '0',
-  right: 'auto'
+  right: 'auto',
 });
 
 onClickOutside(pickerRef, () => {
@@ -72,9 +75,12 @@ const placeholderTimeValue = computed(() => {
 // WATCHES
 
 /** If you disable picker, panel will close. */
-watch(() => props.disabled, () => {
-  if (props.disabled) isClockVisible.value = false;
-});
+watch(
+  () => props.disabled,
+  () => {
+    if (props.disabled) isClockVisible.value = false;
+  },
+);
 
 /** If picker panel is opened, scroll to actual hour and minute. */
 watch(isClockVisible, (visible) => {
@@ -109,7 +115,7 @@ const findViewTime = () => {
   const date = new Date();
   viewHour.value = date.getUTCHours();
   viewMinute.value = date.getUTCMinutes();
-}
+};
 
 /** Select hour. */
 const selectHour = (h: number) => {
@@ -159,9 +165,9 @@ const scrollToSelected = () => {
 const resolveHourClass = (h: number) => {
   return {
     selected: selectedHour.value === h,
-    curr: viewHour.value === h
+    curr: viewHour.value === h,
   };
-}
+};
 
 /**
  * Resolve class of minute item.
@@ -170,9 +176,9 @@ const resolveHourClass = (h: number) => {
 const resolveMinuteClass = (m: number) => {
   return {
     selected: selectedMinute.value === m,
-    curr: viewMinute.value === m
+    curr: viewMinute.value === m,
   };
-}
+};
 
 /** Hide panel. */
 const hidePanel = () => {
@@ -193,20 +199,23 @@ const hidePanel = () => {
       :disabled="disabled"
       readonly
       autocomplete="off"
-      @click="toggleTimePickerVisibility" />
+      @click="toggleTimePickerVisibility"
+    />
 
     <!-- Time picker panel. -->
     <div v-if="isClockVisible" class="clock-container" ref="clockContainerRef" :style="containerStyle">
       <div class="clock-columns">
-
         <!-- Hours scroller. -->
         <div class="clock-column" ref="hourRef">
           <div class="column-header">{{ t('dateTimePicker.hour') }}</div>
-          <div v-for="h in hours" :key="h"
-               class="time-item time-hour"
-               :class="resolveHourClass(h)"
-               :data-testid="`timepicker_${ident}_h${h}`"
-               @click="selectHour(h)">
+          <div
+            v-for="h in hours"
+            :key="h"
+            class="time-item time-hour"
+            :class="resolveHourClass(h)"
+            :data-testid="`timepicker_${ident}_h${h}`"
+            @click="selectHour(h)"
+          >
             {{ h.toString().padStart(2, '0') }}
           </div>
         </div>
@@ -214,15 +223,17 @@ const hidePanel = () => {
         <!-- Minutes scroller. -->
         <div class="clock-column" ref="minuteRef">
           <div class="column-header">{{ t('dateTimePicker.minute') }}</div>
-          <div v-for="m in minutes" :key="m"
-               class="time-item time-minute"
-               :class="resolveMinuteClass(m)"
-               :data-testid="`timepicker_${ident}_m${m}`"
-               @click="selectMinute(m)">
+          <div
+            v-for="m in minutes"
+            :key="m"
+            class="time-item time-minute"
+            :class="resolveMinuteClass(m)"
+            :data-testid="`timepicker_${ident}_m${m}`"
+            @click="selectMinute(m)"
+          >
             {{ m.toString().padStart(2, '0') }}
           </div>
         </div>
-
       </div>
     </div>
   </div>

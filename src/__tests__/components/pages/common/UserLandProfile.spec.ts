@@ -28,7 +28,7 @@ vi.mock('vue-router', () => ({
   useRoute: () => mockRoute,
 }));
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent() {
   return mount(UserLandProfile, {
     global: {

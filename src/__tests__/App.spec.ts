@@ -9,7 +9,7 @@ import realRouter from '@/router';
 
 import App from '@/App.vue';
 
-/** Boilerplate code. */
+/** Convenience function to create application wrapper. */
 async function createWrapper() {
   const pinia = createPinia();
   setActivePinia(pinia);

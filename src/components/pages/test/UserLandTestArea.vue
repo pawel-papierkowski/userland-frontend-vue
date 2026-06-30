@@ -8,7 +8,7 @@ import TestOther from '@/components/pages/test/TestOther.vue';
 </script>
 
 <template>
-  <TabGroup langPrefix="testArea.tabs.">
+  <TabGroup langPrefix="testArea.tabs">
     <template #messages>
       <TestMessages />
     </template>

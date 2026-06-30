@@ -10,7 +10,7 @@
  * - v-model - Variable holding selected option.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
@@ -20,22 +20,25 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 /** Currently selected option. Null means nothing is selected. */
-const selOption = defineModel<number|string|null>({ required: true });
+const selOption = defineModel<number | string | null>({ required: true });
 
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** Array of options. Can contain null value for 'unselected'. */
-  options: (number|string|null)[];
-  /**  If true, acts as disabled component. Optional, default is false. */
-  disabled?: boolean;
-  /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
-  langPrefix?: string;
-}>(), {
-  ident: '',
-  disabled: false,
-  langPrefix: ''
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** Array of options. Can contain null value for 'unselected'. */
+    options: (number | string | null)[];
+    /**  If true, acts as disabled component. Optional, default is false. */
+    disabled?: boolean;
+    /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
+    langPrefix?: string;
+  }>(),
+  {
+    ident: '',
+    disabled: false,
+    langPrefix: '',
+  },
+);
 
 //
 
@@ -43,36 +46,39 @@ const props = withDefaults(defineProps<{
  * User clicked on option.
  * @param option Clicked option.
  */
-const selectOption = (option: number|string|null) => {
+const selectOption = (option: number | string | null) => {
   if (props.disabled) return;
 
   selOption.value = option;
-}
+};
 
 /**
  * Show text of option.
  * @param option Option to show.
  */
-const showOption = (option: number|string|null): number|string|null => {
-  if (props.langPrefix) return t(props.langPrefix+'.'+option);
+const showOption = (option: number | string | null): number | string | null => {
+  if (props.langPrefix) return t(props.langPrefix + '.' + option);
   return option;
-}
+};
 </script>
 
 <template>
   <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
-    <div class="radiobox" :class="{disabled: disabled}">
-      <div v-for="(option, index) in options" :key="index"
-        class="radiobox-option" :data-testid="`radiobox_${ident}${index}`"
-        @click="selectOption(option)">
+    <div class="radiobox" :class="{ disabled: disabled }">
+      <div
+        v-for="(option, index) in options"
+        :key="index"
+        class="radiobox-option"
+        :data-testid="`radiobox_${ident}${index}`"
+        @click="selectOption(option)"
+      >
         <div class="radiobox-circle">
-          <div class="radiobox-inside" :class="{mark: option === selOption}"></div>
+          <div class="radiobox-inside" :class="{ mark: option === selOption }"></div>
         </div>
         <div class="radiobox-label">{{ showOption(option) }}</div>
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
@@ -81,7 +87,6 @@ const showOption = (option: number|string|null): number|string|null => {
 }
 
 .radiobox {
-
 }
 
 .radiobox-option {

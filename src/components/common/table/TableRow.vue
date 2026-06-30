@@ -2,13 +2,14 @@
 /** Component that shows row of table.
  *
  * Models:
- * - v-model - Selected record. Null means nothing is selected.
- * - v-model:formEntry - Form for entry. Used in in-line edit.
+ * - v-model - Selected entry for table page where this row exist. Null means nothing is selected.
+ * - v-model:formEntry - Form for current entry. Used in in-line edit.
  *
  * Properties:
  * - tableId - Identificator of table.
  * - columns - Data about columns. First column must be unique key.
- * - entry - Single entry of table. Can be null.
+ * - rowIndex - Index of row in table.
+ * - entry - Current entry of table for this row. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - rowMeta - Row metadata. Contains field metadata keyed by column name. Optional.
  *

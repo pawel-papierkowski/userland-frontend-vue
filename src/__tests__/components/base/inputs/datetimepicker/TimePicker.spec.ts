@@ -8,16 +8,17 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
 //
 
-/** Boilerplate code. */
-function createComponent(modelValue: Date|null, disabled?: boolean) {
+/** Convenience function to create component. */
+function createComponent(modelValue: Date | null, disabled?: boolean) {
   return mount(TimePicker, {
-      global: {
-        plugins: [i18n],
-      },
-      props: {
-        modelValue, disabled,
-      }
-    });
+    global: {
+      plugins: [i18n],
+    },
+    props: {
+      modelValue,
+      disabled,
+    },
+  });
 }
 
 //
@@ -30,13 +31,19 @@ function createComponent(modelValue: Date|null, disabled?: boolean) {
  * @param selHour Which hour is marked as selected.
  * @param selMinute Which minute is marked as selected.
  */
-function verifyPanel(timePicker: VueWrapper, currHour: number|null, currMinute: number|null, selHour: number|null, selMinute: number|null) {
+function verifyPanel(
+  timePicker: VueWrapper,
+  currHour: number | null,
+  currMinute: number | null,
+  selHour: number | null,
+  selMinute: number | null,
+) {
   const hourElements = timePicker.findAll('.time-hour');
   expect(hourElements).toHaveLength(24);
   const minuteElements = timePicker.findAll('.time-minute');
   expect(minuteElements).toHaveLength(60);
 
-  for (let i=0; i<24; i++) {
+  for (let i = 0; i < 24; i++) {
     const hourCss = ['time-item', 'time-hour'];
     const hourElement = timePicker.find(`[data-testid="timepicker__h${i}"]`);
     if (currHour && currHour === i) hourCss.push('curr');
@@ -45,7 +52,7 @@ function verifyPanel(timePicker: VueWrapper, currHour: number|null, currMinute: 
     expect(hourElement.classes(), `Hour ${i} elem classes are wrong`).toEqual(hourCss);
   }
 
-  for (let i=0; i<60; i++) {
+  for (let i = 0; i < 60; i++) {
     const minuteCss = ['time-item', 'time-minute'];
     const minuteElement = timePicker.find(`[data-testid="timepicker__m${i}"]`);
     if (currMinute && currMinute === i) minuteCss.push('curr');
@@ -55,7 +62,7 @@ function verifyPanel(timePicker: VueWrapper, currHour: number|null, currMinute: 
   }
 }
 
-//
+// ////////////////////////////////////////////////////////////////////////////
 
 /** Tests of TimePicker component. */
 describe('TimePicker', () => {
@@ -87,7 +94,7 @@ describe('TimePicker', () => {
     expect(timePicker.find('.clock-container').exists()).toBe(false);
 
     // Assert: model has correct value.
-    const model = timePicker.props('modelValue') as Date|null;
+    const model = timePicker.props('modelValue') as Date | null;
     expect(model).toBe(null);
   });
 
@@ -130,7 +137,7 @@ describe('TimePicker', () => {
     expect(timePicker.find('.clock-container').exists()).toBe(false);
 
     // Assert: model has correct value.
-    const model = timePicker.props('modelValue') as Date|null;
+    const model = timePicker.props('modelValue') as Date | null;
     expect(model?.getUTCFullYear()).toBe(2026); // date is untouched
     expect(model?.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
     expect(model?.getUTCDate()).toBe(22);

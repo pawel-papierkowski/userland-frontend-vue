@@ -7,7 +7,7 @@
  *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - showWeeks - If true, show week numbers. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
@@ -26,24 +26,27 @@ const { t } = useI18n();
 /** Currently selected date and time. Null means it is unset. */
 const selDateTime = defineModel<Date | null>({ required: true });
 
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
-  disabled?: boolean,
-  /** If true, show weeks. Optional, default is false. */
-  showWeeks?: boolean;
-  /** If not null, defines earliest allowed date. Optional, default is null. */
-  dateTimeMin?: Date|null;
-  /** If not null, defines latest allowed date. Optional, default is null. */
-  dateTimeMax?: Date|null;
-}>(), {
-  ident: '',
-  disabled: false,
-  showWeeks: false,
-  dateTimeMin: null,
-  dateTimeMax: null
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
+    disabled?: boolean;
+    /** If true, show weeks. Optional, default is false. */
+    showWeeks?: boolean;
+    /** If not null, defines earliest allowed date. Optional, default is null. */
+    dateTimeMin?: Date | null;
+    /** If not null, defines latest allowed date. Optional, default is null. */
+    dateTimeMax?: Date | null;
+  }>(),
+  {
+    ident: '',
+    disabled: false,
+    showWeeks: false,
+    dateTimeMin: null,
+    dateTimeMax: null,
+  },
+);
 
 const isCalendarVisible = ref(false);
 const pickerRef = ref<HTMLElement | null>(null);
@@ -52,7 +55,7 @@ const viewDate = ref(new Date()); // Date used for viewing month/year in calenda
 
 const containerStyle = ref({
   left: '0',
-  right: 'auto'
+  right: 'auto',
 });
 
 onClickOutside(pickerRef, () => {
@@ -76,7 +79,7 @@ const placeholderDateValue = computed(() => {
 /** Compute header text (year and name of month). */
 const headerText = computed(() => {
   const monthIx = viewDate.value.getUTCMonth(); // reminder that for some reason month is zero-indexed
-  return viewDate.value.getUTCFullYear() + ' ' + t('dateTimePicker.month.'+monthIx);
+  return viewDate.value.getUTCFullYear() + ' ' + t('dateTimePicker.month.' + monthIx);
 });
 
 /** Shortcuts for days of week used in lang keys. */
@@ -85,10 +88,10 @@ const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 // COMPUTED
 
 /** Find out amount of columns needed for calendar. */
-const gridColumns = computed(() => props.showWeeks ? 8 : 7);
+const gridColumns = computed(() => (props.showWeeks ? 8 : 7));
 /** Find out grid style. */
 const gridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${gridColumns.value || 7}, 1fr)`
+  gridTemplateColumns: `repeat(${gridColumns.value || 7}, 1fr)`,
 }));
 
 /** Recalculate cells shown in calendar. */
@@ -99,9 +102,12 @@ const calendarCells = computed(() => {
 // WATCHES
 
 /** If you disable picker, panel will close. */
-watch(() => props.disabled, () => {
-  if (props.disabled) isCalendarVisible.value = false;
-});
+watch(
+  () => props.disabled,
+  () => {
+    if (props.disabled) isCalendarVisible.value = false;
+  },
+);
 
 // FUNCTIONS.
 
@@ -112,9 +118,10 @@ watch(() => props.disabled, () => {
 const calcCalendarCells = (): CalendarCell[] => {
   const cells: CalendarCell[] = calcDays();
 
-  if (props.showWeeks) { // insert week number cells, always six weeks
-    for (let i=0; i<6; i++) {
-      const dayIx = i*8; // always at monday, will be used for splicing at end
+  if (props.showWeeks) {
+    // insert week number cells, always six weeks
+    for (let i = 0; i < 6; i++) {
+      const dayIx = i * 8; // always at monday, will be used for splicing at end
       const firstDayOfWeek: CalendarCell = cells[dayIx]!;
       // Show week number properly at week common for both years depending on which year is in focus.
       // For example, last week of December will be (usually) 53th week, while first week of January (exactly same week as last week of December)
@@ -129,13 +136,13 @@ const calcCalendarCells = (): CalendarCell[] => {
         day: weekNumber,
         month: 0,
         year: 0,
-        isCurrentMonth: false
+        isCurrentMonth: false,
       };
       cells.splice(dayIx, 0, weekCell);
     }
   }
   return cells;
-}
+};
 
 /**
  * Calculate days for calendar.
@@ -160,20 +167,20 @@ const calcDays = (): CalendarCell[] => {
       day: d.getUTCDate(),
       month: d.getUTCMonth(),
       year: d.getUTCFullYear(),
-      isCurrentMonth: false
+      isCurrentMonth: false,
     });
     ix++;
   }
 
   // Current month days.
-  for (let i = 1; i <= daysInMonth+1; i++) {
+  for (let i = 1; i <= daysInMonth + 1; i++) {
     days.push({
       testid: `datepicker_${props.ident}_${ix}`,
       type: EnCalendarCellType.Date,
       day: i,
       month: month,
       year: year,
-      isCurrentMonth: true
+      isCurrentMonth: true,
     });
     ix++;
   }
@@ -188,13 +195,13 @@ const calcDays = (): CalendarCell[] => {
       day: d.getUTCDate(),
       month: d.getUTCMonth(),
       year: d.getUTCFullYear(),
-      isCurrentMonth: false
+      isCurrentMonth: false,
     });
     ix++;
   }
 
   return days;
-}
+};
 
 //
 
@@ -248,7 +255,7 @@ const changeYear = (delta: number) => {
  */
 const calendarCellToDate = (pickableDay: CalendarCell): Date => {
   return new Date(Date.UTC(pickableDay.year, pickableDay.month, pickableDay.day, 0, 0, 0, 0));
-}
+};
 
 /**
  * User clicks cell in calendar.
@@ -281,7 +288,7 @@ const canPick = (date: Date): boolean => {
   if (props.dateTimeMin != null && date < props.dateTimeMin) return false;
   if (props.dateTimeMax != null && date > props.dateTimeMax) return false;
   return true;
-}
+};
 
 //
 
@@ -290,13 +297,13 @@ const canPick = (date: Date): boolean => {
  * @param calendarCell Calendar cell.
  */
 const resolveCellClass = (calendarCell: CalendarCell) => {
-  if (calendarCell.type === EnCalendarCellType.Week) return {'weekNum': true};
+  if (calendarCell.type === EnCalendarCellType.Week) return { weekNum: true };
   return {
-    'day': true,
+    day: true,
     'not-current': !calendarCell.isCurrentMonth,
-    'today': isToday(calendarCell),
-    'selected': isDaySelected(calendarCell),
-    'disabled': isDayDisabled(calendarCell)
+    today: isToday(calendarCell),
+    selected: isDaySelected(calendarCell),
+    disabled: isDayDisabled(calendarCell),
   };
 };
 
@@ -348,14 +355,19 @@ const hidePanel = () => {
 
 <template>
   <div class="picker" ref="pickerRef">
-    <input :id="`datepicker_${ident}`" :data-testid="`datepicker_${ident}`"
+    <input
+      :id="`datepicker_${ident}`"
+      :data-testid="`datepicker_${ident}`"
       type="text"
-      class="picker-input-date" :class="{ disabled: disabled }"
+      class="picker-input-date"
+      :class="{ disabled: disabled }"
       :value="displayDateValue"
       :placeholder="placeholderDateValue"
       :disabled="disabled"
-      readonly autocomplete="off"
-      @click="toggleDatePickerVisibility" />
+      readonly
+      autocomplete="off"
+      @click="toggleDatePickerVisibility"
+    />
 
     <!-- Date picker panel. -->
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
@@ -376,18 +388,20 @@ const hidePanel = () => {
       <div class="calendar-grid" :style="gridStyle">
         <!-- This row shows days of week. -->
         <div v-if="showWeeks"></div>
-        <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.'+day) }}</div>
+        <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.' + day) }}</div>
 
-        <div v-for="(calendarCell, index) in calendarCells" :key="index"
+        <div
+          v-for="(calendarCell, index) in calendarCells"
+          :key="index"
           :class="resolveCellClass(calendarCell)"
           :data-testid="calendarCell.testid"
-          @click="selectCell(calendarCell)">
+          @click="selectCell(calendarCell)"
+        >
           {{ calendarCell.day }}
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>

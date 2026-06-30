@@ -9,7 +9,7 @@ import MessageBox from '@/components/common/messages/MessageBox.vue';
 
 //
 
-/** Boilerplate code. */
+/** Convenience function to create component. */
 function createComponent(message: Message) {
   return mount(MessageBox, {
     global: {

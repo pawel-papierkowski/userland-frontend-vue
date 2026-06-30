@@ -16,7 +16,7 @@
 
 <template>
   <div class="dropdown-wrapper" ref="dropdown">
-    <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="nav-major">
+    <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="dropdown nav-major">
       <slot name="trigger" />
     </div>
 
@@ -32,6 +32,10 @@
   display: inline-block;
   cursor: pointer;
   user-select: none;
+}
+
+.dropdown {
+  
 }
 
 .dropdown-slot {

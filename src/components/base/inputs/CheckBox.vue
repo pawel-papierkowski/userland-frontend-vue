@@ -9,24 +9,27 @@
  * - v-model - Variable holding checkbox value. Must be boolean|null.
  *
  * Properties:
- * - ident - Used for identification in form. Optional.
+ * - ident - Used for identification. Optional.
  * - allowNull - If true, will cycle null value after true and false. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  */
 const currValue = defineModel<boolean | null>({ required: true });
 
-const props = withDefaults(defineProps<{
-  /** Used for identification in form. */
-  ident?: string;
-  /** Does this checkbox allow setting null value? */
-  allowNull?: boolean;
-  /**  If true, acts as disabled component. Optional, default is false. */
-  disabled?: boolean;
-}>(), {
-  ident: '',
-  allowNull: false,
-  disabled: false
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** Does this checkbox allow setting null value? */
+    allowNull?: boolean;
+    /**  If true, acts as disabled component. Optional, default is false. */
+    disabled?: boolean;
+  }>(),
+  {
+    ident: '',
+    allowNull: false,
+    disabled: false,
+  },
+);
 
 //
 
@@ -35,11 +38,17 @@ const cycle = () => {
   if (props.disabled) return;
 
   switch (currValue.value) {
-    case null: currValue.value = true; break;
-    case true: currValue.value = false; break;
-    case false: currValue.value = props.allowNull ? null : true; break;
+    case null:
+      currValue.value = true;
+      break;
+    case true:
+      currValue.value = false;
+      break;
+    case false:
+      currValue.value = props.allowNull ? null : true;
+      break;
   }
-}
+};
 
 /**
  * What should be shown as checkbox value?
