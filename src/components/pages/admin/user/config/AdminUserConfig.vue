@@ -266,7 +266,7 @@ watch(userSelectedTrigger, async () => {
 //
 
 /**
- * Provide row metadata for given entry.
+ * Provide row metadata for given entry. Mark inputs that are empty as invalid.
  * @param entry Entry or null if new entry.
  * @param rowIndex Row index.
  */

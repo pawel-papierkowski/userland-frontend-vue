@@ -15,7 +15,7 @@
  * - rowIndex - Index of row in table.
  * - entry - Current entry of table for row with this cell. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
- * - fieldMeta - If present, defines additional metadata about cell.
+ * - fieldMeta - If present, defines additional metadata about cell like custom css applied to inside.
  */
 import { computed } from 'vue';
 import type { VNode } from 'vue';
@@ -74,8 +74,9 @@ const cellClass = computed(() => {
   <div v-if="column.visible" class="table-cell" role="cell" :data-testid="dataTestId">
     <div v-if="column.kind === EnColumnKind.Data" :class="{ 'cell-value': !isEditMode }">
       <template v-if="$slots['column_' + column.name]">
-        <!-- If slot with matching name is provided, it is used instead. -->
-        <slot :name="'column_' + column.name" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
+        <!-- If slot with matching name is provided, it is used instead. You are responsible for correctly showing
+        text/input/whatever depending on isEditMode and fieldMeta. -->
+        <slot :name="`column_${column.name}`" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
       </template>
       <template v-else>
         <!-- Default column handling. -->
@@ -91,7 +92,7 @@ const cellClass = computed(() => {
 
     <template v-else-if="column.kind === EnColumnKind.Custom">
       <!-- Custom columns always use slot. -->
-      <slot :name="'column_'+column.name" :entry="entry" />
+      <slot :name="`column_${column.name}`" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
     </template>
   </div>
 </template>

@@ -267,7 +267,7 @@ watch(userSelectedTrigger, async () => {
 //
 
 /**
- * Provide row metadata for given entry.
+ * Provide row metadata for given entry. Mark inputs that are empty as invalid.
  * @param entry Entry or null if new entry.
  * @param rowIndex Row index.
  */
@@ -318,6 +318,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry|null): RowMeta|null => {
     </template>
     <template #column_name="{ entry, isEditMode, formEntry, fieldMeta }">
       <template v-if="isEditMode && formEntry">
+        <!-- Name of permission requires combobox instead of default input. -->
         <ComboBox data-testid="permission-name"
           :class="fieldMeta?.css"
           v-model="formEntry.name"

@@ -222,6 +222,10 @@
   height: 100%;
 }
 
+.table-paginer-number {
+  padding-left: 2px;
+}
+
 .table-paginer-navbtn {
   display: flex;
   align-items: center;

@@ -1,7 +1,11 @@
 <script setup lang="ts">
 /** Bar that contains paging options like arrows, page number etc.
  *
+ * Model:
+ * - currPage - Number of current page, zero-indexed.
+ *
  * Properties:
+ * - tableId - Identificator of table.
  * - meta - Table metadata.
  * - isDisabled - If true, disable paginer. Optional.
  */
@@ -11,6 +15,7 @@ import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 const currPage = defineModel<number>('currPage', { required: true }); // Currently selected page.
 
 const props = withDefaults(defineProps<{
+  tableId: string;
   meta: TableMetaResp;
   isDisabled?: boolean;
 }>(), {
@@ -38,11 +43,13 @@ const applyPage = () => {
     localPage.value = currPage.value + 1;
     return;
   }
+
+  // Values outside range will be clamped to range.
   if (page < 0) page = 0;
   if (page >= props.meta.pageCount) page = props.meta.pageCount - 1;
 
   currPage.value = page;
-  localPage.value = page + 1; // Ensure input shows clamped value
+  localPage.value = page + 1; // Ensure input shows 1-indexed value.
 };
 
 /** Go to first page of results. */
@@ -86,14 +93,13 @@ const pageInputDisabled = () => {
 </script>
 
 <template>
-  <div class="table-paginer">
+  <div class="table-paginer" :data-testid="`paginer_${props.tableId}`">
     <div class="table-paginer-grid">
       <div class="table-paginer-side"></div>
       <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goFirstPage()">⏮️</div>
       <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goPrevPage()">◀️</div>
       <div class="table-paginer-entry">
         <input
-          type="number"
           v-model="localPage"
           class="input-paginer"
           :disabled="pageInputDisabled()"
@@ -102,7 +108,7 @@ const pageInputDisabled = () => {
           @blur="applyPage"
           @keyup.enter="applyPage"
         />
-        / {{ meta.pageCount }}
+        / <span class="table-paginer-number" :data-testid="`paginer_${props.tableId}_pageNumber`">{{ meta.pageCount }}</span>
       </div>
       <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">▶️</div>
       <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">⏭️</div>

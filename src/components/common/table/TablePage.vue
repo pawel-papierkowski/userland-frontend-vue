@@ -235,7 +235,7 @@ defineExpose({
     </div>
 
     <div class="table-entire-row">
-      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()">
+      <TablePaginer v-model:currPage="currPage" :tableId="tableId" :meta="meta" :isDisabled="canDisablePaginer()">
         <!-- Forwarding paginer options slot, if it exists. -->
         <template v-if="$slots['paginer_options']" #[`paginer_options`]="slotData">
           <slot name="paginer_options" v-bind="slotData || {}" />
@@ -301,7 +301,7 @@ defineExpose({
     <div class="table-empty table-entire-row" v-if="!isLoading && data.length === 0">{{ t(empty) }}</div>
 
     <div class="table-entire-row">
-      <TablePaginer v-model:currPage="currPage" :meta="meta" :isDisabled="canDisablePaginer()" />
+      <TablePaginer v-model:currPage="currPage" :tableId="tableId" :meta="meta" :isDisabled="canDisablePaginer()" />
     </div>
   </div>
 </template>
