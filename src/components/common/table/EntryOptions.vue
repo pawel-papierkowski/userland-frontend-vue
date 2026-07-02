@@ -64,7 +64,11 @@ const optionClass = (option: EntryOption) => {
  */
 const optionTooltip = (option: EntryOption, key: string): string => {
   const reason = option?.reason ? option.reason : 'action';
-  // example: admin.user.config.table.texts.delete.adminOnly
+  // Example:
+  // - langPrefix = 'admin.user.config.table.texts'
+  // - key = 'delete'
+  // - reason = 'adminOnly'
+  // Result: 'admin.user.config.table.texts.delete.adminOnly'
   return `${props.langPrefix}.${key}.${reason}`;
 };
 

@@ -987,10 +987,30 @@
     },
     "table": {
       "column": {
+        "createdAt": "Utworzony",
         "name": "Nazwa",
-        "value": "Wartość"
+        "value": "Wartość",
+        "options": "Opcje"
+      },
+      "entryOptions": {
+        "add": {
+          "button": "A",
+          "action": "Wykonuje ADD."
+        },
+        "del": {
+          "button": "D",
+          "action": "Wykonuje DEL.",
+          "disabled": "Zablokowane DEL."
+        }
+      },
+      "page": {
+        "empty":"⚠️ Brak wpisów do wyświetlenia. ⚠️"
       }
     }
+  },
+
+  "combobox": {
+    "placeholder": "-"
   },
 
   "dateTimePicker": {

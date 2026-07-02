@@ -12,21 +12,22 @@
  *
  * Models:
  * - v-model - Selected record. Null means nothing is selected.
- * - v-model:formEntry - Form for entry. Used in in-line edit.
- * - v-model:currPage - Currently selected page.
+ * - v-model:formEntry - Form for entry. Used in in-line edit. Can be null if in-line edit is not used.
+ * - v-model:currPage - Currently selected page. Zero-indexed.
  * - v-model:currSortBy - Current sort column.
  * - v-model:currSortOrder - Current sort order.
  *
  * Properties:
  * - tableId - Identificator of table.
  * - columns - Data about columns. First column must be unique key.
- * - data - Content of table itself.
+ * - data - Content of table itself: single page of entries.
  * - meta - Table metadata.
+ * - resolveRowMeta - ?.
+ * - isLoading - If true, show spinner instead of table content. Used to indicate loading content for table. Optional.
+ * - canSpin - If true, spinner can spin. Used to indicate error due loading content for table. Optional.
  * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
- * - isLoading - If true, show spinner instead of table content.
- * - canSpin - If true, spinner can spin.
  * - empty - I18n key to show when table is empty. Optional.
  *
  * Slots:
@@ -57,14 +58,16 @@ const props = withDefaults(
     data: E[];
     meta: TableMetaResp;
     resolveRowMeta?: (entry: E|null) => RowMeta|null;
+    isLoading?: boolean;
+    canSpin?: boolean;
     canSelect?: boolean;
     inlineEdit?: boolean;
     addNewEntry?: boolean;
-    isLoading: boolean;
-    canSpin: boolean;
     empty?: string;
   }>(),
   {
+    isLoading: false,
+    canSpin: true,
     canSelect: true,
     inlineEdit: false,
     addNewEntry: false,
@@ -98,7 +101,6 @@ watch(() => props.isLoading, (newVal) => {
   if (newVal) return;
   // We know we stopped loading. Ensure page data is consistent.
   // Remember, currPage is zero-indexed.
-
   if (currPage.value === 0) return; // do not touch if we are on first page
 
   if (props.meta.pageCount === 0) {
@@ -132,7 +134,8 @@ const canSortColumn = (column: ColumnData): boolean => {
  * @returns True if paginer should be disabled, otherwise false.
  */
 const canDisablePaginer = (): boolean => {
-  if (selRecord.value !== null && props.inlineEdit) return true;
+  if (props.data.length === 0) return true; // no results
+  if (selRecord.value !== null && props.inlineEdit) return true; // during inline edit
   return false;
 }
 
@@ -250,7 +253,7 @@ defineExpose({
     </template>
 
     <template v-else>
-      <!-- ADD NEW IN-LINE ENTRY -->
+      <!-- NEW IN-LINE ENTRY -->
       <div v-if="addNewEntry && inlineEdit" class="table-row-group" role="rowgroup">
         <div class="table-row" :class="rowClass(null, 0)" role="row" >
           <TableRow

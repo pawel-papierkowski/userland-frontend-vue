@@ -987,8 +987,24 @@
     },
     "table": {
       "column": {
+        "createdAt": "Created",
         "name": "Name",
-        "value": "Value"
+        "value": "Value",
+        "options": "Options"
+      },
+      "entryOptions": {
+        "add": {
+          "button": "A",
+          "action": "Execute ADD."
+        },
+        "del": {
+          "button": "D",
+          "action": "Execute DEL.",
+          "disabled": "Disabled DEL."
+        }
+      },
+      "page": {
+        "empty": "⚠️ No entries to show. ⚠️"
       }
     }
   },
