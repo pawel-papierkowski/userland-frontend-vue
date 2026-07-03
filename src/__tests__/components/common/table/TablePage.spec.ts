@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
 
 import i18n from '@/code/lang/i18n.ts';
@@ -168,24 +168,24 @@ describe('TablePage', () => {
         false, true, true, false, false, 'test.table.page.empty');
 
       // Assert: All visible column headers are shown correctly.
-      const tableHeader = tablePage.findAll('.table-header-cell');
-      expect(tableHeader).toHaveLength(4);
-      expect(tableHeader[0]?.text()).toBe('Created');
-      expect(tableHeader[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[0]?.find('span').classes()).toEqual(['arrow-desc']); // current sort
-      expect(tableHeader[1]?.text()).toBe('Name');
-      expect(tableHeader[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[1]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
-      expect(tableHeader[2]?.text()).toBe('Value');
-      expect(tableHeader[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[2]?.find('span').classes()).toEqual(['arrow-asc', 'potential']);
-      expect(tableHeader[3]?.text()).toBe('Options');
-      expect(tableHeader[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
-      expect(tableHeader[3]?.find('span').exists()).toBe(false);
+      const columnHeaders = tablePage.findAll('.table-header-cell');
+      expect(columnHeaders).toHaveLength(4);
+      expect(columnHeaders[0]?.text()).toBe('Created');
+      expect(columnHeaders[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc']); // current sort
+      expect(columnHeaders[1]?.text()).toBe('Name');
+      expect(columnHeaders[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[1]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
+      expect(columnHeaders[2]?.text()).toBe('Value');
+      expect(columnHeaders[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc', 'potential']);
+      expect(columnHeaders[3]?.text()).toBe('Options');
+      expect(columnHeaders[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
+      expect(columnHeaders[3]?.find('span').exists()).toBe(false);
 
       // Assert: No rows present.
-      const rows = tablePage.findAllComponents(TableRow);
-      expect(rows).toHaveLength(0);
+      const rowCmps = tablePage.findAllComponents(TableRow);
+      expect(rowCmps).toHaveLength(0);
 
       // Assert: Text for empty table is visible.
       const tableEmpty = tablePage.find('.table-empty');
@@ -212,40 +212,46 @@ describe('TablePage', () => {
         false, true, true, false, false, 'test.table.page.empty');
 
       // Assert: All visible column headers are shown correctly.
-      const tableHeader = tablePage.findAll('.table-header-cell');
-      expect(tableHeader).toHaveLength(4);
-      expect(tableHeader[0]?.text()).toBe('Created');
-      expect(tableHeader[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[0]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
-      expect(tableHeader[1]?.text()).toBe('Name');
-      expect(tableHeader[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[1]?.find('span').classes()).toEqual(['arrow-desc']); // current sort
-      expect(tableHeader[2]?.text()).toBe('Value');
-      expect(tableHeader[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
-      expect(tableHeader[2]?.find('span').classes()).toEqual(['arrow-asc', 'potential']);
-      expect(tableHeader[3]?.text()).toBe('Options');
-      expect(tableHeader[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
-      expect(tableHeader[3]?.find('span').exists()).toBe(false);
+      const columnHeaders = tablePage.findAll('.table-header-cell');
+      expect(columnHeaders).toHaveLength(4);
+      expect(columnHeaders[0]?.text()).toBe('Created');
+      expect(columnHeaders[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
+      expect(columnHeaders[1]?.text()).toBe('Name');
+      expect(columnHeaders[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[1]?.find('span').classes()).toEqual(['arrow-desc']); // current sort
+      expect(columnHeaders[2]?.text()).toBe('Value');
+      expect(columnHeaders[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc', 'potential']);
+      expect(columnHeaders[3]?.text()).toBe('Options');
+      expect(columnHeaders[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
+      expect(columnHeaders[3]?.find('span').exists()).toBe(false);
 
       // Assert: Rows are present.
-      const rows = tablePage.findAllComponents(TableRow);
+      const rows = tablePage.findAll('.table-row');
       expect(rows).toHaveLength(2);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[1]?.classes()).toEqual(['table-row']);
+
+      // Assert: Row components are present and in valid state.
+      const rowCmps = tablePage.findAllComponents(TableRow as unknown as VueWrapper);
+      expect(rowCmps).toHaveLength(2);
       // Assert: row 1 has correct data
-      expect(rows[0]?.props('modelValue')).toBeNull();
-      expect(rows[0]?.props('formEntry')).toBeNull();
-      expect(rows[0]?.props('tableId')).toBe('customTableId');
-      expect(rows[0]?.props('columns')).toStrictEqual(columns);
-      expect(rows[0]?.props('rowIndex')).toBe(0);
-      expect(rows[0]?.props('entry')).toStrictEqual(data[0]);
-      expect(rows[0]?.props('inlineEdit')).toBe(false);
+      expect(rowCmps[0]?.props('modelValue')).toBeNull();
+      expect(rowCmps[0]?.props('formEntry')).toBeNull();
+      expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[0]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[0]?.props('rowIndex')).toBe(0);
+      expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
+      expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
       // Assert: row 2 has correct data
-      expect(rows[1]?.props('modelValue')).toBeNull();
-      expect(rows[1]?.props('formEntry')).toBeNull();
-      expect(rows[1]?.props('tableId')).toBe('customTableId');
-      expect(rows[1]?.props('columns')).toStrictEqual(columns);
-      expect(rows[1]?.props('rowIndex')).toBe(1);
-      expect(rows[1]?.props('entry')).toStrictEqual(data[1]);
-      expect(rows[1]?.props('inlineEdit')).toBe(false);
+      expect(rowCmps[1]?.props('modelValue')).toBeNull();
+      expect(rowCmps[1]?.props('formEntry')).toBeNull();
+      expect(rowCmps[1]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[1]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[1]?.props('rowIndex')).toBe(1);
+      expect(rowCmps[1]?.props('entry')).toStrictEqual(data[1]);
+      expect(rowCmps[1]?.props('inlineEdit')).toBe(false);
 
       // Assert: Text for empty table is not present.
       const tableEmpty = tablePage.find('.table-empty');
@@ -256,6 +262,216 @@ describe('TablePage', () => {
       expect(paginers).toHaveLength(2);
       expect(paginers[0]?.props('isDisabled')).toBe(false);
       expect(paginers[1]?.props('isDisabled')).toBe(false);
+    });
+
+    it('selects entry', async () => {
+      // Ensure filled table with selected row looks correctly.
+
+      // Arrange: Generate data for table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      // Arrange: Create table.
+      const tablePage = createComponent(data[0]!, null, 0, 'name', 'DESC', 'customTableId',
+        columns, data, metadata, resolveRowMeta,
+        false, true, true, false, false, 'test.table.page.empty');
+
+      // Act: Select row.
+      const rows = tablePage.findAll('.table-row');
+      expect(rows).toHaveLength(2);
+      await rows[1]?.trigger('click');
+      await nextTick();
+
+      // Assert: Selected row data updated correctly.
+      expect(tablePage.emitted('update:modelValue')).toHaveLength(1);
+      expect(tablePage.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(data[1]);
+
+      // Assert: Rows are present and selected column is visible.
+      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[1]?.classes()).toEqual(['table-row', 'selected']);
+
+      // Assert: Row components are present and in valid state.
+      const rowCmps = tablePage.findAllComponents(TableRow as unknown as VueWrapper);
+      expect(rowCmps).toHaveLength(2);
+      // Assert: row 1 has correct data
+      expect(rowCmps[0]?.props('modelValue')).toStrictEqual(data[1]);
+      expect(rowCmps[0]?.props('formEntry')).toBeNull();
+      expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[0]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[0]?.props('rowIndex')).toBe(0);
+      expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
+      expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
+      // Assert: row 2 has correct data
+      expect(rowCmps[1]?.props('modelValue')).toStrictEqual(data[1]);
+      expect(rowCmps[1]?.props('formEntry')).toBeNull();
+      expect(rowCmps[1]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[1]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[1]?.props('rowIndex')).toBe(1);
+      expect(rowCmps[1]?.props('entry')).toStrictEqual(data[1]);
+      expect(rowCmps[1]?.props('inlineEdit')).toBe(false);
+
+      // Assert: Text for empty table is not present.
+      const tableEmpty = tablePage.find('.table-empty');
+      expect(tableEmpty.exists()).toBe(false);
+
+      // Assert: Table paginers are enabled.
+      const paginers = tablePage.findAllComponents(TablePaginer);
+      expect(paginers).toHaveLength(2);
+      expect(paginers[0]?.props('isDisabled')).toBe(false);
+      expect(paginers[1]?.props('isDisabled')).toBe(false);
+    });
+
+    it('cannot select entry', async () => {
+      // Ensure filled table looks correctly after failed selection try.
+
+      // Arrange: Generate data for table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      // Arrange: Create table.
+      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
+        columns, data, metadata, resolveRowMeta,
+        false, true, false, false, false, 'test.table.page.empty');
+
+      // Act: Try to select row.
+      const rows = tablePage.findAll('.table-row');
+      expect(rows).toHaveLength(2);
+      await rows[1]?.trigger('click');
+      await nextTick();
+
+      // Assert: Selected row data updated correctly.
+      expect(tablePage.emitted('update:modelValue')).toBeUndefined();
+
+      // Assert: Rows are present and selected column is visible.
+      expect(rows[0]?.classes()).toEqual(['table-row', 'unselectable', 'odd']);
+      expect(rows[1]?.classes()).toEqual(['table-row', 'unselectable']);
+
+      // Assert: Row components are present and in valid state.
+      const rowCmps = tablePage.findAllComponents(TableRow as unknown as VueWrapper);
+      expect(rowCmps).toHaveLength(2);
+      // Assert: row 1 has correct data
+      expect(rowCmps[0]?.props('modelValue')).toBeNull();
+      expect(rowCmps[0]?.props('formEntry')).toBeNull();
+      expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[0]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[0]?.props('rowIndex')).toBe(0);
+      expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
+      expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
+      // Assert: row 2 has correct data
+      expect(rowCmps[1]?.props('modelValue')).toBeNull();
+      expect(rowCmps[1]?.props('formEntry')).toBeNull();
+      expect(rowCmps[1]?.props('tableId')).toBe('customTableId');
+      expect(rowCmps[1]?.props('columns')).toStrictEqual(columns);
+      expect(rowCmps[1]?.props('rowIndex')).toBe(1);
+      expect(rowCmps[1]?.props('entry')).toStrictEqual(data[1]);
+      expect(rowCmps[1]?.props('inlineEdit')).toBe(false);
+
+      // Assert: Text for empty table is not present.
+      const tableEmpty = tablePage.find('.table-empty');
+      expect(tableEmpty.exists()).toBe(false);
+
+      // Assert: Table paginers are enabled.
+      const paginers = tablePage.findAllComponents(TablePaginer);
+      expect(paginers).toHaveLength(2);
+      expect(paginers[0]?.props('isDisabled')).toBe(false);
+      expect(paginers[1]?.props('isDisabled')).toBe(false);
+    });
+  });
+
+  describe('change', () => {
+    it('current page', async () => {
+      // Ensure table changes page correctly.
+
+      // Arrange: Generate data for table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      // Arrange: Create table.
+      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
+        columns, data, metadata, resolveRowMeta,
+        false, true, true, false, false, 'test.table.page.empty');
+
+      // Act: Click on next page button.
+      const paginers = tablePage.findAllComponents(TablePaginer);
+      const buttons = paginers[0]?.findAll('.table-paginer-navbtn');
+      buttons![2]?.trigger('click'); // next page button
+      await nextTick();
+
+      // Assert: Page changed correctly (component that uses <TablePage> watches for change in currPage to reload it).
+      expect(tablePage.emitted('update:currPage')).toHaveLength(1);
+      expect(tablePage.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+    });
+
+    it('sorting order of current column', async () => {
+      // Ensure table changes sorting order of current column correctly.
+
+      // Arrange: Generate data for table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+      // Arrange: Create table.
+      const tablePage = createComponent(null, null, 0, 'createdAt', 'ASC', 'customTableId',
+        columns, data, metadata, resolveRowMeta,
+        false, true, true, false, false, 'test.table.page.empty');
+
+      // Act: Click on header of 'createdAt' column. Note we already sort by this column, so we only change direction.
+      const columnHeaders = tablePage.findAll('.table-header-cell');
+      expect(columnHeaders).toHaveLength(4);
+      columnHeaders[0]?.trigger('click'); // 'createdAt' column
+      await nextTick();
+
+      // Assert: Sorting changed correctly (component that uses <TablePage> watches for change in currSortBy/currSortOrder to reload it).
+      expect(tablePage.emitted('update:currSortBy')).toBeUndefined(); // no change here
+      expect(tablePage.emitted('update:currSortOrder')).toHaveLength(1);
+      expect(tablePage.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+
+      // Assert: All visible column headers are shown correctly after change.
+      expect(columnHeaders[0]?.text()).toBe('Created');
+      expect(columnHeaders[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc']); // current sort
+      expect(columnHeaders[1]?.text()).toBe('Name');
+      expect(columnHeaders[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[1]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
+      expect(columnHeaders[2]?.text()).toBe('Value');
+      expect(columnHeaders[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc', 'potential']);
+      expect(columnHeaders[3]?.text()).toBe('Options');
+      expect(columnHeaders[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
+      expect(columnHeaders[3]?.find('span').exists()).toBe(false);
+    });
+
+    it('column to be sorted', async () => {
+      // Ensure table changes column to be sorted correctly.
+
+      // Arrange: Generate data for table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      // Arrange: Create table.
+      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
+        columns, data, metadata, resolveRowMeta,
+        false, true, true, false, false, 'test.table.page.empty');
+
+      // Act: Click on header of 'value' column.
+      const columnHeaders = tablePage.findAll('.table-header-cell');
+      expect(columnHeaders).toHaveLength(4);
+      columnHeaders[2]?.trigger('click'); // 'value' column
+      await nextTick();
+
+      // Assert: Sorting changed correctly (component that uses <TablePage> watches for change in currSortBy/currSortOrder to reload it).
+      expect(tablePage.emitted('update:currSortBy')).toHaveLength(1);
+      expect(tablePage.emitted('update:currSortBy')?.[0]?.[0]).toBe('value');
+      expect(tablePage.emitted('update:currSortOrder')).toHaveLength(1);
+      expect(tablePage.emitted('update:currSortOrder')?.[0]?.[0]).toBe('ASC');
+
+      // Assert: All visible column headers are shown correctly after change.
+      expect(columnHeaders[0]?.text()).toBe('Created');
+      expect(columnHeaders[0]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
+      expect(columnHeaders[1]?.text()).toBe('Name');
+      expect(columnHeaders[1]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[1]?.find('span').classes()).toEqual(['arrow-desc', 'potential']);
+      expect(columnHeaders[2]?.text()).toBe('Value');
+      expect(columnHeaders[2]?.classes()).toEqual(['table-header-cell', 'sortable']);
+      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc']); // current sort
+      expect(columnHeaders[3]?.text()).toBe('Options');
+      expect(columnHeaders[3]?.classes()).toEqual(['table-header-cell']); // options column is not sortable
+      expect(columnHeaders[3]?.find('span').exists()).toBe(false);
     });
   });
 });
