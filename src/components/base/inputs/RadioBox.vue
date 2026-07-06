@@ -14,7 +14,7 @@
  * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
- * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
+ * - langPrefix - Prefix, used for auto-translating entries in list. If empty, options will be shown as is without translation.
  */
 import { useI18n } from 'vue-i18n';
 
@@ -33,7 +33,7 @@ const props = withDefaults(
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
     invalid?: boolean;
-    /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
+    /** Prefix, used for auto-translating entries in list. If empty, options will be shown as is without translation. */
     langPrefix?: string;
   }>(),
   {
@@ -67,13 +67,13 @@ const showOption = (option: number | string | null): number | string | null => {
 </script>
 
 <template>
-  <div class="radiobox-wrapper" :class="{ err: invalid }" :data-testid="`radiobox_${ident}`">
-    <div class="radiobox" :class="{ disabled: disabled }">
+  <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
+    <div class="radiobox" :class="{ disabled: disabled, err: invalid }">
       <div
         v-for="(option, index) in options"
         :key="index"
         class="radiobox-option"
-        :data-testid="`radiobox_${ident}${index}`"
+        :data-testid="`radiobox_${ident}_${index}`"
         @click="selectOption(option)"
       >
         <div class="radiobox-circle">
@@ -120,7 +120,7 @@ const showOption = (option: number | string | null): number | string | null => {
   background-color: var(--radiobox-hover-background);
 }
 
-.radiobox-wrapper.err .radiobox-circle {
+.radiobox.err .radiobox-circle {
   color: var(--radiobox-err-color);
   background: var(--radiobox-err-background);
   border: var(--radiobox-err-border);

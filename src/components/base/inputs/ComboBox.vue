@@ -69,6 +69,15 @@ const props = withDefaults(
 const isOpen = ref(false);
 const arrowClass = computed(() => ({ open: isOpen.value }));
 
+/** Index of currently highlighted option. -1 means none highlighted. */
+const highlightedIndex = ref(-1);
+
+/** ID for the listbox used by aria-controls and aria-activedescendant. */
+const listboxId = computed(() => `combobox-listbox_${props.ident || 'default'}`);
+
+/** Get option element ID for aria-activedescendant. */
+const optionId = (index: number): string => `combobox_${props.ident}_option_${index}`;
+
 //
 
 /** If you disable combobox, list of options will close. */
@@ -86,6 +95,9 @@ const openOptions = () => {
   if (props.disabled) return;
 
   isOpen.value = !isOpen.value;
+  if (!isOpen.value) {
+    highlightedIndex.value = -1;
+  }
 };
 
 /**
@@ -97,6 +109,54 @@ const selectOption = (option: number | string | null) => {
 
   selOption.value = option;
   isOpen.value = false;
+};
+
+/**
+ * Handle keyboard events for accessibility.
+ * Arrow keys navigate options, Enter/Space select, Escape closes.
+ */
+const handleKeydown = (event: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  switch (event.key) {
+    case 'ArrowDown': {
+      event.preventDefault();
+      if (!isOpen.value) {
+        isOpen.value = true;
+        highlightedIndex.value = 0;
+      } else if (highlightedIndex.value < props.options.length - 1) {
+        highlightedIndex.value++;
+      }
+      break;
+    }
+    case 'ArrowUp': {
+      event.preventDefault();
+      if (!isOpen.value) {
+        isOpen.value = true;
+        highlightedIndex.value = props.options.length - 1;
+      } else if (highlightedIndex.value > 0) {
+        highlightedIndex.value--;
+      }
+      break;
+    }
+    case 'Enter':
+    case ' ': {
+      event.preventDefault();
+      if (isOpen.value && highlightedIndex.value >= 0) {
+        selectOption(props.options[highlightedIndex.value] ?? null);
+      } else if (!isOpen.value) {
+        isOpen.value = true;
+        highlightedIndex.value = props.options.findIndex((o) => o === selOption.value);
+      }
+      break;
+    }
+    case 'Escape': {
+      event.preventDefault();
+      isOpen.value = false;
+      highlightedIndex.value = -1;
+      break;
+    }
+  }
 };
 
 /**
@@ -115,19 +175,34 @@ const showOption = (option: number | string | null): number | string | null => {
 
 <template>
   <div class="combobox" :class="{ disabled: disabled, err: invalid }" :data-testid="`combobox_${ident}`"
-    ref="combobox" tabindex="0" @blur="isOpen = false">
+    ref="combobox"
+    role="combobox"
+    :aria-expanded="isOpen"
+    aria-haspopup="listbox"
+    :aria-controls="listboxId"
+    :aria-activedescendant="highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined"
+    :aria-disabled="disabled || undefined"
+    :tabindex="disabled ? -1 : 0"
+    @blur="isOpen = false; highlightedIndex = -1"
+    @keydown="handleKeydown"
+  >
     <div class="combobox-selected" @click="openOptions()">
       <span class="combobox-selected-text">{{ showOption(selOption) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
 
-    <div class="combobox-options" v-show="isOpen">
+    <div class="combobox-options" v-show="isOpen" :id="listboxId" role="listbox">
       <div
         v-for="(option, index) in options"
         :key="index"
+        :id="optionId(index)"
         class="combobox-option"
+        :class="{ highlighted: highlightedIndex === index }"
         :data-testid="`combobox_${ident}_${index}`"
+        role="option"
+        :aria-selected="option === selOption"
         @click="selectOption(option)"
+        @mouseenter="highlightedIndex = index"
       >
         {{ showOption(option) }}
       </div>
@@ -243,7 +318,13 @@ const showOption = (option: number | string | null): number | string | null => {
   color: var(--combobox-option-color-hover);
   background-color: var(--combobox-option-background-hover);
 }
-.combobox.err .combobox-option:hover {
+
+.combobox-option.highlighted {
+  color: var(--combobox-option-color-hover);
+  background-color: var(--combobox-option-background-hover);
+}
+.combobox.err .combobox-option:hover,
+.combobox.err .combobox-option.highlighted {
   color: var(--combobox-option-err-color-hover);
   background-color: var(--combobox-option-err-background-hover);
 }
