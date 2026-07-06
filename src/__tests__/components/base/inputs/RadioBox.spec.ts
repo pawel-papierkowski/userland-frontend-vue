@@ -40,7 +40,7 @@ describe('RadioBox', () => {
   it('has correct presentation', async () => {
     // Check if radio box is constructed correctly.
 
-    // Arrange and Act: set up radio box.
+    // Arrange&Act: set up radio box.
     const radioBox = createComponent(null, createOptions(), false, 'test.radioBox');
 
     // Assert: options are present.

@@ -11,24 +11,27 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 /** Convenience function to create component. */
 function createComponent(
   modelValue: number | string | null,
+  ident: string,
   options: (number | string | null)[],
-  disabled?: boolean,
-  langPrefix?: string,
+  disabled: boolean,
+  invalid: boolean,
+  langPrefix: string,
   placeholder?: string,
 ) {
-  const component = mount(ComboBox, {
+  return mount(ComboBox, {
     global: {
       plugins: [i18n],
     },
     props: {
       modelValue,
+      ident,
       options,
       disabled,
+      invalid,
       langPrefix,
       placeholder,
     },
   });
-  return component;
 }
 
 /** Options for test combobox. */
@@ -41,16 +44,17 @@ function createOptions(): (number | string | null)[] {
 /** Tests of ComboBox component. */
 describe('ComboBox', () => {
   it('has correct presentation', async () => {
-    // Check if combo box is constructed correctly.
+    // Check if combobox is constructed correctly.
 
-    // Arrange and Act: set up combo box.
-    const comboBox = createComponent('b', createOptions(), false, 'test.comboBox');
+    // Arrange&Act: Set up combo box.
+    const comboBox = createComponent('b', 'someCombobox', createOptions(), false, false, 'test.comboBox');
 
-    // Assert: Options are hidden, as user did not click on combobox yet.
-    //expect(comboBox.find('.combobox-options').element.style.display).toBe('none');
-    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+    // Assert: Combobox has correct data-testid attribute.
+    expect(comboBox.attributes('data-testid')).toBe('combobox_someCombobox');
     // Assert: Combobox main field is present and shows selected option (in this case 'b')
     expect(comboBox.find('.combobox-selected-text').text()).toBe('Option B');
+    // Assert: Options are hidden, as user did not click on combobox yet.
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
 
     // Act: Open options.
     await comboBox.find('.combobox-selected').trigger('click');
@@ -63,18 +67,22 @@ describe('ComboBox', () => {
     const optionElements = comboBox.findAll('.combobox-option');
     expect(optionElements).toHaveLength(4);
 
-    // Assert: all options are shown correctly.
+    // Assert: All options are shown correctly.
     expect(optionElements[0]?.text()).toBe('-'); // default placeholder, as we did not provide any
+    expect(optionElements[0]?.attributes('data-testid')).toBe('combobox_someCombobox_0');
     expect(optionElements[1]?.text()).toBe('Option A');
+    expect(optionElements[1]?.attributes('data-testid')).toBe('combobox_someCombobox_1');
     expect(optionElements[2]?.text()).toBe('Option B');
+    expect(optionElements[2]?.attributes('data-testid')).toBe('combobox_someCombobox_2');
     expect(optionElements[3]?.text()).toBe('Option C');
+    expect(optionElements[3]?.attributes('data-testid')).toBe('combobox_someCombobox_3');
   });
 
   it('is correctly selected', async () => {
-    // Check if combo box correctly selects option.
+    // Check if combobox correctly selects option.
 
-    // Arrange and Act: set up combo box.
-    const comboBox = createComponent(null, createOptions(), false, 'test.comboBox', 'test.comboBox.null');
+    // Arrange&Act: Set up combo box.
+    const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox', 'test.comboBox.null');
 
     // Assert: Combobox main field is present and shows selected option (in this case null, thats it unselected)
     expect(comboBox.find('.combobox-selected-text').text()).toBe('Option UNSELECTED (null)');
@@ -84,10 +92,10 @@ describe('ComboBox', () => {
     await nextTick();
 
     // Act: Click on one of options.
-    await comboBox.find('[data-testid="combobox_1"]').trigger('click');
+    await comboBox.find('[data-testid="combobox__1"]').trigger('click');
     await nextTick();
 
-    // Assert: model emitted correct value.
+    // Assert: Model emitted correct value.
     expect(comboBox.emitted('update:modelValue')).toHaveLength(1);
     expect(comboBox.emitted('update:modelValue')?.[0]?.[0]).toBe('a');
 
@@ -98,20 +106,58 @@ describe('ComboBox', () => {
     expect(comboBox.find('.combobox-selected-text').text()).toBe('Option A');
   });
 
-  it('is disabled', async () => {
-    // Check if combo box behaves correctly when disabled.
+  //
 
-    // Arrange and Act: set up disabled combo box.
-    const comboBox = createComponent(null, createOptions(), true, 'test.comboBox', 'test.comboBox.null');
+  it('is disabled', async () => {
+    // Check if combobox behaves correctly when disabled and disabled combobox is visually distinct.
+
+    // Arrange&Act: set up disabled combo box.
+    const comboBox = createComponent(null, '', createOptions(), true, false, 'test.comboBox', 'test.comboBox.null');
 
     // Act: Try to open options.
     await comboBox.find('.combobox-selected').trigger('click');
     await nextTick();
 
-    // Assert: model never emitted anything.
+    // Assert: Model never emitted anything.
     expect(comboBox.emitted('update:modelValue')).toBeUndefined();
 
     // Assert: Options are still hidden, as combobox is disabled and won't open options.
     expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+    // Assert: CSS classes are correctly assigned, ensuring component is visually disabled.
+    expect(comboBox.find('.combobox').classes()).toStrictEqual(['combobox', 'disabled']);
+  });
+
+  it('is invalid', async () => {
+    // Ensure combobox marked as invalid is visually distinct and fully functional.
+
+    // Arrange&Act: Set up combo box marked as invalid.
+    const comboBox = createComponent(null, '', createOptions(), false, true, 'test.comboBox', 'test.comboBox.null');
+
+    // Assert: Options are hidden, as user did not click on combobox yet.
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+
+    // Act: Open options.
+    await comboBox.find('.combobox-selected').trigger('click');
+    await nextTick();
+
+    // Assert: Options are shown, as combobox visually marked as invalid is still fully functional.
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('');
+
+    // Act: Click on one of options.
+    await comboBox.find('[data-testid="combobox__3"]').trigger('click');
+    await nextTick();
+
+    // Assert: Model emitted correct value.
+    expect(comboBox.emitted('update:modelValue')).toHaveLength(1);
+    expect(comboBox.emitted('update:modelValue')?.[0]?.[0]).toBe('c');
+
+    // Assert: Options are now hidden again, as user already selected option.
+    expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+
+    // Assert: Combobox main field is present and shows selected option (in this case 'c')
+    expect(comboBox.find('.combobox-selected-text').text()).toBe('Option C');
+
+    // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
+    expect(comboBox.find('.combobox').classes()).toStrictEqual(['combobox', 'err']);
   });
 });

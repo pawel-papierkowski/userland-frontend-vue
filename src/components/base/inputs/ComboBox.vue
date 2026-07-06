@@ -114,9 +114,10 @@ const showOption = (option: number | string | null): number | string | null => {
 </script>
 
 <template>
-  <div class="combobox" :class="{ disabled: disabled, err: invalid }" ref="combobox" tabindex="0" @blur="isOpen = false">
+  <div class="combobox" :class="{ disabled: disabled, err: invalid }" :data-testid="`combobox_${ident}`"
+    ref="combobox" tabindex="0" @blur="isOpen = false">
     <div class="combobox-selected" @click="openOptions()">
-      <span class="combobox-selected-text">{{ selOption ? showOption(selOption) : t(placeholder) }}</span>
+      <span class="combobox-selected-text">{{ showOption(selOption) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
 
@@ -125,7 +126,7 @@ const showOption = (option: number | string | null): number | string | null => {
         v-for="(option, index) in options"
         :key="index"
         class="combobox-option"
-        :data-testid="'combobox_' + index"
+        :data-testid="`combobox_${ident}_${index}`"
         @click="selectOption(option)"
       >
         {{ showOption(option) }}

@@ -6,7 +6,13 @@ import CheckBox from '@/components/base/inputs/CheckBox.vue';
 //
 
 /** Convenience function to create component. */
-function createComponent(modelValue: boolean | null, ident: string, allowNull: boolean, disabled: boolean, invalid: boolean) {
+function createComponent(
+  modelValue: boolean | null,
+  ident: string,
+  allowNull: boolean,
+  disabled: boolean,
+  invalid: boolean
+) {
   return mount(CheckBox, {
     props: {
       modelValue, ident, allowNull, disabled, invalid,
@@ -18,11 +24,16 @@ function createComponent(modelValue: boolean | null, ident: string, allowNull: b
 
 /** Tests of CheckBox component. */
 describe('CheckBox', () => {
-  it('ident is correct', async () => {
-    // Ensure ident is correct.
+  it('has correct presentation', async () => {
+    // Check if checkbox is constructed correctly.
 
     // Arrange&Act: Create check box that has custom ident.
     const checkBox = createComponent(false, 'someCheckbox', false, false, false);
+
+    // Assert: Checkbox is initialized to false.
+    expect(checkBox.find('.checkbox-inside').text()).toBe('');
+    // Assert: CSS classes are correctly assigned.
+    expect(checkBox.find('.checkbox').classes()).toStrictEqual(['checkbox']);
 
     // Assert: Checkbox has correct data-testid attribute.
     expect(checkBox.attributes('data-testid')).toBe('checkbox_someCheckbox');
@@ -113,6 +124,8 @@ describe('CheckBox', () => {
     expect(checkBox.find('.checkbox-inside').text()).toBe('✔');
   });
 
+  //
+
   it('is disabled', async () => {
     // Ensure nothing happens when we click on disabled checkbox and disabled checkbox is visually distinct.
 
@@ -134,7 +147,7 @@ describe('CheckBox', () => {
   });
 
   it('is invalid', async () => {
-    // Ensure invalid checkbox is visually distinct.
+    // Ensure checkbox marked as invalid is visually distinct and fully functional.
 
     // Arrange&Act: Create check box that is invalid.
     const checkBox = createComponent(false, '', false, false, true);
@@ -142,7 +155,7 @@ describe('CheckBox', () => {
     // Assert: Checkbox is initialized to false.
     expect(checkBox.find('.checkbox-inside').text()).toBe('');
 
-    // Act: Click once.
+    // Act: Click once. Visually invalid checkbox is still fully functional.
     await checkBox.find('.checkbox').trigger('click');
 
     // Assert: Model emitted correct value.
