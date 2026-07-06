@@ -140,6 +140,10 @@ const showSymbol = (): string => {
   cursor: default;
 }
 
+.checkbox:focus-visible {
+  outline: none;
+}
+
 /**/
 
 .checkbox-inside {

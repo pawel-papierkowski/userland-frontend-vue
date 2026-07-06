@@ -46,14 +46,55 @@ const props = withDefaults(
 
 //
 
+/** Get option element ID for ARIA and programmatic focus. */
+const optionId = (index: number): string => `radiobox_${props.ident}_option_${index}`;
+
 /**
  * User clicked on option.
  * @param option Clicked option.
+ * @param index Index of the option for focus management.
  */
-const selectOption = (option: number | string | null) => {
+const selectOption = (option: number | string | null, index?: number) => {
   if (props.disabled) return;
 
   selOption.value = option;
+
+  if (index !== undefined) {
+    const optionEl = document.getElementById(optionId(index));
+    if (optionEl) optionEl.focus();
+  }
+};
+
+/**
+ * Handle keyboard events for accessibility.
+ * Arrow keys navigate between options, Space selects the focused option.
+ */
+const handleKeydown = (event: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  const currentIndex = props.options.findIndex((o) => o === selOption.value);
+  let nextIndex = currentIndex;
+
+  switch (event.key) {
+    case 'ArrowDown':
+    case 'ArrowRight':
+      event.preventDefault();
+      nextIndex = currentIndex + 1;
+      if (nextIndex >= props.options.length) nextIndex = 0; // Wraparound.
+      break;
+    case 'ArrowUp':
+    case 'ArrowLeft':
+      event.preventDefault();
+      nextIndex = currentIndex - 1;
+      if (nextIndex < 0) nextIndex = props.options.length - 1; // Wraparound.
+      break;
+    default:
+      return;
+  }
+
+  if (nextIndex !== currentIndex) {
+    selectOption(props.options[nextIndex] ?? null, nextIndex);
+  }
 };
 
 /**
@@ -68,13 +109,22 @@ const showOption = (option: number | string | null): number | string | null => {
 
 <template>
   <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
-    <div class="radiobox" :class="{ disabled: disabled, err: invalid }">
+    <div
+      class="radiobox"
+      :class="{ disabled: disabled, err: invalid }"
+      role="radiogroup"
+      @keydown="handleKeydown"
+    >
       <div
         v-for="(option, index) in options"
         :key="index"
+        :id="optionId(index)"
         class="radiobox-option"
         :data-testid="`radiobox_${ident}_${index}`"
-        @click="selectOption(option)"
+        role="radio"
+        :aria-checked="option === selOption"
+        :tabindex="option === selOption && !disabled ? 0 : -1"
+        @click="selectOption(option, index)"
       >
         <div class="radiobox-circle">
           <div class="radiobox-inside" :class="{ mark: option === selOption }"></div>
@@ -113,6 +163,10 @@ const showOption = (option: number | string | null): number | string | null => {
   height: 0.9em;
 
   cursor: pointer;
+}
+
+.radiobox-option:focus-visible {
+  outline: none;
 }
 
 .radiobox-option:hover .radiobox-circle {

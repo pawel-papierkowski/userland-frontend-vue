@@ -124,8 +124,8 @@ const handleKeydown = (event: KeyboardEvent) => {
       if (!isOpen.value) {
         isOpen.value = true;
         highlightedIndex.value = 0;
-      } else if (highlightedIndex.value < props.options.length - 1) {
-        highlightedIndex.value++;
+      } else { // Wraparound.
+        highlightedIndex.value = (highlightedIndex.value + 1) % props.options.length;
       }
       break;
     }
@@ -134,8 +134,8 @@ const handleKeydown = (event: KeyboardEvent) => {
       if (!isOpen.value) {
         isOpen.value = true;
         highlightedIndex.value = props.options.length - 1;
-      } else if (highlightedIndex.value > 0) {
-        highlightedIndex.value--;
+      } else { // Wraparound.
+        highlightedIndex.value = (highlightedIndex.value - 1 + props.options.length) % props.options.length;
       }
       break;
     }
@@ -241,6 +241,10 @@ const showOption = (option: number | string | null): number | string | null => {
 .combobox.disabled {
   color: var(--combobox-disabled-color);
   background: var(--combobox-disabled-background);
+}
+
+.combobox:focus-visible {
+  outline: none;
 }
 
 /**/

@@ -12,7 +12,7 @@ input {
   border-radius: var(--input-border-radius);
 }
 
-input:focus {
+input:focus-visible {
   outline: none;
 }
 

@@ -259,8 +259,9 @@ describe('ComboBox', () => {
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
-      // Assert: Stayed on last option (not wrapping around).
-      expect(options[3]?.classes()).toContain('highlighted');
+      // Assert: Wraps around to first option.
+      expect(options[3]?.classes()).not.toContain('highlighted');
+      expect(options[0]?.classes()).toContain('highlighted');
     });
 
     it('keyboard: ArrowUp opens and navigates up', async () => {
@@ -291,8 +292,41 @@ describe('ComboBox', () => {
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
       await nextTick();
 
-      // Assert: Stayed on first option.
+      // Assert: Wraps around to last option.
+      expect(options[0]?.classes()).not.toContain('highlighted');
+      expect(options[3]?.classes()).toContain('highlighted');
+    });
+
+    it('keyboard: ArrowDown/ArrowUp wrap around at boundaries', async () => {
+      // Ensure ArrowDown from last wraps to first and ArrowUp from first wraps to last.
+
+      // Arrange&Act: Open combobox and navigate to last option (index 3).
+      const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox');
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const options = comboBox.findAll('.combobox-option');
+
+      // Assert: Last option (index 3) is highlighted.
+      expect(options[3]?.classes()).toContain('highlighted');
+
+      // Act: Press ArrowDown to wrap to first.
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: First option (index 0) is now highlighted.
       expect(options[0]?.classes()).toContain('highlighted');
+      expect(options[3]?.classes()).not.toContain('highlighted');
+
+      // Act: Press ArrowUp to wrap back to last.
+      await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
+      await nextTick();
+
+      // Assert: Last option (index 3) is highlighted again.
+      expect(options[3]?.classes()).toContain('highlighted');
+      expect(options[0]?.classes()).not.toContain('highlighted');
     });
 
     it('keyboard: Enter selects highlighted option', async () => {
