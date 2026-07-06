@@ -1,9 +1,9 @@
 <script setup lang="ts">
-/**
- * Custom radiobox implementation.
+/** Custom radiobox implementation.
  *
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
+ * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
  *
  * Models:
@@ -13,6 +13,7 @@
  * - ident - Used for identification. Optional.
  * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
  */
 import { useI18n } from 'vue-i18n';
@@ -30,12 +31,15 @@ const props = withDefaults(
     options: (number | string | null)[];
     /**  If true, acts as disabled component. Optional, default is false. */
     disabled?: boolean;
+    /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
+    invalid?: boolean;
     /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
     langPrefix?: string;
   }>(),
   {
     ident: '',
     disabled: false,
+    invalid: false,
     langPrefix: '',
   },
 );
@@ -63,7 +67,7 @@ const showOption = (option: number | string | null): number | string | null => {
 </script>
 
 <template>
-  <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
+  <div class="radiobox-wrapper" :class="{ err: invalid }" :data-testid="`radiobox_${ident}`">
     <div class="radiobox" :class="{ disabled: disabled }">
       <div
         v-for="(option, index) in options"
@@ -84,9 +88,6 @@ const showOption = (option: number | string | null): number | string | null => {
 <style scoped>
 .radiobox-wrapper {
   user-select: none;
-}
-
-.radiobox {
 }
 
 .radiobox-option {

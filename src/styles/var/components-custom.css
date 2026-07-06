@@ -95,6 +95,8 @@
   --datetimepicker-calendar-border-radius: 10px;
   --datetimepicker-calendar-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
+  --datetimepicker-calendar-err-background: linear-gradient(to bottom right, #fffefe 0px, #fff5f5 400px);
+
   --datetimepicker-navbtn-filter: hue-rotate(200deg) brightness(1.6);
   --datetimepicker-navbtn-hover-filter: hue-rotate(200deg) brightness(1.9);
 
@@ -123,6 +125,8 @@
   --datetimepicker-clock-border: 1px solid #444444;
   --datetimepicker-clock-border-radius: 10px;
   --datetimepicker-clock-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  --datetimepicker-clock-err-background: linear-gradient(to bottom right, #fffefe 0px, #fff5f5 400px);
 
   --datetimepicker-time-color: #444444;
   --datetimepicker-time-hover-color: #111111;

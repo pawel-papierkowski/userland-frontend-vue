@@ -16,8 +16,8 @@ export type UserRegisterReq = {
   username: string; // Name shown on frontend.
   email: string; // Email address. Doubles as unique name of account.
   password: string; // Password.
-  isAdmin: boolean; // If true, will get admin permissions. Portfolio mode only.
   lang: string; // Short language code.
+  isAdmin: boolean; // If true, will get admin permissions. Portfolio mode only.
   frontend: string; // Used frontend. Always VUE.
 };
 

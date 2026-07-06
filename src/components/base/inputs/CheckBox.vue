@@ -1,9 +1,9 @@
 <script setup lang="ts">
-/**
- * Custom checkbox implementation.
+/** Custom checkbox implementation. Needed because standard HTML <input type="checkbox"> has very bad CSS support.
  *
  * Features:
  * - Accept null (not set) value.
+ * - Can disable or mark as invalid.
  *
  * Models:
  * - v-model - Variable holding checkbox value. Must be boolean|null.
@@ -12,6 +12,7 @@
  * - ident - Used for identification. Optional.
  * - allowNull - If true, will cycle null value after true and false. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  */
 const currValue = defineModel<boolean | null>({ required: true });
 
@@ -21,13 +22,16 @@ const props = withDefaults(
     ident?: string;
     /** Does this checkbox allow setting null value? */
     allowNull?: boolean;
-    /**  If true, acts as disabled component. Optional, default is false. */
+    /** If true, acts as disabled component. Optional, default is false. */
     disabled?: boolean;
+    /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
+    invalid?: boolean;
   }>(),
   {
     ident: '',
     allowNull: false,
     disabled: false,
+    invalid: false,
   },
 );
 
@@ -37,6 +41,8 @@ const props = withDefaults(
 const cycle = () => {
   if (props.disabled) return;
 
+  // Order of cycle: true -> false -> null -> true -> etc.
+  // Null is skipped if not allowed.
   switch (currValue.value) {
     case null:
       currValue.value = true;
@@ -51,19 +57,39 @@ const cycle = () => {
 };
 
 /**
+ * Handle keyboard events for accessibility.
+ * Space and Enter activate the checkbox.
+ */
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === ' ' || event.key === 'Enter') {
+    event.preventDefault();
+    cycle();
+  }
+};
+
+/**
  * What should be shown as checkbox value?
  * @returns Checkbox character.
  */
 const showSymbol = (): string => {
   if (currValue.value === null) return '◼';
   if (currValue.value) return '✔';
-  return ' ';
+  return '';
 };
 </script>
 
 <template>
   <div class="checkbox-wrapper" :data-testid="`checkbox_${ident}`">
-    <div class="checkbox" :class="{ disabled: disabled }" @click="cycle()">
+    <div
+      class="checkbox"
+      :class="{ disabled: disabled, err: invalid }"
+      role="checkbox"
+      :aria-checked="currValue === null ? 'mixed' : currValue"
+      :aria-disabled="disabled || undefined"
+      :tabindex="disabled ? -1 : 0"
+      @click="cycle()"
+      @keydown="handleKeydown"
+    >
       <div class="checkbox-inside">
         {{ showSymbol() }}
       </div>
@@ -95,20 +121,21 @@ const showSymbol = (): string => {
   user-select: none;
 }
 
-.checkbox:hover {
-  color: var(--checkbox-hover-color);
-  background-color: var(--checkbox-hover-background);
-}
-
-.checkbox-wrapper.err .checkbox {
+.checkbox.err {
   color: var(--checkbox-err-color);
   background: var(--checkbox-err-background);
   border: var(--checkbox-err-border);
 }
 
+.checkbox:hover {
+  color: var(--checkbox-hover-color);
+  background-color: var(--checkbox-hover-background);
+}
+
 .checkbox.disabled {
   color: var(--checkbox-disabled-color);
   background: var(--checkbox-disabled-background);
+  border: var(--checkbox-border); /* Override in case both err and disabled are present. */
 
   cursor: default;
 }

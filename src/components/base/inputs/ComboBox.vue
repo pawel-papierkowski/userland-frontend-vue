@@ -1,21 +1,23 @@
 <script setup lang="ts">
-/**
- * We need to use custom combobox implementation because for some reason <select> and <option>
- * have very bad CSS support for dropdown list for all browsers.
+/** Custom combobox implementation. Needed because <select> and <option> have very bad CSS support for dropdown list
+ * for all browsers.
  *
  * Component uses CSS variables to set up look&feel of combobox. Variables:
- *   --combobox-border: Border of combobox field.
- *   --combobox-background: Background color of combobox field.
  *   --combobox-color: Text color of combobox field.
- *   --combobox-background-hover: Background color of combobox field when mouse hovers over it.
- *   --combobox-color-hover: Text color of combobox field when mouse hovers over it.
+ *   --combobox-background: Background color of combobox field.
+ *   --combobox-border: Border of combobox field.
+ *   --combobox-border-radius: Rounding of border of combobox field.
+ *   --combobox-hover-color: Text color of combobox field when mouse hovers over it.
+ *   --combobox-hover-background: Background color of combobox field when mouse hovers over it.
  *   --combobox-option-border: Border of dropdown list.
  *   --combobox-option-background: Color of background.
  *   --combobox-option-background-hover: Background color of dropdown option when mouse hovers over it.
  *   --combobox-option-color-hover: Text color of dropdown option when mouse hovers over it.
+ * See /styles/var/components-custom.css for full list.
  *
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
+ * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
  *
  * Models:
@@ -25,6 +27,7 @@
  * - ident - Used for identification. Optional.
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
  * - placeholder - Translated text to use if nothing is selected and for 'unselected' option.
  *
@@ -47,6 +50,8 @@ const props = withDefaults(
     options: (number | string | null)[];
     /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
     disabled?: boolean;
+    /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
+    invalid?: boolean;
     /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
     langPrefix?: string;
     /** Translation key to use if nothing is selected and for 'unselected' option. */
@@ -55,6 +60,7 @@ const props = withDefaults(
   {
     ident: '',
     disabled: false,
+    invalid: false,
     langPrefix: '',
     placeholder: 'combobox.placeholder',
   },
@@ -108,7 +114,7 @@ const showOption = (option: number | string | null): number | string | null => {
 </script>
 
 <template>
-  <div class="combobox" :class="{ disabled: disabled }" ref="combobox" tabindex="0" @blur="isOpen = false">
+  <div class="combobox" :class="{ disabled: disabled, err: invalid }" ref="combobox" tabindex="0" @blur="isOpen = false">
     <div class="combobox-selected" @click="openOptions()">
       <span class="combobox-selected-text">{{ selOption ? showOption(selOption) : t(placeholder) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>

@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import { defDuration } from '@/stores/messages.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -76,7 +77,7 @@ const convertToReq = (form: UserPasswordResetLinkForm): UserPasswordResetLinkReq
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.passwordResetStart.msg.success.title', 'user.passwordResetStart.msg.success.content');
+  AppMessager.successT('user.passwordResetStart.msg.success.title', 'user.passwordResetStart.msg.success.content', defDuration * 2);
   log.debug('Successfully sent password reset request as user "', form.email, '".');
 };
 

@@ -3,7 +3,8 @@
  * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
  *
  * Features:
- * - Can pick date, time or both date and time.
+ * - Can select date, time or both date and time.
+ * - Can disable or mark as invalid.
  * - Accept null (not set) value.
  * - Input fields are not editable. You set value via picker panels.
  *
@@ -14,6 +15,7 @@
  * - ident - Used for identification. Optional.
  * - mode - Mode of operation. Optional, default is 'datetime'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - showWeeks - If true, show weeks. Optional, default is false.
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
@@ -32,6 +34,8 @@ const props = withDefaults(
     mode?: 'date' | 'time' | 'datetime';
     /** If true, acts as disabled component (panels do not show). Optional, default is false. */
     disabled?: boolean;
+    /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
+    invalid?: boolean;
     /** If true, show weeks. Optional, default is false. */
     showWeeks?: boolean;
     /** If not null, defines earliest allowed date. Optional, default is null. */
@@ -43,6 +47,7 @@ const props = withDefaults(
     ident: '',
     mode: 'datetime',
     disabled: false,
+    invalid: false,
     showWeeks: false,
     dateTimeMin: null,
     dateTimeMax: null,
@@ -57,6 +62,7 @@ const props = withDefaults(
       v-model="currDateTime"
       :ident="ident"
       :disabled="disabled"
+      :invalid="invalid"
       :showWeeks="showWeeks"
       :dateTimeMin="dateTimeMin"
       :dateTimeMax="dateTimeMax"
@@ -67,6 +73,7 @@ const props = withDefaults(
       v-model="currDateTime"
       :ident="ident"
       :disabled="disabled"
+      :invalid="invalid"
     />
   </div>
 </template>

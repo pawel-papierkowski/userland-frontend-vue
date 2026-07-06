@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import { defDuration } from '@/stores/messages.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -81,7 +82,7 @@ const convertToReq = (form: UserEmailChangeLinkForm): UserEmailChangeLinkReq => 
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.emailChangeStart.msg.success.title', 'user.emailChangeStart.msg.success.content');
+  AppMessager.successT('user.emailChangeStart.msg.success.title', 'user.emailChangeStart.msg.success.content', defDuration * 2);
   log.debug('Successfully sent email change request.');
 };
 

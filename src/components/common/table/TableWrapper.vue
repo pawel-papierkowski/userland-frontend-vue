@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Table wrapper.
+/** Table wrapper that sets up layout of table and related panels like filter or editor.
  *
  * Slots:
  * - filterPanel - Where filter panel goes.

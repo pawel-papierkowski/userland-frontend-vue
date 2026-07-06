@@ -11,6 +11,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import { defDuration } from '@/stores/messages.ts';
 import type { UserEmailChangeReq } from '@/code/data/features/user/user-type';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
@@ -59,7 +60,7 @@ const callEmailChangeApi = async () => {
     await backendApiUser.emailChangeConfirm(payload);
 
     log.debug('Changed email address using token:', tokenStr);
-    AppMessager.successT('user.emailChange.msg.success.title', 'user.emailChange.msg.success.content');
+    AppMessager.successT('user.emailChange.msg.success.title', 'user.emailChange.msg.success.content', defDuration * 2);
 
     // Force user to log in again. Why? Previous token stopped working, since email serves as username in both JWT and
     // internal Spring handling on backend.

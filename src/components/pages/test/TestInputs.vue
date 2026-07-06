@@ -27,13 +27,13 @@ const form: Ref<TestAreaInputForm> = ref({
 
 //
 
-/** Compute input class. */
-const inputClass = computed(() => {
-   return form.value.mode === EnInputMode.Error ? 'err' : '';
-});
 /** Compute disabled. */
 const disabled = computed(() => {
    return form.value.mode === EnInputMode.Disabled;
+});
+/** Compute invalid. */
+const invalid = computed(() => {
+   return form.value.mode === EnInputMode.Error;
 });
 
 //
@@ -64,39 +64,40 @@ const show = (value: string|boolean|null): string => {
       <div class="form-subform-custom">
         <label for="inputText">{{ t('testArea.inputs.inputText') }}:</label>
         <input id="inputText" type="text" v-model="form.inputText" autocomplete="off"
-          :class="inputClass" :disabled="disabled" />
+          placeholder="Enter some text"
+          :class="{ err: invalid }" :disabled="disabled" />
         <div>{{ show(form.inputText) }}</div>
 
         <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
         <ComboBox id="testCombobox" ident="testCombobox" v-model="form.comboBox" :options="enTestComboBox"
           langPrefix="tech.user.status" placeholder="tech.user.status.null"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(form.comboBox) }}</div>
 
         <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
         <CheckBox id="testCheckbox" ident="testCheckbox" v-model="form.checkbox" :allowNull="true"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(form.checkbox) }}</div>
 
         <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
         <RadioBox id="testRadiobox" ident="testRadiobox" v-model="form.radiobox" :options="enTestRadioBox"
            langPrefix="test.radioBox"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(form.radiobox) }}</div>
 
         <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
         <DateTimePicker id="testDateTimePicker" ident="testDateTimePicker" v-model="form.dateTime" mode="datetime"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
         <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
         <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date" :showWeeks="true"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 
         <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
         <DateTimePicker id="testTimePicker" ident="testTimePicker" v-model="form.time" mode="time"
-          :class="inputClass" :disabled="disabled" />
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.time)) }}</div>
       </div>
     </div>

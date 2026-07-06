@@ -8,6 +8,7 @@ import { useI18n } from 'vue-i18n';
 
 import backendApi from '@/services/api-common.ts';
 import backendApiUser from '@/services/features/api-users.ts';
+import { defDuration } from '@/stores/messages.ts';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
@@ -97,7 +98,7 @@ const convertToReq = (form: UserPasswordResetForm): UserPasswordResetReq => {
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.passwordReset.msg.success.title', 'user.passwordReset.msg.success.content');
+  AppMessager.successT('user.passwordReset.msg.success.title', 'user.passwordReset.msg.success.content', defDuration * 2);
   log.debug('Successfully set new password.');
 };
 

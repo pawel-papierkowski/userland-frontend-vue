@@ -14,6 +14,8 @@ import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
+import CheckBox from '@/components/base/inputs/CheckBox.vue';
+
 const log = useLogger();
 const router = useRouter();
 const { t, locale } = useI18n();
@@ -184,14 +186,7 @@ const getInputClass = (msgError: string | null): string => {
 
         <div class="form-entry-inline">
           <label for="isAdmin">{{ t('user.registration.form.isAdmin') }}:</label>
-          <input
-            id="isAdmin"
-            data-testid="isAdmin"
-            type="checkbox"
-            v-model="form.isAdmin"
-            required
-            autocomplete="new-password"
-          />
+          <CheckBox id="isAdmin" ident="isAdmin" v-model="form.isAdmin" />
         </div>
 
         <div class="onpage-msg info" v-html="t('test.notify')" />

@@ -2,6 +2,12 @@
 /** Dedicated time picker. Do not use it directly. Use DateTimePicker with attribute mode="time".
  * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
  *
+ * Features:
+ * - Can select time.
+ * - Can disable or mark as invalid.
+ * - Accept null (not set) value.
+ * - Input field is not editable. You set value via clock panel.
+ *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
  *   You are one to adjust result to timezone etc. when setting or after getting result.
@@ -9,6 +15,7 @@
  * Properties:
  * - ident - Used for identification. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
+ * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  */
 import { ref, computed, nextTick, watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
@@ -27,10 +34,13 @@ const props = withDefaults(
     ident?: string;
     /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
     disabled?: boolean;
+    /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
+    invalid?: boolean;
   }>(),
   {
     ident: '',
     disabled: false,
+    invalid: false,
   },
 );
 
@@ -187,7 +197,7 @@ const hidePanel = () => {
 </script>
 
 <template>
-  <div class="picker" ref="pickerRef">
+  <div class="picker" :class="{ err: invalid }" ref="pickerRef">
     <input
       :id="`timepicker_${ident}`"
       :data-testid="`timepicker_${ident}`"
@@ -263,7 +273,7 @@ const hidePanel = () => {
   cursor: default;
 }
 
-.picker-general.err .picker-input-time {
+.picker.err .picker-input-time {
   color: var(--input-err-color);
   background: var(--input-err-background);
   border: var(--input-err-border);
@@ -286,6 +296,10 @@ const hidePanel = () => {
   box-shadow: var(--datetimepicker-clock-shadow);
 
   z-index: 1000;
+}
+
+.picker.err .clock-container {
+  background: var(--datetimepicker-clock-err-background);
 }
 
 .clock-columns {
