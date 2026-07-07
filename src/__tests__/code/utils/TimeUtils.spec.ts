@@ -2,9 +2,25 @@ import { describe, it, expect } from 'vitest';
 
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-/** Tests TimeUtils class. */
+/** Tests TimeUtils class. Note: test environment is configured for Polish timezone. */
 describe('TimeUtils', () => {
   describe('Timezone handling', () => {
+    it('Handle first day of year', () => {
+      const dateUtc = '2025-01-01T00:00:00.000';
+
+      const actualDate = TimeUtils.zoned(dateUtc);
+      const expectedDate = '2025-01-01 01:00:00';
+      expect(actualDate).toBe(expectedDate);
+    });
+
+    it('Handle last day of year', () => {
+      const dateUtc = '2025-12-31T23:59:59.999';
+
+      const actualDate = TimeUtils.zoned(dateUtc);
+      const expectedDate = '2026-01-01 00:59:59';
+      expect(actualDate).toBe(expectedDate);
+    });
+
     it('Handle winter time', () => {
       const dateUtc = '2025-02-02T12:00:00.345';
 
@@ -85,11 +101,28 @@ describe('TimeUtils', () => {
 
   describe('Getting week number', () => {
     it('from date', () => {
-      const result1 = TimeUtils.getWeekNumberFromDate(new Date(2026, 11, 22));
-      expect(result1).toBe(52);
-      const result2 = TimeUtils.getWeekNumber(2026, 11, 22);
-      expect(result2).toBe(52);
+      // First day of year.
+      const result1a = TimeUtils.getWeekNumberFromDate(new Date(Date.UTC(2026, 0, 1)));
+      expect(result1a).toBe(1);
+      const result1b = TimeUtils.getWeekNumberFromDate(new Date(2026, 0, 1));
+      expect(result1b).toBe(53); // converted internally to UTC that is hour earlier, so in 2025
+      const result1c = TimeUtils.getWeekNumber(2026, 0, 1);
+      expect(result1c).toBe(1);
+
+      // Date in middle of year.
+      const result2a = TimeUtils.getWeekNumberFromDate(new Date(2026, 4, 22));
+      expect(result2a).toBe(21);
+      const result2b = TimeUtils.getWeekNumber(2026, 4, 22);
+      expect(result2b).toBe(21);
+
+      // Last day of year.
+      const result3a = TimeUtils.getWeekNumberFromDate(new Date(2026, 11, 31));
+      expect(result3a).toBe(53);
+      const result3b = TimeUtils.getWeekNumber(2026, 11, 31);
+      expect(result3b).toBe(53);
     });
+
+    //
 
     it('end of week matches end of month', () => {
       // May/June
@@ -131,6 +164,14 @@ describe('TimeUtils', () => {
       expect(result1).toBe(53);
       const result2 = TimeUtils.getWeekNumber(2026, 0, 1);
       expect(result2).toBe(1);
+      const result3 = TimeUtils.getWeekNumber(2026, 0, 2);
+      expect(result3).toBe(1);
+      const result4 = TimeUtils.getWeekNumber(2026, 0, 3);
+      expect(result4).toBe(1);
+      const result5 = TimeUtils.getWeekNumber(2026, 0, 4);
+      expect(result5).toBe(1);
+      const result6 = TimeUtils.getWeekNumber(2026, 0, 5);
+      expect(result6).toBe(2);
     });
 
     it('entire week that is between years 2026/2027', () => {

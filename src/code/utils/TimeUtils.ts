@@ -18,7 +18,7 @@ export class TimeUtils {
     // JS automatically applies the offset that was valid ON THAT DATE.
     // If date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
     const YYYY = date.getFullYear();
-    const MM = this.pad(date.getUTCMonth() + 1);
+    const MM = this.pad(date.getMonth() + 1);
     const DD = this.pad(date.getDate());
     const hh = this.pad(date.getHours());
     const mm = this.pad(date.getMinutes());
@@ -126,7 +126,7 @@ export class TimeUtils {
    * @returns Count of days in given year and month.
    */
   public static getUTCDaysInMonth(year: number, month: number): number {
-    return new Date(year, month + 1, 0).getUTCDate();
+    return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
   }
 
   /**
@@ -136,7 +136,7 @@ export class TimeUtils {
    * @returns Weekday as number. 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
    */
   public static getUTCFirstDayOfMonth(year: number, month: number): number {
-    const day = new Date(year, month, 1).getUTCDay();
+    const day = new Date(Date.UTC(year, month, 1)).getUTCDay();
     return (day + 6) % 7;
   }
 
@@ -148,11 +148,12 @@ export class TimeUtils {
    * @returns Week number.
    */
   public static getWeekNumberFromDate(date: Date): number {
-    return TimeUtils.getWeekNumber(date.getFullYear(), date.getMonth(), date.getDate());
+    //return TimeUtils.getWeekNumber(date.getFullYear(), date.getMonth(), date.getDate());
+    return TimeUtils.getWeekNumber(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
   }
 
   /**
-   * Calculates week number.
+   * Calculates week number. Date is UTC.
    * Note: ISO 8601 sometimes gives results that look wrong for edge case "week that belongs to previous and next year", so we don't use that.
    * Used algo always consider first days of January until Sunday as 1st week of that year.
    * @param year Year.
@@ -173,12 +174,7 @@ export class TimeUtils {
     const jan1Dow = jan1.getUTCDay() || 7;
     const week1Start = new Date(jan1);
     week1Start.setUTCDate(jan1.getUTCDate() - (jan1Dow - 1));
-
-    if (currWeekStart < week1Start) {
-      // This week started before Jan 1's week, so it belongs to the previous year.
-      return TimeUtils.getWeekNumber(year-1, month, day);
-    }
-
+    
     return Math.floor((currWeekStart.getTime() - week1Start.getTime()) / (7 * 86400000)) + 1;
   }
 

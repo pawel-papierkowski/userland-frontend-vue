@@ -173,7 +173,7 @@ const calcDays = (): CalendarCell[] => {
   let ix = 0;
 
   // Padding for previous month. Note that if month has first day on monday, entire previous week will be shown.
-  for (let i = firstDay; i >= 0; i--) {
+  for (let i = firstDay - 1; i >= 0; i--) {
     const d = new Date(Date.UTC(year, month, -i));
     days.push({
       testid: `datepicker_${props.ident}_${ix}`,
@@ -187,7 +187,7 @@ const calcDays = (): CalendarCell[] => {
   }
 
   // Current month days.
-  for (let i = 1; i <= daysInMonth + 1; i++) {
+  for (let i = 1; i <= daysInMonth; i++) {
     days.push({
       testid: `datepicker_${props.ident}_${ix}`,
       type: EnCalendarCellType.Date,

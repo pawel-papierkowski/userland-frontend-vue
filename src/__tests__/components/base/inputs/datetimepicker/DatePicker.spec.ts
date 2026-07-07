@@ -80,6 +80,7 @@ function verifyDays(datePicker: VueWrapper, ident: string, calendarState?: { day
   if (!calendarState) return;
 
   const calendarSize = 42; // Calendar always have 42 cells (6 rows * 7 days).
+  const calendarHeader = datePicker.find('.header-title').text();
   const dayElements = datePicker.findAll('.day');
   expect(dayElements).toHaveLength(calendarSize);
   expect(calendarState.length).toBe(calendarSize);
@@ -88,9 +89,9 @@ function verifyDays(datePicker: VueWrapper, ident: string, calendarState?: { day
     const dayElement = datePicker.find(`[data-testid="datepicker_${ident}_${i}"]`);
     const calendarDay: { day: string; class: string[] } | null = calendarState[i] || null;
 
-    expect(dayElement.exists(), `Day elem ix=${i} should exist`).toBe(true);
-    expect(dayElement.text(), `Day elem ix=${i} text is wrong`).toEqual(calendarDay?.day);
-    expect(dayElement.classes(), `Day elem ix=${i} classes are wrong`).toEqual(calendarDay?.class);
+    expect(dayElement.exists(), `Day elem ix=${i} should exist for ${calendarHeader}`).toBe(true);
+    expect(dayElement.text(), `Day elem ix=${i} text is wrong for ${calendarHeader}`).toEqual(calendarDay?.day);
+    expect(dayElement.classes(), `Day elem ix=${i} classes are wrong for ${calendarHeader}`).toEqual(calendarDay?.class);
   }
 }
 
@@ -255,12 +256,12 @@ describe('DatePicker', () => {
       // Assert: Ensure panel is present.
       expect(datePicker.find('.calendar-container').exists()).toBe(true);
 
-      // Arrange: Data for next assert.
-      const weekNums1: string[] = ['48', '49', '50', '51', '52', '53'];
+      // Arrange: Data for next assert. Note last week of December (simultaneously first week of January) is 53 here.
+      const weekNums1: string[] = ['49', '50', '51', '52', '53', '2'];
       // Assert: Panel shows calendar with correct week numbers.
       verifyPanel(datePicker, '', '2025 December', undefined, weekNums1);
 
-      // Act: move one month forward. Now it is 2026-01.
+      // Act: move one month forward.
       await datePicker.find('[data-testid="datepicker__monthPlus"]').trigger('click');
       await nextTick();
 
@@ -318,13 +319,6 @@ describe('DatePicker', () => {
 
       // Arrange: Data for next assert.
       const calendarState: { day: string; class: string[] }[] = [
-        { day: '25', class: ['day', 'not-current'] },
-        { day: '26', class: ['day', 'not-current'] },
-        { day: '27', class: ['day', 'not-current'] },
-        { day: '28', class: ['day', 'not-current'] },
-        { day: '29', class: ['day', 'not-current'] },
-        { day: '30', class: ['day', 'not-current'] },
-        { day: '31', class: ['day', 'not-current'] },
         { day: '1', class: ['day'] },
         { day: '2', class: ['day'] },
         { day: '3', class: ['day'] },
@@ -360,6 +354,13 @@ describe('DatePicker', () => {
         { day: '3', class: ['day', 'not-current', 'today'] },
         { day: '4', class: ['day', 'not-current'] },
         { day: '5', class: ['day', 'not-current'] },
+        { day: '6', class: ['day', 'not-current'] },
+        { day: '7', class: ['day', 'not-current'] },
+        { day: '8', class: ['day', 'not-current'] },
+        { day: '9', class: ['day', 'not-current'] },
+        { day: '10', class: ['day', 'not-current'] },
+        { day: '11', class: ['day', 'not-current'] },
+        { day: '12', class: ['day', 'not-current'] },
       ];
       // Assert: Panel shows calendar with all days for given month (June).
       verifyPanel(datePicker, '', '2026 June', calendarState);
