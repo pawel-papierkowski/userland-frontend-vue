@@ -197,12 +197,12 @@ const hidePanel = () => {
 </script>
 
 <template>
-  <div class="picker" :class="{ err: invalid }" ref="pickerRef">
+  <div class="picker-time" ref="pickerRef">
     <input type="text"
       :id="`timepicker_${ident}`"
       :data-testid="`timepicker_${ident}`"
       class="picker-input-time"
-      :class="{ disabled: disabled }"
+      :class="{ disabled: disabled, err: invalid }"
       :value="displayTimeValue"
       :placeholder="placeholderTimeValue"
       :disabled="disabled"
@@ -249,7 +249,7 @@ const hidePanel = () => {
 </template>
 
 <style scoped>
-.picker {
+.picker-time {
   display: inline-block;
   position: relative;
   width: var(--datetimepicker-time-width);

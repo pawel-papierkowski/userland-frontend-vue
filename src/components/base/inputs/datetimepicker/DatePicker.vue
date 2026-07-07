@@ -364,12 +364,12 @@ const hidePanel = () => {
 </script>
 
 <template>
-  <div class="picker" :class="{ err: invalid }" ref="pickerRef">
+  <div class="picker-date" ref="pickerRef">
     <input type="text"
       :id="`datepicker_${ident}`"
       :data-testid="`datepicker_${ident}`"
       class="picker-input-date"
-      :class="{ disabled: disabled }"
+      :class="{ disabled: disabled, err: invalid }"
       :value="displayDateValue"
       :placeholder="placeholderDateValue"
       :disabled="disabled"
@@ -414,7 +414,7 @@ const hidePanel = () => {
 </template>
 
 <style scoped>
-.picker {
+.picker-date {
   display: inline-block;
   position: relative;
   width: var(--datetimepicker-date-width);
