@@ -32,11 +32,20 @@ function createComponent(
   return component;
 }
 
-/** Options for test radiobox. */
+/**
+ * Options for test radiobox.
+ * @returns Array of options.
+ */
 function createOptions(): (number | string | null)[] {
   return [null, 'one', 'two', 'three'];
 }
 
+/**
+ * Test state of all option elements.
+ * @param optionElements Option elements.
+ * @param expectedCount Expected count of option elements.
+ * @param expectedMark Expected index of mark (option element that is selected).
+ */
 function testOptions(optionElements: DOMWrapper<Element>[], expectedCount: number, expectedMark: number) {
   expect(optionElements).toHaveLength(expectedCount);
 
@@ -51,7 +60,7 @@ function testOptions(optionElements: DOMWrapper<Element>[], expectedCount: numbe
 /** Tests of RadioBox component. */
 describe('RadioBox', () => {
   describe('general tests', () => {
-    it('has correct presentation', async () => {
+    it('shows correctly translated options with langPrefix', async () => {
       // Check if radiobox is constructed correctly.
 
       // Arrange&Act: set up radiobox.
@@ -79,6 +88,20 @@ describe('RadioBox', () => {
       expect(optionElements[3]?.find('.radiobox-label').text()).toBe('Option Three');
       expect(optionElements[3]?.find('.radiobox-inside').classes()).toEqual(['radiobox-inside']);
       expect(optionElements[3]?.attributes('data-testid')).toBe('radiobox_someRadioBox_3');
+    });
+
+    it('shows raw options without langPrefix', async () => {
+      // Ensure options are shown as raw values when no langPrefix is provided.
+
+      // Arrange&Act: Set up radiobox without langPrefix.
+      const radioBox = createComponent(null, '', createOptions(), false, false);
+
+      // Assert: Options show raw values (null renders as empty string in Vue templates).
+      const optionElements = radioBox.findAll('.radiobox-option');
+      expect(optionElements[0]?.find('.radiobox-label').text()).toBe('');
+      expect(optionElements[1]?.find('.radiobox-label').text()).toBe('one');
+      expect(optionElements[2]?.find('.radiobox-label').text()).toBe('two');
+      expect(optionElements[3]?.find('.radiobox-label').text()).toBe('three');
     });
 
     it('is correctly selected', async () => {
@@ -121,14 +144,14 @@ describe('RadioBox', () => {
       // Assert: Correct option is marked as selected (same as before click).
       testOptions(optionElements, 4, 0); // user tried to set 2
 
-      // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
+      // Assert: CSS classes are correctly assigned, ensuring component is visually disabled.
       expect(radioBox.find('.radiobox').classes()).toStrictEqual(['radiobox', 'disabled']);
     });
 
     it('is invalid', async () => {
       // Ensure radiobox marked as invalid is visually distinct and fully functional.
 
-      // Arrange: Set up disabled radiobox.
+      // Arrange: Set up invalid radiobox.
       const radioBox = createComponent('three', '', createOptions(), false, true, 'test.radioBox');
 
       // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
