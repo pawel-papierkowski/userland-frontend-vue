@@ -365,10 +365,9 @@ const hidePanel = () => {
 
 <template>
   <div class="picker" :class="{ err: invalid }" ref="pickerRef">
-    <input
+    <input type="text"
       :id="`datepicker_${ident}`"
       :data-testid="`datepicker_${ident}`"
-      type="text"
       class="picker-input-date"
       :class="{ disabled: disabled }"
       :value="displayDateValue"
@@ -430,6 +429,11 @@ const hidePanel = () => {
   caret-color: transparent;
   user-select: none;
 }
+.picker-input-date:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 .picker-input-date::selection {
   background: transparent; /** Prevents highlight when you double-click. */
 }

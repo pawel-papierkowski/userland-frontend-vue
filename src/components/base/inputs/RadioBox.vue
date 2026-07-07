@@ -165,10 +165,6 @@ const showOption = (option: number | string | null): number | string | null => {
   cursor: pointer;
 }
 
-.radiobox-option:focus-visible {
-  outline: none;
-}
-
 .radiobox-option:hover .radiobox-circle {
   color: var(--radiobox-hover-color);
   background-color: var(--radiobox-hover-background);

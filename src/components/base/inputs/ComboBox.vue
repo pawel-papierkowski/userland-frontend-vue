@@ -243,10 +243,6 @@ const showOption = (option: number | string | null): number | string | null => {
   background: var(--combobox-disabled-background);
 }
 
-.combobox:focus-visible {
-  outline: none;
-}
-
 /**/
 
 .combobox-selected {

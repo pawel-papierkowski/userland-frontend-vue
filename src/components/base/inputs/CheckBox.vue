@@ -14,13 +14,15 @@
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  */
+
+/** Current value of checkbox. */
 const currValue = defineModel<boolean | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
+    /** Used for identification. Optional. */
     ident?: string;
-    /** Does this checkbox allow setting null value? */
+    /** Does this checkbox allow setting null value? Optional, default is false. */
     allowNull?: boolean;
     /** If true, acts as disabled component. Optional, default is false. */
     disabled?: boolean;
@@ -138,10 +140,6 @@ const showSymbol = (): string => {
   border: var(--checkbox-border); /* Override in case both err and disabled are present. */
 
   cursor: default;
-}
-
-.checkbox:focus-visible {
-  outline: none;
 }
 
 /**/

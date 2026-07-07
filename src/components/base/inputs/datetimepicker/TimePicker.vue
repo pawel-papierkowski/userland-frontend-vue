@@ -198,10 +198,9 @@ const hidePanel = () => {
 
 <template>
   <div class="picker" :class="{ err: invalid }" ref="pickerRef">
-    <input
+    <input type="text"
       :id="`timepicker_${ident}`"
       :data-testid="`timepicker_${ident}`"
-      type="text"
       class="picker-input-time"
       :class="{ disabled: disabled }"
       :value="displayTimeValue"
@@ -265,6 +264,11 @@ const hidePanel = () => {
   caret-color: transparent;
   user-select: none;
 }
+.picker-input-time:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 .picker-input-time::selection {
   background: transparent; /** Prevents highlight when you double-click. */
 }

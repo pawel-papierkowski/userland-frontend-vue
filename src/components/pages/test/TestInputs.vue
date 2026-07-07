@@ -7,6 +7,7 @@ import { enTestComboBox, enTestRadioBox, EnInputMode, enModeOptions } from '@/co
 import type { TestAreaInputForm } from '@/code/data/other/test-area.ts';
 
 import { TimeUtils } from '@/code/utils/TimeUtils';
+import TextBox from '@/components/base/inputs/TextBox.vue';
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import CheckBox from '@/components/base/inputs/CheckBox.vue';
 import RadioBox from '@/components/base/inputs/RadioBox.vue';
@@ -63,9 +64,9 @@ const show = (value: string|boolean|null): string => {
 
       <div class="form-subform-custom">
         <label for="inputText">{{ t('testArea.inputs.inputText') }}:</label>
-        <input id="inputText" type="text" v-model="form.inputText" autocomplete="off"
-          placeholder="Enter some text"
-          :class="{ err: invalid }" :disabled="disabled" />
+        <TextBox id="testCombobox" ident="testTextbox" v-model="form.inputText"
+          autocomplete="off" placeholder="Enter some text"
+          :disabled="disabled" :invalid="invalid" />
         <div>{{ show(form.inputText) }}</div>
 
         <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>

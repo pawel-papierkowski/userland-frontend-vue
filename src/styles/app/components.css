@@ -1,5 +1,12 @@
 /*** Styles specific to this application: components. ***/
 
+/* General. */
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 /* Inputs. */
 
 input {
@@ -12,8 +19,9 @@ input {
   border-radius: var(--input-border-radius);
 }
 
-input:focus-visible {
+input:focus-visible { /* Acceptable as cursor is visible. */
   outline: none;
+  outline-offset: none;
 }
 
 input:hover {
