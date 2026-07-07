@@ -97,6 +97,9 @@ describe('TimePicker', () => {
       // Assert: model has correct value.
       const model = timePicker.props('modelValue') as Date | null;
       expect(model).toBe(null);
+
+      // Assert: TimePicker has correct placeholder value.
+      expect(timePicker.find('input').attributes('placeholder')).toBe('🕜 hh:mm');
     });
 
     it('has correct presentation when null and with panel opened', async () => {

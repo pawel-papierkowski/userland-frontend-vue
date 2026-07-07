@@ -138,6 +138,9 @@ describe('DatePicker', () => {
       // Assert: model has correct value.
       const model = datePicker.props('modelValue') as Date | null;
       expect(model).toBe(null);
+
+      // Assert: DatePicker has correct placeholder value.
+      expect(datePicker.find('input').attributes('placeholder')).toBe('📅 YYYY-MM-DD');
     });
 
     it('has correct presentation when null and with panel opened', async () => {
