@@ -14,6 +14,7 @@
  *
  * Properties:
  * - ident - Used for identification. Optional.
+ * - allowNull - If true, allow deselecting date. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - showWeeks - If true, show week numbers. Optional, default is false.
@@ -37,6 +38,8 @@ const props = withDefaults(
   defineProps<{
     /** Used for identification. */
     ident?: string;
+    /** If true, allow deselecting date. Optional, default is false. */
+    allowNull?: boolean;
     /** If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
@@ -50,6 +53,7 @@ const props = withDefaults(
   }>(),
   {
     ident: '',
+    allowNull: false,
     disabled: false,
     invalid: false,
     showWeeks: false,
@@ -278,8 +282,9 @@ const selectCell = (calendarCell: CalendarCell) => {
   if (!canPick(newDate)) return;
 
   if (TimeUtils.formatUTCDate(selDateTime.value) === TimeUtils.formatUTCDate(newDate)) {
-    // Deselect date.
-    selDateTime.value = null;
+    // Selected same date again, deselect date.
+    if (props.allowNull) selDateTime.value = null;
+    else return;
   } else {
     // Select new date without touching time.
     const prevDateTime = selDateTime.value;
@@ -291,6 +296,7 @@ const selectCell = (calendarCell: CalendarCell) => {
     }
     selDateTime.value = newDate;
   }
+  // Hide calendar panel.
   isCalendarVisible.value = false;
 };
 

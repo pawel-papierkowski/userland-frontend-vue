@@ -14,6 +14,7 @@
  * Properties:
  * - ident - Used for identification. Optional.
  * - mode - Mode of operation. Optional, default is 'datetime'.
+ * - allowNull - If true, allow deselecting date. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - showWeeks - If true, show weeks. Optional, default is false.
@@ -32,6 +33,8 @@ const props = withDefaults(
     ident?: string;
     /** Mode of operation. Optional, default is datetime. */
     mode?: 'date' | 'time' | 'datetime';
+    /** If true, allow deselecting date. Optional, default is false. */
+    allowNull?: boolean;
     /** If true, acts as disabled component (panels do not show). Optional, default is false. */
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
@@ -46,6 +49,7 @@ const props = withDefaults(
   {
     ident: '',
     mode: 'datetime',
+    allowNull: false,
     disabled: false,
     invalid: false,
     showWeeks: false,
@@ -61,6 +65,7 @@ const props = withDefaults(
       v-if="mode === 'datetime' || mode === 'date'"
       v-model="currDateTime"
       :ident="ident"
+      :allowNull="allowNull"
       :disabled="disabled"
       :invalid="invalid"
       :showWeeks="showWeeks"
@@ -72,6 +77,7 @@ const props = withDefaults(
       v-if="mode === 'datetime' || mode === 'time'"
       v-model="currDateTime"
       :ident="ident"
+      :allowNull="allowNull"
       :disabled="disabled"
       :invalid="invalid"
     />

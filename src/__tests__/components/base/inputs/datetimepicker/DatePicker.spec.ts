@@ -6,12 +6,24 @@ import i18n from '@/code/lang/i18n.ts';
 
 import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mockOnClickOutside = vi.hoisted(() => vi.fn<(...args: any[]) => any>());
+
+vi.mock('@vueuse/core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@vueuse/core')>();
+  return {
+    ...actual,
+    onClickOutside: mockOnClickOutside,
+  };
+});
+
 //
 
 /** Convenience function to create component. */
 function createComponent(
   modelValue: Date | null,
   ident: string,
+  allowNull: boolean,
   disabled: boolean,
   invalid: boolean,
   showWeeks: boolean,
@@ -25,6 +37,7 @@ function createComponent(
     props: {
       modelValue,
       ident,
+      allowNull,
       disabled,
       invalid,
       showWeeks,
@@ -120,6 +133,21 @@ describe('DatePicker', () => {
   //
 
   describe('general tests', () => {
+    it('registers onClickOutside on mount', () => {
+      // Ensure the component wires up VueUse's onClickOutside on mount.
+      // Note: The actual DOM event cannot be reliably tested in jsdom environment,
+      // but the hidePanel behavior is covered by the "closes panel when disabled" test.
+
+      // Arrange: Reset mock.
+      mockOnClickOutside.mockClear();
+
+      // Act: Create the component.
+      createComponent(null, '', false, false, false, false);
+
+      // Assert: onClickOutside was called once.
+      expect(mockOnClickOutside).toHaveBeenCalledOnce();
+    });
+
     it('has correct presentation when null in general', async () => {
       // Ensures component looks correct when current value is null.
 
@@ -127,7 +155,7 @@ describe('DatePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Act: Create the component.
-      const datePicker = createComponent(null, '', false, false, false);
+      const datePicker = createComponent(null, '', false, false, false, false);
 
       // Assert: Input is empty.
       expect(datePicker.find('.picker-input-date').attributes('value')).toBeUndefined();
@@ -150,7 +178,7 @@ describe('DatePicker', () => {
       vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
 
       // Act: Create the component.
-      const datePicker = createComponent(null, 'someDatePicker', false, false, false);
+      const datePicker = createComponent(null, 'someDatePicker', false, false, false, false);
 
       // Act: Open calendar panel.
       await datePicker.find('.picker-input-date').trigger('click');
@@ -218,7 +246,7 @@ describe('DatePicker', () => {
       vi.setSystemTime(new Date('2025-12-14T12:10:00Z')); // last weeks of 2025
 
       // Act: Create the component.
-      const datePicker = createComponent(null, '', false, false, true);
+      const datePicker = createComponent(null, '', false, false, false, true);
 
       // Act: Open calendar panel.
       await datePicker.find('.picker-input-date').trigger('click');
@@ -252,7 +280,7 @@ describe('DatePicker', () => {
       const someDate: Date = new Date('2026-05-22T23:50:00Z');
 
       // Act: Create the component.
-      const datePicker = createComponent(someDate, '', false, false, false);
+      const datePicker = createComponent(someDate, '', false, false, false, false);
 
       // Assert: Input is filled.
       expect(datePicker.find('.picker-input-date').attributes('value')).toBe('📅 2026-05-22');
@@ -279,7 +307,7 @@ describe('DatePicker', () => {
       const someDate: Date = new Date('2026-06-15T19:30:00Z');
 
       // Act: Create the component.
-      const datePicker = createComponent(someDate, '', false, false, false);
+      const datePicker = createComponent(someDate, '', false, false, false, false);
 
       // Act: Open calendar panel.
       await datePicker.find('.picker-input-date').trigger('click');
@@ -346,7 +374,7 @@ describe('DatePicker', () => {
       vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
 
       // Act: Create the component.
-      const datePicker = createComponent(null, '', false, false, false);
+      const datePicker = createComponent(null, '', false, false, false, false);
 
       // Act: Open calendar panel.
       await datePicker.find('.picker-input-date').trigger('click');
@@ -387,7 +415,7 @@ describe('DatePicker', () => {
       const maxDate: Date = new Date('2027-01-22T00:00:00Z');
 
       // Act: Create the component.
-      const datePicker = createComponent(someDate, '', false, false, false, minDate, maxDate);
+      const datePicker = createComponent(someDate, '', false, false, false, false, minDate, maxDate);
 
       // Act: Open calendar panel.
       await datePicker.find('.picker-input-date').trigger('click');
@@ -450,6 +478,90 @@ describe('DatePicker', () => {
       verifyPanel(datePicker, '', '2027 January', calendarState);
     });
 
+    it('re-selecting same date deselects date if allowNull is true', async () => {
+      // Ensure clicking the already-selected date still emits an update if allowNull === true. It allows unselecting date.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Act: Create the component.
+      const datePicker = createComponent(null, '', true, false, false, false);
+
+      // Act: Open calendar panel.
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Select day. Now it is 2026-02-18.
+      await datePicker.find('[data-testid="datepicker__10"]').trigger('click');
+      await nextTick();
+
+      // Assert: date&time from component is correct.
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(0)![0] as Date;
+      expect(result.getUTCFullYear()).toBe(2026);
+      expect(result.getUTCMonth()).toBe(1); // reminder that months are 0 indexed
+      expect(result.getUTCDate()).toBe(5);
+      expect(result.getUTCHours()).toBe(0);
+      expect(result.getUTCMinutes()).toBe(0);
+      expect(result.getUTCSeconds()).toBe(0);
+      expect(result.getUTCMilliseconds()).toBe(0);
+
+      // Act: Open calendar panel, as it got hidden after selecting day.
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Select same day again.
+      await datePicker.find('[data-testid="datepicker__10"]').trigger('click');
+      await nextTick();
+
+      // Assert: Second emission. Date was deselected.
+      expect(emitted).toHaveLength(2);
+      const result2 = emitted?.at(-1)![0] as null;
+      expect(result2).toBeNull();
+    });
+
+    it('re-selecting same date does nothing if allowNull is false', async () => {
+      // Ensure clicking the already-selected date does nothing if allowNull === false.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Act: Create the component.
+      const datePicker = createComponent(null, '', false, false, false, false);
+
+      // Act: Open calendar panel.
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Select day. Now it is 2026-02-18.
+      await datePicker.find('[data-testid="datepicker__10"]').trigger('click');
+      await nextTick();
+
+      // Assert: date&time from component is correct.
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(0)![0] as Date;
+      expect(result.getUTCFullYear()).toBe(2026);
+      expect(result.getUTCMonth()).toBe(1); // reminder that months are 0 indexed
+      expect(result.getUTCDate()).toBe(5);
+      expect(result.getUTCHours()).toBe(0);
+      expect(result.getUTCMinutes()).toBe(0);
+      expect(result.getUTCSeconds()).toBe(0);
+      expect(result.getUTCMilliseconds()).toBe(0);
+
+      // Act: Open calendar panel, as it got hidden after selecting day.
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Select same day again.
+      await datePicker.find('[data-testid="datepicker__10"]').trigger('click');
+      await nextTick();
+
+      // Assert: No new emissions generated.
+      expect(emitted).toHaveLength(1);
+    });
+
     //
 
     it('is disabled', async () => {
@@ -460,7 +572,7 @@ describe('DatePicker', () => {
       const someDate: Date = new Date('2026-05-22T23:50:00Z');
 
       // Arrange: Create the component.
-      const datePicker = createComponent(someDate, '', true, false, false);
+      const datePicker = createComponent(someDate, '', false, true, false, false);
 
       // Assert: CSS classes are correctly assigned, ensuring component is visually disabled.
       expect(datePicker.find('.picker-input-date').classes()).toStrictEqual(['picker-input-date', 'disabled']);
@@ -473,6 +585,30 @@ describe('DatePicker', () => {
       expect(datePicker.find('.calendar-container').exists()).toBe(false);
     });
 
+    it('closes panel when disabled while open', async () => {
+      // Ensure the panel closes when the picker is disabled while open.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Arrange: Create the component.
+      const datePicker = createComponent(null, '', false, false, false, false);
+
+      // Act: Open calendar panel.
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Assert: Ensure panel is present.
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+
+      // Act: Set disabled to true.
+      await datePicker.setProps({ disabled: true });
+      await nextTick();
+
+      // Assert: Panel is now closed.
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
     it('is invalid', async () => {
       // Ensure datepicker marked as invalid is visually distinct and fully functional.
 
@@ -481,7 +617,7 @@ describe('DatePicker', () => {
       const someDate: Date = new Date('2026-05-22T00:01:00Z');
 
       // Arrange: Create the component.
-      const datePicker = createComponent(someDate, '', false, true, false);
+      const datePicker = createComponent(someDate, '', false, false, true, false);
 
       // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
       expect(datePicker.find('.picker-input-date').classes()).toStrictEqual(['picker-input-date', 'err']);

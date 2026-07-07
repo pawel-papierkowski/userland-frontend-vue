@@ -87,17 +87,17 @@ const show = (value: string|boolean|null): string => {
         <div>{{ show(form.radiobox) }}</div>
 
         <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
-        <DateTimePicker id="testDateTimePicker" ident="testDateTimePicker" v-model="form.dateTime" mode="datetime"
+        <DateTimePicker id="testDateTimePicker" ident="testDateTimePicker" v-model="form.dateTime" mode="datetime" :allowNull="true"
           :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
         <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
-        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date" :showWeeks="true"
+        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date" :allowNull="true" :showWeeks="true"
           :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 
         <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
-        <DateTimePicker id="testTimePicker" ident="testTimePicker" v-model="form.time" mode="time"
+        <DateTimePicker id="testTimePicker" ident="testTimePicker" v-model="form.time" mode="time" :allowNull="true"
           :disabled="disabled" :invalid="invalid" />
         <div>{{ show(TimeUtils.cnvFull(form.time)) }}</div>
       </div>

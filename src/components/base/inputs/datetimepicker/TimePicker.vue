@@ -14,6 +14,7 @@
  *
  * Properties:
  * - ident - Used for identification. Optional.
+ * - allowNull - If true, allow deselecting time. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  */
@@ -32,6 +33,8 @@ const props = withDefaults(
   defineProps<{
     /** Used for identification. */
     ident?: string;
+    /** If true, allow deselecting time. Optional, default is false. */
+    allowNull?: boolean;
     /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
@@ -39,6 +42,7 @@ const props = withDefaults(
   }>(),
   {
     ident: '',
+    allowNull: false,
     disabled: false,
     invalid: false,
   },
@@ -131,6 +135,12 @@ const findViewTime = () => {
 const selectHour = (h: number) => {
   if (props.disabled) return;
 
+  // Selecting same hour.
+  if (selDateTime.value && selDateTime.value.getUTCHours() === h) {
+    if (props.allowNull) selDateTime.value = null; // Deselect time.
+    return;
+  }
+
   const date = selDateTime.value ? new Date(selDateTime.value) : new Date();
   if (!selDateTime.value) date.setUTCSeconds(0, 0);
   date.setUTCHours(h);
@@ -140,6 +150,12 @@ const selectHour = (h: number) => {
 /** Select minute. */
 const selectMinute = (m: number) => {
   if (props.disabled) return;
+
+  // Selecting same minute.
+  if (selDateTime.value && selDateTime.value.getUTCMinutes() === m) {
+    if (props.allowNull) selDateTime.value = null; // Deselect time.
+    return;
+  }
 
   const date = selDateTime.value ? new Date(selDateTime.value) : new Date();
   if (!selDateTime.value) date.setUTCSeconds(0, 0);
