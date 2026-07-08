@@ -55,6 +55,13 @@ const clockContainerRef = ref<HTMLElement | null>(null);
 const hourRef = ref<HTMLElement | null>(null);
 const minuteRef = ref<HTMLElement | null>(null);
 
+/** Keyboard-focus hour index. Set when panel opens, updated via arrow navigation. */
+const focusedHour = ref<number | null>(null);
+/** Keyboard-focus minute index. Set when panel opens, updated via arrow navigation. */
+const focusedMinute = ref<number | null>(null);
+/** Which listbox column currently has keyboard focus. */
+const activeColumn = ref<'hour' | 'minute'>('hour');
+
 const hours = Array.from({ length: 24 }, (_, i) => i);
 const minutes = Array.from({ length: 60 }, (_, i) => i);
 
@@ -62,6 +69,17 @@ const viewHour = ref<number | null>(null);
 const viewMinute = ref<number | null>(null);
 const selectedHour = computed(() => selDateTime.value?.getUTCHours() ?? null);
 const selectedMinute = computed(() => selDateTime.value?.getUTCMinutes() ?? null);
+
+/** aria-activedescendant value for the hour listbox. */
+const hourActiveDesc = computed(() => {
+  if (focusedHour.value === null) return undefined;
+  return `timepicker_${props.ident}_opt_h${focusedHour.value}`;
+});
+/** aria-activedescendant value for the minute listbox. */
+const minuteActiveDesc = computed(() => {
+  if (focusedMinute.value === null) return undefined;
+  return `timepicker_${props.ident}_opt_m${focusedMinute.value}`;
+});
 
 const containerStyle = ref({
   left: '0',
@@ -111,6 +129,16 @@ const toggleTimePickerVisibility = async () => {
     isClockVisible.value = true;
     findViewTime();
 
+    // Initialize keyboard focus state.
+    if (selDateTime.value) {
+      focusedHour.value = selDateTime.value.getUTCHours();
+      focusedMinute.value = selDateTime.value.getUTCMinutes();
+    } else {
+      focusedHour.value = viewHour.value;
+      focusedMinute.value = viewMinute.value;
+    }
+    activeColumn.value = 'hour';
+
     await nextTick();
     // Adjust picker position if needed to prevent window overflow.
     if (clockContainerRef.value) {
@@ -121,6 +149,8 @@ const toggleTimePickerVisibility = async () => {
         containerStyle.value = { left: '0', right: 'auto' };
       }
     }
+    // Move keyboard focus into the panel (hour column) so user can navigate immediately.
+    hourRef.value?.focus();
   }
 };
 
@@ -182,6 +212,200 @@ const scrollToSelected = () => {
   });
 };
 
+/** Scroll hour listbox so given hour is visible. */
+const scrollHourIntoView = (h: number) => {
+  nextTick(() => {
+    if (hourRef.value) {
+      const el = hourRef.value.querySelector(`[data-testid="timepicker_${props.ident}_h${h}"]`);
+      el?.scrollIntoView({ block: 'center' });
+    }
+  });
+};
+
+/** Scroll minute listbox so given minute is visible. */
+const scrollMinuteIntoView = (m: number) => {
+  nextTick(() => {
+    if (minuteRef.value) {
+      const el = minuteRef.value.querySelector(`[data-testid="timepicker_${props.ident}_m${m}"]`);
+      el?.scrollIntoView({ block: 'center' });
+    }
+  });
+};
+
+// KEYBOARD HANDLERS
+
+/** Handle keyboard on the input (combobox). */
+const onInputKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (!isClockVisible.value) toggleTimePickerVisibility();
+  } else if (e.key === 'Escape' && isClockVisible.value) {
+    e.preventDefault();
+    hidePanel();
+  }
+};
+
+/** Handle keyboard on the hour listbox. */
+const onHourKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  switch (e.key) {
+    case 'ArrowUp':
+      e.preventDefault();
+      focusedHour.value =
+        focusedHour.value !== null
+          ? focusedHour.value > 0
+            ? focusedHour.value - 1
+            : 23
+          : (selectedHour.value ?? viewHour.value ?? 0);
+      scrollHourIntoView(focusedHour.value);
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      focusedHour.value =
+        focusedHour.value !== null
+          ? focusedHour.value < 23
+            ? focusedHour.value + 1
+            : 0
+          : (selectedHour.value ?? viewHour.value ?? 0);
+      scrollHourIntoView(focusedHour.value);
+      break;
+    case 'ArrowRight':
+    case 'Tab':
+      e.preventDefault();
+      activeColumn.value = 'minute';
+      nextTick(() => minuteRef.value?.focus());
+      break;
+    case 'Home': // Jump to start of list.
+      e.preventDefault();
+      focusedHour.value = 0;
+      scrollHourIntoView(0);
+      break;
+    case 'End': // Jump to end of list.
+      e.preventDefault();
+      focusedHour.value = 23;
+      scrollHourIntoView(23);
+      break;
+    case 'Enter':
+    case ' ':
+      e.preventDefault();
+      keyPressSelectHour();
+      break;
+    case 'Escape':
+      e.preventDefault();
+      hidePanelAndRefocus();
+      break;
+  }
+};
+
+/** Handle keyboard on the minute listbox. */
+const onMinuteKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  switch (e.key) {
+    case 'ArrowUp':
+      e.preventDefault();
+      focusedMinute.value =
+        focusedMinute.value !== null
+          ? focusedMinute.value > 0
+            ? focusedMinute.value - 1
+            : 59
+          : (selectedMinute.value ?? viewMinute.value ?? 0);
+      scrollMinuteIntoView(focusedMinute.value);
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      focusedMinute.value =
+        focusedMinute.value !== null
+          ? focusedMinute.value < 59
+            ? focusedMinute.value + 1
+            : 0
+          : (selectedMinute.value ?? viewMinute.value ?? 0);
+      scrollMinuteIntoView(focusedMinute.value);
+      break;
+    case 'ArrowLeft':
+    case 'Tab':
+      e.preventDefault();
+      activeColumn.value = 'hour';
+      nextTick(() => hourRef.value?.focus());
+      break;
+    case 'Home': // Jump to start of list.
+      e.preventDefault();
+      focusedMinute.value = 0;
+      scrollMinuteIntoView(0);
+      break;
+    case 'End': // Jump to end of list.
+      e.preventDefault();
+      focusedMinute.value = 59;
+      scrollMinuteIntoView(59);
+      break;
+    case 'Enter':
+    case ' ':
+      e.preventDefault();
+      keyPressSelectMinute();
+      break;
+    case 'Escape':
+      e.preventDefault();
+      hidePanelAndRefocus();
+      break;
+  }
+};
+
+//
+
+/** React on selecting hour via key press. */
+const keyPressSelectHour = () => {
+  if (focusedHour.value !== null) {
+    selectHour(focusedHour.value);
+    nextTick(() => {
+      // If time was deselected (allowNull same-hour toggle), close panel.
+      // Otherwise move focus to minute column.
+      if (selDateTime.value === null) {
+        hidePanelAndRefocus();
+      } else {
+        activeColumn.value = 'minute';
+        nextTick(() => minuteRef.value?.focus());
+      }
+    });
+  }
+};
+
+/** React on selecting minute via key press. */
+const keyPressSelectMinute = () => {
+  if (focusedMinute.value !== null) {
+    selectMinute(focusedMinute.value);
+    hidePanelAndFocusNext();
+  }
+};
+
+/** Hide panel and return focus to the input. */
+const hidePanelAndRefocus = () => {
+  isClockVisible.value = false;
+  nextTick(() => {
+    const inputEl = document.getElementById(`timepicker_${props.ident}`);
+    inputEl?.focus();
+  });
+};
+
+/** Hide panel and move focus to the next focusable element on page. */
+const hidePanelAndFocusNext = () => {
+  isClockVisible.value = false;
+  nextTick(() => {
+    const inputEl = document.getElementById(`timepicker_${props.ident}`);
+    if (inputEl) {
+      const focusable =
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      const allFocusable = document.querySelectorAll<HTMLElement>(focusable);
+      const idx = Array.from(allFocusable).indexOf(inputEl as HTMLElement);
+      if (idx !== -1 && idx + 1 < allFocusable.length) {
+        allFocusable[idx + 1]!.focus();
+      }
+    }
+  });
+};
+
 //
 
 /**
@@ -192,6 +416,7 @@ const resolveHourClass = (h: number) => {
   return {
     selected: selectedHour.value === h,
     curr: viewHour.value === h,
+    focused: activeColumn.value === 'hour' && focusedHour.value === h,
   };
 };
 
@@ -203,6 +428,7 @@ const resolveMinuteClass = (m: number) => {
   return {
     selected: selectedMinute.value === m,
     curr: viewMinute.value === m,
+    focused: activeColumn.value === 'minute' && focusedMinute.value === m,
   };
 };
 
@@ -232,6 +458,7 @@ const hidePanel = () => {
       :aria-label="t('dateTimePicker.placeholder.time')"
       :aria-disabled="disabled || undefined"
       @click="toggleTimePickerVisibility"
+      @keydown="onInputKeydown"
     />
 
     <!-- Time picker: clock panel. -->
@@ -247,11 +474,21 @@ const hidePanel = () => {
     >
       <div class="clock-columns">
         <!-- Hours scroller. -->
-        <div class="clock-column" ref="hourRef" role="listbox" :aria-label="t('dateTimePicker.hour')">
+        <div
+          class="clock-column"
+          ref="hourRef"
+          role="listbox"
+          tabindex="0"
+          :aria-label="t('dateTimePicker.hour')"
+          :aria-activedescendant="hourActiveDesc"
+          @keydown="onHourKeydown"
+          @focus="activeColumn = 'hour'"
+        >
           <div class="column-header" aria-hidden="true">{{ t('dateTimePicker.hour') }}</div>
           <div
             v-for="h in hours"
             :key="h"
+            :id="`timepicker_${ident}_opt_h${h}`"
             class="time-item time-hour"
             :class="resolveHourClass(h)"
             role="option"
@@ -265,11 +502,21 @@ const hidePanel = () => {
         </div>
 
         <!-- Minutes scroller. -->
-        <div class="clock-column" ref="minuteRef" role="listbox" :aria-label="t('dateTimePicker.minute')">
+        <div
+          class="clock-column"
+          ref="minuteRef"
+          role="listbox"
+          tabindex="0"
+          :aria-label="t('dateTimePicker.minute')"
+          :aria-activedescendant="minuteActiveDesc"
+          @keydown="onMinuteKeydown"
+          @focus="activeColumn = 'minute'"
+        >
           <div class="column-header" aria-hidden="true">{{ t('dateTimePicker.minute') }}</div>
           <div
             v-for="m in minutes"
             :key="m"
+            :id="`timepicker_${ident}_opt_m${m}`"
             class="time-item time-minute"
             :class="resolveMinuteClass(m)"
             role="option"
@@ -426,5 +673,16 @@ const hidePanel = () => {
 .time-item.curr:hover {
   color: var(--datetimepicker-time-hover-color);
   background: var(--datetimepicker-time-hover-background);
+}
+
+/** Keyboard-focus ring on the active option. */
+.time-item.focused {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/** Suppress native focus ring on the listbox container itself. */
+.clock-column:focus-visible {
+  outline: none;
 }
 </style>
