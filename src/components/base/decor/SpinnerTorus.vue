@@ -12,24 +12,32 @@
  * - Spinner in text: <SpinnerTorus display="inline-block" size="1em" />
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = withDefaults(defineProps<{
-  /** True if can spin, false if it cannot spin. */
-  canSpin?: boolean,
-  /** You can set CSS display property directly. */
-  display?: string,
-  /** Size of the spinner (e.g., "1rem", "100px"). */
-  size?: string;
-}>(), {
-  canSpin: true,
-  display: 'inline-block',
-  size: '1rem'
-});
+const props = withDefaults(
+  defineProps<{
+    /** True if can spin, false if it cannot spin. */
+    canSpin?: boolean;
+    /** You can set CSS display property directly. */
+    display?: string;
+    /** Size of the spinner (e.g., "1rem", "100px"). */
+    size?: string;
+  }>(),
+  {
+    canSpin: true,
+    display: 'inline-block',
+    size: '1rem',
+  },
+);
 </script>
 
 <template>
   <div class="spinner-wrapper" :style="{ display: display, width: size, height: size }">
-    <svg class="spinner spins" :class="{'paused': !canSpin}"
-      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155 155" fill="none">
+    <svg
+      class="spinner spins"
+      :class="{ paused: !canSpin }"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 155 155"
+      fill="none"
+    >
       <g stroke="currentColor" stroke-width="35" stroke-linecap="round">
         <circle cx="77.5" cy="77.5" r="60" stroke-opacity=".55" />
         <path d="M90.305 18.882A60.003 60.003 0 0 1 137.5 77.5" />
@@ -59,10 +67,18 @@ const props = withDefaults(defineProps<{
 
 @keyframes spin {
   /* Spin the spinner using CSS. Additionally pulsate slightly. */
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
   0%,
-  100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 </style>

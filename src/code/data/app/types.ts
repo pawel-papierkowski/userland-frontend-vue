@@ -24,4 +24,4 @@ export type LoginState = {
   expiresAt: Date;
   /** Permissions. Example: ["ROLE_ADMIN", "USER_EDIT"] */
   permissions: string[];
-}
+};

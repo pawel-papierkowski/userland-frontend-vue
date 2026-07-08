@@ -30,11 +30,11 @@ const form: Ref<TestAreaInputForm> = ref({
 
 /** Compute disabled. */
 const disabled = computed(() => {
-   return form.value.mode === EnInputMode.Disabled;
+  return form.value.mode === EnInputMode.Disabled;
 });
 /** Compute invalid. */
 const invalid = computed(() => {
-   return form.value.mode === EnInputMode.Error;
+  return form.value.mode === EnInputMode.Error;
 });
 
 //
@@ -44,11 +44,11 @@ const invalid = computed(() => {
  * @param value Value to show.
  * @returns Value as string.
  */
-const show = (value: string|boolean|null): string => {
+const show = (value: string | boolean | null): string => {
   if (value === null) return '❓';
-  if (typeof value === 'boolean') return value ? '✅' : '❌'
+  if (typeof value === 'boolean') return value ? '✅' : '❌';
   return value;
-}
+};
 </script>
 
 <template>
@@ -56,49 +56,101 @@ const show = (value: string|boolean|null): string => {
     <div class="form-semiwide">
       <div class="form-subform">
         <label for="checkbox">{{ t('testArea.inputs.mode.name') }}:</label>
-        <RadioBox id="radiobox" data-testid="radiobox" v-model="form.mode" :options="enModeOptions"
-           langPrefix="testArea.inputs.mode" />
+        <RadioBox
+          id="radiobox"
+          data-testid="radiobox"
+          v-model="form.mode"
+          :options="enModeOptions"
+          langPrefix="testArea.inputs.mode"
+        />
       </div>
 
-      <hr/>
+      <hr />
 
       <div class="form-subform-custom">
         <label for="inputText">{{ t('testArea.inputs.inputText') }}:</label>
-        <TextBox id="testCombobox" ident="testTextbox" v-model="form.inputText"
-          autocomplete="off" placeholder="Enter some text"
-          :disabled="disabled" :invalid="invalid" />
+        <TextBox
+          id="testCombobox"
+          ident="testTextbox"
+          v-model="form.inputText"
+          autocomplete="off"
+          placeholder="Enter some text"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(form.inputText) }}</div>
 
         <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
-        <ComboBox id="testCombobox" ident="testCombobox" v-model="form.comboBox" :options="enTestComboBox"
-          langPrefix="tech.user.status" placeholder="tech.user.status.null"
-          :disabled="disabled" :invalid="invalid" />
+        <ComboBox
+          id="testCombobox"
+          ident="testCombobox"
+          v-model="form.comboBox"
+          :options="enTestComboBox"
+          langPrefix="tech.user.status"
+          placeholder="tech.user.status.null"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(form.comboBox) }}</div>
 
         <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
-        <CheckBox id="testCheckbox" ident="testCheckbox" v-model="form.checkbox" :allowNull="true"
-          :disabled="disabled" :invalid="invalid" />
+        <CheckBox
+          id="testCheckbox"
+          ident="testCheckbox"
+          v-model="form.checkbox"
+          :allowNull="true"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(form.checkbox) }}</div>
 
         <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
-        <RadioBox id="testRadiobox" ident="testRadiobox" v-model="form.radiobox" :options="enTestRadioBox"
-           langPrefix="test.radioBox"
-          :disabled="disabled" :invalid="invalid" />
+        <RadioBox
+          id="testRadiobox"
+          ident="testRadiobox"
+          v-model="form.radiobox"
+          :options="enTestRadioBox"
+          langPrefix="test.radioBox"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(form.radiobox) }}</div>
 
         <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
-        <DateTimePicker id="testDateTimePicker" ident="testDateTimePicker" v-model="form.dateTime" mode="datetime" :allowNull="true"
-          :disabled="disabled" :invalid="invalid" />
+        <DateTimePicker
+          id="testDateTimePicker"
+          ident="testDateTimePicker"
+          v-model="form.dateTime"
+          mode="datetime"
+          :allowNull="true"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
         <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
-        <DateTimePicker id="testDatePicker" ident="testDatePicker" v-model="form.date" mode="date" :allowNull="true" :showWeeks="true"
-          :disabled="disabled" :invalid="invalid" />
+        <DateTimePicker
+          id="testDatePicker"
+          ident="testDatePicker"
+          v-model="form.date"
+          mode="date"
+          :allowNull="true"
+          :showWeeks="true"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 
         <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
-        <DateTimePicker id="testTimePicker" ident="testTimePicker" v-model="form.time" mode="time" :allowNull="true"
-          :disabled="disabled" :invalid="invalid" />
+        <DateTimePicker
+          id="testTimePicker"
+          ident="testTimePicker"
+          v-model="form.time"
+          mode="time"
+          :allowNull="true"
+          :disabled="disabled"
+          :invalid="invalid"
+        />
         <div>{{ show(TimeUtils.cnvFull(form.time)) }}</div>
       </div>
     </div>
@@ -106,7 +158,6 @@ const show = (value: string|boolean|null): string => {
 </template>
 
 <style scoped>
-
 .form-subform-custom {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;

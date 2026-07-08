@@ -143,7 +143,7 @@ export type UserPermissionTableEntry = {
   createdAt: string;
   name: string;
   value: string;
-  meta: EntryMeta|null;
+  meta: EntryMeta | null;
 };
 
 /** User permission table entry edit form. */
@@ -154,7 +154,7 @@ export type UserPermissionEntryEditForm = {
 
 /** User permission table entry edit request. */
 export type UserPermissionEntryEditReq = {
-  id: number|null; // Null if new entry, otherwise edit existing entry.
+  id: number | null; // Null if new entry, otherwise edit existing entry.
   userId: number;
   name: string;
   value: string;
@@ -190,7 +190,7 @@ export type UserConfigTableEntry = {
   createdAt: string;
   name: string;
   value: string;
-  meta: EntryMeta|null;
+  meta: EntryMeta | null;
 };
 
 /** User config table entry edit form. */
@@ -201,7 +201,7 @@ export type UserConfigEntryEditForm = {
 
 /** User config table entry edit request. */
 export type UserConfigEntryEditReq = {
-  id: number|null; // Null if new entry, otherwise edit existing entry.
+  id: number | null; // Null if new entry, otherwise edit existing entry.
   userId: number;
   name: string;
   value: string;
@@ -279,5 +279,5 @@ export type UserJwtTableEntry = {
 export interface AdminUserTabExpose {
   handleReload: () => Promise<void>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectEntry: (entry: Record<string, any>|null, force: boolean) => Promise<void>;
+  selectEntry: (entry: Record<string, any> | null, force: boolean) => Promise<void>;
 }

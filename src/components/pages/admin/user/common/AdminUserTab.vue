@@ -1,4 +1,13 @@
-<script setup lang="ts" generic="F extends { tableMeta: TableMetaReq | null }, E extends Record<string, any>, FE extends Record<string, any>, R">
+<script
+  setup
+  lang="ts"
+  generic="
+    F extends { tableMeta: TableMetaReq | null },
+    E extends Record<string, any>,
+    FE extends Record<string, any>,
+    R
+  "
+>
 /**
  * Generic component for admin user tabs (History, Config, etc.).
  * Handles data fetching, pagination, sorting, and user selection changes.
@@ -33,7 +42,13 @@ import backendApi from '@/services/api-common.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
-import type { ColumnData, RowMeta, TableMetaReq, TableMetaResp, TablePageExpose } from '@/code/data/features/common/type.ts';
+import type {
+  ColumnData,
+  RowMeta,
+  TableMetaReq,
+  TableMetaResp,
+  TablePageExpose,
+} from '@/code/data/features/common/type.ts';
 
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
@@ -44,21 +59,24 @@ const selEntryRecord = defineModel<E | null>('entry', { required: false });
 const formFilter = defineModel<F>('formFilter', { required: true });
 const formEntry = defineModel<FE | null>('formEntry', { required: false });
 
-const props = withDefaults(defineProps<{
-  tableId: string;
-  columns: ColumnData[];
-  fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
-  convertToReq: (form: F, userId: number) => R;
-  processEntry?: (entry: E) => void;
-  resolveRowMeta?: (entry: E|null) => RowMeta|null;
-  inlineEdit?: boolean;
-  addNewEntry?: boolean;
-  emptyText: string;
-  emptyNoUserText: string;
-}>(), {
-  inlineEdit: false,
-  addNewEntry: false,
-});
+const props = withDefaults(
+  defineProps<{
+    tableId: string;
+    columns: ColumnData[];
+    fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
+    convertToReq: (form: F, userId: number) => R;
+    processEntry?: (entry: E) => void;
+    resolveRowMeta?: (entry: E | null) => RowMeta | null;
+    inlineEdit?: boolean;
+    addNewEntry?: boolean;
+    emptyText: string;
+    emptyNoUserText: string;
+  }>(),
+  {
+    inlineEdit: false,
+    addNewEntry: false,
+  },
+);
 
 /** Loaded page of data. */
 const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({
@@ -161,7 +179,12 @@ watch(currSortBy, (_, oldVal) => {
   if (oldVal === null) return;
 
   if (!formFilter.value.tableMeta)
-    formFilter.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+    formFilter.value.tableMeta = {
+      pageSize: null,
+      page: null,
+      sortBy: currSortBy.value,
+      sortOrder: currSortOrder.value,
+    };
   else {
     formFilter.value.tableMeta.sortBy = currSortBy.value;
     formFilter.value.tableMeta.sortOrder = currSortOrder.value;
@@ -174,7 +197,12 @@ watch(currSortOrder, (_, oldVal) => {
   if (oldVal === null) return;
 
   if (!formFilter.value.tableMeta)
-    formFilter.value.tableMeta = { pageSize: null, page: null, sortBy: currSortBy.value, sortOrder: currSortOrder.value };
+    formFilter.value.tableMeta = {
+      pageSize: null,
+      page: null,
+      sortBy: currSortBy.value,
+      sortOrder: currSortOrder.value,
+    };
   else {
     formFilter.value.tableMeta.sortBy = currSortBy.value;
     formFilter.value.tableMeta.sortOrder = currSortOrder.value;
@@ -189,7 +217,7 @@ watch(currSortOrder, (_, oldVal) => {
  * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
  */
-const selectEntry = (entry: E|null, force: boolean) => {
+const selectEntry = (entry: E | null, force: boolean) => {
   tablePageRef.value?.selectEntry(entry, force);
 };
 
@@ -208,7 +236,8 @@ defineExpose({
       <slot name="filter" :isBusy="isBusy" :isDisabled="isDisabled" :handleReload="handleReload" />
     </template>
     <template #tablePanel>
-      <TablePage ref="tablePageRef"
+      <TablePage
+        ref="tablePageRef"
         v-model="selEntryRecord"
         v-model:formEntry="formEntry"
         v-model:currPage="currPage"

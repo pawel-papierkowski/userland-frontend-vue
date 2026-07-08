@@ -2,7 +2,9 @@
  * Modern minimal reset.        *
  ********************************/
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box; /* Prevents box sizing trap. */
@@ -34,13 +36,20 @@ body {
 
 /* Settings for specific elements. */
 
-img, picture, video, canvas, svg {
-  max-width: 100%;   /* Never overflow their container */
-  display: block;    /* Removes weird bottom gap from inline display */
+img,
+picture,
+video,
+canvas,
+svg {
+  max-width: 100%; /* Never overflow their container */
+  display: block; /* Removes weird bottom gap from inline display */
 }
 
-input, button, textarea, select {
-  font: inherit;     /* Use the same font as surrounding text */
+input,
+button,
+textarea,
+select {
+  font: inherit; /* Use the same font as surrounding text */
 }
 
 /* MEDIA */
@@ -50,7 +59,9 @@ input, button, textarea, select {
   html:focus-within {
     scroll-behavior: auto;
   }
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

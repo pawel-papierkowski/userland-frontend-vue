@@ -20,13 +20,23 @@ vi.mock('@vueuse/core', async (importOriginal) => {
 //
 
 /** Convenience function to create component. */
-function createComponent(modelValue: Date | null, ident: string, allowNull: boolean, disabled: boolean, invalid: boolean) {
+function createComponent(
+  modelValue: Date | null,
+  ident: string,
+  allowNull: boolean,
+  disabled: boolean,
+  invalid: boolean,
+) {
   return mount(TimePicker, {
     global: {
       plugins: [i18n],
     },
     props: {
-      modelValue, ident, allowNull, disabled, invalid,
+      modelValue,
+      ident,
+      allowNull,
+      disabled,
+      invalid,
     },
   });
 }
@@ -391,6 +401,262 @@ describe('TimePicker', () => {
       expect(result.getUTCMinutes()).toBe(33);
       expect(result.getUTCSeconds()).toBe(0);
       expect(result.getUTCMilliseconds()).toBe(0);
+    });
+  });
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Accessibility tests
+
+  describe('accessibility', () => {
+    it('input has correct aria attributes when panel is hidden', () => {
+      // Ensures the input element has proper ARIA roles and attributes when closed.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create the component (panel starts hidden).
+      const timePicker = createComponent(null, 'test', false, false, false);
+      const input = timePicker.find('.picker-input-time');
+
+      // Assert: Correct static ARIA attributes.
+      expect(input.attributes('role')).toBe('combobox');
+      expect(input.attributes('aria-haspopup')).toBe('listbox');
+
+      // Assert: aria-expanded is false when panel is hidden.
+      expect(input.attributes('aria-expanded')).toBe('false');
+
+      // Assert: aria-controls matches panel id convention.
+      expect(input.attributes('aria-controls')).toBe('timepicker_test_panel');
+
+      // Assert: aria-label is present with placeholder text.
+      expect(input.attributes('aria-label')).toBe('hh:mm');
+
+      // Assert: aria-disabled is not present when not disabled.
+      expect(input.attributes('aria-disabled')).toBeUndefined();
+    });
+
+    it('input aria-expanded reflects panel visibility', async () => {
+      // Ensures aria-expanded toggles correctly when panel opens/closes.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, '', false, false, false);
+      const input = timePicker.find('.picker-input-time');
+
+      // Act: Open panel.
+      await input.trigger('click');
+      await nextTick();
+
+      // Assert: aria-expanded is true when panel is visible.
+      expect(input.attributes('aria-expanded')).toBe('true');
+
+      // Act: Close panel by clicking again.
+      await input.trigger('click');
+      await nextTick();
+
+      // Assert: aria-expanded is false when panel is hidden.
+      expect(input.attributes('aria-expanded')).toBe('false');
+    });
+
+    it('input has aria-disabled when disabled', () => {
+      // Ensures the input has aria-disabled when the component is disabled.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create component with disabled=true.
+      const timePicker = createComponent(null, '', false, true, false);
+      const input = timePicker.find('.picker-input-time');
+
+      // Assert: aria-disabled is present and set to "true".
+      expect(input.attributes('aria-disabled')).toBe('true');
+    });
+
+    it('clock panel has correct aria attributes', async () => {
+      // Ensures the clock panel (dialog) has proper ARIA attributes.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Arrange: Create the component and open panel.
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Locate the clock panel.
+      const panel = timePicker.find('.clock-container');
+
+      // Assert: Panel has correct ARIA attributes.
+      expect(panel.attributes('role')).toBe('dialog');
+      expect(panel.attributes('aria-modal')).toBe('true');
+      expect(panel.attributes('aria-label')).toBe('hh:mm');
+
+      // Assert: Panel id matches what input's aria-controls points to.
+      expect(panel.attributes('id')).toBe('timepicker_test_panel');
+    });
+
+    it('hour column and header have correct aria attributes', async () => {
+      // Ensures the hour listbox is properly labeled and header is hidden from AT.
+
+      // Arrange: Set up date/time and open panel.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, '', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Locate hour column.
+      const hourColumn = timePicker.findAll('.clock-column').at(0)!;
+
+      // Assert: Column has listbox role and aria-label.
+      expect(hourColumn.attributes('role')).toBe('listbox');
+      expect(hourColumn.attributes('aria-label')).toBe('Hour');
+
+      // Assert: Column header is hidden from accessibility tree.
+      const hourHeader = hourColumn.find('.column-header');
+      expect(hourHeader.attributes('aria-hidden')).toBe('true');
+    });
+
+    it('minute column and header have correct aria attributes', async () => {
+      // Ensures the minute listbox is properly labeled and header is hidden from AT.
+
+      // Arrange: Set up date/time and open panel.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, '', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Locate minute column.
+      const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
+
+      // Assert: Column has listbox role and aria-label.
+      expect(minuteColumn.attributes('role')).toBe('listbox');
+      expect(minuteColumn.attributes('aria-label')).toBe('Minute');
+
+      // Assert: Column header is hidden from accessibility tree.
+      const minuteHeader = minuteColumn.find('.column-header');
+      expect(minuteHeader.attributes('aria-hidden')).toBe('true');
+    });
+
+    it('hour items have role option with aria-selected and aria-label', async () => {
+      // Ensures each hour item has correct ARIA attributes when no time is selected.
+
+      // Arrange: Set up date/time and open panel (no time selected).
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Check specific hour items.
+      const hour5 = timePicker.find('[data-testid="timepicker_test_h5"]');
+      const hour14 = timePicker.find('[data-testid="timepicker_test_h14"]');
+
+      // Assert: Each hour item has option role.
+      expect(hour5.attributes('role')).toBe('option');
+      expect(hour14.attributes('role')).toBe('option');
+
+      // Assert: aria-selected is false when no time is selected.
+      expect(hour5.attributes('aria-selected')).toBe('false');
+      expect(hour14.attributes('aria-selected')).toBe('false');
+
+      // Assert: aria-label includes the value and unit label.
+      expect(hour5.attributes('aria-label')).toBe('5 Hour');
+      expect(hour14.attributes('aria-label')).toBe('14 Hour');
+    });
+
+    it('minute items have role option with aria-selected and aria-label', async () => {
+      // Ensures each minute item has correct ARIA attributes when no time is selected.
+
+      // Arrange: Set up date/time and open panel (no time selected).
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Check specific minute items.
+      const minute3 = timePicker.find('[data-testid="timepicker_test_m3"]');
+      const minute45 = timePicker.find('[data-testid="timepicker_test_m45"]');
+
+      // Assert: Each minute item has option role.
+      expect(minute3.attributes('role')).toBe('option');
+      expect(minute45.attributes('role')).toBe('option');
+
+      // Assert: aria-selected is false when no time is selected.
+      expect(minute3.attributes('aria-selected')).toBe('false');
+      expect(minute45.attributes('aria-selected')).toBe('false');
+
+      // Assert: aria-label includes the value and unit label.
+      expect(minute3.attributes('aria-label')).toBe('3 Minute');
+      expect(minute45.attributes('aria-label')).toBe('45 Minute');
+    });
+
+    it('aria-selected reflects the selected hour', async () => {
+      // Ensures aria-selected is true on the selected hour and false on others.
+
+      // Arrange: Set up date/time and open panel.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Select hour 14.
+      await timePicker.find('[data-testid="timepicker_test_h14"]').trigger('click');
+      await nextTick();
+
+      // Assert: Selected hour 14 has aria-selected="true".
+      const selectedHour = timePicker.find('[data-testid="timepicker_test_h14"]');
+      expect(selectedHour.attributes('aria-selected')).toBe('true');
+
+      // Assert: Other hours remain aria-selected="false".
+      const otherHour = timePicker.find('[data-testid="timepicker_test_h5"]');
+      expect(otherHour.attributes('aria-selected')).toBe('false');
+
+      // Assert: The selected hour's aria-label is still correct.
+      expect(selectedHour.attributes('aria-label')).toBe('14 Hour');
+    });
+
+    it('aria-selected reflects the selected minute', async () => {
+      // Ensures aria-selected is true on the selected minute and false on others.
+
+      // Arrange: Set up date/time and open panel.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Select minute 33.
+      await timePicker.find('[data-testid="timepicker_test_m33"]').trigger('click');
+      await nextTick();
+
+      // Assert: Selected minute 33 has aria-selected="true".
+      const selectedMinute = timePicker.find('[data-testid="timepicker_test_m33"]');
+      expect(selectedMinute.attributes('aria-selected')).toBe('true');
+
+      // Assert: Other minutes remain aria-selected="false".
+      const otherMinute = timePicker.find('[data-testid="timepicker_test_m3"]');
+      expect(otherMinute.attributes('aria-selected')).toBe('false');
+
+      // Assert: The selected minute's aria-label is still correct.
+      expect(selectedMinute.attributes('aria-label')).toBe('33 Minute');
+    });
+
+    it('aria-selected updates when time is deselected via allowNull', async () => {
+      // Ensures aria-selected returns to false when time is deselected.
+
+      // Arrange: Set up date/time and open panel with allowNull.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', true, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+
+      // Act: Select and then deselect hour 14.
+      await timePicker.find('[data-testid="timepicker_test_h14"]').trigger('click');
+      await nextTick();
+      await timePicker.find('[data-testid="timepicker_test_h14"]').trigger('click');
+      await nextTick();
+
+      // Assert: Previously selected hour now has aria-selected="false".
+      const deselectedHour = timePicker.find('[data-testid="timepicker_test_h14"]');
+      expect(deselectedHour.attributes('aria-selected')).toBe('false');
     });
   });
 });

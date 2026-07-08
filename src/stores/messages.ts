@@ -31,7 +31,13 @@ export const useMessageStore = defineStore('messages', () => {
    * @param errCode Error code. If present, will show separately in message box.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  function addMessage(level: EnMessageLevel, title: string = '', content: string, errCode: string = '', duration = defDuration) {
+  function addMessage(
+    level: EnMessageLevel,
+    title: string = '',
+    content: string,
+    errCode: string = '',
+    duration = defDuration,
+  ) {
     if (messages.value.length >= maxMessages) {
       // Remove oldest message.
       const id = messages.value[0]?.id ?? '';
@@ -56,10 +62,14 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   // Convenience helpers.
-  const info = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Info, title, content, '', duration);
-  const success = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Success, title, content, '', duration);
-  const warning = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Warning, title, content, '', duration);
-  const failure = (title: string, content: string, duration = defDuration) => addMessage(EnMessageLevel.Failure, title, content, '', duration);
+  const info = (title: string, content: string, duration = defDuration) =>
+    addMessage(EnMessageLevel.Info, title, content, '', duration);
+  const success = (title: string, content: string, duration = defDuration) =>
+    addMessage(EnMessageLevel.Success, title, content, '', duration);
+  const warning = (title: string, content: string, duration = defDuration) =>
+    addMessage(EnMessageLevel.Warning, title, content, '', duration);
+  const failure = (title: string, content: string, duration = defDuration) =>
+    addMessage(EnMessageLevel.Failure, title, content, '', duration);
   const error = (title: string, content: string, errCode: string = '', duration = defDuration) =>
     addMessage(EnMessageLevel.Error, title, content, errCode, duration);
 

@@ -5,7 +5,7 @@ export class TimeUtils {
    * @param dateStr Date as string in format `YYYY-MM-DDThh:mm:ss` without timezone. Accepts `.SSS` if present.
    * @returns Date as string with timezone applied in format `YYYY-MM-DD hh:mm:ss`.
    */
-  public static zoned(dateStr: string|null): string {
+  public static zoned(dateStr: string | null): string {
     if (dateStr == null) return '';
 
     // Parse as UTC by adding 'Z' (standard ISO 8601 expects 'T' separator).
@@ -174,7 +174,7 @@ export class TimeUtils {
     const jan1Dow = jan1.getUTCDay() || 7;
     const week1Start = new Date(jan1);
     week1Start.setUTCDate(jan1.getUTCDate() - (jan1Dow - 1));
-    
+
     return Math.floor((currWeekStart.getTime() - week1Start.getTime()) / (7 * 86400000)) + 1;
   }
 

@@ -105,7 +105,7 @@ export class AppMessager {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static errorT(error: any, fallbackTitle: string, fallbackContent: string, duration = defDuration) {
-    this.error(error, t(fallbackTitle), t(fallbackContent), duration)
+    this.error(error, t(fallbackTitle), t(fallbackContent), duration);
   }
 
   /**

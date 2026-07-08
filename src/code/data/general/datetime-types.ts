@@ -22,4 +22,4 @@ export type CalendarCell = {
   year: number;
   /** If true, this date pick is for current month. */
   isCurrentMonth: boolean;
-}
+};

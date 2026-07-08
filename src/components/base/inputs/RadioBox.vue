@@ -109,12 +109,7 @@ const showOption = (option: number | string | null): number | string | null => {
 
 <template>
   <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
-    <div
-      class="radiobox"
-      :class="{ disabled: disabled, err: invalid }"
-      role="radiogroup"
-      @keydown="handleKeydown"
-    >
+    <div class="radiobox" :class="{ disabled: disabled, err: invalid }" role="radiogroup" @keydown="handleKeydown">
       <div
         v-for="(option, index) in options"
         :key="index"

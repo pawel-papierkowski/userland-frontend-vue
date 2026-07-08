@@ -15,12 +15,13 @@ const messageStore = useMessageStore();
 
 <template>
   <div class="message-wrapper" data-testid="msgContainer">
-
     <TransitionGroup name="msg-list" tag="div" class="messages">
       <div v-for="msg in messageStore.messages" :key="msg.id" class="msg-item">
-        <MessageBox :msg="msg"
+        <MessageBox
+          :msg="msg"
           @click="messageStore.removeMessage(msg.id)"
-          @close="messageStore.removeMessage(msg.id)" />
+          @close="messageStore.removeMessage(msg.id)"
+        />
       </div>
     </TransitionGroup>
   </div>

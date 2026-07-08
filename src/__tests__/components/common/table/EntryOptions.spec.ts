@@ -18,14 +18,24 @@ interface TestEntry {
 }
 
 /** Convenience function to create component. */
-function createComponent(meta: EntryMeta|null, entry: TestEntry|null, langPrefix: string, actions: Record<string, (entry: Record<string, any>|null) => void | Promise<void>>, isBusy: boolean) {
+function createComponent(
+  meta: EntryMeta | null,
+  entry: TestEntry | null,
+  langPrefix: string,
+  actions: Record<string, (entry: Record<string, any> | null) => void | Promise<void>>,
+  isBusy: boolean,
+) {
   return mount(EntryOptions, {
     global: {
       plugins: [i18n],
     },
     props: {
-      meta, entry, langPrefix, actions, isBusy
-    }
+      meta,
+      entry,
+      langPrefix,
+      actions,
+      isBusy,
+    },
   });
 }
 
@@ -45,9 +55,9 @@ function createData(): EntryMeta {
       del: {
         access: 'DISABLED',
         reason: 'disabled',
-      }
+      },
     },
-    data: null
+    data: null,
   };
 }
 
@@ -55,15 +65,15 @@ function createEntry(): TestEntry {
   return {
     id: 42,
     name: 'Entry Name',
-    value: 'Entry Value'
+    value: 'Entry Value',
   };
 }
 
-function createActions(): Record<string, (entry: Record<string, any>|null) => void | Promise<void>> {
+function createActions(): Record<string, (entry: Record<string, any> | null) => void | Promise<void>> {
   return {
-    add: vi.fn<(entry: Record<string, any>|null) => void | Promise<void>>(),
-    del: vi.fn<(entry: Record<string, any>|null) => void | Promise<void>>(),
-  }
+    add: vi.fn<(entry: Record<string, any> | null) => void | Promise<void>>(),
+    del: vi.fn<(entry: Record<string, any> | null) => void | Promise<void>>(),
+  };
 }
 
 // ////////////////////////////////////////////////////////////////////////////

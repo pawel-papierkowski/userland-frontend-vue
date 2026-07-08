@@ -193,7 +193,7 @@ export const userPermissionsTableColumns: ColumnData[] = [
 ];
 
 /** List of values for permission name. */
-export const enUserPermissionName: (string|null)[] = [ 'role', 'user' ];
+export const enUserPermissionName: (string | null)[] = ['role', 'user'];
 
 // USER CONFIG TABLE
 

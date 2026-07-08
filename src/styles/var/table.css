@@ -1,7 +1,6 @@
 /*** Variables: table. ***/
 
 :root {
-
   /* TablePage specific vars. */
   --tablepage-color: var(--input-color);
 
@@ -10,5 +9,4 @@
 
   --table-entry-btn-filter: none;
   --table-entry-btn-hover-filter: brightness(1.3);
-
 }

@@ -11,60 +11,63 @@ import TablePaginer from '@/components/common/table/TablePaginer.vue';
 /** Convenience function to create component. */
 function createComponent(currPage: number, meta: TableMetaResp, isDisabled?: boolean) {
   return mount(TablePaginer, {
-      props: {
-        currPage, tableId: '', meta, isDisabled
-      }
-    });
+    props: {
+      currPage,
+      tableId: '',
+      meta,
+      isDisabled,
+    },
+  });
 }
 
 //
 
 function createTableMetaLarge(page: number): TableMetaResp {
   return {
-      pageCount: 3,
-      entryCount: 25,
+    pageCount: 3,
+    entryCount: 25,
 
-      pageSize: 10,
-      page: page,
-      sortBy: 'name',
-      sortOrder: 'ASC',
-    };
+    pageSize: 10,
+    page: page,
+    sortBy: 'name',
+    sortOrder: 'ASC',
+  };
 }
 
 function createTableMetaMedium(page: number): TableMetaResp {
   return {
-      pageCount: 2,
-      entryCount: 8,
+    pageCount: 2,
+    entryCount: 8,
 
-      pageSize: 5,
-      page: page,
-      sortBy: 'name',
-      sortOrder: 'ASC',
-    };
+    pageSize: 5,
+    page: page,
+    sortBy: 'name',
+    sortOrder: 'ASC',
+  };
 }
 
 function createTableMetaSmall(): TableMetaResp {
   return {
-      pageCount: 1,
-      entryCount: 4,
+    pageCount: 1,
+    entryCount: 4,
 
-      pageSize: 10,
-      page: 1,
-      sortBy: 'name',
-      sortOrder: 'ASC',
-    };
+    pageSize: 10,
+    page: 1,
+    sortBy: 'name',
+    sortOrder: 'ASC',
+  };
 }
 
 function createTableMetaZero(): TableMetaResp {
   return {
-      pageCount: 0,
-      entryCount: 0,
+    pageCount: 0,
+    entryCount: 0,
 
-      pageSize: 10,
-      page: 1,
-      sortBy: 'name',
-      sortOrder: 'ASC',
-    };
+    pageSize: 10,
+    page: 1,
+    sortBy: 'name',
+    sortOrder: 'ASC',
+  };
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -399,7 +402,7 @@ describe('TablePaginer', () => {
       // Act: Fill input and confirm.
       const input = tablePaginer.find('input');
       await input.setValue('3');
-      await input.trigger('keyup', {key: 'Enter'});
+      await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
       // Assert: model emitted correct value.
@@ -427,7 +430,7 @@ describe('TablePaginer', () => {
       // Act: Fill input and confirm.
       const input = tablePaginer.find('input');
       await input.setValue('-1'); // outside range: too small
-      await input.trigger('keyup', {key: 'Enter'});
+      await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
       // Assert: model emitted correct value.
@@ -455,7 +458,7 @@ describe('TablePaginer', () => {
       // Act: Fill input and confirm.
       const input = tablePaginer.find('input');
       await input.setValue('666'); // outside range: too large
-      await input.trigger('keyup', {key: 'Enter'});
+      await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
       // Assert: model emitted correct value.
@@ -483,7 +486,7 @@ describe('TablePaginer', () => {
       // Act: Fill input and confirm.
       const input = tablePaginer.find('input');
       await input.setValue('aaa'); // invalid input: not a number!
-      await input.trigger('keyup', {key: 'Enter'});
+      await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
       // Assert: model never emitted anything.

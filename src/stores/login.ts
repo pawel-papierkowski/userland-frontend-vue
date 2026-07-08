@@ -23,8 +23,8 @@ export const useLoginStore = defineStore('login', () => {
       email: '',
       issuedAt: new Date(0),
       expiresAt: new Date(0),
-      permissions: []
-    }
+      permissions: [],
+    };
   }
 
   /**
@@ -90,7 +90,7 @@ export const useLoginStore = defineStore('login', () => {
       // Example: prefix 'role' and suffix 'admin,operator' will be mapped to ['role_admin', 'role_operator'].
       const splitSuffix: string[] = permSuffix.split(',');
       for (const permSuffix of splitSuffix) {
-        const fullPermission = permPrefix+'_'+permSuffix;
+        const fullPermission = permPrefix + '_' + permSuffix;
         loginState.value.permissions.push(fullPermission);
       }
     }
@@ -102,10 +102,10 @@ export const useLoginStore = defineStore('login', () => {
    * @param fieldName Name of custom field.
    * @returns Value of given field or null if field does not exist.
    */
-  function getValue(decodedJwt: JwtPayload, fieldName: string): string|null {
+  function getValue(decodedJwt: JwtPayload, fieldName: string): string | null {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const value = (decodedJwt as Record<string, any>)[fieldName]; // necessary as decodedJwt[fieldName] generates IDE error
-    return value || null as string|null;
+    return value || (null as string | null);
   }
 
   return { loginState, applyToken, resetLoginState };

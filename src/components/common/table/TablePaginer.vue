@@ -14,13 +14,16 @@ import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 const currPage = defineModel<number>('currPage', { required: true }); // Currently selected page.
 
-const props = withDefaults(defineProps<{
-  tableId: string;
-  meta: TableMetaResp;
-  isDisabled?: boolean;
-}>(), {
-  isDisabled: false,
-});
+const props = withDefaults(
+  defineProps<{
+    tableId: string;
+    meta: TableMetaResp;
+    isDisabled?: boolean;
+  }>(),
+  {
+    isDisabled: false,
+  },
+);
 
 /** Local page number. This is number shown in input (1-indexed). */
 const localPage = ref(currPage.value + 1);
@@ -108,7 +111,10 @@ const pageInputDisabled = () => {
           @blur="applyPage"
           @keyup.enter="applyPage"
         />
-        / <span class="table-paginer-number" :data-testid="`paginer_${props.tableId}_pageNumber`">{{ meta.pageCount }}</span>
+        /
+        <span class="table-paginer-number" :data-testid="`paginer_${props.tableId}_pageNumber`">{{
+          meta.pageCount
+        }}</span>
       </div>
       <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">▶️</div>
       <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">⏭️</div>

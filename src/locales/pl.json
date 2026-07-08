@@ -415,7 +415,7 @@
                 "title": "Zapis nieudany",
                 "content": "Niewłaściwa nazwa uprawnienia."
               },
-              "badValue":  {
+              "badValue": {
                 "title": "Zapis nieudany",
                 "content": "Niewłaściwa wartość uprawnienia."
               }
@@ -494,7 +494,7 @@
                 "title": "Zapis nieudany",
                 "content": "Niewłaściwa nazwa konfiguracji."
               },
-              "badValue":  {
+              "badValue": {
                 "title": "Zapis nieudany",
                 "content": "Niewłaściwa wartość konfiguracji."
               }
@@ -646,13 +646,13 @@
     },
     "components": {
       "title": "Komponenty",
-      "ComboBox":"<code>ComboBox</code> jest komponentem zastępującym <code>select</code> i <code>options</code>.",
-      "CheckBox":"<code>CheckBox</code> jest komponentem zastępującym <code>input</code> z <code>type='checkbox'</code>.",
-      "DateTimePicker":"<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
-      "SlideShow":"Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
-      "MessageContainer":"<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",
-      "Table":"Rodzina komponentów <code>Table*</code> obsługuje pokazywanie i edycję tabeli. Używane w panelu administracyjnym.",
-      "SpinnerTorus":"<code>SpinnerTorus</code> sygnalizuje aktywność, gdy czekasz, aż frontend zakończy operację, taką jak np. wywołanie backendu."
+      "ComboBox": "<code>ComboBox</code> jest komponentem zastępującym <code>select</code> i <code>options</code>.",
+      "CheckBox": "<code>CheckBox</code> jest komponentem zastępującym <code>input</code> z <code>type='checkbox'</code>.",
+      "DateTimePicker": "<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
+      "SlideShow": "Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
+      "MessageContainer": "<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",
+      "Table": "Rodzina komponentów <code>Table*</code> obsługuje pokazywanie i edycję tabeli. Używane w panelu administracyjnym.",
+      "SpinnerTorus": "<code>SpinnerTorus</code> sygnalizuje aktywność, gdy czekasz, aż frontend zakończy operację, taką jak np. wywołanie backendu."
     }
   },
 
@@ -1004,7 +1004,7 @@
         }
       },
       "page": {
-        "empty":"⚠️ Brak wpisów do wyświetlenia. ⚠️"
+        "empty": "⚠️ Brak wpisów do wyświetlenia. ⚠️"
       }
     }
   },

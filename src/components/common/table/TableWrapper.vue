@@ -9,18 +9,21 @@
  * Properties:
  * - layout - Specifies type of layout. Allowed values: side, bottom. Optional, defaults to side.
  */
-const props = withDefaults(defineProps<{
-  layout?: string;
-}>(), {
-  layout: 'side'
-});
+const props = withDefaults(
+  defineProps<{
+    layout?: string;
+  }>(),
+  {
+    layout: 'side',
+  },
+);
 
 const getClass = () => {
   return {
     side: props.layout === 'side',
     bottom: props.layout === 'bottom',
-  }
-}
+  };
+};
 </script>
 
 <template>

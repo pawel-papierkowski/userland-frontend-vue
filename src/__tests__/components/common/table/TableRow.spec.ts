@@ -21,72 +21,88 @@ interface TestForm {
 }
 
 /** Convenience function to create component. Version with slots. */
-function createComponentWithSlots(slots: Record<string, string>, modelValue: TestEntry|null, formEntry: TestForm|null, tableId: string, columns: ColumnData[], rowIndex: number, entry: TestEntry|null, inlineEdit?: boolean, rowMeta?: RowMeta|null) {
+function createComponentWithSlots(
+  slots: Record<string, string>,
+  modelValue: TestEntry | null,
+  formEntry: TestForm | null,
+  tableId: string,
+  columns: ColumnData[],
+  rowIndex: number,
+  entry: TestEntry | null,
+  inlineEdit?: boolean,
+  rowMeta?: RowMeta | null,
+) {
   return mount(TableRow, {
-      props: {
-        modelValue, formEntry,
-        tableId, columns, rowIndex, entry, inlineEdit, rowMeta
-      },
-      slots
-    });
+    props: {
+      modelValue,
+      formEntry,
+      tableId,
+      columns,
+      rowIndex,
+      entry,
+      inlineEdit,
+      rowMeta,
+    },
+    slots,
+  });
 }
 
 //
 
 function createEntry(): TestEntry {
   return {
-      id: 42,
-      name: 'Entry Name',
-      value: 'Entry Value'
-    };
+    id: 42,
+    name: 'Entry Name',
+    value: 'Entry Value',
+  };
 }
 
 function createForm(): TestForm {
   return {
-      name: 'Form Name',
-      value: 'Form Value'
-    };
+    name: 'Form Name',
+    value: 'Form Value',
+  };
 }
 
 /** Create test data for entire row. */
-function createData(): {testEntry: TestEntry, testForm: TestForm, columns: ColumnData[]} {
-    const testEntry: TestEntry = createEntry();
-    const testForm: TestForm = createForm();
-    const columns: ColumnData[] = [
-      {
-        name: 'id',
-        defSort: '',
-        translation: 'test.table.column.id',
-        visible: false,
-        editable: false,
-        kind: EnColumnKind.Data
-      },
-      {
-        name: 'name',
-        defSort: 'ASC',
-        translation: 'test.table.column.name',
-        visible: true,
-        editable: false,
-        kind: EnColumnKind.Data
-      },
-      {
-        name: 'value',
-        defSort: 'ASC',
-        translation: 'test.table.column.value',
-        visible: true,
-        editable: true,
-        kind: EnColumnKind.Data
-      },
-      {
-        name: 'options',
-        defSort: '',
-        translation: 'test.table.column.options',
-        visible: true,
-        editable: false,
-        kind: EnColumnKind.Custom
-      }
+function createData(): { testEntry: TestEntry; testForm: TestForm; columns: ColumnData[] } {
+  const testEntry: TestEntry = createEntry();
+  const testForm: TestForm = createForm();
+  const columns: ColumnData[] = [
+    {
+      name: 'id',
+      defSort: '',
+      translation: 'test.table.column.id',
+      visible: false,
+      editable: false,
+      kind: EnColumnKind.Data,
+    },
+    {
+      name: 'name',
+      defSort: 'ASC',
+      translation: 'test.table.column.name',
+      visible: true,
+      editable: false,
+      kind: EnColumnKind.Data,
+    },
+    {
+      name: 'value',
+      defSort: 'ASC',
+      translation: 'test.table.column.value',
+      visible: true,
+      editable: true,
+      kind: EnColumnKind.Data,
+    },
+    {
+      name: 'options',
+      defSort: '',
+      translation: 'test.table.column.options',
+      visible: true,
+      editable: false,
+      kind: EnColumnKind.Custom,
+    },
   ];
-    return { testEntry, testForm, columns };
+  return { testEntry, testForm, columns };
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -100,7 +116,17 @@ describe('TableRow', () => {
     const { testEntry, testForm, columns } = createData();
 
     // Act: Create component.
-    const tableRow = createComponentWithSlots({ column_options: 'OPTIONS' }, null, testForm, 'testTable', columns, 0, testEntry, false, null);
+    const tableRow = createComponentWithSlots(
+      { column_options: 'OPTIONS' },
+      null,
+      testForm,
+      'testTable',
+      columns,
+      0,
+      testEntry,
+      false,
+      null,
+    );
 
     // Assert: Cells in row are present and correct.
     const cells = tableRow.findAll('.table-cell');
@@ -117,7 +143,17 @@ describe('TableRow', () => {
     const { testEntry, testForm, columns } = createData();
 
     // Act: Create component.
-    const tableRow = createComponentWithSlots({ column_options: 'OPTIONS' }, testEntry, testForm, 'testTable', columns, 0, testEntry, true, null);
+    const tableRow = createComponentWithSlots(
+      { column_options: 'OPTIONS' },
+      testEntry,
+      testForm,
+      'testTable',
+      columns,
+      0,
+      testEntry,
+      true,
+      null,
+    );
 
     // Assert: Cells in row are present and correct.
     const cells = tableRow.findAll('.table-cell');

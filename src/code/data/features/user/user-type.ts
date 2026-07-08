@@ -55,8 +55,8 @@ export type UserDataResp = {
 
 /** User profile view data. */
 export type UserProfileData = {
-  name: string|null;
-  surname: string|null;
+  name: string | null;
+  surname: string | null;
 };
 
 // USER EDIT
@@ -65,8 +65,8 @@ export type UserProfileData = {
 export type UserEditForm = {
   username: string;
   email: string; // we won't be editing it directly, but we can show it
-  name: string|null;
-  surname: string|null;
+  name: string | null;
+  surname: string | null;
 };
 
 /** User edit request. */

@@ -91,7 +91,10 @@
 
   color: #374151;
   background-color: #d8d8d8;
-  box-shadow: 1px 0 0 0 #d8d8d8, 0 1px 0 0 #d8d8d8, -1px 1px 0 0 #d8d8d8; /* Ensure gap is not visible*/
+  box-shadow:
+    1px 0 0 0 #d8d8d8,
+    0 1px 0 0 #d8d8d8,
+    -1px 1px 0 0 #d8d8d8; /* Ensure gap is not visible*/
 
   min-width: 0; /* Prevents cell from expanding parent */
   padding: 5px;
@@ -133,8 +136,10 @@
   box-shadow: 1px 0 0 0 #fff7ed; /* Ensure gap is not visible*/
 }
 .table-row.selected .table-cell:first-child {
-   /* Orange left border effect and gap hiding. */
-  box-shadow: inset 4px 0 0 0 #f97316, 1px 0 0 0 #fff7ed;
+  /* Orange left border effect and gap hiding. */
+  box-shadow:
+    inset 4px 0 0 0 #f97316,
+    1px 0 0 0 #fff7ed;
 }
 
 .table-row:not(.unselectable):hover .table-cell {
@@ -150,8 +155,10 @@
   box-shadow: 1px 0 0 0 #ffedd5; /* Ensure gap is not visible*/
 }
 .table-row.selected:hover .table-cell:first-child {
-   /* Orange left border effect and gap hiding. */
-  box-shadow: inset 4px 0 0 0 #f97316, 1px 0 0 0 #ffedd5;
+  /* Orange left border effect and gap hiding. */
+  box-shadow:
+    inset 4px 0 0 0 #f97316,
+    1px 0 0 0 #ffedd5;
 }
 
 /* Table cell classes. */
@@ -205,7 +212,6 @@
   gap: 0.3rem;
 
   padding: 2px;
-
 
   justify-items: center;
   align-items: center;

@@ -91,7 +91,9 @@ function verifyDays(datePicker: VueWrapper, ident: string, calendarState?: { day
 
     expect(dayElement.exists(), `Day elem ix=${i} should exist for ${calendarHeader}`).toBe(true);
     expect(dayElement.text(), `Day elem ix=${i} text is wrong for ${calendarHeader}`).toEqual(calendarDay?.day);
-    expect(dayElement.classes(), `Day elem ix=${i} classes are wrong for ${calendarHeader}`).toEqual(calendarDay?.class);
+    expect(dayElement.classes(), `Day elem ix=${i} classes are wrong for ${calendarHeader}`).toEqual(
+      calendarDay?.class,
+    );
   }
 }
 

@@ -30,7 +30,10 @@ export const useUserEventStore = defineStore('user-events', () => {
   }
 
   return {
-    userSelectedTrigger, userUpdatedTrigger, diffUserData,
-    notifyUserSelected, notifyUserUpdated
+    userSelectedTrigger,
+    userUpdatedTrigger,
+    diffUserData,
+    notifyUserSelected,
+    notifyUserUpdated,
   };
 });

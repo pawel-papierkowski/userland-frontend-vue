@@ -29,9 +29,9 @@ const props = withDefaults(
     tableId: string;
     columns: ColumnData[];
     rowIndex: number;
-    entry: E|null;
+    entry: E | null;
     inlineEdit?: boolean;
-    rowMeta?: RowMeta|null;
+    rowMeta?: RowMeta | null;
   }>(),
   {
     inlineEdit: false,
@@ -45,14 +45,14 @@ const props = withDefaults(
  * Retrieve correct field metadata for given column.
  * @param column Column.
  */
-const resolveFieldMeta = (column: ColumnData): FieldMeta|null => {
+const resolveFieldMeta = (column: ColumnData): FieldMeta | null => {
   if (!props.rowMeta) return null;
   return props.rowMeta[column.name] || null;
-}
+};
 </script>
 
 <template>
-  <div :data-testid="`row_${props.tableId}_${rowIndex}`" style="display: contents;">
+  <div :data-testid="`row_${props.tableId}_${rowIndex}`" style="display: contents">
     <!-- CELLS FOR SINGLE TABLE ROW -->
     <template v-for="(column, colIndex) in columns" :key="colIndex">
       <TableCell

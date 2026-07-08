@@ -15,14 +15,17 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = withDefaults(defineProps<{
-  /** Used for identification. */
-  ident?: string;
-  /** Prefix for language key. Together with slot name will make lang key. */
-  langPrefix: string;
-}>(), {
-  ident: ''
-});
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    ident?: string;
+    /** Prefix for language key. Together with slot name will make lang key. */
+    langPrefix: string;
+  }>(),
+  {
+    ident: '',
+  },
+);
 
 const slots = useSlots();
 /** Extracted names (keys) of the slots that were actually provided. */
@@ -48,7 +51,7 @@ const selectSlot = (slotName: string) => {
  */
 const getNameClass = (slotName: string) => {
   return {
-    'active': selectedSlot.value === slotName
+    active: selectedSlot.value === slotName,
   };
 };
 </script>
@@ -57,9 +60,14 @@ const getNameClass = (slotName: string) => {
   <div class="tabgroup-wrapper">
     <div class="tabgroup-header">
       <!-- Loop through all slot names passed to this component. -->
-      <div v-for="slotName in activeSlots" :key="slotName" @click="selectSlot(slotName)"
+      <div
+        v-for="slotName in activeSlots"
+        :key="slotName"
+        @click="selectSlot(slotName)"
         :data-testid="`tabgroup_${ident}_${slotName}`"
-        class="tabgroup-header-name" :class="getNameClass(slotName)">
+        class="tabgroup-header-name"
+        :class="getNameClass(slotName)"
+      >
         {{ t(langPrefix + '.' + slotName) }}
       </div>
     </div>

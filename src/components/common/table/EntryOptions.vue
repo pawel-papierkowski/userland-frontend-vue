@@ -19,12 +19,12 @@ import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts
 const { t } = useI18n();
 
 const props = defineProps<{
-    meta: EntryMeta|null;
-    entry: E|null;
-    langPrefix: string;
-    actions: Record<string, (entry: E|null) => void | Promise<void>>;
-    isBusy: boolean;
-  }>();
+  meta: EntryMeta | null;
+  entry: E | null;
+  langPrefix: string;
+  actions: Record<string, (entry: E | null) => void | Promise<void>>;
+  isBusy: boolean;
+}>();
 
 //
 
@@ -54,8 +54,8 @@ const optionCanSee = (option: EntryOption): boolean => {
  */
 const optionClass = (option: EntryOption) => {
   return {
-    disabled: !optionCanUse(option)
-  }
+    disabled: !optionCanUse(option),
+  };
 };
 
 /**
@@ -86,16 +86,20 @@ const optionExecute = async (option: EntryOption, key: string) => {
     console.warn(`Action '${key}' not implemented in parent.`);
   }
 };
-
 </script>
 
 <template>
   <div class="entry-content">
     <template v-for="(option, key) in meta?.options" :key="key">
-        <div class="entry-btn" :class="optionClass(option)" :title="t(optionTooltip(option, key))"
-          v-if="optionCanSee(option)" @click="optionExecute(option, key)">
-          {{ t(langPrefix + '.' + key + '.button') }}
-        </div>
+      <div
+        class="entry-btn"
+        :class="optionClass(option)"
+        :title="t(optionTooltip(option, key))"
+        v-if="optionCanSee(option)"
+        @click="optionExecute(option, key)"
+      >
+        {{ t(langPrefix + '.' + key + '.button') }}
+      </div>
     </template>
   </div>
 </template>

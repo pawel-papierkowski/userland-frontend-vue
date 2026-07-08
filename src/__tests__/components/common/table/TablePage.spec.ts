@@ -26,18 +26,46 @@ interface TestForm {
 }
 
 /** Convenience function to create component. */
-function createComponent(modelValue: TestEntry|null, formEntry: TestForm|null, currPage: number, currSortBy: string|null, currSortOrder: string|null,
-    tableId: string, columns: ColumnData[], data: TestEntry[], meta: TableMetaResp, resolveRowMeta: (entry: Record<string, any>|null) => RowMeta|null,
-    isLoading: boolean, canSpin: boolean, canSelect: boolean, inlineEdit: boolean, addNewEntry: boolean, empty: string) {
+function createComponent(
+  modelValue: TestEntry | null,
+  formEntry: TestForm | null,
+  currPage: number,
+  currSortBy: string | null,
+  currSortOrder: string | null,
+  tableId: string,
+  columns: ColumnData[],
+  data: TestEntry[],
+  meta: TableMetaResp,
+  resolveRowMeta: (entry: Record<string, any> | null) => RowMeta | null,
+  isLoading: boolean,
+  canSpin: boolean,
+  canSelect: boolean,
+  inlineEdit: boolean,
+  addNewEntry: boolean,
+  empty: string,
+) {
   return mount(TablePage, {
     global: {
       plugins: [i18n],
     },
     props: {
-      modelValue, formEntry, currPage, currSortBy, currSortOrder,
-      tableId, columns, data, meta, resolveRowMeta,
-      isLoading, canSpin, canSelect, inlineEdit, addNewEntry, empty
-    }
+      modelValue,
+      formEntry,
+      currPage,
+      currSortBy,
+      currSortOrder,
+      tableId,
+      columns,
+      data,
+      meta,
+      resolveRowMeta,
+      isLoading,
+      canSpin,
+      canSelect,
+      inlineEdit,
+      addNewEntry,
+      empty,
+    },
   });
 }
 
@@ -51,7 +79,7 @@ function genColumns(): ColumnData[] {
       translation: 'test.table.column.id',
       visible: false,
       editable: false,
-      kind: EnColumnKind.Data
+      kind: EnColumnKind.Data,
     },
     {
       name: 'createdAt',
@@ -59,7 +87,7 @@ function genColumns(): ColumnData[] {
       translation: 'test.table.column.createdAt',
       visible: true,
       editable: false,
-      kind: EnColumnKind.Data
+      kind: EnColumnKind.Data,
     },
     {
       name: 'name',
@@ -67,7 +95,7 @@ function genColumns(): ColumnData[] {
       translation: 'test.table.column.name',
       visible: true,
       editable: true,
-      kind: EnColumnKind.Data
+      kind: EnColumnKind.Data,
     },
     {
       name: 'value',
@@ -75,7 +103,7 @@ function genColumns(): ColumnData[] {
       translation: 'test.table.column.value',
       visible: true,
       editable: true,
-      kind: EnColumnKind.Data
+      kind: EnColumnKind.Data,
     },
     {
       name: 'options',
@@ -83,8 +111,8 @@ function genColumns(): ColumnData[] {
       translation: 'test.table.column.options',
       visible: true,
       editable: false,
-      kind: EnColumnKind.Custom
-    }
+      kind: EnColumnKind.Custom,
+    },
   ];
 }
 
@@ -94,12 +122,12 @@ function genData(page: number): TestEntry[] {
       {
         id: 40,
         name: 'AA',
-        value: 'BB'
+        value: 'BB',
       },
       {
         id: 41,
         name: 'config',
-        value: 'true'
+        value: 'true',
       },
     ];
   if (page === 1)
@@ -107,12 +135,12 @@ function genData(page: number): TestEntry[] {
       {
         id: 42,
         name: 'Entry Name',
-        value: 'Entry Value'
+        value: 'Entry Value',
       },
       {
         id: 43,
         name: 'ZX83',
-        value: '0'
+        value: '0',
       },
     ];
   if (page === 2)
@@ -120,8 +148,8 @@ function genData(page: number): TestEntry[] {
       {
         id: 44,
         name: 'O E',
-        value: 'V X'
-      }
+        value: 'V X',
+      },
     ];
   return [];
 }
@@ -138,18 +166,27 @@ function genMetaData(page: number, sortBy: string, sortOrder: string): TableMeta
   };
 }
 
-function genResolveRowMeta(): (entry: Record<string, any>|null) => RowMeta|null {
- return vi.fn<(entry: Record<string, any>|null) => RowMeta|null>();
+function genResolveRowMeta(): (entry: Record<string, any> | null) => RowMeta | null {
+  return vi.fn<(entry: Record<string, any> | null) => RowMeta | null>();
 }
 
-function generateAll(isEmpty: boolean, page: number, sortBy: string, sortOrder: string): { columns: ColumnData[], data: TestEntry[], metadata: TableMetaResp, resolveRowMeta: (entry: Record<string, any>|null) => RowMeta|null } {
+function generateAll(
+  isEmpty: boolean,
+  page: number,
+  sortBy: string,
+  sortOrder: string,
+): {
+  columns: ColumnData[];
+  data: TestEntry[];
+  metadata: TableMetaResp;
+  resolveRowMeta: (entry: Record<string, any> | null) => RowMeta | null;
+} {
   const columns = genColumns();
   const data = genData(isEmpty ? -1 : page);
   const metadata = genMetaData(isEmpty ? 0 : page, sortBy, sortOrder);
   const resolveRowMeta = genResolveRowMeta();
   return { columns, data, metadata, resolveRowMeta };
 }
-
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -163,9 +200,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(true, 0, 'createdAt', 'DESC');
 
       // Act: Create table.
-      const tablePage = createComponent(null, null, 0, 'createdAt', 'DESC', '',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'DESC',
+        '',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Assert: All visible column headers are shown correctly.
       const columnHeaders = tablePage.findAll('.table-header-cell');
@@ -207,9 +259,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       // Act: Create table.
-      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'name',
+        'DESC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Assert: All visible column headers are shown correctly.
       const columnHeaders = tablePage.findAll('.table-header-cell');
@@ -271,9 +338,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       // Arrange: Create table.
-      const tablePage = createComponent(data[0]!, null, 0, 'name', 'DESC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        data[0]!,
+        null,
+        0,
+        'name',
+        'DESC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Act: Select row.
       const rows = tablePage.findAll('.table-row');
@@ -327,9 +409,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       // Arrange: Create table.
-      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, false, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'name',
+        'DESC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        false,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Act: Try to select row.
       const rows = tablePage.findAll('.table-row');
@@ -384,9 +481,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       // Arrange: Create table.
-      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'name',
+        'DESC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Act: Click on next page button.
       const paginers = tablePage.findAllComponents(TablePaginer);
@@ -406,9 +518,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
 
       // Arrange: Create table.
-      const tablePage = createComponent(null, null, 0, 'createdAt', 'ASC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'ASC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Act: Click on header of 'createdAt' column. Note we already sort by this column, so we only change direction.
       const columnHeaders = tablePage.findAll('.table-header-cell');
@@ -443,9 +570,24 @@ describe('TablePage', () => {
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       // Arrange: Create table.
-      const tablePage = createComponent(null, null, 0, 'name', 'DESC', 'customTableId',
-        columns, data, metadata, resolveRowMeta,
-        false, true, true, false, false, 'test.table.page.empty');
+      const tablePage = createComponent(
+        null,
+        null,
+        0,
+        'name',
+        'DESC',
+        'customTableId',
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
 
       // Act: Click on header of 'value' column.
       const columnHeaders = tablePage.findAll('.table-header-cell');

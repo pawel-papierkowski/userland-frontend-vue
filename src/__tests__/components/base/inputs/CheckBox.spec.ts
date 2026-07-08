@@ -15,7 +15,11 @@ function createComponent(
 ) {
   return mount(CheckBox, {
     props: {
-      modelValue, ident, allowNull, disabled, invalid,
+      modelValue,
+      ident,
+      allowNull,
+      disabled,
+      invalid,
     },
   });
 }
@@ -132,7 +136,7 @@ describe('CheckBox', () => {
 
       // Arrange&Act: Create check box that is disabled.
       const checkBox = createComponent(true, '', false, true, false);
-      
+
       // Assert: CSS classes are correctly assigned, ensuring component is visually disabled.
       expect(checkBox.find('.checkbox').classes()).toStrictEqual(['checkbox', 'disabled']);
 

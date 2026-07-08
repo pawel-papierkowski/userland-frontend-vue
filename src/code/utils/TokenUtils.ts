@@ -1,4 +1,4 @@
-import type { RouteLocationNormalizedLoadedGeneric } from "vue-router";
+import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 
 /** Utility class for handling tokens. */
 export class TokenUtils {

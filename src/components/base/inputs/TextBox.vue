@@ -45,13 +45,15 @@ const props = withDefaults(
 
 <template>
   <div class="input-wrapper" :data-testid="`textbox_${ident}`">
-    <input type="text"
+    <input
+      type="text"
       v-model="currValue"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
       :class="{ err: invalid }"
       :disabled="disabled"
-      :tabindex="disabled ? -1 : 0" />
+      :tabindex="disabled ? -1 : 0"
+    />
   </div>
 </template>
 

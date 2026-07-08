@@ -57,7 +57,7 @@ const props = withDefaults(
     columns: ColumnData[];
     data: E[];
     meta: TableMetaResp;
-    resolveRowMeta?: (entry: E|null) => RowMeta|null;
+    resolveRowMeta?: (entry: E | null) => RowMeta | null;
     isLoading?: boolean;
     canSpin?: boolean;
     canSelect?: boolean;
@@ -91,31 +91,35 @@ const slottedColumns = computed(() => {
 
 /** If you disable selection abiliy, automatically deselect. */
 watch(
-  () => props.canSelect, () => {
+  () => props.canSelect,
+  () => {
     if (!props.canSelect) selRecord.value = null;
   },
 );
 
 /** React to end of loading. */
-watch(() => props.isLoading, (newVal) => {
-  if (newVal) return;
-  // We know we stopped loading. Ensure page data is consistent.
-  // Remember, currPage is zero-indexed.
-  if (currPage.value === 0) return; // do not touch if we are on first page
+watch(
+  () => props.isLoading,
+  (newVal) => {
+    if (newVal) return;
+    // We know we stopped loading. Ensure page data is consistent.
+    // Remember, currPage is zero-indexed.
+    if (currPage.value === 0) return; // do not touch if we are on first page
 
-  if (props.meta.pageCount === 0) {
-    currPage.value = 0; // reset currPage to ensure it will always try to load first page
-    return;
-  }
+    if (props.meta.pageCount === 0) {
+      currPage.value = 0; // reset currPage to ensure it will always try to load first page
+      return;
+    }
 
-  // Check if current page is too large.
-  const offPageNumber = currPage.value + 1; // one-indexed
-  if (props.meta.pageCount < offPageNumber) {
-    currPage.value = props.meta.pageCount - 1;
-    if (currPage.value < 0) currPage.value = 0;
-    return;
-  }
-});
+    // Check if current page is too large.
+    const offPageNumber = currPage.value + 1; // one-indexed
+    if (props.meta.pageCount < offPageNumber) {
+      currPage.value = props.meta.pageCount - 1;
+      if (currPage.value < 0) currPage.value = 0;
+      return;
+    }
+  },
+);
 
 // Table column handling.
 
@@ -127,7 +131,7 @@ watch(() => props.isLoading, (newVal) => {
 const canSortColumn = (column: ColumnData): boolean => {
   if (selRecord.value !== null && props.inlineEdit) return false;
   return column.defSort !== '';
-}
+};
 
 /**
  * Check if paginer should be disabled.
@@ -137,7 +141,7 @@ const canDisablePaginer = (): boolean => {
   if (props.data.length === 0) return true; // no results
   if (selRecord.value !== null && props.inlineEdit) return true; // during inline edit
   return false;
-}
+};
 
 /**
  * Find out additional classes for column header.
@@ -145,8 +149,8 @@ const canDisablePaginer = (): boolean => {
  */
 const columHeaderClass = (column: ColumnData) => {
   return {
-    sortable: canSortColumn(column)
-  }
+    sortable: canSortColumn(column),
+  };
 };
 
 /**
@@ -188,7 +192,7 @@ const changeSort = (column: ColumnData) => {
  * @param entry Entry. Can be null if it is row for new entry.
  * @param rowIndex Row index.
  */
-const rowClass = (entry: E|null, rowIndex: number) => {
+const rowClass = (entry: E | null, rowIndex: number) => {
   const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
   let selected = false;
   if (selRecord.value && entry !== null) selected = selRecord.value[key] === entry[key];
@@ -205,7 +209,7 @@ const rowClass = (entry: E|null, rowIndex: number) => {
  * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
  */
-const selectEntry = (entry: E|null, force: boolean) => {
+const selectEntry = (entry: E | null, force: boolean) => {
   if (!force && !props.canSelect) return;
   // This automatically emits 'update:modelValue' to the parent.
   if (entry === null) selRecord.value = null;
@@ -222,14 +226,23 @@ defineExpose({
 </script>
 
 <template>
-  <div class="table-container" role="table" :data-testid="`table_${props.tableId}`"
-    :style="{ '--col-count': visibleColumnsCount }">
+  <div
+    class="table-container"
+    role="table"
+    :data-testid="`table_${props.tableId}`"
+    :style="{ '--col-count': visibleColumnsCount }"
+  >
     <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
       <div class="table-header-row" role="row">
         <template v-for="(column, colIndex) in columns" :key="colIndex">
-          <div v-if="column.visible" class="table-header-cell" :class="columHeaderClass(column)" role="columnheader"
-            @click="changeSort(column)">
+          <div
+            v-if="column.visible"
+            class="table-header-cell"
+            :class="columHeaderClass(column)"
+            role="columnheader"
+            @click="changeSort(column)"
+          >
             {{ t(column.translation) }}
             <span v-if="column.defSort !== ''" :class="sortMarker(column)"></span>
           </div>
@@ -255,7 +268,7 @@ defineExpose({
     <template v-else>
       <!-- NEW IN-LINE ENTRY -->
       <div v-if="addNewEntry && inlineEdit" class="table-row-group" role="rowgroup">
-        <div class="table-row" :class="rowClass(null, 0)" role="row" >
+        <div class="table-row" :class="rowClass(null, 0)" role="row">
           <TableRow
             v-model="selRecord"
             v-model:formEntry="formEntry"
@@ -267,7 +280,11 @@ defineExpose({
             :rowMeta="resolveRowMeta ? resolveRowMeta(null) : null"
           >
             <!-- Slot forwarding: forward all slots that match columns. -->
-            <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">
+            <template
+              v-for="(column, colIndex) in slottedColumns"
+              :key="colIndex"
+              #[`column_${column.name}`]="slotData"
+            >
               <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
             </template>
           </TableRow>
@@ -277,8 +294,10 @@ defineExpose({
       <!-- TABLE ROWS -->
       <div class="table-row-group" role="rowgroup">
         <div
-          v-for="(entry, rowIndex) in data" :key="rowIndex"
-          class="table-row" :class="rowClass(entry, rowIndex)"
+          v-for="(entry, rowIndex) in data"
+          :key="rowIndex"
+          class="table-row"
+          :class="rowClass(entry, rowIndex)"
           role="row"
           @click="selectEntry(entry, false)"
         >
@@ -293,7 +312,11 @@ defineExpose({
             :rowMeta="resolveRowMeta ? resolveRowMeta(entry) : null"
           >
             <!-- Slot forwarding: forward all slots that match columns. -->
-            <template v-for="(column, colIndex) in slottedColumns" :key="colIndex" #[`column_${column.name}`]="slotData">
+            <template
+              v-for="(column, colIndex) in slottedColumns"
+              :key="colIndex"
+              #[`column_${column.name}`]="slotData"
+            >
               <slot :name="`column_${column.name}`" v-bind="slotData || {}" />
             </template>
           </TableRow>

@@ -8,9 +8,9 @@ import type { EnColumnKind } from '@/code/data/features/common/const.ts';
 // EDITOR
 
 export type TabData = {
-  id: string,
-  label: string,
-  component: Component
+  id: string;
+  label: string;
+  component: Component;
 };
 
 // /////
@@ -19,17 +19,17 @@ export type TabData = {
 /** Column data for TablePage component. */
 export type ColumnData = {
   /** Name of column. */
-  name: string,
+  name: string;
   /** Default sort for this column. Allowed values: 'ASC', 'DESC' or '' (no sorting enabled for this column). */
-  defSort: string,
+  defSort: string;
   /** Translation key for column header. */
-  translation: string,
+  translation: string;
   /** Is column visible? */
-  visible: boolean,
+  visible: boolean;
   /** Is column editable? Applies only to in-place editing. */
-  editable: boolean,
+  editable: boolean;
   /** Kind of column. */
-  kind: EnColumnKind,
+  kind: EnColumnKind;
 };
 
 /** Metadata for given row. */
@@ -45,10 +45,10 @@ export type FieldMeta = {
 
 /** Table metadata request for pagination and sorting. */
 export type TableMetaReq = {
-  pageSize: number|null; // Size of page.
-  page: number|null; // Page number.
-  sortBy: string|null; // Name of field to sort by. If null/empty, will sort by default field (usually createdAt).
-  sortOrder: string|null; // Sort order for sortBy. If null/empty, will use descending order.
+  pageSize: number | null; // Size of page.
+  page: number | null; // Page number.
+  sortBy: string | null; // Name of field to sort by. If null/empty, will sort by default field (usually createdAt).
+  sortOrder: string | null; // Sort order for sortBy. If null/empty, will use descending order.
 };
 
 /** Table metadata response. */
@@ -65,17 +65,17 @@ export type TableMetaResp = {
 /** Entry metadata response. */
 export type EntryMeta = {
   /** Options available for this entry. */
-  options: Record<string, EntryOption>|null,
+  options: Record<string, EntryOption> | null;
   /** Other metadata. */
-  data: Record<string, string>|null
+  data: Record<string, string> | null;
 };
 
 /** Entry metadata option. */
 export type EntryOption = {
   /** Access rules. */
-  access: 'INVISIBLE'|'DISABLED'|'ENABLED',
+  access: 'INVISIBLE' | 'DISABLED' | 'ENABLED';
   /** Reason for state of option as language key. */
-  reason: string|null,
+  reason: string | null;
 };
 
 // OTHER
@@ -83,5 +83,5 @@ export type EntryOption = {
 /** Needed for proper definition of tablePageRef because TablePage uses generics. */
 export interface TablePageExpose {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selectEntry: (entry: Record<string, any>|null, force: boolean) => Promise<void>;
+  selectEntry: (entry: Record<string, any> | null, force: boolean) => Promise<void>;
 }

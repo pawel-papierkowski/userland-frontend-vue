@@ -8,21 +8,21 @@
  */
 
 /* General variables and styles. */
-@import url("general/reset.css");
-@import url("general/style.css");
+@import url('general/reset.css');
+@import url('general/style.css');
 
 /* App-specific variables. */
-@import url("var/app.css");
-@import url("var/components-custom.css");
-@import url("var/components.css");
-@import url("var/form.css");
-@import url("var/layout.css");
-@import url("var/table.css");
+@import url('var/app.css');
+@import url('var/components-custom.css');
+@import url('var/components.css');
+@import url('var/form.css');
+@import url('var/layout.css');
+@import url('var/table.css');
 
 /* App-specific styles. */
-@import url("app/app.css");
-@import url("app/components-custom.css");
-@import url("app/components.css");
-@import url("app/form.css");
-@import url("app/layout.css");
-@import url("app/table.css");
+@import url('app/app.css');
+@import url('app/components-custom.css');
+@import url('app/components.css');
+@import url('app/form.css');
+@import url('app/layout.css');
+@import url('app/table.css');

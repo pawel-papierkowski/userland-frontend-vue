@@ -4,7 +4,6 @@
 import MessageContainer from '@/components/common/messages/MessageContainer.vue';
 import StandardHeader from '@/components/layout/standard/header/StandardHeader.vue';
 import StandardFooter from '@/components/layout/standard/footer/StandardFooter.vue';
-
 </script>
 
 <template>

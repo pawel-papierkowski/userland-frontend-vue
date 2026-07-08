@@ -214,7 +214,8 @@ const hidePanel = () => {
 
 <template>
   <div class="picker-time" ref="pickerRef">
-    <input type="text"
+    <input
+      type="text"
       :id="`timepicker_${ident}`"
       :data-testid="`timepicker_${ident}`"
       class="picker-input-time"
@@ -224,20 +225,38 @@ const hidePanel = () => {
       :disabled="disabled"
       readonly
       autocomplete="off"
+      role="combobox"
+      aria-haspopup="listbox"
+      :aria-expanded="isClockVisible"
+      :aria-controls="`timepicker_${ident}_panel`"
+      :aria-label="t('dateTimePicker.placeholder.time')"
+      :aria-disabled="disabled || undefined"
       @click="toggleTimePickerVisibility"
     />
 
-    <!-- Time picker panel. -->
-    <div v-if="isClockVisible" class="clock-container" ref="clockContainerRef" :style="containerStyle">
+    <!-- Time picker: clock panel. -->
+    <div
+      v-if="isClockVisible"
+      :id="`timepicker_${ident}_panel`"
+      class="clock-container"
+      ref="clockContainerRef"
+      role="dialog"
+      :aria-label="t('dateTimePicker.placeholder.time')"
+      aria-modal="true"
+      :style="containerStyle"
+    >
       <div class="clock-columns">
         <!-- Hours scroller. -->
-        <div class="clock-column" ref="hourRef">
-          <div class="column-header">{{ t('dateTimePicker.hour') }}</div>
+        <div class="clock-column" ref="hourRef" role="listbox" :aria-label="t('dateTimePicker.hour')">
+          <div class="column-header" aria-hidden="true">{{ t('dateTimePicker.hour') }}</div>
           <div
             v-for="h in hours"
             :key="h"
             class="time-item time-hour"
             :class="resolveHourClass(h)"
+            role="option"
+            :aria-selected="selectedHour === h"
+            :aria-label="`${h} ${t('dateTimePicker.hour')}`"
             :data-testid="`timepicker_${ident}_h${h}`"
             @click="selectHour(h)"
           >
@@ -246,13 +265,16 @@ const hidePanel = () => {
         </div>
 
         <!-- Minutes scroller. -->
-        <div class="clock-column" ref="minuteRef">
-          <div class="column-header">{{ t('dateTimePicker.minute') }}</div>
+        <div class="clock-column" ref="minuteRef" role="listbox" :aria-label="t('dateTimePicker.minute')">
+          <div class="column-header" aria-hidden="true">{{ t('dateTimePicker.minute') }}</div>
           <div
             v-for="m in minutes"
             :key="m"
             class="time-item time-minute"
             :class="resolveMinuteClass(m)"
+            role="option"
+            :aria-selected="selectedMinute === m"
+            :aria-label="`${m} ${t('dateTimePicker.minute')}`"
             :data-testid="`timepicker_${ident}_m${m}`"
             @click="selectMinute(m)"
           >

@@ -77,7 +77,11 @@ const convertToReq = (form: UserAccountDeleteLinkForm): UserAccountDeleteLinkReq
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.accountDeleteStart.msg.success.title', 'user.accountDeleteStart.msg.success.content', defDuration * 2);
+  AppMessager.successT(
+    'user.accountDeleteStart.msg.success.title',
+    'user.accountDeleteStart.msg.success.content',
+    defDuration * 2,
+  );
   log.debug('Successfully sent account deletion request.');
 };
 

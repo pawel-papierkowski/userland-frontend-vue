@@ -88,9 +88,15 @@ const logVue = (level: EnMessageLevel) => {
       <legend>{{ t('testArea.messages.msgButtons.legend') }}</legend>
       <div class="items-vertical">
         <button @click="genMessage(EnMessageLevel.Info)">{{ t('testArea.messages.msgButtons.info.label') }}</button>
-        <button @click="genMessage(EnMessageLevel.Success)">{{ t('testArea.messages.msgButtons.success.label') }}</button>
-        <button @click="genMessage(EnMessageLevel.Warning)">{{ t('testArea.messages.msgButtons.warning.label') }}</button>
-        <button @click="genMessage(EnMessageLevel.Failure)">{{ t('testArea.messages.msgButtons.failure.label') }}</button>
+        <button @click="genMessage(EnMessageLevel.Success)">
+          {{ t('testArea.messages.msgButtons.success.label') }}
+        </button>
+        <button @click="genMessage(EnMessageLevel.Warning)">
+          {{ t('testArea.messages.msgButtons.warning.label') }}
+        </button>
+        <button @click="genMessage(EnMessageLevel.Failure)">
+          {{ t('testArea.messages.msgButtons.failure.label') }}
+        </button>
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.messages.msgButtons.error.label') }}</button>
       </div>
     </fieldset>

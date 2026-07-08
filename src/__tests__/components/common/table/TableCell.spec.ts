@@ -21,92 +21,123 @@ interface TestForm {
 }
 
 /** Convenience function to create component. */
-function createComponent(modelValue: TestEntry|null, formEntry: TestForm|null, tableId: string, column: ColumnData, rowIndex: number, entry: TestEntry|null, inlineEdit?: boolean, fieldMeta?: FieldMeta|null) {
+function createComponent(
+  modelValue: TestEntry | null,
+  formEntry: TestForm | null,
+  tableId: string,
+  column: ColumnData,
+  rowIndex: number,
+  entry: TestEntry | null,
+  inlineEdit?: boolean,
+  fieldMeta?: FieldMeta | null,
+) {
   return mount(TableCell, {
-      props: {
-        modelValue, formEntry,
-        tableId, column, rowIndex, entry, inlineEdit, fieldMeta
-      }
-    });
+    props: {
+      modelValue,
+      formEntry,
+      tableId,
+      column,
+      rowIndex,
+      entry,
+      inlineEdit,
+      fieldMeta,
+    },
+  });
 }
 
 /** Convenience function to create component. Version with slots. */
-function createComponentWithSlots(slots: Record<string, string>, modelValue: TestEntry|null, formEntry: TestForm|null, tableId: string, column: ColumnData, rowIndex: number, entry: TestEntry|null, inlineEdit?: boolean, fieldMeta?: FieldMeta|null) {
+function createComponentWithSlots(
+  slots: Record<string, string>,
+  modelValue: TestEntry | null,
+  formEntry: TestForm | null,
+  tableId: string,
+  column: ColumnData,
+  rowIndex: number,
+  entry: TestEntry | null,
+  inlineEdit?: boolean,
+  fieldMeta?: FieldMeta | null,
+) {
   return mount(TableCell, {
-      props: {
-        modelValue, formEntry,
-        tableId, column, rowIndex, entry, inlineEdit, fieldMeta
-      },
-      slots
-    });
+    props: {
+      modelValue,
+      formEntry,
+      tableId,
+      column,
+      rowIndex,
+      entry,
+      inlineEdit,
+      fieldMeta,
+    },
+    slots,
+  });
 }
 
 //
 
 function createEntry(): TestEntry {
   return {
-      id: 42,
-      name: 'Entry Name',
-      value: 'Entry Value'
-    };
+    id: 42,
+    name: 'Entry Name',
+    value: 'Entry Value',
+  };
 }
 
 function createForm(): TestForm {
   return {
-      name: 'Form Name',
-      value: 'Form Value'
-    };
+    name: 'Form Name',
+    value: 'Form Value',
+  };
 }
 
 function createFieldMeta(): FieldMeta {
   return {
-      css: 'err'
-    };
+    css: 'err',
+  };
 }
 
 /** Create test data for cell in 'name' column. */
-function createDataName(): {testEntry: TestEntry, testForm: TestForm, column: ColumnData} {
-    const testEntry: TestEntry = createEntry();
-    const testForm: TestForm = createForm();
-    const column: ColumnData = {
-      name: 'name',
-      defSort: 'ASC',
-      translation: 'test.table.column.name',
-      visible: true,
-      editable: false,
-      kind: EnColumnKind.Data
-    };
-    return { testEntry, testForm, column };
+function createDataName(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
+  const testEntry: TestEntry = createEntry();
+  const testForm: TestForm = createForm();
+  const column: ColumnData = {
+    name: 'name',
+    defSort: 'ASC',
+    translation: 'test.table.column.name',
+    visible: true,
+    editable: false,
+    kind: EnColumnKind.Data,
+  };
+  return { testEntry, testForm, column };
 }
 
 /** Create test data for cell in 'value' column. */
-function createDataValue(): {testEntry: TestEntry, testForm: TestForm, column: ColumnData} {
-    const testEntry: TestEntry = createEntry();
-    const testForm: TestForm = createForm();
-    const column: ColumnData = {
-      name: 'value',
-      defSort: 'ASC',
-      translation: 'test.table.column.value',
-      visible: true,
-      editable: true,
-      kind: EnColumnKind.Data
-    };
-    return { testEntry, testForm, column };
+function createDataValue(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
+  const testEntry: TestEntry = createEntry();
+  const testForm: TestForm = createForm();
+  const column: ColumnData = {
+    name: 'value',
+    defSort: 'ASC',
+    translation: 'test.table.column.value',
+    visible: true,
+    editable: true,
+    kind: EnColumnKind.Data,
+  };
+  return { testEntry, testForm, column };
 }
 
 /** Create test data for cell in 'options' column. */
-function createDataOptions(): {testEntry: TestEntry, testForm: TestForm, column: ColumnData} {
-    const testEntry: TestEntry = createEntry();
-    const testForm: TestForm = createForm();
-    const column: ColumnData = {
-      name: 'options',
-      defSort: '',
-      translation: 'test.table.column.options',
-      visible: true,
-      editable: false,
-      kind: EnColumnKind.Custom
-    };
-    return { testEntry, testForm, column };
+function createDataOptions(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
+  const testEntry: TestEntry = createEntry();
+  const testForm: TestForm = createForm();
+  const column: ColumnData = {
+    name: 'options',
+    defSort: '',
+    translation: 'test.table.column.options',
+    visible: true,
+    editable: false,
+    kind: EnColumnKind.Custom,
+  };
+  return { testEntry, testForm, column };
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -137,7 +168,17 @@ describe('TableCell', () => {
     const { testEntry, testForm, column } = createDataName();
 
     // Act: Create component.
-    const tableCell = createComponentWithSlots({ column_name: 'Other Name' }, null, testForm, 'testTable', column, 0, testEntry, false, null);
+    const tableCell = createComponentWithSlots(
+      { column_name: 'Other Name' },
+      null,
+      testForm,
+      'testTable',
+      column,
+      0,
+      testEntry,
+      false,
+      null,
+    );
 
     // Assert: State of cell is correct.
     expect(tableCell.text()).toBe('Other Name'); // content from slot assigned for this column
@@ -239,10 +280,19 @@ describe('TableCell', () => {
     const { testEntry, testForm, column } = createDataOptions();
 
     // Act: Create component.
-    const tableCell = createComponentWithSlots({ column_options: 'OPTIONS' }, null, testForm, 'testTable', column, 0, testEntry, false, null);
+    const tableCell = createComponentWithSlots(
+      { column_options: 'OPTIONS' },
+      null,
+      testForm,
+      'testTable',
+      column,
+      0,
+      testEntry,
+      false,
+      null,
+    );
 
     // Assert: State of cell is correct.
     expect(tableCell.text()).toBe('OPTIONS');
   });
 });
-

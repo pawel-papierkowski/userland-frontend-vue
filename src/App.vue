@@ -13,13 +13,13 @@ const refreshLang = () => {
   const systemLanguage = navigator.language.split('-')[0] || fallbackLang;
   const browserLang = localStorage.getItem(locstLang) || systemLanguage;
   locale.value = languages.includes(browserLang) ? browserLang : fallbackLang;
-}
+};
 
 /** If JWT is present in storage, relog user. */
 const relogUser = () => {
   const jwt = localStorage.getItem(locstJwt) || null;
   if (jwt !== null) AppLoginer.login(jwt);
-}
+};
 
 refreshLang();
 relogUser();

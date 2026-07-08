@@ -124,7 +124,8 @@ const handleKeydown = (event: KeyboardEvent) => {
       if (!isOpen.value) {
         isOpen.value = true;
         highlightedIndex.value = 0;
-      } else { // Wraparound.
+      } else {
+        // Wraparound.
         highlightedIndex.value = (highlightedIndex.value + 1) % props.options.length;
       }
       break;
@@ -134,7 +135,8 @@ const handleKeydown = (event: KeyboardEvent) => {
       if (!isOpen.value) {
         isOpen.value = true;
         highlightedIndex.value = props.options.length - 1;
-      } else { // Wraparound.
+      } else {
+        // Wraparound.
         highlightedIndex.value = (highlightedIndex.value - 1 + props.options.length) % props.options.length;
       }
       break;
@@ -174,7 +176,10 @@ const showOption = (option: number | string | null): number | string | null => {
 </script>
 
 <template>
-  <div class="combobox" :class="{ disabled: disabled, err: invalid }" :data-testid="`combobox_${ident}`"
+  <div
+    class="combobox"
+    :class="{ disabled: disabled, err: invalid }"
+    :data-testid="`combobox_${ident}`"
     ref="combobox"
     role="combobox"
     :aria-expanded="isOpen"
@@ -183,7 +188,10 @@ const showOption = (option: number | string | null): number | string | null => {
     :aria-activedescendant="highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : 0"
-    @blur="isOpen = false; highlightedIndex = -1"
+    @blur="
+      isOpen = false;
+      highlightedIndex = -1;
+    "
     @keydown="handleKeydown"
   >
     <div class="combobox-selected" @click="openOptions()">

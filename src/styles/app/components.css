@@ -19,7 +19,8 @@ input {
   border-radius: var(--input-border-radius);
 }
 
-input:focus-visible { /* Acceptable as cursor is visible. */
+input:focus-visible {
+  /* Acceptable as cursor is visible. */
   outline: none;
   outline-offset: none;
 }

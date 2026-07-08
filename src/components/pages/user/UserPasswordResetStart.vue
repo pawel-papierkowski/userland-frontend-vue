@@ -77,7 +77,11 @@ const convertToReq = (form: UserPasswordResetLinkForm): UserPasswordResetLinkReq
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.passwordResetStart.msg.success.title', 'user.passwordResetStart.msg.success.content', defDuration * 2);
+  AppMessager.successT(
+    'user.passwordResetStart.msg.success.title',
+    'user.passwordResetStart.msg.success.content',
+    defDuration * 2,
+  );
   log.debug('Successfully sent password reset request as user "', form.email, '".');
 };
 

@@ -56,7 +56,11 @@ const handleAccountDeletion = async () => {
     await backendApiUser.accountDeleteConfirm(payload);
 
     log.debug('Deleted user account using token:', tokenStr);
-    AppMessager.successT('user.accountDelete.msg.success.title', 'user.accountDelete.msg.success.content', defDuration * 2);
+    AppMessager.successT(
+      'user.accountDelete.msg.success.title',
+      'user.accountDelete.msg.success.content',
+      defDuration * 2,
+    );
 
     // User account ceased to exist, so we log out user on frontend.
     AppLoginer.logout(false);

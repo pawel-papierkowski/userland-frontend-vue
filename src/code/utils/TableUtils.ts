@@ -8,9 +8,9 @@ export class TableUtils {
    * @param optionKey Option key.
    * @returns Option or null.
    */
-  public static ExtractOption(entryMeta: EntryMeta|null, optionKey: string): EntryOption|null  {
+  public static ExtractOption(entryMeta: EntryMeta | null, optionKey: string): EntryOption | null {
     if (entryMeta == null) return null;
-    const options: Record<string, EntryOption>|null = entryMeta.options;
+    const options: Record<string, EntryOption> | null = entryMeta.options;
     if (options == null) return null;
     return options[optionKey] || null;
   }

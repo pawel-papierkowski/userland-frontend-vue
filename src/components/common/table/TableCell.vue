@@ -31,9 +31,9 @@ const props = withDefaults(
     tableId: string;
     column: ColumnData;
     rowIndex: number;
-    entry: E|null;
+    entry: E | null;
     inlineEdit?: boolean;
-    fieldMeta?: FieldMeta|null;
+    fieldMeta?: FieldMeta | null;
   }>(),
   {
     inlineEdit: false,
@@ -43,11 +43,11 @@ const props = withDefaults(
 
 defineSlots<{
   [key: string]: (props: {
-    entry: E|null,
-    isEditMode?: boolean,
-    formEntry?: FE | null
-    fieldMeta?: FieldMeta|null;
-  }) => VNode[] // result of rendering slot
+    entry: E | null;
+    isEditMode?: boolean;
+    formEntry?: FE | null;
+    fieldMeta?: FieldMeta | null;
+  }) => VNode[]; // result of rendering slot
 }>();
 
 //
@@ -76,13 +76,18 @@ const cellClass = computed(() => {
       <template v-if="$slots['column_' + column.name]">
         <!-- If slot with matching name is provided, it is used instead. You are responsible for correctly showing
         text/input/whatever depending on isEditMode and fieldMeta. -->
-        <slot :name="`column_${column.name}`" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
+        <slot
+          :name="`column_${column.name}`"
+          :entry="entry"
+          :isEditMode="isEditMode"
+          :formEntry="formEntry"
+          :fieldMeta="fieldMeta"
+        />
       </template>
       <template v-else>
         <!-- Default column handling. -->
         <template v-if="isEditMode && formEntry">
-          <input :id="column.name" type="text" :class="cellClass"
-            v-model="formEntry[column.name]" autocomplete="off" />
+          <input :id="column.name" type="text" :class="cellClass" v-model="formEntry[column.name]" autocomplete="off" />
         </template>
         <template v-else>
           {{ entry === null ? '' : entry[column.name] }}
@@ -92,7 +97,13 @@ const cellClass = computed(() => {
 
     <template v-else-if="column.kind === EnColumnKind.Custom">
       <!-- Custom columns always use slot. -->
-      <slot :name="`column_${column.name}`" :entry="entry" :isEditMode="isEditMode" :formEntry="formEntry" :fieldMeta="fieldMeta" />
+      <slot
+        :name="`column_${column.name}`"
+        :entry="entry"
+        :isEditMode="isEditMode"
+        :formEntry="formEntry"
+        :fieldMeta="fieldMeta"
+      />
     </template>
   </div>
 </template>

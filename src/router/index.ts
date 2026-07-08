@@ -33,39 +33,54 @@ const meta4admin = { layout: 'ADMIN', requiresAuth: true, permissions: ['role_op
 
 // Define all routes for this app. Note meta is always present.
 const routes = [
-    // STANDARD WEBPAGES
+  // STANDARD WEBPAGES
 
-    { name:'home', path: '/', component: UserLandHome, meta: meta4unlogged },
-    { name:'testArea', path: '/testArea', component: UserLandTestArea, meta: meta4unlogged },
-    { name:'debugArea', path: '/debugArea', component: UserLandDebugArea, meta: meta4unlogged },
-    { name:'memberArea', path: '/memberArea', component: UserLandMember, meta: meta4logged },
-    { name:'registration', path: '/registration', component: UserRegistration, meta: meta4unlogged },
-    { name:'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
+  { name: 'home', path: '/', component: UserLandHome, meta: meta4unlogged },
+  { name: 'testArea', path: '/testArea', component: UserLandTestArea, meta: meta4unlogged },
+  { name: 'debugArea', path: '/debugArea', component: UserLandDebugArea, meta: meta4unlogged },
+  { name: 'memberArea', path: '/memberArea', component: UserLandMember, meta: meta4logged },
+  { name: 'registration', path: '/registration', component: UserRegistration, meta: meta4unlogged },
+  { name: 'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
 
-    // User-related pages.
-    { name:'user-activate', path: '/user/activate', component: UserActivation, meta: meta4unlogged },
-    { name:'user-profile', path: '/user/profile', component: UserLandProfile, meta: meta4logged },
+  // User-related pages.
+  { name: 'user-activate', path: '/user/activate', component: UserActivation, meta: meta4unlogged },
+  { name: 'user-profile', path: '/user/profile', component: UserLandProfile, meta: meta4logged },
 
-    // Starting point for user actions that require additional security.
-    { name:'user-passwordReset-start', path: '/user/passwordResetStart', component: UserPasswordResetStart, meta: meta4unlogged },
-    { name:'user-emailChange-start', path: '/user/emailChangeStart', component: UserEmailChangeStart, meta: meta4unlogged },
-    { name:'user-accountDel-start', path: '/user/accountDelStart', component: UserAccountDeletionStart, meta: meta4unlogged },
+  // Starting point for user actions that require additional security.
+  {
+    name: 'user-passwordReset-start',
+    path: '/user/passwordResetStart',
+    component: UserPasswordResetStart,
+    meta: meta4unlogged,
+  },
+  {
+    name: 'user-emailChange-start',
+    path: '/user/emailChangeStart',
+    component: UserEmailChangeStart,
+    meta: meta4unlogged,
+  },
+  {
+    name: 'user-accountDel-start',
+    path: '/user/accountDelStart',
+    component: UserAccountDeletionStart,
+    meta: meta4unlogged,
+  },
 
-    // These pages are accessible only via email: link with token.
-    { name:'user-passwordReset', path: '/user/passwordReset', component: UserPasswordReset, meta: meta4unlogged },
-    { name:'user-emailChange', path: '/user/emailChange', component: UserEmailChange, meta: meta4unlogged },
-    { name:'user-accountDel', path: '/user/accountDel', component: UserAccountDeletion, meta: meta4unlogged },
+  // These pages are accessible only via email: link with token.
+  { name: 'user-passwordReset', path: '/user/passwordReset', component: UserPasswordReset, meta: meta4unlogged },
+  { name: 'user-emailChange', path: '/user/emailChange', component: UserEmailChange, meta: meta4unlogged },
+  { name: 'user-accountDel', path: '/user/accountDel', component: UserAccountDeletion, meta: meta4unlogged },
 
-    // ADMINISTRATION PANEL PAGES
+  // ADMINISTRATION PANEL PAGES
 
-    { name:'admin-login', path: '/admin', component: UserLandLogin, meta: meta4adminLogin },
-    { name:'admin-main', path: '/admin/main', component: AdminMain, meta: meta4admin },
-    { name:'admin-profile', path: '/admin/profile', component: UserLandProfile, meta: meta4admin },
-    { name:'admin-user', path: '/admin/user', component: AdminUser, meta: meta4admin },
+  { name: 'admin-login', path: '/admin', component: UserLandLogin, meta: meta4adminLogin },
+  { name: 'admin-main', path: '/admin/main', component: AdminMain, meta: meta4admin },
+  { name: 'admin-profile', path: '/admin/profile', component: UserLandProfile, meta: meta4admin },
+  { name: 'admin-user', path: '/admin/user', component: AdminUser, meta: meta4admin },
 
-    // Catch-all 404 route MUST be at the end
-    { path: '/:pathMatch(.*)*', component: AppNotFound, meta: meta4unlogged }
-  ];
+  // Catch-all 404 route MUST be at the end
+  { path: '/:pathMatch(.*)*', component: AppNotFound, meta: meta4unlogged },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -117,6 +132,6 @@ const checkAccessPermissions = (meta: RouteMeta): boolean => {
     if (AppLoginer.hasPermission(perm)) return true;
   }
   return false;
-}
+};
 
 export default router;

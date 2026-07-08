@@ -9,7 +9,7 @@ export class Verifier {
    * @param fieldValue Field to verify.
    * @returns Null if field is correct, otherwise error message.
    */
-  public static verifyField(fieldValue: string, usedButton: boolean): string|null {
+  public static verifyField(fieldValue: string, usedButton: boolean): string | null {
     const result = Verifier.verifyFieldInt(fieldValue, usedButton);
     if (result !== '') return result;
     return null; // no further verification needed here
@@ -20,7 +20,7 @@ export class Verifier {
    * @param email Email address to verify.
    * @returns Null if email address is correct, otherwise error message.
    */
-  public static verifyEmail(email: string, usedButton: boolean): string|null {
+  public static verifyEmail(email: string, usedButton: boolean): string | null {
     const result = Verifier.verifyFieldInt(email, usedButton);
     if (result !== '') return result;
 
@@ -34,7 +34,7 @@ export class Verifier {
    * @param password Password to verify.
    * @returns Null if password is correct, otherwise error message.
    */
-  public static verifyPassword(password: string, usedButton: boolean): string|null {
+  public static verifyPassword(password: string, usedButton: boolean): string | null {
     const result = Verifier.verifyFieldInt(password, usedButton);
     if (result !== '') return result;
 
@@ -51,7 +51,7 @@ export class Verifier {
    * @param confirmPassword Password confirmation to verify.
    * @returns Null if password is correct, otherwise error message.
    */
-  public static verifyConfirmPassword(password: string, confirmPassword: string, usedButton: boolean): string|null {
+  public static verifyConfirmPassword(password: string, confirmPassword: string, usedButton: boolean): string | null {
     const result = Verifier.verifyFieldInt(confirmPassword, usedButton);
     if (result !== '') return result;
 
@@ -66,7 +66,7 @@ export class Verifier {
    * @param fieldValue Field to verify.
    * @returns Null if field is correct, empty string if further verification should be done, otherwise error message.
    */
-  public static verifyFieldInt(fieldValue: string, usedButton: boolean): string|null {
+  public static verifyFieldInt(fieldValue: string, usedButton: boolean): string | null {
     if (!fieldValue) return usedButton ? t('form.errFieldEmpty') : null;
     if (fieldValue === '') return t('form.errFieldEmpty');
     return '';

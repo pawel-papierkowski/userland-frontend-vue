@@ -6,7 +6,6 @@ import HomeDescr from '@/components/pages/home/HomeDescr.vue';
 import HomeTechStack from '@/components/pages/home/HomeTechStack.vue';
 import HomeFeatures from '@/components/pages/home/HomeFeatures.vue';
 import HomeComponents from '@/components/pages/home/HomeComponents.vue';
-
 </script>
 
 <template>

@@ -371,7 +371,8 @@ const hidePanel = () => {
 
 <template>
   <div class="picker-date" ref="pickerRef">
-    <input type="text"
+    <input
+      type="text"
       :id="`datepicker_${ident}`"
       :data-testid="`datepicker_${ident}`"
       class="picker-input-date"
@@ -384,7 +385,7 @@ const hidePanel = () => {
       @click="toggleDatePickerVisibility"
     />
 
-    <!-- Date picker panel. -->
+    <!-- Date picker: calendar panel. -->
     <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
       <div class="calendar-header">
         <div class="header-nav">

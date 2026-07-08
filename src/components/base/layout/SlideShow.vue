@@ -28,8 +28,8 @@ const props = withDefaults(
   {
     autoplay: true,
     interval: 3,
-    delay: 10
-  }
+    delay: 10,
+  },
 );
 
 /** Defined slots. */
@@ -64,7 +64,7 @@ const nextSlot = () => {
 const startAutoplay = () => {
   if (!props.autoplay || stopped.value || activeSlots.value.length < 1) return;
   stopAutoplay();
-  autoplayTimer = setInterval(nextSlot, props.interval*1000);
+  autoplayTimer = setInterval(nextSlot, props.interval * 1000);
 };
 
 /**
@@ -95,14 +95,14 @@ const stopSlideShow = () => {
   stopped.value = true; // prevent change of slot
   stopAutoplay();
   if (props.delay < 0) return; // no resuming slideshow
-  delayTimer = setTimeout(() => resumeSlideShow(), props.delay*1000);
-}
+  delayTimer = setTimeout(() => resumeSlideShow(), props.delay * 1000);
+};
 
 /** Resumes slideshow after delay. Note that means actual delay time is actually delay + normal interval. */
 const resumeSlideShow = () => {
   stopped.value = false;
   startAutoplay();
-}
+};
 
 //
 
@@ -112,7 +112,7 @@ const resumeSlideShow = () => {
  */
 const getEntryClass = (slotName: string) => {
   return {
-    'active': selectedSlot.value === slotName
+    active: selectedSlot.value === slotName,
   };
 };
 
@@ -176,7 +176,9 @@ onUnmounted(() => {
   height: 12px;
   border-radius: 50%;
   background-color: #ccc;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .slideshow-selection-entry:hover {
@@ -202,7 +204,9 @@ onUnmounted(() => {
 /* Slide/Fade Transition */
 .slide-enter-active,
 .slide-leave-active {
-  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .slide-enter-from {

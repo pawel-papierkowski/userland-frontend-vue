@@ -2,9 +2,9 @@ import type { ProjectProp } from '@/code/data/app/types.ts';
 
 /** Project properties. */
 export const projectProp: ProjectProp = {
-  title: "UserLand",
-  author: "Paweł Papierkowski",
-  dateRange: "2026",
+  title: 'UserLand',
+  author: 'Paweł Papierkowski',
+  dateRange: '2026',
   version: import.meta.env.VITE_APP_VERSION, // from package.json, defined in vite.config.ts
   build: import.meta.env.DEV ? 'DEV' : 'PROD',
 };
@@ -19,10 +19,10 @@ export const apiAddress = projectProp.build === 'PROD' ? apiAddressProd : apiAdd
 export const fallbackLang = 'en';
 
 /** List of known languages. */
-export const languages: string[] = [ 'en', 'pl' ];
+export const languages: string[] = ['en', 'pl'];
 
 /** List of permission prefixes. */
-export const permissions: string[] = [ 'role', 'user' ];
+export const permissions: string[] = ['role', 'user'];
 
 /** How close to expiration we should be before automatic prolongation in minutes. */
 export const prolongExpiration = 15;

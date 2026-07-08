@@ -10,5 +10,4 @@ const { t } = useI18n();
   <p v-html="t('homeArea.description')" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

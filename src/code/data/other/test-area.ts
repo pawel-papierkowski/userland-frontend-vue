@@ -9,7 +9,7 @@ export enum EnInputMode {
 }
 
 /** List of values for mode radiobox. */
-export const enModeOptions: (number|null)[] = [ EnInputMode.Standard, EnInputMode.Disabled, EnInputMode.Error ];
+export const enModeOptions: (number | null)[] = [EnInputMode.Standard, EnInputMode.Disabled, EnInputMode.Error];
 
 /** Form for test area. */
 export type TestAreaInputForm = {
@@ -24,7 +24,7 @@ export type TestAreaInputForm = {
 };
 
 /** List of values for test combobox. */
-export const enTestComboBox: (string|null)[] = [ null, 'PENDING', 'ACTIVE', 'DEMO' ];
+export const enTestComboBox: (string | null)[] = [null, 'PENDING', 'ACTIVE', 'DEMO'];
 
 /** List of values for test radiobox. */
-export const enTestRadioBox: (string|null)[] = [ null, 'one', 'two', 'three' ];
+export const enTestRadioBox: (string | null)[] = [null, 'one', 'two', 'three'];

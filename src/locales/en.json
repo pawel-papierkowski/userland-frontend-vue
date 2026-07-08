@@ -415,7 +415,7 @@
                 "title": "Failed to save",
                 "content": "Invalid permission name."
               },
-              "badValue":  {
+              "badValue": {
                 "title": "Failed to save",
                 "content": "Invalid permission value."
               }
@@ -494,7 +494,7 @@
                 "title": "Failed to save",
                 "content": "Invalid config name."
               },
-              "badValue":  {
+              "badValue": {
                 "title": "Failed to save",
                 "content": "Invalid config value."
               }
@@ -646,13 +646,13 @@
     },
     "components": {
       "title": "Components",
-      "ComboBox":"<code>ComboBox</code> is custom component replacing <code>select</code> and <code>options</code>.",
-      "CheckBox":"<code>CheckBox</code> is custom component replacing <code>input</code> with <code>type='checkbox'</code>.",
-      "DateTimePicker":"<code>DateTimePicker</code> allows picking date and/or time.",
-      "SlideShow":"You can see <code>SlideShow</code>! This is where you see this text.",
-      "MessageContainer":"<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
-      "Table":"Family of <code>Table*</code> components handle showing and editing table. Used in administration panel.",
-      "SpinnerTorus":"<code>SpinnerTorus</code> shows activity when you wait for frontend to finish action like calling backend."
+      "ComboBox": "<code>ComboBox</code> is custom component replacing <code>select</code> and <code>options</code>.",
+      "CheckBox": "<code>CheckBox</code> is custom component replacing <code>input</code> with <code>type='checkbox'</code>.",
+      "DateTimePicker": "<code>DateTimePicker</code> allows picking date and/or time.",
+      "SlideShow": "You can see <code>SlideShow</code>! This is where you see this text.",
+      "MessageContainer": "<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
+      "Table": "Family of <code>Table*</code> components handle showing and editing table. Used in administration panel.",
+      "SpinnerTorus": "<code>SpinnerTorus</code> shows activity when you wait for frontend to finish action like calling backend."
     }
   },
 

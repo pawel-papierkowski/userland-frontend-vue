@@ -18,10 +18,10 @@ export default {
    * @param timeout Timeout in seconds. Default is minute since we may need to wait for GCP to spin up.
    * @returns Axios instance.
    */
-  create(endpointBase : string, timeout: number=60) {
+  create(endpointBase: string, timeout: number = 60) {
     const instance = axios.create({
       baseURL: apiAddress + endpointBase,
-      timeout: timeout*1000,
+      timeout: timeout * 1000,
     });
 
     // Add authentication token, if it is present.
@@ -31,12 +31,13 @@ export default {
 
       // Check if we should prolong session.
       // We do NOT prolong if we are already in prolong or login/logout/register request.
-      const isAuthRequest = config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
+      const isAuthRequest =
+        config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
 
       if (!isAuthRequest && AppLoginer.shouldProlong()) {
         logger.debug('Session close to expiration, prolonging...');
         try {
-          const {jwt} = await AppLoginer.prolongSilently();
+          const { jwt } = await AppLoginer.prolongSilently();
           token = jwt; // we need to use new token
         } catch (error) {
           logger.error(error, 'Failed to prolong.');
@@ -60,19 +61,19 @@ export default {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logError(error: any, comment: string) {
     if (isAxiosError(error)) {
-        if (error.response) {
-          // The server actually responded with an error (e.g., 400 Bad Request). Log it.
-          logger.error(comment, {
-            status: error.response.status, // e.g. 400
-            message: error.message,        // e.g. "Request failed with status code 400"
-            backendBody: error.response.data // The actual JSON from backend
-          });
-        } else if (error.request) {
-          // Request was made but no response was received (e.g. backend is down).
-          logger.error(comment, 'Backend is unreachable. No response received.');
-        }
+      if (error.response) {
+        // The server actually responded with an error (e.g., 400 Bad Request). Log it.
+        logger.error(comment, {
+          status: error.response.status, // e.g. 400
+          message: error.message, // e.g. "Request failed with status code 400"
+          backendBody: error.response.data, // The actual JSON from backend
+        });
+      } else if (error.request) {
+        // Request was made but no response was received (e.g. backend is down).
+        logger.error(comment, 'Backend is unreachable. No response received.');
+      }
     } else {
       logger.error(comment, 'An unexpected error occurred:', error);
     }
-  }
-}
+  },
+};

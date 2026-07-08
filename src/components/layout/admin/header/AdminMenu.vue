@@ -13,7 +13,7 @@ const { t } = useI18n();
 const handleLogout = async () => {
   await AppLoginer.logout();
   router.push({ name: 'admin-login' });
-}
+};
 </script>
 
 <template>

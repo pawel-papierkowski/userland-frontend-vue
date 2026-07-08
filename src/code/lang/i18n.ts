@@ -16,7 +16,7 @@ const i18n = createI18n({
   async: false,
   messages: {
     en,
-    pl
+    pl,
   },
 });
 

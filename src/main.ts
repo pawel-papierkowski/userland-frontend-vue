@@ -9,7 +9,7 @@ import App from './App.vue';
 import router from './router';
 
 import { logger } from '@/code/utils/logger.ts';
-import i18n from '@/code/lang/i18n.ts'
+import i18n from '@/code/lang/i18n.ts';
 
 import './styles/main.css';
 

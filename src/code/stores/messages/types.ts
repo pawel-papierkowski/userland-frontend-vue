@@ -13,11 +13,16 @@ export enum EnMessageLevel {
 
 export function messageLevelStr(level: EnMessageLevel): string {
   switch (level) {
-    case EnMessageLevel.Info: return 'info';
-    case EnMessageLevel.Success: return 'success';
-    case EnMessageLevel.Warning: return 'warning';
-    case EnMessageLevel.Failure: return 'failure';
-    case EnMessageLevel.Error: return 'error';
+    case EnMessageLevel.Info:
+      return 'info';
+    case EnMessageLevel.Success:
+      return 'success';
+    case EnMessageLevel.Warning:
+      return 'warning';
+    case EnMessageLevel.Failure:
+      return 'failure';
+    case EnMessageLevel.Error:
+      return 'error';
   }
 }
 

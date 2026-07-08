@@ -13,5 +13,5 @@ export const logger = createLogger({
   callerInfo: true, // Prints the file and line number.
   prefixFormat: ({ level, caller }) => {
     return `[${level.toUpperCase()}] ${caller ? `[${caller.fileName}:${caller.lineNumber}]` : ''}`;
-  }
+  },
 });

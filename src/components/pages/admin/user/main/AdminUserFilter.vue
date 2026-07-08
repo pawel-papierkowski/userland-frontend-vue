@@ -42,7 +42,8 @@ const emit = defineEmits(['reload']);
           <input id="email" data-testid="email" type="text" v-model="form.email" autocomplete="off" />
 
           <label for="status">{{ t('admin.user.filter.status') }}:</label>
-          <ComboBox id="status"
+          <ComboBox
+            id="status"
             ident="status"
             v-model="form.status"
             :options="enUserStatus"
@@ -52,7 +53,8 @@ const emit = defineEmits(['reload']);
         </div>
         <div class="form-subform">
           <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
-          <DateTimePicker id="createdFromAt"
+          <DateTimePicker
+            id="createdFromAt"
             ident="createdFromAt"
             v-model="form.createdFromAt"
             mode="date"
@@ -60,7 +62,8 @@ const emit = defineEmits(['reload']);
           />
 
           <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
-          <DateTimePicker id="createdToAt"
+          <DateTimePicker
+            id="createdToAt"
             ident="createdToAt"
             v-model="form.createdToAt"
             mode="date"

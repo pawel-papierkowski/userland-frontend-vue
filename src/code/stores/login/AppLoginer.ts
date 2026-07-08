@@ -15,7 +15,7 @@ import { AppMessager } from '@/code/stores/messages/AppMessager';
  */
 export class AppLoginer {
   /** Promise for prolongation. Used to avoid multiple concurrent calls. */
-  private static prolongPromise: Promise<{result: boolean, jwt: string}> | null = null;
+  private static prolongPromise: Promise<{ result: boolean; jwt: string }> | null = null;
 
   /**
    * Log in user. You can get token from /api/users/login or /api/users/prolong endpoints or from local storage.
@@ -32,8 +32,8 @@ export class AppLoginer {
     if (result) localStorage.setItem(locstJwt, jwtToken);
     else localStorage.removeItem(locstJwt);
 
-    if (result) logger.debug("Logged in successfully.");
-    else logger.warn("Failed to log in.");
+    if (result) logger.debug('Logged in successfully.');
+    else logger.warn('Failed to log in.');
     return result;
   }
 
@@ -57,7 +57,7 @@ export class AppLoginer {
     localStorage.removeItem(locstJwt);
 
     AppMessager.infoT('user.logout.msg.info.title', 'user.logout.msg.info.content');
-    logger.debug("Logged out successfully.");
+    logger.debug('Logged out successfully.');
   }
 
   /**
@@ -81,7 +81,7 @@ export class AppLoginer {
    * Prolong user session silently. Contains API call. It is up to you to catch exceptions and react to result.
    * @returns result: true if successful, otherwise false. jwt: JWT token.
    */
-  public static async prolongSilently(): Promise<{result: boolean, jwt: string}> {
+  public static async prolongSilently(): Promise<{ result: boolean; jwt: string }> {
     if (AppLoginer.prolongPromise) return AppLoginer.prolongPromise;
 
     AppLoginer.prolongPromise = (async () => {
@@ -95,7 +95,7 @@ export class AppLoginer {
         const result = loginStore.applyToken(jwtToken);
         if (result) localStorage.setItem(locstJwt, jwtToken);
         else localStorage.removeItem(locstJwt);
-        return {result: result, jwt: jwtToken};
+        return { result: result, jwt: jwtToken };
       } finally {
         AppLoginer.prolongPromise = null;
       }
@@ -164,7 +164,7 @@ export class AppLoginer {
    * Retrieve JWT, if it exists.
    * @returns JWT or null if no token.
    */
-  public static getJwt(): string|null {
+  public static getJwt(): string | null {
     const loginStore = useLoginStore();
     if (!loginStore.loginState.isLogged) return null;
 

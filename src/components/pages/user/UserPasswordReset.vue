@@ -98,7 +98,11 @@ const convertToReq = (form: UserPasswordResetForm): UserPasswordResetReq => {
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.passwordReset.msg.success.title', 'user.passwordReset.msg.success.content', defDuration * 2);
+  AppMessager.successT(
+    'user.passwordReset.msg.success.title',
+    'user.passwordReset.msg.success.content',
+    defDuration * 2,
+  );
   log.debug('Successfully set new password.');
 };
 

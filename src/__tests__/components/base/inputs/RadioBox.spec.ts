@@ -49,7 +49,7 @@ function createOptions(): (number | string | null)[] {
 function testOptions(optionElements: DOMWrapper<Element>[], expectedCount: number, expectedMark: number) {
   expect(optionElements).toHaveLength(expectedCount);
 
-  for (let i=0; i<expectedCount; i++) {
+  for (let i = 0; i < expectedCount; i++) {
     const classes = expectedMark === i ? ['radiobox-inside', 'mark'] : ['radiobox-inside'];
     expect(optionElements[i]?.find('.radiobox-inside').classes()).toEqual(classes);
   }

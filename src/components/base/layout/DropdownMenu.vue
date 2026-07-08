@@ -5,13 +5,13 @@
  * - trigger - Place to click so dropdown will show.
  * - content - Actual content of dropdown.
  */
-  import { ref } from 'vue';
-  import { onClickOutside } from '@vueuse/core';
+import { ref } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 
-  const isOpen = ref(false);
-  const dropdown = ref(null);
+const isOpen = ref(false);
+const dropdown = ref(null);
 
-  onClickOutside(dropdown, () => (isOpen.value = false));
+onClickOutside(dropdown, () => (isOpen.value = false));
 </script>
 
 <template>
@@ -35,7 +35,6 @@
 }
 
 .dropdown {
-  
 }
 
 .dropdown-slot {

@@ -82,7 +82,11 @@ const convertToReq = (form: UserEmailChangeLinkForm): UserEmailChangeLinkReq => 
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.emailChangeStart.msg.success.title', 'user.emailChangeStart.msg.success.content', defDuration * 2);
+  AppMessager.successT(
+    'user.emailChangeStart.msg.success.title',
+    'user.emailChangeStart.msg.success.content',
+    defDuration * 2,
+  );
   log.debug('Successfully sent email change request.');
 };
 

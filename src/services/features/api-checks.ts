@@ -35,5 +35,5 @@ export default {
    */
   exception() {
     return apiClient.get('/exception');
-  }
-}
+  },
+};
