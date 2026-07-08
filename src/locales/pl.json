@@ -1020,6 +1020,10 @@
     },
     "hour": "Godzina",
     "minute": "Minuta",
+    "yearMinus": "Poprzedni rok",
+    "monthMinus": "Poprzedni miesiąc",
+    "monthPlus": "Następny miesiąc",
+    "yearPlus": "Następny rok",
     "dayOfWeek": {
       "mon": "Pon",
       "tue": "Wt",

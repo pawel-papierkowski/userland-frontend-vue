@@ -382,34 +382,89 @@ const hidePanel = () => {
       :disabled="disabled"
       readonly
       autocomplete="off"
+      role="combobox"
+      aria-haspopup="dialog"
+      :aria-expanded="isCalendarVisible"
+      :aria-controls="`datepicker_${ident}_panel`"
+      :aria-label="t('dateTimePicker.placeholder.date')"
+      :aria-disabled="disabled || undefined"
       @click="toggleDatePickerVisibility"
     />
 
     <!-- Date picker: calendar panel. -->
-    <div v-if="isCalendarVisible" class="calendar-container" ref="calendarContainerRef" :style="containerStyle">
+    <div
+      v-if="isCalendarVisible"
+      :id="`datepicker_${ident}_panel`"
+      class="calendar-container"
+      ref="calendarContainerRef"
+      role="dialog"
+      :aria-label="t('dateTimePicker.placeholder.date')"
+      aria-modal="true"
+      :style="containerStyle"
+    >
       <div class="calendar-header">
         <div class="header-nav">
-          <div class="header-navbtn" :data-testid="`datepicker_${ident}_yearMinus`" @click="changeYear(-1)">⏪</div>
-          <div class="header-navbtn" :data-testid="`datepicker_${ident}_monthMinus`" @click="changeMonth(-1)">◀️</div>
+          <div
+            class="header-navbtn"
+            :data-testid="`datepicker_${ident}_yearMinus`"
+            :aria-label="`${t('dateTimePicker.yearMinus')}`"
+            @click="changeYear(-1)"
+          >
+            ⏪
+          </div>
+          <div
+            class="header-navbtn"
+            :data-testid="`datepicker_${ident}_monthMinus`"
+            :aria-label="`${t('dateTimePicker.monthMinus')}`"
+            @click="changeMonth(-1)"
+          >
+            ◀️
+          </div>
         </div>
-        <div class="header-title">
+        <div class="header-title" aria-live="polite">
           {{ headerText }}
         </div>
         <div class="header-nav">
-          <div class="header-navbtn" :data-testid="`datepicker_${ident}_monthPlus`" @click="changeMonth(1)">▶️</div>
-          <div class="header-navbtn" :data-testid="`datepicker_${ident}_yearPlus`" @click="changeYear(1)">⏩</div>
+          <div
+            class="header-navbtn"
+            :data-testid="`datepicker_${ident}_monthPlus`"
+            :aria-label="`${t('dateTimePicker.monthPlus')}`"
+            @click="changeMonth(1)"
+          >
+            ▶️
+          </div>
+          <div
+            class="header-navbtn"
+            :data-testid="`datepicker_${ident}_yearPlus`"
+            :aria-label="`${t('dateTimePicker.yearPlus')}`"
+            @click="changeYear(1)"
+          >
+            ⏩
+          </div>
         </div>
       </div>
 
-      <div class="calendar-grid" :style="gridStyle">
+      <div class="calendar-grid" :style="gridStyle" role="grid" :aria-label="headerText">
         <!-- This row shows days of week. -->
-        <div v-if="showWeeks"></div>
-        <div v-for="day in daysOfWeek" :key="day" class="weekday">{{ t('dateTimePicker.dayOfWeek.' + day) }}</div>
+        <div v-if="showWeeks" aria-hidden="true"></div>
+        <div v-for="day in daysOfWeek" :key="day" class="weekday" aria-hidden="true">
+          {{ t('dateTimePicker.dayOfWeek.' + day) }}
+        </div>
 
         <div
           v-for="(calendarCell, index) in calendarCells"
           :key="index"
           :class="resolveCellClass(calendarCell)"
+          role="gridcell"
+          :aria-selected="calendarCell.type === EnCalendarCellType.Date ? isDaySelected(calendarCell) : undefined"
+          :aria-disabled="
+            calendarCell.type === EnCalendarCellType.Date ? isDayDisabled(calendarCell) || undefined : undefined
+          "
+          :aria-label="
+            calendarCell.type === EnCalendarCellType.Date
+              ? `${calendarCell.year} ${t('dateTimePicker.month.' + calendarCell.month)} ${calendarCell.day}`
+              : undefined
+          "
           :data-testid="calendarCell.testid"
           @click="selectCell(calendarCell)"
         >

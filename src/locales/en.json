@@ -1020,6 +1020,10 @@
     },
     "hour": "Hour",
     "minute": "Minute",
+    "yearMinus": "Previous year",
+    "monthMinus": "Previous month",
+    "monthPlus": "Next month",
+    "yearPlus": "Next year",
     "dayOfWeek": {
       "mon": "Mon",
       "tue": "Tue",

@@ -657,4 +657,202 @@ describe('DatePicker', () => {
       expect(result.getUTCMilliseconds()).toBe(0);
     });
   });
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Accessibility tests
+
+  describe('accessibility', () => {
+    it('input has correct aria attributes when panel is hidden', () => {
+      // Ensures the input element has proper ARIA roles and attributes when closed.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Act: Create the component (panel starts hidden).
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Assert: Correct static ARIA attributes.
+      expect(input.attributes('role')).toBe('combobox');
+      expect(input.attributes('aria-haspopup')).toBe('dialog');
+
+      // Assert: aria-expanded is false when panel is hidden.
+      expect(input.attributes('aria-expanded')).toBe('false');
+
+      // Assert: aria-controls matches panel id convention.
+      expect(input.attributes('aria-controls')).toBe('datepicker_test_panel');
+
+      // Assert: aria-label is present with placeholder text (date format).
+      expect(input.attributes('aria-label')).toBe('YYYY-MM-DD');
+
+      // Assert: aria-disabled is not present when not disabled.
+      expect(input.attributes('aria-disabled')).toBeUndefined();
+    });
+
+    it('input aria-expanded reflects panel visibility', async () => {
+      // Ensures aria-expanded toggles correctly when panel opens/closes.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+      const datePicker = createComponent(null, '', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Act: Open panel.
+      await input.trigger('click');
+      await nextTick();
+
+      // Assert: aria-expanded is true when panel is visible.
+      expect(input.attributes('aria-expanded')).toBe('true');
+
+      // Act: Close panel by clicking again.
+      await input.trigger('click');
+      await nextTick();
+
+      // Assert: aria-expanded is false when panel is hidden.
+      expect(input.attributes('aria-expanded')).toBe('false');
+    });
+
+    it('input has aria-disabled when disabled', () => {
+      // Ensures the input has aria-disabled when the component is disabled.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Act: Create component with disabled=true.
+      const datePicker = createComponent(null, '', false, true, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Assert: aria-disabled is present and set to "true".
+      expect(input.attributes('aria-disabled')).toBe('true');
+    });
+
+    it('calendar dialog has correct aria attributes', async () => {
+      // Ensures the calendar panel (dialog) has proper ARIA attributes.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Arrange: Create the component and open panel.
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Locate the calendar panel.
+      const panel = datePicker.find('.calendar-container');
+
+      // Assert: Panel has correct ARIA attributes.
+      expect(panel.attributes('role')).toBe('dialog');
+      expect(panel.attributes('aria-modal')).toBe('true');
+      expect(panel.attributes('aria-label')).toBe('YYYY-MM-DD');
+
+      // Assert: Panel id matches what input's aria-controls points to.
+      expect(panel.attributes('id')).toBe('datepicker_test_panel');
+    });
+
+    it('calendar grid has correct aria attributes', async () => {
+      // Ensures the calendar grid has proper ARIA roles and labels.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Arrange: Create the component and open panel.
+      const datePicker = createComponent(null, '', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Locate the calendar grid.
+      const grid = datePicker.find('.calendar-grid');
+
+      // Assert: Grid has grid role and the header text as aria-label.
+      expect(grid.attributes('role')).toBe('grid');
+      expect(grid.attributes('aria-label')).toBe('2026 February');
+    });
+
+    it('day cells have role gridcell and correct aria-label', async () => {
+      // Ensures each day cell has proper ARIA attributes.
+
+      // Arrange: Set up date/time to show February 2026.
+      vi.setSystemTime(new Date('2026-02-21T12:10:00Z'));
+
+      // Arrange: Create the component and open panel.
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Act: Check specific day cells.
+      // February 2026 has 6 padding cells from January (Dec 26-31 at indices 0-5).
+      // Index 6 = Feb 1, index 11 = Feb 6, index 33 = Feb 28.
+      // Padding cells from next month: index 34 = Mar 1, etc.
+      const cellJan26 = datePicker.find('[data-testid="datepicker_test_0"]');
+      const cellFeb1 = datePicker.find('[data-testid="datepicker_test_6"]');
+      const cellFeb6 = datePicker.find('[data-testid="datepicker_test_11"]');
+      const cellFeb28 = datePicker.find('[data-testid="datepicker_test_33"]');
+
+      // Assert: Each day cell has gridcell role.
+      expect(cellJan26.attributes('role')).toBe('gridcell');
+      expect(cellFeb1.attributes('role')).toBe('gridcell');
+      expect(cellFeb6.attributes('role')).toBe('gridcell');
+      expect(cellFeb28.attributes('role')).toBe('gridcell');
+
+      // Assert: aria-label includes full date (year, month name, day).
+      expect(cellJan26.attributes('aria-label')).toBe('2026 January 26');
+      expect(cellFeb1.attributes('aria-label')).toBe('2026 February 1');
+      expect(cellFeb6.attributes('aria-label')).toBe('2026 February 6');
+      expect(cellFeb28.attributes('aria-label')).toBe('2026 February 28');
+
+      // Assert: aria-selected is false when no date is selected.
+      expect(cellFeb1.attributes('aria-selected')).toBe('false');
+      expect(cellFeb6.attributes('aria-selected')).toBe('false');
+
+      // Assert: aria-disabled is not set when no date constraints.
+      expect(cellFeb1.attributes('aria-disabled')).toBeUndefined();
+    });
+
+    it('aria-selected reflects the selected date', async () => {
+      // Ensures aria-selected is true on the selected day cell and false on others.
+
+      // Arrange: Set up date/time with a selected date (June 2026, day 15 selected).
+      // June 1, 2026 is a Sunday, no padding from prev month.
+      // June 15 is at index 14.
+      vi.setSystemTime(new Date('2026-07-03T12:10:00Z'));
+      const someDate: Date = new Date('2026-06-15T19:30:00Z');
+
+      // Act: Create component and open panel.
+      const datePicker = createComponent(someDate, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Assert: Selected day cell (June 15, index 14) has aria-selected="true".
+      const selectedCell = datePicker.find('[data-testid="datepicker_test_14"]');
+      expect(selectedCell.attributes('aria-selected')).toBe('true');
+      expect(selectedCell.attributes('aria-label')).toBe('2026 June 15');
+
+      // Assert: Other days have aria-selected="false".
+      const otherCell = datePicker.find('[data-testid="datepicker_test_0"]');
+      expect(otherCell.attributes('aria-selected')).toBe('false');
+    });
+
+    it('aria-disabled reflects disabled date cells via min/max constraints', async () => {
+      // Ensures aria-disabled is present on out-of-range date cells.
+
+      // Arrange: Set up date/time with min/max constraints.
+      vi.setSystemTime(new Date('2027-01-28T12:10:00Z'));
+      const someDate: Date = new Date('2027-01-10T00:00:00Z');
+      const minDate: Date = new Date('2027-01-04T00:00:00Z');
+      const maxDate: Date = new Date('2027-01-22T00:00:00Z');
+
+      // Act: Create component and open panel.
+      const datePicker = createComponent(someDate, 'test', false, false, false, false, minDate, maxDate);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+
+      // Assert: Day before minDate (index 4 = Jan 1, 2027) has aria-disabled="true".
+      const disabledCell = datePicker.find('[data-testid="datepicker_test_4"]');
+      expect(disabledCell.attributes('aria-disabled')).toBe('true');
+
+      // Assert: Day within range (index 9 = Jan 6, 2027) has no aria-disabled.
+      const enabledCell = datePicker.find('[data-testid="datepicker_test_9"]');
+      expect(enabledCell.attributes('aria-disabled')).toBeUndefined();
+    });
+  });
 });
