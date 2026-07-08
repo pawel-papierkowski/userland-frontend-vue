@@ -50,8 +50,8 @@ function createComponent(
  * @param currMinute Which minute is marked as current.
  * @param selHour Which hour is marked as selected.
  * @param selMinute Which minute is marked as selected.
- * @param focusHour Which hour is keyboard-focused. Defaults to selHour if set, else currHour.
- * @param focusMinute Which minute is keyboard-focused. Defaults to selMinute if set, else currMinute.
+ * @param focusHour Which hour is keyboard-focused.
+ * @param focusMinute Which minute is keyboard-focused.
  */
 function verifyPanel(
   timePicker: VueWrapper,
@@ -60,12 +60,9 @@ function verifyPanel(
   currMinute: number | null,
   selHour: number | null,
   selMinute: number | null,
-  focusHour?: number | null,
-  focusMinute?: number | null,
+  focusHour: number | null,
+  focusMinute: number | null,
 ) {
-  const actualFocusHour = focusHour !== undefined ? focusHour : selHour !== null ? selHour : currHour;
-  const actualFocusMinute = focusMinute !== undefined ? focusMinute : selMinute !== null ? selMinute : currMinute;
-
   const hourElements = timePicker.findAll('.time-hour');
   expect(hourElements).toHaveLength(24);
   const minuteElements = timePicker.findAll('.time-minute');
@@ -76,7 +73,7 @@ function verifyPanel(
     const hourElement = timePicker.find(`[data-testid="timepicker_${ident}_h${i}"]`);
     if (currHour !== null && currHour === i) hourCss.push('curr');
     if (selHour !== null && selHour === i) hourCss.push('selected');
-    if (actualFocusHour !== null && actualFocusHour === i) hourCss.push('focused');
+    if (focusHour !== null && focusHour === i) hourCss.push('focused');
 
     expect(hourElement.classes(), `Hour ${i} elem classes are wrong`).toEqual(hourCss);
   }
@@ -86,7 +83,7 @@ function verifyPanel(
     const minuteElement = timePicker.find(`[data-testid="timepicker_${ident}_m${i}"]`);
     if (currMinute !== null && currMinute === i) minuteCss.push('curr');
     if (selMinute !== null && selMinute === i) minuteCss.push('selected');
-    if (actualFocusMinute !== null && actualFocusMinute === i) minuteCss.push('focused');
+    if (focusMinute !== null && focusMinute === i) minuteCss.push('focused');
 
     expect(minuteElement.classes(), `Minute ${i} elem classes are wrong`).toEqual(minuteCss);
   }
@@ -168,7 +165,7 @@ describe('TimePicker', () => {
 
       // Assert: Panel shows scrollers with hours and minutes. Only current time is marked.
       // Focus ring is on hour column (the active column on open).
-      verifyPanel(timePicker, 'someTimePicker', 4, 7, null, null, 4, null); // note same time as in arrange
+      verifyPanel(timePicker, 'someTimePicker', 4, 7, null, null, null, null); // note same time as in arrange
     });
 
     //
@@ -219,7 +216,7 @@ describe('TimePicker', () => {
 
       // Assert: Panel shows scrollers with hours and minutes. Both current and selected time is marked.
       // Focus ring is on hour column (the active column on open).
-      verifyPanel(timePicker, '', 4, 7, 16, 30, 16, null); // note same time as in arrange
+      verifyPanel(timePicker, '', 4, 7, 16, 30, null, null); // note same time as in arrange
     });
 
     //
@@ -751,9 +748,9 @@ describe('TimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const someDate: Date = new Date('2026-05-22T16:30:00Z');
 
-      // Act: Open the panel.
+      // Act: Open the panel via keyboard.
       const timePicker = createComponent(someDate, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Assert: Selected hour 16 has the focused class (hour is the active column on open).
@@ -773,9 +770,9 @@ describe('TimePicker', () => {
       // Arrange: Set up date/time with no selection.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
-      // Act: Open the panel.
+      // Act: Open the panel via keyboard.
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Assert: Current hour 4 has the focused class (hour is the active column on open).
@@ -788,10 +785,10 @@ describe('TimePicker', () => {
     it('ArrowDown on hour listbox navigates to next hour', async () => {
       // Ensures ArrowDown moves focus to the next hour.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Act: Press ArrowDown in the hour column.
@@ -807,10 +804,10 @@ describe('TimePicker', () => {
     it('ArrowUp on hour listbox navigates to previous hour', async () => {
       // Ensures ArrowUp moves focus to the previous hour.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Act: Press ArrowUp in the hour column.
@@ -826,10 +823,10 @@ describe('TimePicker', () => {
     it('ArrowDown on minute listbox navigates to next minute', async () => {
       // Ensures ArrowDown moves focus to the next minute.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -849,10 +846,10 @@ describe('TimePicker', () => {
     it('ArrowUp on minute listbox navigates to previous minute', async () => {
       // Ensures ArrowUp moves focus to the previous minute.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -876,7 +873,7 @@ describe('TimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T00:07:00Z'));
       const someDate: Date = new Date('2026-05-22T00:30:00Z');
       const timePicker = createComponent(someDate, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
 
@@ -905,7 +902,7 @@ describe('TimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:00:00Z'));
       const someDate: Date = new Date('2026-05-22T16:00:00Z');
       const timePicker = createComponent(someDate, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -934,10 +931,10 @@ describe('TimePicker', () => {
     it('ArrowRight moves from hour to minute column', async () => {
       // Ensures ArrowRight key switches focus from hour listbox to minute listbox.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Arrange: Verify initial state is hour-focused.
@@ -957,10 +954,10 @@ describe('TimePicker', () => {
     it('ArrowLeft moves from minute to hour column', async () => {
       // Ensures ArrowLeft key switches focus from minute listbox to hour listbox.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -976,10 +973,10 @@ describe('TimePicker', () => {
     it('Tab switches between hour and minute columns', async () => {
       // Ensures Tab switches from hour to minute, and Tab in minute switches back to hour.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
@@ -1002,10 +999,10 @@ describe('TimePicker', () => {
     it('Enter selects hour and moves focus to minute column', async () => {
       // Ensures pressing Enter on a focused hour selects it and jumps to minute column.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
@@ -1038,7 +1035,7 @@ describe('TimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const someDate: Date = new Date('2026-05-22T14:30:00Z');
       const timePicker = createComponent(someDate, 'test', true, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
 
@@ -1060,6 +1057,42 @@ describe('TimePicker', () => {
       expect(timePicker.find('.clock-container').exists()).toBe(false);
     });
 
+    it('Enter on same minute with allowNull closes panel', async () => {
+      // Ensures pressing Enter on the already-selected minute (allowNull=true) closes the panel
+      // without deselecting date. This is more intuitive behavior than nulling result.
+
+      // Arrange: Set up with a preselected time and allowNull.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const someDate: Date = new Date('2026-05-22T14:30:00Z');
+      const timePicker = createComponent(someDate, 'test', true, false, false);
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Arrange: Switch to minute column.
+      const hourColumn = timePicker.findAll('.clock-column').at(0)!;
+      await hourColumn.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Assert: Verify minute 30 is both selected and focused.
+      expect(timePicker.find('[data-testid="timepicker_test_m30"]').classes()).toContain('selected');
+      expect(timePicker.find('[data-testid="timepicker_test_m30"]').classes()).toContain('focused');
+
+      // Act: Press Enter on already-selected minute 30.
+      const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
+      await minuteColumn.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Time was NOT deselected.
+      const emitted = timePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as Date;
+      expect(result.getUTCHours()).toBe(14);
+      expect(result.getUTCMinutes()).toBe(30);
+
+      // Assert: Panel is closed.
+      expect(timePicker.find('.clock-container').exists()).toBe(false);
+    });
+
     it('Space on minute selects time and closes panel', async () => {
       // Ensures pressing Space on a focused minute selects it and closes the panel.
 
@@ -1067,7 +1100,7 @@ describe('TimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const someDate: Date = new Date('2026-05-22T14:30:00Z');
       const timePicker = createComponent(someDate, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -1092,10 +1125,10 @@ describe('TimePicker', () => {
     it('Enter on minute selects time and closes panel', async () => {
       // Ensures pressing Enter on a focused minute selects it and closes the panel.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
@@ -1134,10 +1167,10 @@ describe('TimePicker', () => {
     it('Escape in hour column closes panel', async () => {
       // Ensures Escape in the hour column closes the panel.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       expect(timePicker.find('.clock-container').exists()).toBe(true);
 
@@ -1153,10 +1186,10 @@ describe('TimePicker', () => {
     it('Escape in minute column closes panel', async () => {
       // Ensures Escape in the minute column closes the panel.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, '', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Act: Press Escape in the minute column.
@@ -1171,10 +1204,10 @@ describe('TimePicker', () => {
     it('Home and End on hour column jump to first and last hour', async () => {
       // Ensures Home jumps to hour 0 and End jumps to hour 23.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
 
@@ -1196,10 +1229,10 @@ describe('TimePicker', () => {
     it('Home and End on minute column jump to first and last minute', async () => {
       // Ensures Home jumps to minute 0 and End jumps to minute 59.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -1222,13 +1255,103 @@ describe('TimePicker', () => {
       expect(timePicker.find('[data-testid="timepicker_test_m59"]').classes()).toContain('focused');
     });
 
-    it('keyboard navigation updates aria-activedescendant on hour column', async () => {
-      // Ensures the hour listbox aria-activedescendant attribute follows keyboard focus.
+    //
 
-      // Arrange: Set up date/time and open panel.
+    it('Open panel via click, select hour via keyboard', async () => {
+      // If you open panel via click, there is no visible focus.
+      // If you press key, focus appears, but nothing else happens.
+
+      // Arrange: Set up date/time and open panel via mouse.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
       await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+      const hourColumn = timePicker.findAll('.clock-column').at(0)!;
+      const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
+
+      // Assert: No focus present.
+      expect(timePicker.find('[data-testid="timepicker_test_h4"]').classes()).not.toContain('focused');
+      expect(timePicker.find('[data-testid="timepicker_test_m7"]').classes()).not.toContain('focused');
+      expect(hourColumn.attributes('aria-activedescendant')).toBeUndefined();
+      expect(minuteColumn.attributes('aria-activedescendant')).toBeUndefined();
+
+      // Act: Press arrow button. Note focus will appear, but we will NOT move down.
+      await hourColumn.trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Act: Press Enter to select hour. Since we have focus, it works normally.
+      await hourColumn.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Hour 4 is selected. Note it did NOT move to 5, that's correct behavior! Why?
+      // Focus was invisible (since we opened panel via mouse click), so press of key shows focus first and do nothing else.
+      // Only next key press will do something.
+      const emitted = timePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as Date;
+      expect(result.getUTCHours()).toBe(4);
+
+      // Assert: Minute column now has focus.
+      expect(timePicker.find('[data-testid="timepicker_test_h4"]').classes()).not.toContain('focused');
+      expect(timePicker.find('[data-testid="timepicker_test_m7"]').classes()).toContain('focused');
+      expect(hourColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_h4');
+      expect(minuteColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_m7');
+    });
+
+    it('Open panel via click, switch columns via keyboard', async () => {
+      // If you open panel via click, there is no visible focus.
+      // If you press key, focus appears, but nothing else happens.
+
+      // Arrange: Set up date/time and open panel via mouse.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('click');
+      await nextTick();
+      const hourColumn = timePicker.findAll('.clock-column').at(0)!;
+      const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
+
+      // Assert: No focus present.
+      expect(timePicker.find('[data-testid="timepicker_test_h4"]').classes()).not.toContain('focused');
+      expect(timePicker.find('[data-testid="timepicker_test_m7"]').classes()).not.toContain('focused');
+      expect(hourColumn.attributes('aria-activedescendant')).toBeUndefined();
+      expect(minuteColumn.attributes('aria-activedescendant')).toBeUndefined();
+
+      // Act: Press tab button. Note focus will appear, but we will NOT switch to minutes column.
+      await hourColumn.trigger('keydown', { key: 'Tab' });
+      await nextTick();
+
+      // Assert: Focus present on hours column.
+      expect(timePicker.find('[data-testid="timepicker_test_h4"]').classes()).toContain('focused');
+      expect(timePicker.find('[data-testid="timepicker_test_m7"]').classes()).not.toContain('focused');
+      expect(hourColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_h4');
+      expect(minuteColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_m7');
+
+      // Act: Press Enter to select hour.
+      await hourColumn.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Hour 4 is selected.
+      const emitted = timePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as Date;
+      expect(result.getUTCHours()).toBe(4);
+
+      // Assert: Minute column now has focus.
+      expect(timePicker.find('[data-testid="timepicker_test_h4"]').classes()).not.toContain('focused');
+      expect(timePicker.find('[data-testid="timepicker_test_m7"]').classes()).toContain('focused');
+      expect(hourColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_h4');
+      expect(minuteColumn.attributes('aria-activedescendant')).toBe('timepicker_test_opt_m7');
+    });
+
+    //
+
+    it('keyboard navigation updates aria-activedescendant on hour column', async () => {
+      // Ensures the hour listbox aria-activedescendant attribute follows keyboard focus.
+
+      // Arrange: Set up date/time and open panel via keyboard.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const timePicker = createComponent(null, 'test', false, false, false);
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
 
@@ -1248,10 +1371,10 @@ describe('TimePicker', () => {
     it('keyboard navigation updates aria-activedescendant on minute column', async () => {
       // Ensures the minute listbox aria-activedescendant attribute follows keyboard focus.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
       const minuteColumn = timePicker.findAll('.clock-column').at(1)!;
 
@@ -1273,10 +1396,10 @@ describe('TimePicker', () => {
     it('option elements have unique id matching aria-activedescendant pattern', async () => {
       // Ensures hour and minute option elements have correct id attributes.
 
-      // Arrange: Set up date/time and open panel.
+      // Arrange: Set up date/time and open panel via keyboard.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
       const timePicker = createComponent(null, 'test', false, false, false);
-      await timePicker.find('.picker-input-time').trigger('click');
+      await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
 
       // Assert: Option ids follow the correct pattern.

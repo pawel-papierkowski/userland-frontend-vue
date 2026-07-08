@@ -738,9 +738,9 @@
       "radioBox": {
         "label": "Radiobox"
       },
-      "dateTimePicker": "Date/time picker",
-      "datePicker": "Date picker",
-      "timePicker": "Time picker"
+      "dateTimePicker": "Date/time picker (UTC)",
+      "datePicker": "Date picker (UTC)",
+      "timePicker": "Time picker (UTC)"
     },
     "other": {
       "generalButtons": {

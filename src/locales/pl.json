@@ -738,9 +738,9 @@
       "radioBox": {
         "label": "Wybór jeden z wielu"
       },
-      "dateTimePicker": "Wybór daty/czasu",
-      "datePicker": "Wybór daty",
-      "timePicker": "Wybór czasu"
+      "dateTimePicker": "Wybór daty/czasu (UTC)",
+      "datePicker": "Wybór daty (UTC)",
+      "timePicker": "Wybór czasu (UTC)"
     },
     "other": {
       "generalButtons": {

@@ -110,7 +110,7 @@ const placeholderTimeValue = computed(() => {
 watch(
   () => props.disabled,
   () => {
-    if (props.disabled) isClockVisible.value = false;
+    if (props.disabled) hidePanel();
   },
 );
 
@@ -122,20 +122,23 @@ watch(isClockVisible, (visible) => {
 // FUNCTIONS.
 
 /** Toggle visibility of time picker panel. */
-const toggleTimePickerVisibility = async () => {
+const toggleTimePickerVisibility = async (viaKeyboard: boolean) => {
   if (isClockVisible.value) {
-    isClockVisible.value = false;
+    hidePanel();
   } else {
     isClockVisible.value = true;
     findViewTime();
 
     // Initialize keyboard focus state.
-    if (selDateTime.value) {
-      focusedHour.value = selDateTime.value.getUTCHours();
-      focusedMinute.value = selDateTime.value.getUTCMinutes();
-    } else {
-      focusedHour.value = viewHour.value;
-      focusedMinute.value = viewMinute.value;
+    if (viaKeyboard) {
+      setupFocus(true);
+      if (selDateTime.value) {
+        focusedHour.value = selDateTime.value.getUTCHours();
+        focusedMinute.value = selDateTime.value.getUTCMinutes();
+      } else {
+        focusedHour.value = viewHour.value;
+        focusedMinute.value = viewMinute.value;
+      }
     }
     activeColumn.value = 'hour';
 
@@ -178,11 +181,11 @@ const selectHour = (h: number) => {
 };
 
 /** Select minute. */
-const selectMinute = (m: number) => {
+const selectMinute = (m: number, viaKeyboard: boolean) => {
   if (props.disabled) return;
 
   // Selecting same minute.
-  if (selDateTime.value && selDateTime.value.getUTCMinutes() === m) {
+  if (!viaKeyboard && selDateTime.value && selDateTime.value.getUTCMinutes() === m) {
     if (props.allowNull) selDateTime.value = null; // Deselect time.
     return;
   }
@@ -240,7 +243,7 @@ const onInputKeydown = (e: KeyboardEvent) => {
 
   if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
     e.preventDefault();
-    if (!isClockVisible.value) toggleTimePickerVisibility();
+    if (!isClockVisible.value) toggleTimePickerVisibility(true);
   } else if (e.key === 'Escape' && isClockVisible.value) {
     e.preventDefault();
     hidePanel();
@@ -256,9 +259,7 @@ const onHourKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedHour.value =
         focusedHour.value !== null
-          ? focusedHour.value > 0
-            ? focusedHour.value - 1
-            : 23
+          ? (focusedHour.value > 0 ? focusedHour.value - 1 : 23)
           : (selectedHour.value ?? viewHour.value ?? 0);
       scrollHourIntoView(focusedHour.value);
       break;
@@ -266,17 +267,14 @@ const onHourKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedHour.value =
         focusedHour.value !== null
-          ? focusedHour.value < 23
-            ? focusedHour.value + 1
-            : 0
+          ? (focusedHour.value < 23 ? focusedHour.value + 1 : 0)
           : (selectedHour.value ?? viewHour.value ?? 0);
       scrollHourIntoView(focusedHour.value);
       break;
     case 'ArrowRight':
     case 'Tab':
       e.preventDefault();
-      activeColumn.value = 'minute';
-      nextTick(() => minuteRef.value?.focus());
+      keyPressSwitchColumn();
       break;
     case 'Home': // Jump to start of list.
       e.preventDefault();
@@ -309,9 +307,7 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedMinute.value =
         focusedMinute.value !== null
-          ? focusedMinute.value > 0
-            ? focusedMinute.value - 1
-            : 59
+          ? (focusedMinute.value > 0 ? focusedMinute.value - 1 : 59)
           : (selectedMinute.value ?? viewMinute.value ?? 0);
       scrollMinuteIntoView(focusedMinute.value);
       break;
@@ -319,17 +315,14 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedMinute.value =
         focusedMinute.value !== null
-          ? focusedMinute.value < 59
-            ? focusedMinute.value + 1
-            : 0
+          ? (focusedMinute.value < 59 ? focusedMinute.value + 1 : 0)
           : (selectedMinute.value ?? viewMinute.value ?? 0);
       scrollMinuteIntoView(focusedMinute.value);
       break;
     case 'ArrowLeft':
     case 'Tab':
       e.preventDefault();
-      activeColumn.value = 'hour';
-      nextTick(() => hourRef.value?.focus());
+      keyPressSwitchColumn();
       break;
     case 'Home': // Jump to start of list.
       e.preventDefault();
@@ -355,34 +348,63 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
 
 //
 
+/** React on column change via key press. */
+const keyPressSwitchColumn = () => {
+  if (focusedHour.value === null || focusedMinute.value === null) {
+    // Just show focus without switching column.
+    setupFocus(false);
+    return;
+  }
+
+  if (activeColumn.value === 'minute') {
+    // Switch focus to hour column.
+    activeColumn.value = 'hour';
+    nextTick(() => hourRef.value?.focus());
+  } else {
+    // Switch focus to minute column.
+    activeColumn.value = 'minute';
+    nextTick(() => minuteRef.value?.focus());
+  }
+};
+
 /** React on selecting hour via key press. */
 const keyPressSelectHour = () => {
-  if (focusedHour.value !== null) {
-    selectHour(focusedHour.value);
-    nextTick(() => {
-      // If time was deselected (allowNull same-hour toggle), close panel.
-      // Otherwise move focus to minute column.
-      if (selDateTime.value === null) {
-        hidePanelAndRefocus();
-      } else {
-        activeColumn.value = 'minute';
-        nextTick(() => minuteRef.value?.focus());
-      }
-    });
+  if (focusedHour.value === null) {
+    // Just show focus without selecting anything.
+    setupFocus(false);
+    return;
   }
+
+  selectHour(focusedHour.value);
+  nextTick(() => {
+    // If time was deselected (allowNull same-hour toggle), close panel.
+    // Otherwise move focus to minute column.
+    if (selDateTime.value === null) {
+      hidePanelAndRefocus();
+    } else {
+      activeColumn.value = 'minute';
+      if (focusedMinute.value === null)
+        focusedMinute.value = selDateTime.value ? selDateTime.value.getUTCMinutes() : viewMinute.value;
+      nextTick(() => minuteRef.value?.focus());
+    }
+  });
 };
 
 /** React on selecting minute via key press. */
 const keyPressSelectMinute = () => {
-  if (focusedMinute.value !== null) {
-    selectMinute(focusedMinute.value);
-    hidePanelAndFocusNext();
+  if (focusedMinute.value === null) {
+    // Just show focus without selecting anything.
+    setupFocus(false);
+    return;
   }
+
+  selectMinute(focusedMinute.value, true);
+  hidePanelAndFocusNext();
 };
 
 /** Hide panel and return focus to the input. */
 const hidePanelAndRefocus = () => {
-  isClockVisible.value = false;
+  hidePanel();
   nextTick(() => {
     const inputEl = document.getElementById(`timepicker_${props.ident}`);
     inputEl?.focus();
@@ -391,7 +413,7 @@ const hidePanelAndRefocus = () => {
 
 /** Hide panel and move focus to the next focusable element on page. */
 const hidePanelAndFocusNext = () => {
-  isClockVisible.value = false;
+  hidePanel();
   nextTick(() => {
     const inputEl = document.getElementById(`timepicker_${props.ident}`);
     if (inputEl) {
@@ -406,7 +428,25 @@ const hidePanelAndFocusNext = () => {
   });
 };
 
-//
+// Utilities.
+
+/** Hide panel. Also removes focus. */
+const hidePanel = () => {
+  isClockVisible.value = false;
+  focusedHour.value = null;
+  focusedMinute.value = null;
+};
+
+/**
+ * Set up focus values.
+ * @param force If true, will override focused values. If false, will set focused values only if these are null.
+ */
+const setupFocus = (force: boolean) => {
+  if (force || focusedHour.value === null)
+    focusedHour.value = selDateTime.value ? selDateTime.value.getUTCHours() : viewHour.value;
+  if (force || focusedMinute.value === null)
+    focusedMinute.value = selDateTime.value ? selDateTime.value.getUTCMinutes() : viewMinute.value;
+}
 
 /**
  * Resolve class of hour item.
@@ -431,11 +471,6 @@ const resolveMinuteClass = (m: number) => {
     focused: activeColumn.value === 'minute' && focusedMinute.value === m,
   };
 };
-
-/** Hide panel. */
-const hidePanel = () => {
-  isClockVisible.value = false;
-};
 </script>
 
 <template>
@@ -457,7 +492,7 @@ const hidePanel = () => {
       :aria-controls="`timepicker_${ident}_panel`"
       :aria-label="t('dateTimePicker.placeholder.time')"
       :aria-disabled="disabled || undefined"
-      @click="toggleTimePickerVisibility"
+      @click="toggleTimePickerVisibility(false)"
       @keydown="onInputKeydown"
     />
 
@@ -523,7 +558,7 @@ const hidePanel = () => {
             :aria-selected="selectedMinute === m"
             :aria-label="`${m} ${t('dateTimePicker.minute')}`"
             :data-testid="`timepicker_${ident}_m${m}`"
-            @click="selectMinute(m)"
+            @click="selectMinute(m, false)"
           >
             {{ m.toString().padStart(2, '0') }}
           </div>
