@@ -13,7 +13,7 @@
  *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - allowNull - If true, allow deselecting date. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
@@ -37,8 +37,8 @@ const selDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** If true, allow deselecting date. Optional, default is false. */
     allowNull?: boolean;
     /** If true, acts as disabled component (calendar panel does not show). Optional, default is false. */
@@ -53,7 +53,7 @@ const props = withDefaults(
     dateTimeMax?: Date | null;
   }>(),
   {
-    ident: '',
+    id: '',
     allowNull: false,
     disabled: false,
     invalid: false,
@@ -121,7 +121,7 @@ const activeDescendantId = computed(() => {
       cell.month === focusedDate.value!.getUTCMonth() &&
       cell.year === focusedDate.value!.getUTCFullYear(),
   );
-  return index >= 0 ? `datepicker_${props.ident}_cell_${index}` : undefined;
+  return index >= 0 ? `datepicker_${props.id}_cell_${index}` : undefined;
 });
 
 /** Recalculate cells shown in calendar. */
@@ -161,7 +161,7 @@ const calcCalendarCells = (): CalendarCell[] => {
 
       const weekNumber = TimeUtils.getWeekNumber(lastDayOfWeek.year, lastDayOfWeek.month, lastDayOfWeek.day);
       const weekCell: CalendarCell = {
-        testid: `datepicker_${props.ident}_w${weekNumber}`,
+        testid: `datepicker_${props.id}_w${weekNumber}`,
         type: EnCalendarCellType.Week,
         day: weekNumber,
         month: 0,
@@ -192,7 +192,7 @@ const calcDays = (): CalendarCell[] => {
   for (let i = firstDay - 1; i >= 0; i--) {
     const d = new Date(Date.UTC(year, month, -i));
     days.push({
-      testid: `datepicker_${props.ident}_${ix}`,
+      testid: `datepicker_${props.id}_${ix}`,
       type: EnCalendarCellType.Date,
       day: d.getUTCDate(),
       month: d.getUTCMonth(),
@@ -205,7 +205,7 @@ const calcDays = (): CalendarCell[] => {
   // Current month days.
   for (let i = 1; i <= daysInMonth; i++) {
     days.push({
-      testid: `datepicker_${props.ident}_${ix}`,
+      testid: `datepicker_${props.id}_${ix}`,
       type: EnCalendarCellType.Date,
       day: i,
       month: month,
@@ -220,7 +220,7 @@ const calcDays = (): CalendarCell[] => {
   for (let i = 1; i <= remainingCells; i++) {
     const d = new Date(Date.UTC(year, month + 1, i));
     days.push({
-      testid: `datepicker_${props.ident}_${ix}`,
+      testid: `datepicker_${props.id}_${ix}`,
       type: EnCalendarCellType.Date,
       day: d.getUTCDate(),
       month: d.getUTCMonth(),
@@ -473,14 +473,6 @@ const onGridKeydown = (e: KeyboardEvent) => {
     }
   }
 
-  // Helper to shift focusedDate by a number of days.
-  const shiftFocus = (days: number) => {
-    const newDate = new Date(focusedDate.value!);
-    newDate.setUTCDate(newDate.getUTCDate() + days);
-    ensureViewShows(newDate);
-    focusedDate.value = newDate;
-  };
-
   switch (e.key) {
     case 'ArrowLeft':
       e.preventDefault();
@@ -542,6 +534,17 @@ const onGridKeydown = (e: KeyboardEvent) => {
   }
 };
 
+/**
+ * Helper to shift focusedDate by a number of days.
+ * @param days Number of days to move by.
+ */
+const shiftFocus = (days: number) => {
+  const newDate = new Date(focusedDate.value!);
+  newDate.setUTCDate(newDate.getUTCDate() + days);
+  ensureViewShows(newDate);
+  focusedDate.value = newDate;
+};
+
 //
 
 /** React on selecting date via key press. */
@@ -568,7 +571,7 @@ const hidePanel = () => {
 const hidePanelAndRefocus = () => {
   hidePanel();
   nextTick(() => {
-    const inputEl = document.getElementById(`datepicker_${props.ident}`);
+    const inputEl = document.getElementById(`datepicker_${props.id}`);
     inputEl?.focus();
   });
 };
@@ -577,7 +580,7 @@ const hidePanelAndRefocus = () => {
 const hidePanelAndFocusNext = () => {
   hidePanel();
   nextTick(() => {
-    const inputEl = document.getElementById(`datepicker_${props.ident}`);
+    const inputEl = document.getElementById(`datepicker_${props.id}`);
     NavUtils.FocusNext(inputEl);
   });
 };
@@ -586,9 +589,9 @@ const hidePanelAndFocusNext = () => {
 <template>
   <div class="picker-date" ref="pickerRef">
     <input
+      :id="`datepicker_${id}`"
       type="text"
-      :id="`datepicker_${ident}`"
-      :data-testid="`datepicker_${ident}`"
+      :data-testid="`datepicker_${id}`"
       class="picker-input-date"
       :class="{ disabled: disabled, err: invalid }"
       :value="displayDateValue"
@@ -600,7 +603,7 @@ const hidePanelAndFocusNext = () => {
       :tabindex="disabled ? -1 : 0"
       aria-haspopup="dialog"
       :aria-expanded="isCalendarVisible"
-      :aria-controls="`datepicker_${ident}_panel`"
+      :aria-controls="`datepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.date')"
       :aria-disabled="disabled || undefined"
       @click="toggleDatePickerVisibility(false)"
@@ -610,7 +613,7 @@ const hidePanelAndFocusNext = () => {
     <!-- Date picker: calendar panel. -->
     <div
       v-if="isCalendarVisible"
-      :id="`datepicker_${ident}_panel`"
+      :id="`datepicker_${id}_panel`"
       class="calendar-container"
       ref="calendarContainerRef"
       role="dialog"
@@ -622,7 +625,7 @@ const hidePanelAndFocusNext = () => {
         <div class="header-nav">
           <div
             class="header-navbtn"
-            :data-testid="`datepicker_${ident}_yearMinus`"
+            :data-testid="`datepicker_${id}_yearMinus`"
             :aria-label="`${t('dateTimePicker.yearMinus')}`"
             @click="changeYear(-1)"
           >
@@ -630,7 +633,7 @@ const hidePanelAndFocusNext = () => {
           </div>
           <div
             class="header-navbtn"
-            :data-testid="`datepicker_${ident}_monthMinus`"
+            :data-testid="`datepicker_${id}_monthMinus`"
             :aria-label="`${t('dateTimePicker.monthMinus')}`"
             @click="changeMonth(-1)"
           >
@@ -643,7 +646,7 @@ const hidePanelAndFocusNext = () => {
         <div class="header-nav">
           <div
             class="header-navbtn"
-            :data-testid="`datepicker_${ident}_monthPlus`"
+            :data-testid="`datepicker_${id}_monthPlus`"
             :aria-label="`${t('dateTimePicker.monthPlus')}`"
             @click="changeMonth(1)"
           >
@@ -651,7 +654,7 @@ const hidePanelAndFocusNext = () => {
           </div>
           <div
             class="header-navbtn"
-            :data-testid="`datepicker_${ident}_yearPlus`"
+            :data-testid="`datepicker_${id}_yearPlus`"
             :aria-label="`${t('dateTimePicker.yearPlus')}`"
             @click="changeYear(1)"
           >
@@ -680,7 +683,7 @@ const hidePanelAndFocusNext = () => {
           v-for="(calendarCell, index) in calendarCells"
           :key="index"
           :class="resolveCellClass(calendarCell)"
-          :id="calendarCell.type === EnCalendarCellType.Date ? `datepicker_${ident}_cell_${index}` : undefined"
+          :id="calendarCell.type === EnCalendarCellType.Date ? `datepicker_${id}_cell_${index}` : undefined"
           role="gridcell"
           :aria-selected="calendarCell.type === EnCalendarCellType.Date ? isDaySelected(calendarCell) : undefined"
           :aria-disabled="

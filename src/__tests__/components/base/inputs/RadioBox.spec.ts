@@ -10,7 +10,7 @@ import RadioBox from '@/components/base/inputs/RadioBox.vue';
 /** Convenience function to create component. */
 function createComponent(
   modelValue: number | string | null,
-  ident: string,
+  id: string,
   options: (number | string | null)[],
   disabled: boolean,
   invalid: boolean,
@@ -22,7 +22,7 @@ function createComponent(
     },
     props: {
       modelValue,
-      ident,
+      id,
       options,
       disabled,
       invalid,

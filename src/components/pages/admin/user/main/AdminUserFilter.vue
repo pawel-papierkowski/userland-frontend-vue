@@ -44,7 +44,6 @@ const emit = defineEmits(['reload']);
           <label for="status">{{ t('admin.user.filter.status') }}:</label>
           <ComboBox
             id="status"
-            ident="status"
             v-model="form.status"
             :options="enUserStatus"
             langPrefix="tech.user.status"
@@ -55,7 +54,6 @@ const emit = defineEmits(['reload']);
           <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
           <DateTimePicker
             id="createdFromAt"
-            ident="createdFromAt"
             v-model="form.createdFromAt"
             mode="date"
             :dateTimeMax="form.createdToAt"
@@ -64,14 +62,13 @@ const emit = defineEmits(['reload']);
           <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
           <DateTimePicker
             id="createdToAt"
-            ident="createdToAt"
             v-model="form.createdToAt"
             mode="date"
             :dateTimeMin="form.createdFromAt"
           />
 
           <label for="locked">{{ t('admin.user.filter.locked') }}:</label>
-          <CheckBox id="locked" ident="locked" v-model="form.locked" :allowNull="true" />
+          <CheckBox id="locked" v-model="form.locked" :allowNull="true" />
         </div>
       </div>
 

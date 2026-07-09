@@ -55,7 +55,7 @@ const show = (value: string | boolean | null): string => {
   <div class="testArea-wrapper">
     <div class="form-semiwide">
       <div class="form-subform">
-        <label for="checkbox">{{ t('testArea.inputs.mode.name') }}:</label>
+        <label for="radiobox">{{ t('testArea.inputs.mode.name') }}:</label>
         <RadioBox
           id="radiobox"
           data-testid="radiobox"
@@ -68,10 +68,9 @@ const show = (value: string | boolean | null): string => {
       <hr />
 
       <div class="form-subform-custom">
-        <label for="inputText">{{ t('testArea.inputs.inputText') }}:</label>
+        <label for="testTextbox">{{ t('testArea.inputs.inputText') }}:</label>
         <TextBox
-          id="testCombobox"
-          ident="testTextbox"
+          id="testTextbox"
           v-model="form.inputText"
           autocomplete="off"
           placeholder="Enter some text"
@@ -83,7 +82,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
         <ComboBox
           id="testCombobox"
-          ident="testCombobox"
           v-model="form.comboBox"
           :options="enTestComboBox"
           langPrefix="tech.user.status"
@@ -96,7 +94,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
         <CheckBox
           id="testCheckbox"
-          ident="testCheckbox"
           v-model="form.checkbox"
           :allowNull="true"
           :disabled="disabled"
@@ -107,7 +104,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
         <RadioBox
           id="testRadiobox"
-          ident="testRadiobox"
           v-model="form.radiobox"
           :options="enTestRadioBox"
           langPrefix="test.radioBox"
@@ -119,7 +115,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
         <DateTimePicker
           id="testDateTimePicker"
-          ident="testDateTimePicker"
           v-model="form.dateTime"
           mode="datetime"
           :allowNull="true"
@@ -131,7 +126,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
         <DateTimePicker
           id="testDatePicker"
-          ident="testDatePicker"
           v-model="form.date"
           mode="date"
           :allowNull="true"
@@ -144,7 +138,6 @@ const show = (value: string | boolean | null): string => {
         <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
         <DateTimePicker
           id="testTimePicker"
-          ident="testTimePicker"
           v-model="form.time"
           mode="time"
           :allowNull="true"

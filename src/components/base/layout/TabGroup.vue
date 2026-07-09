@@ -63,10 +63,10 @@ const getNameClass = (slotName: string) => {
       <div
         v-for="slotName in activeSlots"
         :key="slotName"
-        @click="selectSlot(slotName)"
         :data-testid="`tabgroup_${ident}_${slotName}`"
         class="tabgroup-header-name"
         :class="getNameClass(slotName)"
+        @click="selectSlot(slotName)"
       >
         {{ t(langPrefix + '.' + slotName) }}
       </div>

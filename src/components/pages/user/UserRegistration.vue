@@ -186,7 +186,7 @@ const getInputClass = (msgError: string | null): string => {
 
         <div class="form-entry-inline">
           <label for="isAdmin">{{ t('user.registration.form.isAdmin') }}:</label>
-          <CheckBox id="isAdmin" ident="isAdmin" v-model="form.isAdmin" />
+          <CheckBox id="isAdmin" v-model="form.isAdmin" />
         </div>
 
         <div class="onpage-msg info" v-html="t('test.notify')" />

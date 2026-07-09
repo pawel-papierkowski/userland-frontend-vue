@@ -19,5 +19,7 @@ export class NavUtils {
       nextElement = allFocusable[idx + 1] || null;
       nextElement!.focus();
     }
+    // DEBUG
+    console.warn(`FocusNext() called. Result count: ${allFocusable.length}, currElement ix=${idx}, nextElement: ${nextElement === null ? 'null' : nextElement.tagName}`);
   }
 }

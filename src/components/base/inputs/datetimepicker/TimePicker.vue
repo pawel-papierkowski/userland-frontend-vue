@@ -13,7 +13,7 @@
  *   You are one to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - allowNull - If true, allow deselecting time. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
@@ -32,8 +32,8 @@ const selDateTime = defineModel<Date | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** If true, allow deselecting time. Optional, default is false. */
     allowNull?: boolean;
     /** If true, acts as disabled component (clock panel does not show). Optional, default is false. */
@@ -42,7 +42,7 @@ const props = withDefaults(
     invalid?: boolean;
   }>(),
   {
-    ident: '',
+    id: '',
     allowNull: false,
     disabled: false,
     invalid: false,
@@ -74,12 +74,12 @@ const selectedMinute = computed(() => selDateTime.value?.getUTCMinutes() ?? null
 /** aria-activedescendant value for the hour listbox. */
 const hourActiveDesc = computed(() => {
   if (focusedHour.value === null) return undefined;
-  return `timepicker_${props.ident}_opt_h${focusedHour.value}`;
+  return `timepicker_${props.id}_opt_h${focusedHour.value}`;
 });
 /** aria-activedescendant value for the minute listbox. */
 const minuteActiveDesc = computed(() => {
   if (focusedMinute.value === null) return undefined;
-  return `timepicker_${props.ident}_opt_m${focusedMinute.value}`;
+  return `timepicker_${props.id}_opt_m${focusedMinute.value}`;
 });
 
 const containerStyle = ref({
@@ -222,7 +222,7 @@ const scrollToSelected = () => {
 const scrollHourIntoView = (h: number) => {
   nextTick(() => {
     if (hourRef.value) {
-      const el = hourRef.value.querySelector(`[data-testid="timepicker_${props.ident}_h${h}"]`);
+      const el = hourRef.value.querySelector(`[data-testid="timepicker_${props.id}_h${h}"]`);
       el?.scrollIntoView({ block: 'center' });
     }
   });
@@ -232,7 +232,7 @@ const scrollHourIntoView = (h: number) => {
 const scrollMinuteIntoView = (m: number) => {
   nextTick(() => {
     if (minuteRef.value) {
-      const el = minuteRef.value.querySelector(`[data-testid="timepicker_${props.ident}_m${m}"]`);
+      const el = minuteRef.value.querySelector(`[data-testid="timepicker_${props.id}_m${m}"]`);
       el?.scrollIntoView({ block: 'center' });
     }
   });
@@ -418,7 +418,7 @@ const hidePanel = () => {
 const hidePanelAndRefocus = () => {
   hidePanel();
   nextTick(() => {
-    const inputEl = document.getElementById(`timepicker_${props.ident}`);
+    const inputEl = document.getElementById(`timepicker_${props.id}`);
     inputEl?.focus();
   });
 };
@@ -427,7 +427,7 @@ const hidePanelAndRefocus = () => {
 const hidePanelAndFocusNext = () => {
   hidePanel();
   nextTick(() => {
-    const inputEl = document.getElementById(`timepicker_${props.ident}`);
+    const inputEl = document.getElementById(`timepicker_${props.id}`);
     NavUtils.FocusNext(inputEl);
   });
 };
@@ -471,9 +471,9 @@ const resolveMinuteClass = (m: number) => {
 <template>
   <div class="picker-time" ref="pickerRef">
     <input
+      :id="`timepicker_${id}`"
       type="text"
-      :id="`timepicker_${ident}`"
-      :data-testid="`timepicker_${ident}`"
+      :data-testid="`timepicker_${id}`"
       class="picker-input-time"
       :class="{ disabled: disabled, err: invalid }"
       :value="displayTimeValue"
@@ -485,7 +485,7 @@ const resolveMinuteClass = (m: number) => {
       :tabindex="disabled ? -1 : 0"
       aria-haspopup="listbox"
       :aria-expanded="isClockVisible"
-      :aria-controls="`timepicker_${ident}_panel`"
+      :aria-controls="`timepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.time')"
       :aria-disabled="disabled || undefined"
       @click="toggleTimePickerVisibility(false)"
@@ -495,7 +495,7 @@ const resolveMinuteClass = (m: number) => {
     <!-- Time picker: clock panel. -->
     <div
       v-if="isClockVisible"
-      :id="`timepicker_${ident}_panel`"
+      :id="`timepicker_${id}_panel`"
       class="clock-container"
       ref="clockContainerRef"
       role="dialog"
@@ -519,13 +519,13 @@ const resolveMinuteClass = (m: number) => {
           <div
             v-for="h in hours"
             :key="h"
-            :id="`timepicker_${ident}_opt_h${h}`"
+            :id="`timepicker_${id}_opt_h${h}`"
             class="time-item time-hour"
             :class="resolveHourClass(h)"
             role="option"
             :aria-selected="selectedHour === h"
             :aria-label="`${h} ${t('dateTimePicker.hour')}`"
-            :data-testid="`timepicker_${ident}_h${h}`"
+            :data-testid="`timepicker_${id}_h${h}`"
             @click="selectHour(h)"
           >
             {{ h.toString().padStart(2, '0') }}
@@ -547,13 +547,13 @@ const resolveMinuteClass = (m: number) => {
           <div
             v-for="m in minutes"
             :key="m"
-            :id="`timepicker_${ident}_opt_m${m}`"
+            :id="`timepicker_${id}_opt_m${m}`"
             class="time-item time-minute"
             :class="resolveMinuteClass(m)"
             role="option"
             :aria-selected="selectedMinute === m"
             :aria-label="`${m} ${t('dateTimePicker.minute')}`"
-            :data-testid="`timepicker_${ident}_m${m}`"
+            :data-testid="`timepicker_${id}_m${m}`"
             @click="selectMinute(m, false)"
           >
             {{ m.toString().padStart(2, '0') }}

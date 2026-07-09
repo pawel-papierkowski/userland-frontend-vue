@@ -8,7 +8,7 @@ import CheckBox from '@/components/base/inputs/CheckBox.vue';
 /** Convenience function to create component. */
 function createComponent(
   modelValue: boolean | null,
-  ident: string,
+  id: string,
   allowNull: boolean,
   disabled: boolean,
   invalid: boolean,
@@ -16,7 +16,7 @@ function createComponent(
   return mount(CheckBox, {
     props: {
       modelValue,
-      ident,
+      id,
       allowNull,
       disabled,
       invalid,

@@ -49,7 +49,7 @@ const isBtnDisabled = () => {
         <label for="createdFromAt">{{ t('admin.user.config.filter.createdFromAt') }}:</label>
         <DateTimePicker
           v-model="form.createdFromAt"
-          ident="createdFromAt"
+          id="createdFromAt"
           mode="date"
           :dateTimeMax="form.createdToAt"
           :disabled="disabled"
@@ -58,7 +58,7 @@ const isBtnDisabled = () => {
         <label for="createdToAt">{{ t('admin.user.config.filter.createdToAt') }}:</label>
         <DateTimePicker
           v-model="form.createdToAt"
-          ident="createdToAt"
+          id="createdToAt"
           mode="date"
           :dateTimeMin="form.createdFromAt"
           :disabled="disabled"

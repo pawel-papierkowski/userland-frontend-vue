@@ -22,7 +22,7 @@ vi.mock('@vueuse/core', async (importOriginal) => {
 /** Convenience function to create component. */
 function createComponent(
   modelValue: Date | null,
-  ident: string,
+  id: string,
   allowNull: boolean,
   disabled: boolean,
   invalid: boolean,
@@ -36,7 +36,7 @@ function createComponent(
     },
     props: {
       modelValue,
-      ident,
+      id,
       allowNull,
       disabled,
       invalid,

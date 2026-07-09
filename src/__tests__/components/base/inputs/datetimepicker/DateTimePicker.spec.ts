@@ -12,7 +12,7 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 /** Convenience function to create component. */
 function createComponent(
   modelValue: Date | null,
-  ident: string,
+  id: string,
   mode: 'date' | 'time' | 'datetime',
   allowNull: boolean,
   disabled: boolean,
@@ -27,7 +27,7 @@ function createComponent(
     },
     props: {
       modelValue,
-      ident,
+      id,
       mode,
       allowNull,
       disabled,
@@ -58,7 +58,7 @@ describe('DateTimePicker', () => {
     const datePicker = dateTimePicker.findComponent(DatePicker);
     expect(datePicker.exists()).toBe(true);
     expect(datePicker.props('modelValue')).toBe(null);
-    expect(datePicker.props('ident')).toBe('someDateTime');
+    expect(datePicker.props('id')).toBe('someDateTime');
     expect(datePicker.props('allowNull')).toBe(false);
     expect(datePicker.props('disabled')).toBe(true);
     expect(datePicker.props('invalid')).toBe(false);
@@ -70,7 +70,7 @@ describe('DateTimePicker', () => {
     const timePicker = dateTimePicker.findComponent(TimePicker);
     expect(timePicker.exists()).toBe(true);
     expect(timePicker.props('modelValue')).toBe(null);
-    expect(timePicker.props('ident')).toBe('someDateTime');
+    expect(timePicker.props('id')).toBe('someDateTime');
     expect(timePicker.props('allowNull')).toBe(false);
     expect(timePicker.props('disabled')).toBe(true);
     expect(timePicker.props('invalid')).toBe(false);
@@ -90,7 +90,7 @@ describe('DateTimePicker', () => {
     const datePicker = dateTimePicker.findComponent(DatePicker);
     expect(datePicker.exists()).toBe(true);
     expect(datePicker.props('modelValue')).toBe(someDate);
-    expect(datePicker.props('ident')).toBe('someDate');
+    expect(datePicker.props('id')).toBe('someDate');
     expect(datePicker.props('allowNull')).toBe(false);
     expect(datePicker.props('disabled')).toBe(false);
     expect(datePicker.props('invalid')).toBe(false);
@@ -121,7 +121,7 @@ describe('DateTimePicker', () => {
     const timePicker = dateTimePicker.findComponent(TimePicker);
     expect(timePicker.exists()).toBe(true);
     expect(timePicker.props('modelValue')).toBe(someDate);
-    expect(timePicker.props('ident')).toBe('someTime');
+    expect(timePicker.props('id')).toBe('someTime');
     expect(timePicker.props('allowNull')).toBe(true);
     expect(timePicker.props('disabled')).toBe(false);
     expect(timePicker.props('invalid')).toBe(true);

@@ -9,7 +9,7 @@
  * - v-model - Variable holding checkbox value. Must be boolean|null.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - allowNull - If true, will cycle null value after true and false. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
@@ -20,8 +20,8 @@ const currValue = defineModel<boolean | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. Optional. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** Does this checkbox allow setting null value? Optional, default is false. */
     allowNull?: boolean;
     /** If true, acts as disabled component. Optional, default is false. */
@@ -30,7 +30,7 @@ const props = withDefaults(
     invalid?: boolean;
   }>(),
   {
-    ident: '',
+    id: '',
     allowNull: false,
     disabled: false,
     invalid: false,
@@ -81,8 +81,9 @@ const showSymbol = (): string => {
 </script>
 
 <template>
-  <div class="checkbox-wrapper" :data-testid="`checkbox_${ident}`">
+  <div class="checkbox-wrapper" :data-testid="`checkbox_${id}`">
     <div
+      :id="id"
       class="checkbox"
       :class="{ disabled: disabled, err: invalid }"
       role="checkbox"

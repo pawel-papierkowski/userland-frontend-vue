@@ -12,7 +12,7 @@
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - mode - Mode of operation. Optional, default is 'datetime'.
  * - allowNull - If true, allow deselecting date. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
@@ -29,8 +29,8 @@ const currDateTime = defineModel<Date | null>({ required: true });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** Mode of operation. Optional, default is datetime. */
     mode?: 'date' | 'time' | 'datetime';
     /** If true, allow deselecting date. Optional, default is false. */
@@ -47,7 +47,7 @@ const props = withDefaults(
     dateTimeMax?: Date | null;
   }>(),
   {
-    ident: '',
+    id: '',
     mode: 'datetime',
     allowNull: false,
     disabled: false,
@@ -57,6 +57,9 @@ const props = withDefaults(
     dateTimeMax: null,
   },
 );
+
+const dateId = `${props.id}`;
+const timeId = props.mode === 'datetime' ? `t${props.id}` : `${props.id}`;
 </script>
 
 <template>
@@ -64,7 +67,7 @@ const props = withDefaults(
     <DatePicker
       v-if="mode === 'datetime' || mode === 'date'"
       v-model="currDateTime"
-      :ident="ident"
+      :id="dateId"
       :allowNull="allowNull"
       :disabled="disabled"
       :invalid="invalid"
@@ -76,7 +79,7 @@ const props = withDefaults(
     <TimePicker
       v-if="mode === 'datetime' || mode === 'time'"
       v-model="currDateTime"
-      :ident="ident"
+      :id="timeId"
       :allowNull="allowNull"
       :disabled="disabled"
       :invalid="invalid"

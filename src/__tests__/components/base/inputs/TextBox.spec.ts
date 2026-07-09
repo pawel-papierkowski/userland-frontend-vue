@@ -8,7 +8,7 @@ import TextBox from '@/components/base/inputs/TextBox.vue';
 /** Convenience function to create component. */
 function createComponent(
   modelValue: string | null,
-  ident: string,
+  id: string,
   autocomplete: string,
   placeholder: string,
   disabled: boolean,
@@ -17,7 +17,7 @@ function createComponent(
   return mount(TextBox, {
     props: {
       modelValue,
-      ident,
+      id,
       autocomplete,
       placeholder,
       disabled,

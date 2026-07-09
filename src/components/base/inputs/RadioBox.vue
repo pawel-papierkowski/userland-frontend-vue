@@ -10,12 +10,14 @@
  * - v-model - Variable holding selected option.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  * - langPrefix - Prefix, used for auto-translating entries in list. If empty, options will be shown as is without translation.
  */
+import { nextTick } from 'vue';
+import { NavUtils } from '@/code/utils/NavUtils.ts';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -25,8 +27,8 @@ const selOption = defineModel<number | string | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** Array of options. Can contain null value for 'unselected'. */
     options: (number | string | null)[];
     /**  If true, acts as disabled component. Optional, default is false. */
@@ -37,7 +39,7 @@ const props = withDefaults(
     langPrefix?: string;
   }>(),
   {
-    ident: '',
+    id: '',
     disabled: false,
     invalid: false,
     langPrefix: '',
@@ -47,7 +49,26 @@ const props = withDefaults(
 //
 
 /** Get option element ID for ARIA and programmatic focus. */
-const optionId = (index: number): string => `radiobox_${props.ident}_option_${index}`;
+const optionId = (index: number): string => `radiobox_${props.id}_option_${index}`;
+
+//
+
+/**
+ * Returns selected element or first element if nothing selected.
+ * @returns Active element or null if could not find element.
+ */
+const findActiveElement = (): HTMLElement | null => {
+  const selectedIndex = props.options.findIndex((o) => o === selOption.value);
+  const targetIndex = selectedIndex >= 0 ? selectedIndex : 0;
+  return document.getElementById(optionId(targetIndex));
+};
+
+/** Focus on chosen option inside. */
+const onGroupFocus = () => {
+  // Immediately change focus to actually selected option (or first option if nothing is selected).
+  const el = findActiveElement();
+  el?.focus();
+};
 
 /**
  * User clicked on option.
@@ -69,24 +90,29 @@ const selectOption = (option: number | string | null, index?: number) => {
  * Handle keyboard events for accessibility.
  * Arrow keys navigate between options, Space selects the focused option.
  */
-const handleKeydown = (event: KeyboardEvent) => {
+const handleKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return;
 
   const currentIndex = props.options.findIndex((o) => o === selOption.value);
   let nextIndex = currentIndex;
 
-  switch (event.key) {
+  switch (e.key) {
     case 'ArrowDown':
     case 'ArrowRight':
-      event.preventDefault();
+      e.preventDefault();
       nextIndex = currentIndex + 1;
       if (nextIndex >= props.options.length) nextIndex = 0; // Wraparound.
       break;
     case 'ArrowUp':
     case 'ArrowLeft':
-      event.preventDefault();
+      e.preventDefault();
       nextIndex = currentIndex - 1;
       if (nextIndex < 0) nextIndex = props.options.length - 1; // Wraparound.
+      break;
+    case 'Enter':
+    case ' ':
+      e.preventDefault();
+      focusNext();
       break;
     default:
       return;
@@ -105,17 +131,33 @@ const showOption = (option: number | string | null): number | string | null => {
   if (props.langPrefix) return t(props.langPrefix + '.' + option);
   return option;
 };
+
+/** Move focus to the next focusable element on page. */
+const focusNext = () => {
+  nextTick(() => {
+    const el = findActiveElement();
+    NavUtils.FocusNext(el);
+  });
+};
 </script>
 
 <template>
-  <div class="radiobox-wrapper" :data-testid="`radiobox_${ident}`">
-    <div class="radiobox" :class="{ disabled: disabled, err: invalid }" role="radiogroup" @keydown="handleKeydown">
+  <div class="radiobox-wrapper" :data-testid="`radiobox_${id}`">
+    <div
+      :id="id"
+      class="radiobox"
+      :class="{ disabled: disabled, err: invalid }"
+      role="radiogroup"
+      tabindex="-1"
+      @keydown="handleKeydown"
+      @focus="onGroupFocus">
+
       <div
         v-for="(option, index) in options"
-        :key="index"
         :id="optionId(index)"
+        :key="index"
         class="radiobox-option"
-        :data-testid="`radiobox_${ident}_${index}`"
+        :data-testid="`radiobox_${id}_${index}`"
         role="radio"
         :aria-checked="option === selOption"
         :tabindex="option === selOption && !disabled ? 0 : -1"
@@ -126,6 +168,7 @@ const showOption = (option: number | string | null): number | string | null => {
         </div>
         <div class="radiobox-label">{{ showOption(option) }}</div>
       </div>
+
     </div>
   </div>
 </template>

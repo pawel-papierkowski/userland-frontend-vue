@@ -24,7 +24,7 @@
  * - v-model - Variable holding selected option.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
@@ -44,8 +44,8 @@ const selOption = defineModel<number | string | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
     options: (number | string | null)[];
     /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
@@ -58,7 +58,7 @@ const props = withDefaults(
     placeholder?: string;
   }>(),
   {
-    ident: '',
+    id: '',
     disabled: false,
     invalid: false,
     langPrefix: '',
@@ -73,10 +73,10 @@ const arrowClass = computed(() => ({ open: isOpen.value }));
 const highlightedIndex = ref(-1);
 
 /** ID for the listbox used by aria-controls and aria-activedescendant. */
-const listboxId = computed(() => `combobox-listbox_${props.ident || 'default'}`);
+const listboxId = computed(() => `combobox-listbox_${props.id || 'default'}`);
 
 /** Get option element ID for aria-activedescendant. */
-const optionId = (index: number): string => `combobox_${props.ident}_option_${index}`;
+const optionId = (index: number): string => `combobox_${props.id}_option_${index}`;
 
 //
 
@@ -177,9 +177,10 @@ const showOption = (option: number | string | null): number | string | null => {
 
 <template>
   <div
+    :id="id"
     class="combobox"
     :class="{ disabled: disabled, err: invalid }"
-    :data-testid="`combobox_${ident}`"
+    :data-testid="`combobox_${id}`"
     ref="combobox"
     role="combobox"
     :aria-expanded="isOpen"
@@ -206,7 +207,7 @@ const showOption = (option: number | string | null): number | string | null => {
         :id="optionId(index)"
         class="combobox-option"
         :class="{ highlighted: highlightedIndex === index }"
-        :data-testid="`combobox_${ident}_${index}`"
+        :data-testid="`combobox_${id}_${index}`"
         role="option"
         :aria-selected="option === selOption"
         @click="selectOption(option)"

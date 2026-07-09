@@ -10,7 +10,7 @@
  * - v-model - Variable holding text.
  *
  * Properties:
- * - ident - Used for identification. Optional.
+ * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - autocomplete - For autocomplete attribute of <input>. Optional.
  * - placeholder - Shows grayed out text in background of input if null/empty. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
@@ -23,8 +23,8 @@ const currValue = defineModel<string | null>({ required: true });
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(
   defineProps<{
-    /** Used for identification. Optional. */
-    ident?: string;
+    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    id?: string;
     /** For autocomplete attribute of <input>. Optional. */
     autocomplete?: string;
     /** Shows grayed out text in background of input if null/empty. Optional. */
@@ -35,7 +35,7 @@ const props = withDefaults(
     invalid?: boolean;
   }>(),
   {
-    ident: '',
+    id: '',
     placeholder: '',
     disabled: false,
     invalid: false,
@@ -44,8 +44,9 @@ const props = withDefaults(
 </script>
 
 <template>
-  <div class="input-wrapper" :data-testid="`textbox_${ident}`">
+  <div class="input-wrapper" :data-testid="`textbox_${id}`">
     <input
+      :id="id"
       type="text"
       v-model="currValue"
       :autocomplete="autocomplete"
