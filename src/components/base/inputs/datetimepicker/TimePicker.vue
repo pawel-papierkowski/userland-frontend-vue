@@ -22,7 +22,8 @@ import { ref, computed, nextTick, watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
-import { TimeUtils } from '@/code/utils/TimeUtils';
+import { TimeUtils } from '@/code/utils/TimeUtils.ts';
+import { NavUtils } from '@/code/utils/NavUtils.ts';
 
 const { t } = useI18n();
 
@@ -143,6 +144,7 @@ const toggleTimePickerVisibility = async (viaKeyboard: boolean) => {
     activeColumn.value = 'hour';
 
     await nextTick();
+
     // Adjust picker position if needed to prevent window overflow.
     if (clockContainerRef.value) {
       const rect = clockContainerRef.value.getBoundingClientRect();
@@ -152,6 +154,7 @@ const toggleTimePickerVisibility = async (viaKeyboard: boolean) => {
         containerStyle.value = { left: '0', right: 'auto' };
       }
     }
+
     // Move keyboard focus into the panel (hour column) so user can navigate immediately.
     hourRef.value?.focus();
   }
@@ -402,6 +405,15 @@ const keyPressSelectMinute = () => {
   hidePanelAndFocusNext();
 };
 
+// UTILITIES.
+
+/** Hide panel. Also removes focus. */
+const hidePanel = () => {
+  isClockVisible.value = false;
+  focusedHour.value = null;
+  focusedMinute.value = null;
+};
+
 /** Hide panel and return focus to the input. */
 const hidePanelAndRefocus = () => {
   hidePanel();
@@ -416,25 +428,8 @@ const hidePanelAndFocusNext = () => {
   hidePanel();
   nextTick(() => {
     const inputEl = document.getElementById(`timepicker_${props.ident}`);
-    if (inputEl) {
-      const focusable =
-        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
-      const allFocusable = document.querySelectorAll<HTMLElement>(focusable);
-      const idx = Array.from(allFocusable).indexOf(inputEl as HTMLElement);
-      if (idx !== -1 && idx + 1 < allFocusable.length) {
-        allFocusable[idx + 1]!.focus();
-      }
-    }
+    NavUtils.FocusNext(inputEl);
   });
-};
-
-// Utilities.
-
-/** Hide panel. Also removes focus. */
-const hidePanel = () => {
-  isClockVisible.value = false;
-  focusedHour.value = null;
-  focusedMinute.value = null;
 };
 
 /**
@@ -487,6 +482,7 @@ const resolveMinuteClass = (m: number) => {
       readonly
       autocomplete="off"
       role="combobox"
+      :tabindex="disabled ? -1 : 0"
       aria-haspopup="listbox"
       :aria-expanded="isClockVisible"
       :aria-controls="`timepicker_${ident}_panel`"

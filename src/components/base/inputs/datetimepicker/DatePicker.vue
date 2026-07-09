@@ -26,6 +26,7 @@ import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
+import { NavUtils } from '@/code/utils/NavUtils.ts';
 import { EnCalendarCellType } from '@/code/data/general/datetime-types.ts';
 import type { CalendarCell } from '@/code/data/general/datetime-types.ts';
 
@@ -66,6 +67,8 @@ const isCalendarVisible = ref(false);
 const pickerRef = ref<HTMLElement | null>(null);
 const calendarContainerRef = ref<HTMLElement | null>(null);
 const viewDate = ref(new Date()); // Date used for viewing month/year in calendar.
+const focusedDate = ref<Date | null>(null); // Date under keyboard focus within the calendar grid.
+const calendarGridRef = ref<HTMLElement | null>(null); // Ref for the calendar grid element (for keyboard focus).
 
 const containerStyle = ref({
   left: '0',
@@ -108,6 +111,19 @@ const gridStyle = computed(() => ({
   gridTemplateColumns: `repeat(${gridColumns.value || 7}, 1fr)`,
 }));
 
+/** Compute ID of the focused cell for aria-activedescendant. */
+const activeDescendantId = computed(() => {
+  if (!focusedDate.value) return undefined;
+  const index = calendarCells.value.findIndex(
+    (cell) =>
+      cell.type === EnCalendarCellType.Date &&
+      cell.day === focusedDate.value!.getUTCDate() &&
+      cell.month === focusedDate.value!.getUTCMonth() &&
+      cell.year === focusedDate.value!.getUTCFullYear(),
+  );
+  return index >= 0 ? `datepicker_${props.ident}_cell_${index}` : undefined;
+});
+
 /** Recalculate cells shown in calendar. */
 const calendarCells = computed(() => {
   return calcCalendarCells();
@@ -119,7 +135,7 @@ const calendarCells = computed(() => {
 watch(
   () => props.disabled,
   () => {
-    if (props.disabled) isCalendarVisible.value = false;
+    if (props.disabled) hidePanel();
   },
 );
 
@@ -220,13 +236,18 @@ const calcDays = (): CalendarCell[] => {
 //
 
 /** Toggle visibility of date picker panel. */
-const toggleDatePickerVisibility = async () => {
+const toggleDatePickerVisibility = async (viaKeyboard: boolean) => {
   if (isCalendarVisible.value) {
-    isCalendarVisible.value = false;
+    hidePanel();
   } else {
     // If selected date is null, set viewDate to current date (as in system date of computer).
     viewDate.value = selDateTime.value ? new Date(selDateTime.value) : new Date();
     isCalendarVisible.value = true;
+
+    // Initialize keyboard focus state.
+    if (viaKeyboard) {
+      setupFocus(true);
+    }
 
     await nextTick();
 
@@ -239,6 +260,9 @@ const toggleDatePickerVisibility = async () => {
         containerStyle.value = { left: '0', right: 'auto' };
       }
     }
+
+    // Move keyboard focus into the grid so user can navigate immediately.
+    calendarGridRef.value?.focus();
   }
 };
 
@@ -272,16 +296,21 @@ const calendarCellToDate = (pickableDay: CalendarCell): Date => {
 };
 
 /**
- * User clicks cell in calendar.
- * @param calendarCell Calendar cell that was clicked.
+ * Select a specific date (shared by click and keyboard).
+ * @param date Date to select.
  */
-const selectCell = (calendarCell: CalendarCell) => {
-  if (props.disabled || calendarCell.type !== EnCalendarCellType.Date) return;
+const selectDate = (date: Date) => {
+  if (props.disabled) return;
+  if (!canPick(date)) return;
 
-  const newDate = calendarCellToDate(calendarCell);
-  if (!canPick(newDate)) return;
+  const newDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0));
 
-  if (TimeUtils.formatUTCDate(selDateTime.value) === TimeUtils.formatUTCDate(newDate)) {
+  if (
+    selDateTime.value &&
+    selDateTime.value.getUTCFullYear() === newDate.getUTCFullYear() &&
+    selDateTime.value.getUTCMonth() === newDate.getUTCMonth() &&
+    selDateTime.value.getUTCDate() === newDate.getUTCDate()
+  ) {
     // Selected same date again, deselect date.
     if (props.allowNull) selDateTime.value = null;
     else return;
@@ -298,6 +327,15 @@ const selectCell = (calendarCell: CalendarCell) => {
   }
   // Hide calendar panel.
   isCalendarVisible.value = false;
+};
+
+/**
+ * User clicks cell in calendar.
+ * @param calendarCell Calendar cell that was clicked.
+ */
+const selectCell = (calendarCell: CalendarCell) => {
+  if (calendarCell.type !== EnCalendarCellType.Date) return;
+  selectDate(calendarCellToDate(calendarCell));
 };
 
 const canPick = (date: Date): boolean => {
@@ -320,6 +358,7 @@ const resolveCellClass = (calendarCell: CalendarCell) => {
     today: isToday(calendarCell),
     selected: isDaySelected(calendarCell),
     disabled: isDayDisabled(calendarCell),
+    focused: isFocused(calendarCell),
   };
 };
 
@@ -361,11 +400,186 @@ const isDayDisabled = (calendarCell: CalendarCell): boolean => {
   return !canPick(givenDay);
 };
 
+/**
+ * Check if given date is keyboard-focused.
+ * @param calendarCell Calendar cell. Must be Date.
+ */
+const isFocused = (calendarCell: CalendarCell): boolean => {
+  if (!focusedDate.value || calendarCell.type !== EnCalendarCellType.Date) return false;
+  return (
+    calendarCell.day === focusedDate.value.getUTCDate() &&
+    calendarCell.month === focusedDate.value.getUTCMonth() &&
+    calendarCell.year === focusedDate.value.getUTCFullYear()
+  );
+};
+
+// KEYBOARD HANDLERS
+
+/** Handle keyboard on the input (combobox). */
+const onInputKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (!isCalendarVisible.value) toggleDatePickerVisibility(true);
+  } else if (e.key === 'Escape' && isCalendarVisible.value) {
+    e.preventDefault();
+    hidePanel();
+  }
+};
+
+/**
+ * Set up focus values.
+ * @param force If true, will override focused value. If false, will set focused value only if null.
+ */
+const setupFocus = (force: boolean) => {
+  if (force || focusedDate.value === null)
+    focusedDate.value = selDateTime.value ? new Date(selDateTime.value) : new Date();
+};
+
+/**
+ * If navigation moves to a different month, update viewDate to show that month.
+ * @param date The date to ensure is visible.
+ */
+const ensureViewShows = (date: Date) => {
+  const viewYear = viewDate.value.getUTCFullYear();
+  const viewMonth = viewDate.value.getUTCMonth();
+  if (date.getUTCFullYear() !== viewYear || date.getUTCMonth() !== viewMonth) {
+    viewDate.value = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
+  }
+};
+
+/** Handle keyboard on the calendar grid. */
+const onGridKeydown = (e: KeyboardEvent) => {
+  if (props.disabled) return;
+
+  // If no focus is set yet (panel opened via click), set it now without doing anything else.
+  if (focusedDate.value === null) {
+    if (
+      e.key === 'ArrowUp' ||
+      e.key === 'ArrowDown' ||
+      e.key === 'ArrowLeft' ||
+      e.key === 'ArrowRight' ||
+      e.key === 'Home' ||
+      e.key === 'End' ||
+      e.key === 'PageUp' ||
+      e.key === 'PageDown' ||
+      e.key === 'Enter' ||
+      e.key === ' '
+    ) {
+      e.preventDefault();
+      setupFocus(false);
+      return;
+    }
+  }
+
+  // Helper to shift focusedDate by a number of days.
+  const shiftFocus = (days: number) => {
+    const newDate = new Date(focusedDate.value!);
+    newDate.setUTCDate(newDate.getUTCDate() + days);
+    ensureViewShows(newDate);
+    focusedDate.value = newDate;
+  };
+
+  switch (e.key) {
+    case 'ArrowLeft':
+      e.preventDefault();
+      shiftFocus(-1);
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      shiftFocus(1);
+      break;
+    case 'ArrowUp':
+      e.preventDefault();
+      shiftFocus(-7);
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      shiftFocus(7);
+      break;
+    case 'Home':
+      e.preventDefault();
+      focusedDate.value = new Date(Date.UTC(viewDate.value.getUTCFullYear(), viewDate.value.getUTCMonth(), 1));
+      break;
+    case 'End':
+      e.preventDefault();
+      focusedDate.value = new Date(
+        Date.UTC(
+          viewDate.value.getUTCFullYear(),
+          viewDate.value.getUTCMonth(),
+          TimeUtils.getUTCDaysInMonth(viewDate.value.getUTCFullYear(), viewDate.value.getUTCMonth()),
+        ),
+      );
+      break;
+    case 'PageUp':
+      e.preventDefault();
+      changeMonth(-1);
+      if (focusedDate.value) {
+        const newDate = new Date(focusedDate.value);
+        newDate.setUTCMonth(newDate.getUTCMonth() - 1);
+        focusedDate.value = newDate;
+      }
+      break;
+    case 'PageDown':
+      e.preventDefault();
+      changeMonth(1);
+      if (focusedDate.value) {
+        const newDate = new Date(focusedDate.value);
+        newDate.setUTCMonth(newDate.getUTCMonth() + 1);
+        focusedDate.value = newDate;
+      }
+      break;
+    case 'Enter':
+    case ' ':
+      e.preventDefault();
+      keyPressSelectDate();
+      break;
+    case 'Escape':
+      e.preventDefault();
+      hidePanelAndRefocus();
+      break;
+  }
+};
+
 //
 
-/** Hide panel. */
+/** React on selecting date via key press. */
+const keyPressSelectDate = () => {
+  if (focusedDate.value) {
+    const prevDateTime = selDateTime.value;
+    selectDate(focusedDate.value);
+    nextTick(() => {
+      // Only close and refocus if the selection actually changed (or was cleared).
+      if (selDateTime.value !== prevDateTime) hidePanelAndFocusNext();
+    });
+  }
+};
+
+// UTILITIES.
+
+/** Hide panel. Also removes focus. */
 const hidePanel = () => {
   isCalendarVisible.value = false;
+  focusedDate.value = null;
+};
+
+/** Hide panel and return focus to the input. */
+const hidePanelAndRefocus = () => {
+  hidePanel();
+  nextTick(() => {
+    const inputEl = document.getElementById(`datepicker_${props.ident}`);
+    inputEl?.focus();
+  });
+};
+
+/** Hide panel and move focus to the next focusable element on page. */
+const hidePanelAndFocusNext = () => {
+  hidePanel();
+  nextTick(() => {
+    const inputEl = document.getElementById(`datepicker_${props.ident}`);
+    NavUtils.FocusNext(inputEl);
+  });
 };
 </script>
 
@@ -383,12 +597,14 @@ const hidePanel = () => {
       readonly
       autocomplete="off"
       role="combobox"
+      :tabindex="disabled ? -1 : 0"
       aria-haspopup="dialog"
       :aria-expanded="isCalendarVisible"
       :aria-controls="`datepicker_${ident}_panel`"
       :aria-label="t('dateTimePicker.placeholder.date')"
       :aria-disabled="disabled || undefined"
-      @click="toggleDatePickerVisibility"
+      @click="toggleDatePickerVisibility(false)"
+      @keydown="onInputKeydown"
     />
 
     <!-- Date picker: calendar panel. -->
@@ -444,7 +660,16 @@ const hidePanel = () => {
         </div>
       </div>
 
-      <div class="calendar-grid" :style="gridStyle" role="grid" :aria-label="headerText">
+      <div
+        class="calendar-grid"
+        ref="calendarGridRef"
+        tabindex="0"
+        :style="gridStyle"
+        role="grid"
+        :aria-label="headerText"
+        :aria-activedescendant="activeDescendantId"
+        @keydown="onGridKeydown"
+      >
         <!-- This row shows days of week. -->
         <div v-if="showWeeks" aria-hidden="true"></div>
         <div v-for="day in daysOfWeek" :key="day" class="weekday" aria-hidden="true">
@@ -455,6 +680,7 @@ const hidePanel = () => {
           v-for="(calendarCell, index) in calendarCells"
           :key="index"
           :class="resolveCellClass(calendarCell)"
+          :id="calendarCell.type === EnCalendarCellType.Date ? `datepicker_${ident}_cell_${index}` : undefined"
           role="gridcell"
           :aria-selected="calendarCell.type === EnCalendarCellType.Date ? isDaySelected(calendarCell) : undefined"
           :aria-disabled="
@@ -566,6 +792,11 @@ const hidePanel = () => {
   text-align: center;
 }
 
+/** Suppress native focus ring on the grid container itself (we use aria-activedescendant). */
+.calendar-grid:focus-visible {
+  outline: none;
+}
+
 .weekday {
   font-weight: bold;
   font-size: 0.8em;
@@ -615,6 +846,12 @@ const hidePanel = () => {
   box-shadow: var(--datetimepicker-day-disabled-shadow);
 
   cursor: default;
+}
+
+/** Keyboard-focus ring on the active day cell. */
+.day.focused {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .weekNum {

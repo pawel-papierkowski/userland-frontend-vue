@@ -855,4 +855,487 @@ describe('DatePicker', () => {
       expect(enabledCell.attributes('aria-disabled')).toBeUndefined();
     });
   });
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Keyboard tests
+
+  describe('keyboard', () => {
+    it('Enter on input opens the panel', async () => {
+      // Ensures pressing Enter on the input opens the calendar panel.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Act: Press Enter on the input.
+      await input.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Panel is now visible.
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('Space on input opens the panel', async () => {
+      // Ensures pressing Space on the input opens the calendar panel.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Act: Press Space on the input.
+      await input.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: Panel is now visible.
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('ArrowDown on input opens the panel', async () => {
+      // Ensures pressing ArrowDown on the input opens the calendar panel.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Act: Press ArrowDown on the input.
+      await input.trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: Panel is now visible.
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('Escape on input closes the panel', async () => {
+      // Ensures pressing Escape on the input closes the panel when open.
+
+      // Arrange: Set up date/time and create component.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      const input = datePicker.find('.picker-input-date');
+
+      // Arrange: Open the panel first.
+      await input.trigger('click');
+      await nextTick();
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+
+      // Act: Press Escape on the input.
+      await input.trigger('keydown', { key: 'Escape' });
+      await nextTick();
+
+      // Assert: Panel is now closed.
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('initial focused class reflects the selected date on keyboard open', async () => {
+      // Ensures the keyboard-focus starts on the currently selected date.
+
+      // Arrange: Set up date/time with a selected date (June 15, 2026).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const someDate: Date = new Date('2026-06-15T19:30:00Z');
+
+      // Act: Open the panel via keyboard.
+      const datePicker = createComponent(someDate, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: Selected day (June 15, index 14) has the focused class.
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').classes()).toContain('focused');
+
+      // Assert: Other days do not have the focused class.
+      expect(datePicker.find('[data-testid="datepicker_test_0"]').classes()).not.toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_7"]').classes()).not.toContain('focused');
+    });
+
+    it('initial focused class reflects current date when no selection', async () => {
+      // Ensures the keyboard-focus starts on the current date when no date is selected.
+
+      // Arrange: Set up date/time with no selection.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+
+      // Act: Open the panel via keyboard.
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: Current day (June 3, index 2) has the focused class.
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).toContain('focused');
+
+      // Assert: Other days do not have the focused class.
+      expect(datePicker.find('[data-testid="datepicker_test_1"]').classes()).not.toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_3"]').classes()).not.toContain('focused');
+    });
+
+    it('ArrowRight on grid navigates to next day', async () => {
+      // Ensures ArrowRight moves focus to the next day.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press ArrowRight in the grid.
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Assert: June 4 (index 3) is now focused, June 3 (index 2) is not.
+      expect(datePicker.find('[data-testid="datepicker_test_3"]').classes()).toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).not.toContain('focused');
+    });
+
+    it('ArrowLeft on grid navigates to previous day', async () => {
+      // Ensures ArrowLeft moves focus to the previous day.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press ArrowLeft in the grid.
+      await grid.trigger('keydown', { key: 'ArrowLeft' });
+      await nextTick();
+
+      // Assert: June 2 (index 1) is now focused, June 3 (index 2) is not.
+      expect(datePicker.find('[data-testid="datepicker_test_1"]').classes()).toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).not.toContain('focused');
+    });
+
+    it('ArrowDown on grid navigates forward one week', async () => {
+      // Ensures ArrowDown moves focus seven days forward.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press ArrowDown in the grid.
+      await grid.trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: June 10 (index 9) is now focused, June 3 (index 2) is not.
+      expect(datePicker.find('[data-testid="datepicker_test_9"]').classes()).toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).not.toContain('focused');
+    });
+
+    it('ArrowUp on grid navigates backward one week', async () => {
+      // Ensures ArrowUp moves focus seven days backward.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-10T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press ArrowUp in the grid.
+      await grid.trigger('keydown', { key: 'ArrowUp' });
+      await nextTick();
+
+      // Assert: June 3 (index 2) is now focused, June 10 (index 9) is not.
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_9"]').classes()).not.toContain('focused');
+    });
+
+    it('Arrow navigates across month boundary', async () => {
+      // Ensures ArrowRight from last day of month navigates to first day of next month
+      // and updates the view.
+
+      // Arrange: Set up date/time to show June 2026 (Jun 1 is Monday).
+      vi.setSystemTime(new Date('2026-06-01T12:10:00Z'));
+      const someDate: Date = new Date('2026-06-30T00:00:00Z');
+      const datePicker = createComponent(someDate, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press ArrowRight to go from June 30 to July 1.
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Assert: Header now shows July.
+      expect(datePicker.find('.header-title').text()).toBe('2026 July');
+
+      // Assert: The focused day is July 1 (identified by its aria-label).
+      const julyFirstCell = datePicker.find('[aria-label="2026 July 1"]');
+      expect(julyFirstCell.classes()).toContain('focused');
+    });
+
+    it('Home navigates to first day of current month', async () => {
+      // Ensures Home jumps to the first day of the current month.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 15, index 14).
+      vi.setSystemTime(new Date('2026-06-15T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press Home to jump to day 1.
+      await grid.trigger('keydown', { key: 'Home' });
+      await nextTick();
+
+      // Assert: June 1 (index 0) is focused.
+      expect(datePicker.find('[data-testid="datepicker_test_0"]').classes()).toContain('focused');
+    });
+
+    it('End navigates to last day of current month', async () => {
+      // Ensures End jumps to the last day of the current month.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 15, index 14).
+      vi.setSystemTime(new Date('2026-06-15T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press End to jump to day 30.
+      await grid.trigger('keydown', { key: 'End' });
+      await nextTick();
+
+      // Assert: June 30 (index 29) is focused.
+      expect(datePicker.find('[data-testid="datepicker_test_29"]').classes()).toContain('focused');
+    });
+
+    it('PageDown navigates to next month', async () => {
+      // Ensures PageDown moves to the next month.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 15, index 14).
+      vi.setSystemTime(new Date('2026-06-15T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press PageDown.
+      await grid.trigger('keydown', { key: 'PageDown' });
+      await nextTick();
+
+      // Assert: Header now shows July.
+      expect(datePicker.find('.header-title').text()).toBe('2026 July');
+    });
+
+    it('PageUp navigates to previous month', async () => {
+      // Ensures PageUp moves to the previous month.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 15, index 14).
+      vi.setSystemTime(new Date('2026-06-15T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Act: Press PageUp.
+      await grid.trigger('keydown', { key: 'PageUp' });
+      await nextTick();
+
+      // Assert: Header now shows May.
+      expect(datePicker.find('.header-title').text()).toBe('2026 May');
+    });
+
+    it('Enter selects focused date and closes panel', async () => {
+      // Ensures pressing Enter on a focused date selects it and closes the panel.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Arrange: Navigate to June 5 (index 4).
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Act: Press Enter to select June 5.
+      await grid.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Date is selected and panel closed.
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as Date;
+      expect(result.getUTCFullYear()).toBe(2026);
+      expect(result.getUTCMonth()).toBe(5); // reminder: zero-indexed
+      expect(result.getUTCDate()).toBe(5);
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('Space selects focused date and closes panel', async () => {
+      // Ensures pressing Space on a focused date selects it and closes the panel.
+
+      // Arrange: Set up date/time and open panel via keyboard (focus on June 3, index 2).
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Arrange: Navigate to June 8 (index 7).
+      for (let i = 0; i < 5; i++) {
+        await grid.trigger('keydown', { key: 'ArrowRight' });
+        await nextTick();
+      }
+
+      // Act: Press Space to select June 8.
+      await grid.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: Date is selected and panel closed.
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as Date;
+      expect(result.getUTCFullYear()).toBe(2026);
+      expect(result.getUTCMonth()).toBe(5); // reminder: zero-indexed
+      expect(result.getUTCDate()).toBe(8);
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('Enter on already-selected date with allowNull deselects and closes', async () => {
+      // Ensures pressing Enter on the already-selected date with allowNull=true
+      // clears the selection and closes the panel.
+
+      // Arrange: Set up with a preselected date and allowNull.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const someDate: Date = new Date('2026-06-15T14:30:00Z');
+      const datePicker = createComponent(someDate, 'test', true, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Arrange: Verify June 15 is both selected and focused.
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').classes()).toContain('selected');
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').classes()).toContain('focused');
+
+      // Act: Press Enter on already-selected date.
+      await grid.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Date was deselected (model value is null).
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toHaveLength(1);
+      const result = emitted?.at(-1)![0] as null;
+      expect(result).toBeNull();
+
+      // Assert: Panel is closed after deselection.
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('Enter on already-selected date with allowNull=false does nothing', async () => {
+      // Ensures pressing Enter on the already-selected date with allowNull=false
+      // does not change selection nor close the panel.
+
+      // Arrange: Set up with a preselected date and allowNull=false.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const someDate: Date = new Date('2026-06-15T14:30:00Z');
+      const datePicker = createComponent(someDate, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Arrange: Verify June 15 is both selected and focused.
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').classes()).toContain('selected');
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').classes()).toContain('focused');
+
+      // Act: Press Enter on already-selected date.
+      await grid.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: No new emissions generated and panel stays open.
+      const emitted = datePicker.emitted('update:modelValue');
+      expect(emitted).toBeUndefined();
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('Escape in grid closes panel', async () => {
+      // Ensures Escape in the grid closes the panel.
+
+      // Arrange: Set up date/time and open panel via keyboard.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+
+      // Act: Press Escape in the grid.
+      const grid = datePicker.find('.calendar-grid');
+      await grid.trigger('keydown', { key: 'Escape' });
+      await nextTick();
+
+      // Assert: Panel is closed.
+      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('click-open panel has no focus until first key press', async () => {
+      // If you open panel via click, there is no visible focus.
+      // If you press a navigation key, focus appears without moving.
+
+      // Arrange: Set up date/time and open panel via mouse click.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('click');
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Assert: No focus present initially.
+      expect(datePicker.find('[data-testid="datepicker_test_3"]').classes()).not.toContain('focused');
+      expect(grid.attributes('aria-activedescendant')).toBeUndefined();
+
+      // Act: Press a navigation key. Focus appears but does not move.
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Assert: Focus present on June 3 (the initial date), NOT on June 4.
+      expect(datePicker.find('[data-testid="datepicker_test_3"]').classes()).not.toContain('focused');
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').classes()).toContain('focused');
+      expect(grid.attributes('aria-activedescendant')).toBe('datepicker_test_cell_2');
+    });
+
+    it('keyboard navigation updates aria-activedescendant on grid', async () => {
+      // Ensures the grid's aria-activedescendant attribute follows keyboard focus.
+
+      // Arrange: Set up date/time and open panel via keyboard.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+      const grid = datePicker.find('.calendar-grid');
+
+      // Assert: Initial active descendant points to June 3 (index 2).
+      expect(grid.attributes('aria-activedescendant')).toBe('datepicker_test_cell_2');
+
+      // Act: Navigate right twice.
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+      await grid.trigger('keydown', { key: 'ArrowRight' });
+      await nextTick();
+
+      // Assert: Active descendant now points to June 5 (index 4).
+      expect(grid.attributes('aria-activedescendant')).toBe('datepicker_test_cell_4');
+    });
+
+    it('day cells have correct id matching aria-activedescendant pattern', async () => {
+      // Ensures day cells have the correct id attributes.
+
+      // Arrange: Set up date/time and open panel via keyboard.
+      vi.setSystemTime(new Date('2026-06-03T12:10:00Z'));
+      const datePicker = createComponent(null, 'test', false, false, false, false);
+      await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: Cell IDs follow the correct pattern.
+      expect(datePicker.find('[data-testid="datepicker_test_2"]').attributes('id')).toBe('datepicker_test_cell_2');
+      expect(datePicker.find('[data-testid="datepicker_test_14"]').attributes('id')).toBe('datepicker_test_cell_14');
+      expect(datePicker.find('[data-testid="datepicker_test_29"]').attributes('id')).toBe('datepicker_test_cell_29');
+    });
+  });
 });
