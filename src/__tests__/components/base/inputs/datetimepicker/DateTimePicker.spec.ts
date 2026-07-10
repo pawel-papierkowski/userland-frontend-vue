@@ -70,7 +70,7 @@ describe('DateTimePicker', () => {
     const timePicker = dateTimePicker.findComponent(TimePicker);
     expect(timePicker.exists()).toBe(true);
     expect(timePicker.props('modelValue')).toBe(null);
-    expect(timePicker.props('id')).toBe('someDateTime');
+    expect(timePicker.props('id')).toBe('tsomeDateTime'); // if both datePicker and timePicker are present, timePicker must have different id
     expect(timePicker.props('allowNull')).toBe(false);
     expect(timePicker.props('disabled')).toBe(true);
     expect(timePicker.props('invalid')).toBe(false);

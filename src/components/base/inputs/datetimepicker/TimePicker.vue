@@ -7,6 +7,8 @@
  * - Can disable or mark as invalid.
  * - Accept null (not set) value.
  * - Input field is not editable. You set value via clock panel.
+ * - Keyboard navigation via arrows (open panel or change hour/minute), enter/space (pick hour/minute) and esc (close panel).
+ * - Supports WAI-ARIA.
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.

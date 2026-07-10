@@ -4,6 +4,8 @@
  * Features:
  * - Accept null (not set) value.
  * - Can disable or mark as invalid.
+ * - Keyboard (enter or space) cycles between possible values.
+ * - Supports WAI-ARIA.
  *
  * Models:
  * - v-model - Variable holding checkbox value. Must be boolean|null.

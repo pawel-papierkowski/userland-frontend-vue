@@ -1,12 +1,29 @@
 <script setup lang="ts">
 /** Dropdown menu.
  *
+ * Features:
+ * - Contains two slots, one always visible and other shown when first is clicked.
+ *
+ * Properties:
+ * - id - Used for identification. Optional.
+ *
  * Slots:
  * - trigger - Place to click so dropdown will show.
  * - content - Actual content of dropdown.
  */
 import { ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = withDefaults(
+  defineProps<{
+    /** Used for identification. */
+    id?: string;
+  }>(),
+  {
+    id: '',
+  },
+);
 
 const isOpen = ref(false);
 const dropdown = ref(null);
@@ -15,8 +32,11 @@ onClickOutside(dropdown, () => (isOpen.value = false));
 </script>
 
 <template>
-  <div class="dropdown-wrapper" ref="dropdown">
-    <div @mouseover="isOpen = true" @click="isOpen = !isOpen" class="dropdown nav-major">
+  <div class="dropdown-wrapper" ref="dropdown" :data-testid="`dropdownmenu_${id}`">
+    <div
+      class="dropdown nav-major"
+      @mouseover="isOpen = true"
+      @click="isOpen = !isOpen">
       <slot name="trigger" />
     </div>
 
@@ -32,9 +52,6 @@ onClickOutside(dropdown, () => (isOpen.value = false));
   display: inline-block;
   cursor: pointer;
   user-select: none;
-}
-
-.dropdown {
 }
 
 .dropdown-slot {

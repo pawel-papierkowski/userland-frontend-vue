@@ -4,7 +4,9 @@
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
  * - Can disable or mark as invalid.
+ * - Keyboard navigation via arrows (automatically selects option). Enter/space moves to next component.
  * - Component is integrated with vue-i18n.
+ * - Supports WAI-ARIA.
  *
  * Models:
  * - v-model - Variable holding selected option.

@@ -7,6 +7,8 @@
  * - Can disable or mark as invalid.
  * - Accept null (not set) value.
  * - Input fields are not editable. You set value via picker panels.
+ * - Keyboard navigation supported.
+ * - Supports WAI-ARIA.
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
@@ -26,7 +28,6 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
 const currDateTime = defineModel<Date | null>({ required: true });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(
   defineProps<{
     /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
