@@ -985,6 +985,10 @@
       "b": "Tab B",
       "c": "Tab C"
     },
+    "slideshow": {
+      "label": "{id} slideshow",
+      "slide": "Slide {n} of {total}"
+    },
     "table": {
       "column": {
         "createdAt": "Created",
