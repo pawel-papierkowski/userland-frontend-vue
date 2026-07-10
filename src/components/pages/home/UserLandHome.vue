@@ -10,7 +10,7 @@ import HomeComponents from '@/components/pages/home/HomeComponents.vue';
 
 <template>
   <article>
-    <SlideShow :interval="15" :delay="30">
+    <SlideShow langPrefix="test.slideshow" :interval="15" :delay="30">
       <template #descr>
         <HomeDescr />
       </template>
