@@ -1,5 +1,6 @@
 <script setup lang="ts">
 /** User menu in header. Different depending on your login status. */
+import { nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -10,10 +11,19 @@ import DropdownMenu from '@/components/base/layout/DropdownMenu.vue';
 const router = useRouter();
 const { t } = useI18n();
 
+/** Handle logout. */
 const handleLogout = async () => {
   await AppLoginer.logout();
   router.push({ name: 'home' });
 };
+
+/** Handle keyboard events. */
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    nextTick(() => handleLogout());
+  }
+}
 </script>
 
 <template>
@@ -28,10 +38,14 @@ const handleLogout = async () => {
     </template>
 
     <template #content>
-      <div class="dropdown-content">
+      <div tabindex="-1" class="dropdown-content">
         <router-link class="nav-major" :to="{ name: 'user-profile' }">{{ t('header.user.profile') }}</router-link>
         <hr />
-        <div class="nav-major" @click="handleLogout()">{{ t('header.user.logout') }}</div>
+        <div
+          class="nav-major"
+          tabindex="0"
+          @click="handleLogout()"
+          @keydown="onKeydown">{{ t('header.user.logout') }}</div>
       </div>
     </template>
   </DropdownMenu>

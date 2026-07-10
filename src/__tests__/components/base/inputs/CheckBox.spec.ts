@@ -28,7 +28,7 @@ function createComponent(
 
 /** Tests of CheckBox component. */
 describe('CheckBox', () => {
-  describe('general tests', () => {
+  describe('general', () => {
     it('has correct presentation', async () => {
       // Check if checkbox is constructed correctly.
 
@@ -216,7 +216,12 @@ describe('CheckBox', () => {
       // Assert: aria-disabled is present and true on the checkbox element.
       expect(checkBox.find('.checkbox').attributes('aria-disabled')).toBe('true');
     });
+  });
 
+  // ////////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation tests
+
+  describe('keyboard', () => {
     it('responds to keyboard', async () => {
       // Ensure Space and Enter keys cycle the checkbox value, and other keys do nothing.
 

@@ -59,7 +59,7 @@ function testOptions(optionElements: DOMWrapper<Element>[], expectedCount: numbe
 
 /** Tests of RadioBox component. */
 describe('RadioBox', () => {
-  describe('general tests', () => {
+  describe('general', () => {
     it('shows correctly translated options with langPrefix', async () => {
       // Check if radiobox is constructed correctly.
 
@@ -124,6 +124,33 @@ describe('RadioBox', () => {
       // Assert: Correct option is marked as selected.
       testOptions(optionElements, 4, 2);
     });
+
+    it('click focuses and selects option', async () => {
+      // Ensure clicking an option updates selection and tabindex.
+
+      // Arrange&Act: Set up radiobox with 'one' selected.
+      const radioBox = createComponent('one', '', createOptions(), false, false, 'test.radioBox');
+      const options = radioBox.findAll('.radiobox-option');
+
+      // Assert: 'one' (index 1) is selected with tabindex 0.
+      expect(options[1]?.attributes('aria-checked')).toBe('true');
+      expect(options[1]?.attributes('tabindex')).toBe('0');
+      expect(options[2]?.attributes('tabindex')).toBe('-1');
+
+      // Act: Click on 'three' (index 3).
+      await options[3]?.trigger('click');
+
+      // Assert: 'three' is now selected with tabindex 0.
+      expect(options[1]?.attributes('aria-checked')).toBe('false');
+      expect(options[1]?.attributes('tabindex')).toBe('-1');
+      expect(options[3]?.attributes('aria-checked')).toBe('true');
+      expect(options[3]?.attributes('tabindex')).toBe('0');
+      // Assert: Model emitted correct value.
+      expect(radioBox.emitted('update:modelValue')).toHaveLength(1);
+      expect(radioBox.emitted('update:modelValue')?.[0]?.[0]).toBe('three');
+    });
+
+    //
 
     it('is disabled', async () => {
       // Ensure nothing happens when we click on disabled radiobox and disabled radiobox is visually distinct.
@@ -217,8 +244,13 @@ describe('RadioBox', () => {
         expect(opt.attributes('tabindex')).toBe('-1');
       });
     });
+  });
 
-    it('keyboard: ArrowRight/ArrowDown navigates forward', async () => {
+  // ////////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation tests
+
+  describe('keyboard', () => {
+    it('ArrowRight/ArrowDown navigates forward', async () => {
       // Ensure ArrowRight and ArrowDown move selection to next option.
 
       // Arrange&Act: Set up radiobox with 'one' selected (index 1).
@@ -250,7 +282,7 @@ describe('RadioBox', () => {
       expect(radioBox.emitted('update:modelValue')?.[1]?.[0]).toBe('three');
     });
 
-    it('keyboard: ArrowLeft/ArrowUp navigates backward', async () => {
+    it('ArrowLeft/ArrowUp navigates backward', async () => {
       // Ensure ArrowLeft and ArrowUp move selection to previous option.
 
       // Arrange&Act: Set up radiobox with 'two' selected (index 2).
@@ -281,7 +313,7 @@ describe('RadioBox', () => {
       expect(radioBox.emitted('update:modelValue')?.[1]?.[0]).toBe(null);
     });
 
-    it('keyboard: wraps around at boundaries', async () => {
+    it('wraps around at boundaries', async () => {
       // Ensure arrow key navigation wraps around at first and last option.
 
       // Arrange&Act: Set up radiobox with null selected (index 0, first option).
@@ -308,7 +340,7 @@ describe('RadioBox', () => {
       expect(options[0]?.attributes('tabindex')).toBe('0');
     });
 
-    it('keyboard: disabled ignores keyboard events', async () => {
+    it('disabled ignores keyboard events', async () => {
       // Ensure arrow keys are ignored when radiobox is disabled.
 
       // Arrange&Act: Set up disabled radiobox with 'one' selected.
@@ -335,31 +367,6 @@ describe('RadioBox', () => {
       expect(options[0]?.attributes('aria-checked')).toBe('false');
       // Assert: Model still never emitted.
       expect(radioBox.emitted('update:modelValue')).toBeUndefined();
-    });
-
-    it('click focuses and selects option', async () => {
-      // Ensure clicking an option updates selection and tabindex.
-
-      // Arrange&Act: Set up radiobox with 'one' selected.
-      const radioBox = createComponent('one', '', createOptions(), false, false, 'test.radioBox');
-      const options = radioBox.findAll('.radiobox-option');
-
-      // Assert: 'one' (index 1) is selected with tabindex 0.
-      expect(options[1]?.attributes('aria-checked')).toBe('true');
-      expect(options[1]?.attributes('tabindex')).toBe('0');
-      expect(options[2]?.attributes('tabindex')).toBe('-1');
-
-      // Act: Click on 'three' (index 3).
-      await options[3]?.trigger('click');
-
-      // Assert: 'three' is now selected with tabindex 0.
-      expect(options[1]?.attributes('aria-checked')).toBe('false');
-      expect(options[1]?.attributes('tabindex')).toBe('-1');
-      expect(options[3]?.attributes('aria-checked')).toBe('true');
-      expect(options[3]?.attributes('tabindex')).toBe('0');
-      // Assert: Model emitted correct value.
-      expect(radioBox.emitted('update:modelValue')).toHaveLength(1);
-      expect(radioBox.emitted('update:modelValue')?.[0]?.[0]).toBe('three');
     });
   });
 });

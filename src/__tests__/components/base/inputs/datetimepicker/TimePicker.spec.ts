@@ -20,13 +20,7 @@ vi.mock('@vueuse/core', async (importOriginal) => {
 //
 
 /** Convenience function to create component. */
-function createComponent(
-  modelValue: Date | null,
-  id: string,
-  allowNull: boolean,
-  disabled: boolean,
-  invalid: boolean,
-) {
+function createComponent(modelValue: Date | null, id: string, allowNull: boolean, disabled: boolean, invalid: boolean) {
   return mount(TimePicker, {
     global: {
       plugins: [i18n],
@@ -105,7 +99,7 @@ describe('TimePicker', () => {
 
   //
 
-  describe('general tests', () => {
+  describe('general', () => {
     it('registers onClickOutside on mount', () => {
       // Ensure the component wires up VueUse's onClickOutside on mount.
       // Note: The actual DOM event cannot be reliably tested in jsdom environment,

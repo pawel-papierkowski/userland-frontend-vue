@@ -43,7 +43,7 @@ function createOptions(): (number | string | null)[] {
 
 /** Tests of ComboBox component. */
 describe('ComboBox', () => {
-  describe('general tests', () => {
+  describe('general', () => {
     it('has correct presentation', async () => {
       // Check if combobox is constructed correctly.
 
@@ -105,6 +105,30 @@ describe('ComboBox', () => {
 
       // Assert: Combobox main field is present and shows selected option (in this case 'a')
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option A');
+    });
+
+    it('mouseenter highlights option', async () => {
+      // Ensure hovering over an option updates the highlighted index.
+
+      // Arrange: Create combobox.
+      const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox');
+
+      // Act: Open combobox.
+      await comboBox.find('.combobox-selected').trigger('click');
+      await nextTick();
+
+      // Act: Hover over third option.
+      await comboBox.findAll('.combobox-option')[2]?.trigger('mouseenter');
+      await nextTick();
+
+      // Assert: Third option is highlighted.
+      const options = comboBox.findAll('.combobox-option');
+      expect(options[0]?.classes()).not.toContain('highlighted');
+      expect(options[1]?.classes()).not.toContain('highlighted');
+      expect(options[2]?.classes()).toContain('highlighted');
+      expect(options[3]?.classes()).not.toContain('highlighted');
+      // Assert: aria-activedescendant updated.
+      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
     });
 
     //
@@ -219,8 +243,13 @@ describe('ComboBox', () => {
       // Assert: aria-disabled is present and true.
       expect(comboBox.attributes('aria-disabled')).toBe('true');
     });
+  });
 
-    it('keyboard: ArrowDown opens and navigates down', async () => {
+  // ////////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation tests
+
+  describe('keyboard', () => {
+    it('ArrowDown opens and navigates down', async () => {
       // Ensure ArrowDown opens combobox and moves highlight down.
 
       // Arrange&Act: Set up combobox.
@@ -264,7 +293,7 @@ describe('ComboBox', () => {
       expect(options[0]?.classes()).toContain('highlighted');
     });
 
-    it('keyboard: ArrowUp opens and navigates up', async () => {
+    it('ArrowUp opens and navigates up', async () => {
       // Ensure ArrowUp opens combobox and moves highlight up.
 
       // Arrange&Act: Set up combobox.
@@ -297,7 +326,7 @@ describe('ComboBox', () => {
       expect(options[3]?.classes()).toContain('highlighted');
     });
 
-    it('keyboard: ArrowDown/ArrowUp wrap around at boundaries', async () => {
+    it('ArrowDown/ArrowUp wrap around at boundaries', async () => {
       // Ensure ArrowDown from last wraps to first and ArrowUp from first wraps to last.
 
       // Arrange&Act: Open combobox and navigate to last option (index 3).
@@ -329,7 +358,7 @@ describe('ComboBox', () => {
       expect(options[0]?.classes()).not.toContain('highlighted');
     });
 
-    it('keyboard: Enter selects highlighted option', async () => {
+    it('Enter selects highlighted option', async () => {
       // Ensure Enter key selects the highlighted option.
 
       // Arrange&Act: Set up combobox.
@@ -354,7 +383,7 @@ describe('ComboBox', () => {
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option B');
     });
 
-    it('keyboard: Space opens and highlights current selection', async () => {
+    it('Space opens and highlights current selection', async () => {
       // Ensure Space key opens combobox and highlights currently selected option.
       // When pressed again, Space selects the highlighted option.
 
@@ -391,7 +420,7 @@ describe('ComboBox', () => {
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option B');
     });
 
-    it('keyboard: Escape closes dropdown', async () => {
+    it('Escape closes dropdown', async () => {
       // Ensure Escape key closes combobox dropdown.
 
       // Arrange&Act: Open combobox.
@@ -414,7 +443,7 @@ describe('ComboBox', () => {
       expect(comboBox.attributes('aria-activedescendant')).toBeUndefined();
     });
 
-    it('keyboard: disabled combobox ignores keyboard events', async () => {
+    it('disabled combobox ignores keyboard events', async () => {
       // Ensure keyboard events are ignored on disabled combobox.
 
       // Arrange&Act: Set up disabled combobox.
@@ -433,30 +462,6 @@ describe('ComboBox', () => {
 
       // Assert: Options are still hidden.
       expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
-    });
-
-    it('mouseenter highlights option', async () => {
-      // Ensure hovering over an option updates the highlighted index.
-
-      // Arrange: Create combobox.
-      const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox');
-
-      // Act: Open combobox.
-      await comboBox.find('.combobox-selected').trigger('click');
-      await nextTick();
-
-      // Act: Hover over third option.
-      await comboBox.findAll('.combobox-option')[2]?.trigger('mouseenter');
-      await nextTick();
-
-      // Assert: Third option is highlighted.
-      const options = comboBox.findAll('.combobox-option');
-      expect(options[0]?.classes()).not.toContain('highlighted');
-      expect(options[1]?.classes()).not.toContain('highlighted');
-      expect(options[2]?.classes()).toContain('highlighted');
-      expect(options[3]?.classes()).not.toContain('highlighted');
-      // Assert: aria-activedescendant updated.
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
     });
   });
 });

@@ -135,7 +135,7 @@ describe('DatePicker', () => {
 
   //
 
-  describe('general tests', () => {
+  describe('general', () => {
     it('registers onClickOutside on mount', () => {
       // Ensure the component wires up VueUse's onClickOutside on mount.
       // Note: The actual DOM event cannot be reliably tested in jsdom environment,
@@ -857,7 +857,7 @@ describe('DatePicker', () => {
   });
 
   // ////////////////////////////////////////////////////////////////////////////
-  // Keyboard tests
+  // Keyboard navigation tests
 
   describe('keyboard', () => {
     it('Enter on input opens the panel', async () => {
