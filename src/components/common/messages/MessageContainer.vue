@@ -9,14 +9,26 @@
  * import { AppMessager } from '@/code/messages/AppMessager.ts';
  * AppMessager.infoT('user.registration.msg.success.title', 'user.registration.msg.success.content');
  */
+import { useI18n } from 'vue-i18n';
+
 import { useMessageStore } from '@/stores/messages.ts';
 import MessageBox from '@/components/common/messages/MessageBox.vue';
+
+const { t } = useI18n();
 
 const messageStore = useMessageStore();
 </script>
 
 <template>
-  <div class="message-wrapper" data-testid="msgContainer">
+  <div
+    class="message-wrapper"
+    data-testid="msgContainer"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    :aria-label="t('msgs.aria.container')"
+    aria-relevant="additions removals"
+  >
     <TransitionGroup name="msg-list" tag="div" class="messages">
       <div v-for="msg in messageStore.messages" :key="msg.id" class="msg-item">
         <MessageBox

@@ -32,15 +32,17 @@ describe('MessageContainer', () => {
     it('is empty', () => {
       // Check empty message container.
 
+      // Arrange&Act: Create component.
       const messageContainer = createComponent();
 
-      // Check that there are no elements with class '.message-box'.
+      // Assert: Check that there are no elements with class '.message-box'.
       expect(messageContainer.findAll('.message-box')).toHaveLength(0);
     });
 
     it('has single message', async () => {
       // Check message container with single message.
 
+      // Arrange: Create component.
       const messageContainer = createComponent();
 
       // Act: Add one message.
@@ -55,6 +57,7 @@ describe('MessageContainer', () => {
     it('has many messages', async () => {
       // Check message container with many messages.
 
+      // Arrange: Create component.
       const messageContainer = createComponent();
 
       // Act: Add multiple messages.
@@ -75,6 +78,37 @@ describe('MessageContainer', () => {
       expect(messages[2]?.find('.message-content').text()).toBe('msg.warn.content');
       expect(messages[3]?.find('.message-content').text()).toBe('msg.success.content');
       expect(messages[4]?.find('.message-content').text()).toBe('msg.info.content');
+    });
+  });
+
+  describe('accessibility', () => {
+    it('has correct ARIA attributes', () => {
+      // Checks that the container exposes proper ARIA attributes for screen readers.
+
+      // Arrange&Act: Create component.
+      const messageContainer = createComponent();
+
+      // Assert: wrapper has live region attributes.
+      expect(messageContainer.find('.message-wrapper').attributes('role')).toBe('status');
+      expect(messageContainer.find('.message-wrapper').attributes('aria-live')).toBe('polite');
+      expect(messageContainer.find('.message-wrapper').attributes('aria-atomic')).toBe('true');
+      expect(messageContainer.find('.message-wrapper').attributes('aria-label')).toBe('Notifications');
+      expect(messageContainer.find('.message-wrapper').attributes('aria-relevant')).toBe('additions removals');
+    });
+
+    it('announces new messages via live region', async () => {
+      // Checks that when a message is added, it appears inside the live region.
+
+      // Arrange: Create component.
+      const messageContainer = createComponent();
+
+      // Act: add a message.
+      AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
+      await nextTick();
+
+      // Assert: the live region contains the message box.
+      const liveRegion = messageContainer.find('[aria-live="polite"]');
+      expect(liveRegion.findAll('.message-box').length).toBe(1);
     });
   });
 });

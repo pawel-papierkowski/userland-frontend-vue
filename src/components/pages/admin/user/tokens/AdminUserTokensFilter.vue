@@ -8,6 +8,9 @@
  * Properties:
  * - isBusy - If true, show filter button as disabled and busy.
  * - disabled - If true, entire filter form is disabled.
+ *
+ * Events:
+ * - reload: Fired when user tokens table needs to be reloaded.
  */
 import { useI18n } from 'vue-i18n';
 

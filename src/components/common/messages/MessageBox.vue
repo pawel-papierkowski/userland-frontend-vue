@@ -1,9 +1,12 @@
 <script setup lang="ts">
 /**
- * Single message in a box. Can be removed by clicking on it.
+ * Single message in a box. Can be removed by clicking on it or pressing Escape.
  *
  * Properties:
  * - msg: Message data.
+ *
+ * Events:
+ * - close: Fired when user dismisses the message (click or Escape).
  */
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -16,6 +19,31 @@ const props = defineProps<{
   msg: Message;
 }>();
 
+const emit = defineEmits<{
+  close: [];
+}>();
+
+//
+
+/** Label for message level. */
+const levelLabel = computed(() => {
+  switch (props.msg.level) {
+    case EnMessageLevel.Info:
+      return t('msgs.aria.level.info');
+    case EnMessageLevel.Success:
+      return t('msgs.aria.level.success');
+    case EnMessageLevel.Warning:
+      return t('msgs.aria.level.warning');
+    case EnMessageLevel.Failure:
+      return t('msgs.aria.level.failure');
+    case EnMessageLevel.Error:
+      return t('msgs.aria.level.error');
+    default:
+      return '';
+  }
+});
+
+/** Determines CSS class of message. */
 const messageClass = computed(() => {
   switch (props.msg.level) {
     case EnMessageLevel.Info:
@@ -33,6 +61,7 @@ const messageClass = computed(() => {
   }
 });
 
+/** Emoji to show for given message box based on its level. */
 const icon = computed(() => {
   switch (props.msg.level) {
     case EnMessageLevel.Info:
@@ -49,12 +78,32 @@ const icon = computed(() => {
       return '';
   }
 });
+
+//
+
+/**
+ * Handle keyboard events on the message box.
+ * Dismisses the message on Escape key.
+ */
+function handleKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') {
+    emit('close');
+  }
+}
 </script>
 
 <template>
-  <div class="message-box" :class="messageClass" :data-testid="'msgBox_' + msg.no">
+  <div
+    class="message-box"
+    :class="messageClass"
+    :data-testid="'msgBox_' + msg.no"
+    role="alert"
+    :aria-label="levelLabel"
+    tabindex="0"
+    @keydown="handleKeydown"
+  >
     <div class="message-header">
-      <div class="message-icon">{{ icon }}</div>
+      <div class="message-icon" aria-hidden="true">{{ icon }}</div>
       <div class="message-title">{{ msg.title }}</div>
     </div>
     <div class="message-body">

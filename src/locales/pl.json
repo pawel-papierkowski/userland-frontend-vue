@@ -846,6 +846,16 @@
   },
 
   "msgs": {
+    "aria": {
+      "container": "Notyfikacje",
+      "level": {
+        "info": "Informacja",
+        "success": "Sukces",
+        "warning": "Ostrzeżenie",
+        "failure": "Niepowodzenie",
+        "error": "Błąd"
+      }
+    },
     "errorCode": "Kod błędu",
 
     "networkError": {

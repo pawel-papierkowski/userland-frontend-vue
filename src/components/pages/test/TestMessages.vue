@@ -19,8 +19,8 @@ const count: Ref<number> = ref(0);
  */
 const genMessage = (level: EnMessageLevel) => {
   count.value++;
-  const titleKey = 'testArea.msgButtons.' + messageLevelStr(level) + '.title';
-  const contentKey = 'testArea.msgButtons.' + messageLevelStr(level) + '.content';
+  const titleKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.title';
+  const contentKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.content';
 
   switch (level) {
     case EnMessageLevel.Info:
