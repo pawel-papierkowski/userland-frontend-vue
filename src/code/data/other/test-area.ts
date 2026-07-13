@@ -14,10 +14,10 @@ export const enModeOptions: (number | null)[] = [EnInputMode.Standard, EnInputMo
 /** Form for test area. */
 export type TestAreaInputForm = {
   mode: EnInputMode;
-  inputText: string | null;
+  textBox: string | null;
   comboBox: string | null;
-  checkbox: boolean | null;
-  radiobox: string | null;
+  checkBox: boolean | null;
+  radioBox: string | null;
   dateTime: Date | null;
   date: Date | null;
   time: Date | null;

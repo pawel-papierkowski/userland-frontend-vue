@@ -17,10 +17,10 @@ const { t } = useI18n();
 
 const form: Ref<TestAreaInputForm> = ref({
   mode: EnInputMode.Standard,
-  inputText: null,
+  textBox: null,
   comboBox: null,
-  checkbox: null,
-  radiobox: null,
+  checkBox: null,
+  radioBox: null,
   dateTime: null,
   date: null,
   time: null,
@@ -71,7 +71,7 @@ const show = (value: string | boolean | null): string => {
         <label for="testTextbox">{{ t('testArea.inputs.inputText') }}:</label>
         <TextBox
           id="testTextbox"
-          v-model="form.inputText"
+          v-model="form.textBox"
           autocomplete="off"
           placeholder="Enter some text"
           :disabled="disabled"
@@ -94,23 +94,23 @@ const show = (value: string | boolean | null): string => {
         <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
         <CheckBox
           id="testCheckbox"
-          v-model="form.checkbox"
+          v-model="form.checkBox"
           :allowNull="true"
           :disabled="disabled"
           :invalid="invalid"
         />
-        <div>{{ show(form.checkbox) }}</div>
+        <div>{{ show(form.checkBox) }}</div>
 
         <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>
         <RadioBox
           id="testRadiobox"
-          v-model="form.radiobox"
+          v-model="form.radioBox"
           :options="enTestRadioBox"
           langPrefix="test.radioBox"
           :disabled="disabled"
           :invalid="invalid"
         />
-        <div>{{ show(form.radiobox) }}</div>
+        <div>{{ show(form.radioBox) }}</div>
 
         <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
         <DateTimePicker
