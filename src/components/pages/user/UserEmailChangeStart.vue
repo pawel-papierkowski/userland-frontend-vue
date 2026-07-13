@@ -49,9 +49,9 @@ const handleEmailChangeLink = async () => {
     await backendApiUser.emailChangeLink(emailChangeReq); // API CALL.
 
     showMessage();
-    clearForm();
     router.push({ name: 'home' });
   } catch (error) {
+    clearForm();
     AppMessager.errorT(error, 'user.emailChangeStart.msg.error.title', 'user.emailChangeStart.msg.error.content');
     backendApi.logError(error, 'Email change request failed!');
   } finally {
@@ -92,6 +92,7 @@ const showMessage = () => {
 
 /** Clear entire form. */
 const clearForm = () => {
+  usedButton.value = false;
   form.newEmail = '';
   form.password = '';
 };

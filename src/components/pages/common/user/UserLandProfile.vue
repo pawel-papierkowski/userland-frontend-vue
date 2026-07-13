@@ -159,6 +159,7 @@ const showMessage = () => {
 
 /** Clear entire form. */
 const clearForm = () => {
+  usedButton.value = false;
   form.username = '';
   form.email = '';
   form.name = '';

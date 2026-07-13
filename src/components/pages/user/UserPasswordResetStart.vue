@@ -45,7 +45,6 @@ const handlePasswordResetLink = async () => {
     await backendApiUser.passwordResetLink(passwordResetReq); // API CALL.
 
     showMessage();
-    clearForm();
     router.push({ name: 'home' });
   } catch (error) {
     AppMessager.errorT(error, 'user.passwordResetStart.msg.error.title', 'user.passwordResetStart.msg.error.content');
@@ -83,11 +82,6 @@ const showMessage = () => {
     defDuration * 2,
   );
   log.debug('Successfully sent password reset request as user "', form.email, '".');
-};
-
-/** Clear entire form. */
-const clearForm = () => {
-  form.email = '';
 };
 
 //

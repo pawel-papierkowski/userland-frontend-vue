@@ -77,7 +77,7 @@ const show = (value: string | boolean | null): string => {
           :disabled="disabled"
           :invalid="invalid"
         />
-        <div>{{ show(form.inputText) }}</div>
+        <div>{{ show(form.textBox) }}</div>
 
         <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
         <ComboBox

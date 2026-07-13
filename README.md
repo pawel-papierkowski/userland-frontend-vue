@@ -56,6 +56,8 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
 
 ### Custom components
 
+All custom components implement roles, ARIA and keyboard where applicable.
+
 - General purpose components:
   - **ComboBox**: HTML equivalent (`<select>` and `<options>`) is very CSS-unfriendly - very few things can be changed.
   - **DateTimePicker**: Nice picker for date/time selection.
@@ -70,13 +72,15 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
 
 ### Local storage
 
-- `app-language`: Language code. Resolved from browser or user settings, if logged in. Missing or unknown language means fallback to `en` (English).
-- `app-jwt`: JWT token. Present after you log in. Used when reloading page (as Pinia state will be lost) to log in again locally (if token is still valid).
+- `app-language`: Language code. Resolved from browser (or user settings, if logged in). Missing or unknown language means fallback to `en` (English).
+- `app-jwt`: JWT token. Present after you log in. Used when reloading whole page (as Pinia state will be lost) to log in again locally if token is still valid.
 
 ## Local startup
 
 To run project locally in development mode, execute in terminal:
-`npm run dev`
+```
+npm run dev
+```
 
 If you want to check production version:
 ```
@@ -86,27 +90,43 @@ npm run preview
 
 Stop server via `Ctrl+C`.
 
-## Testing
-[TODO]
+## Verification
+To check validity of Typescript and Vue-specific changes using configuration in `tsconfig*.json` files:
+```
+npm run type-check
+```
 
+To lint code (static analysis, anti-patterns, bugs, style issues etc):
+```
+npm run lint
+```
+It runs two linters (`oxlint` and `eslint`).
+
+## Testing
+
+You can run tests in terminal:
+```
+npm run test:ci
+```
 
 ## Deployment
 
-Done using **GitHub Actions**. See `.github/workflows/deploy.yml`.
+Done using **GitHub Actions** on GitHub. See `.github/workflows/deploy.yml`.
 
 ## Tech stack
 
 - Language: HTML, CSS, JavaScript/TypeScript
-- Framework: **Vue** 3.22.3
+- Framework: **Node.js** 24, **Vue.js** 3.5.39
 
 ### Additional packages
 
 Besides Vue itself, we use additional libraries.
 - General libraries
-  - **vueuse/core** for useful utilities
-  - **vue-i18n** for translations
-  - **axios** for HTTP client
-  - **jwt-decode** for easier handling of JWT
+  - **vueuse/core**: for useful utilities
+  - **vue-i18n**: for translations
+  - **axios**: for HTTP client
+  - **jwt-decode**: for easier handling of JWT
 
 - Development only
-  - **Cypress** as end-to-end testing package.
+  - **start-server-and-test**: utility for starting server, waiting for it and running tests. After finishing, server is killed. Useful for e2e tests.
+  - **Cypress**: as end-to-end testing package.

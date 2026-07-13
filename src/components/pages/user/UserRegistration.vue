@@ -60,7 +60,6 @@ const handleRegister = async () => {
     await backendApiUser.register(registerReq); // API CALL
 
     showMessage();
-    clearForm();
     router.push({ name: 'home' });
   } catch (error) {
     AppMessager.errorT(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
@@ -98,15 +97,6 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
 const showMessage = () => {
   AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', defDuration * 2);
   log.debug('Registered user using form data:', { ...form });
-};
-
-/** Clear entire form. */
-const clearForm = () => {
-  form.username = '';
-  form.email = '';
-  form.password = '';
-  form.confirmPassword = '';
-  form.isAdmin = false;
 };
 
 /** Go to login page. */

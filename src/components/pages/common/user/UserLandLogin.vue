@@ -61,14 +61,14 @@ const handleLogin = async () => {
     if (AppLoginer.isLogged()) {
       // token was accepted
       showMessage(true);
-      clearForm();
       handleRedirection();
     } else {
       // token was rejected for some reason
-      showMessage(false);
       clearForm();
+      showMessage(false);
     }
   } catch (error) {
+    clearForm();
     AppMessager.errorT(error, 'user.login.msg.error.title', 'user.login.msg.error.content');
     backendApi.logError(error, 'Login failed!');
   } finally {
@@ -115,6 +115,7 @@ const showMessage = (success: boolean) => {
 
 /** Clear entire form. */
 const clearForm = () => {
+  usedButton.value = false;
   form.email = '';
   form.password = '';
 };

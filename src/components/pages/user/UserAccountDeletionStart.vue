@@ -45,9 +45,9 @@ const handleAccountDeletionLink = async () => {
     await backendApiUser.accountDeleteLink(accountDeleteReq); // API CALL.
 
     showMessage();
-    clearForm();
     router.push({ name: 'home' });
   } catch (error) {
+    clearForm();
     AppMessager.errorT(error, 'user.accountDeleteStart.msg.error.title', 'user.accountDeleteStart.msg.error.content');
     backendApi.logError(error, 'Account deletion request failed!');
   } finally {
@@ -87,6 +87,7 @@ const showMessage = () => {
 
 /** Clear entire form. */
 const clearForm = () => {
+  usedButton.value = false;
   form.password = '';
 };
 

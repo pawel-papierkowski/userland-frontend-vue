@@ -65,9 +65,9 @@ const handlePasswordResetConfirmation = async () => {
     await backendApiUser.passwordResetConfirm(passwordResetReq); // API CALL.
 
     showMessage();
-    clearForm();
     router.push({ name: 'home' });
   } catch (error) {
+    clearForm();
     AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
     backendApi.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
   } finally {
@@ -108,6 +108,7 @@ const showMessage = () => {
 
 /** Clear entire form. */
 const clearForm = () => {
+  usedButton.value = false;
   form.password = '';
   form.confirmPassword = '';
 };

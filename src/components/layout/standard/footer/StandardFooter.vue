@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /** Simple footer. */
 
+import { version } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { projectProp } from '@/code/data/app/const.ts';
 
@@ -9,6 +10,9 @@ const { t } = useI18n();
 
 <template>
   <footer>
+    <p>
+      {{ t('footer.framework') }}: Vue {{ version }}
+    </p>
     <p>
       {{ t('footer.frontendRepository') }}:
       <a href="https://github.com/pawel-papierkowski/userland-frontend-vue" target="_blank" rel="noopener"

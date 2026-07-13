@@ -25,7 +25,8 @@
 
   "footer": {
     "frontendRepository": "Repozytorium frontendu",
-    "backendRepository": "Repozytorium backendu"
+    "backendRepository": "Repozytorium backendu",
+    "framework": "Framework"
   },
 
   "languages": {
