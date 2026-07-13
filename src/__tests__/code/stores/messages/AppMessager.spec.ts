@@ -14,7 +14,7 @@ describe('AppMessager', () => {
   it('adds an info message', () => {
     const messageStore = useMessageStore();
 
-    // Act: create message.
+    // Arrange&Act: create message.
     AppMessager.info('testArea.msgButtons.info.title', 'testArea.msgButtons.info.content');
 
     // Assert: message exists in store.
@@ -27,7 +27,7 @@ describe('AppMessager', () => {
   it('adds an translated info message', () => {
     const messageStore = useMessageStore();
 
-    // Act: create translated message.
+    // Arrange&Act: create translated message.
     AppMessager.infoT('testArea.messages.msgButtons.info.title', 'testArea.messages.msgButtons.info.content');
 
     // Assert: message exists in store.
@@ -53,7 +53,7 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create message.
+    // Act: create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
     // Assert: message exists in store.
@@ -77,7 +77,7 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create message.
+    // Act: create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
     // Assert: message exists in store. It will report error for HTTP status 400.
@@ -101,7 +101,7 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create message.
+    // Act: create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
     // Assert: message exists in store. Will show fallback text.
@@ -120,7 +120,7 @@ describe('AppMessager', () => {
       request: {}, // No response
     };
 
-    // Act: create message.
+    // Act: create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
     // Assert: message exists in store.
@@ -138,7 +138,7 @@ describe('AppMessager', () => {
     // Arrange: custom error (not an Axios error).
     const error = new Error('Simple error');
 
-    // Act: create translated message.
+    // Act: create translated error message.
     AppMessager.errorT(error, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
     // Assert: message exists in store. Will show fallback text.

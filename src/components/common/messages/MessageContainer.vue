@@ -1,11 +1,13 @@
 <script setup lang="ts">
 /**
- * Floating message container that can show many message boxes.
+ * Floating message container that can show many message boxes. After some time, message boxes are automatically removed. User can also remove them by clicking on them.
+ * Used as feedback for user after doing various actions.
+ *
  * To add new messages, use AppMessager.
  *
  * Example of use:
  * import { AppMessager } from '@/code/messages/AppMessager.ts';
- * AppMessager.info('user.registration.msg.success.title', 'user.registration.msg.success.content');
+ * AppMessager.infoT('user.registration.msg.success.title', 'user.registration.msg.success.content');
  */
 import { useMessageStore } from '@/stores/messages.ts';
 import MessageBox from '@/components/common/messages/MessageBox.vue';

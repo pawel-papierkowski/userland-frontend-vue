@@ -102,6 +102,7 @@ export class AppMessager {
    * @param error Error object.
    * @param fallbackTitle Title to use if cannot process error as i18n key.
    * @param fallbackContent Content to use if cannot process error as i18n key.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static errorT(error: any, fallbackTitle: string, fallbackContent: string, duration = defDuration) {
@@ -113,6 +114,7 @@ export class AppMessager {
    * @param error Error object.
    * @param fallbackTitle Title string to use if cannot process error.
    * @param fallbackContent Content string to use if cannot process error.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static error(error: any, fallbackTitle: string, fallbackContent: string, duration = defDuration) {
@@ -137,6 +139,7 @@ export class AppMessager {
    * @param error Axios error.
    * @param fallbackTitle Fallback title.
    * @param fallbackContent Fallback content.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private static processResponseError(error: any, fallbackTitle: string, fallbackContent: string, duration: number) {
@@ -163,6 +166,7 @@ export class AppMessager {
 
   /**
    * Process error without response from server (network issue).
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   private static processRequestError(duration: number) {
     this.showError(t('msgs.networkError.title'), t('msgs.networkError.content'), '', duration);

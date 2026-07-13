@@ -15,12 +15,12 @@ export const defDurationSuccess = 5;
 const maxMessages = 20;
 
 /**
- * Stores global message queue. Shown in MessageContainer component. Use AppMessager to add messages.
+ * Stores global message queue. Shown in `MessageContainer` component. Use `AppMessager` to add messages.
  */
 export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
   const messages = ref<Message[]>([]);
-  /** Number of message. */
+  /** Number of last message. */
   let lastNo: number = 0;
 
   /**
