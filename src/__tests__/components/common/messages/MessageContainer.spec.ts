@@ -26,51 +26,55 @@ describe('MessageContainer', () => {
     setActivePinia(pinia);
   });
 
-  it('is empty', () => {
-    // Check empty message container.
+  //
 
-    const messageContainer = createComponent();
+  describe('general', () => {
+    it('is empty', () => {
+      // Check empty message container.
 
-    // Check that there are no elements with class '.message-box'.
-    expect(messageContainer.findAll('.message-box')).toHaveLength(0);
-  });
+      const messageContainer = createComponent();
 
-  it('has single message', async () => {
-    // Check message container with single message.
+      // Check that there are no elements with class '.message-box'.
+      expect(messageContainer.findAll('.message-box')).toHaveLength(0);
+    });
 
-    const messageContainer = createComponent();
+    it('has single message', async () => {
+      // Check message container with single message.
 
-    // Act: Add one message.
-    AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
+      const messageContainer = createComponent();
 
-    await nextTick(); // Wait for DOM to update.
+      // Act: Add one message.
+      AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
 
-    // Assert: check that there is single element with class '.message-box'.
-    expect(messageContainer.findAll('.message-box')).toHaveLength(1);
-  });
+      await nextTick(); // Wait for DOM to update.
 
-  it('has many messages', async () => {
-    // Check message container with many messages.
+      // Assert: check that there is single element with class '.message-box'.
+      expect(messageContainer.findAll('.message-box')).toHaveLength(1);
+    });
 
-    const messageContainer = createComponent();
+    it('has many messages', async () => {
+      // Check message container with many messages.
 
-    // Act: Add multiple messages.
-    AppMessager.error(new Error(), 'msg.error.title', 'msg.error.content');
-    AppMessager.failure('msg.failure.title', 'msg.failure.content');
-    AppMessager.warning('msg.warn.title', 'msg.warn.content');
-    AppMessager.success('msg.success.title', 'msg.success.content');
-    AppMessager.info('msg.info.title', 'msg.info.content');
+      const messageContainer = createComponent();
 
-    await nextTick(); // Wait for DOM to update.
+      // Act: Add multiple messages.
+      AppMessager.error(new Error(), 'msg.error.title', 'msg.error.content');
+      AppMessager.failure('msg.failure.title', 'msg.failure.content');
+      AppMessager.warning('msg.warn.title', 'msg.warn.content');
+      AppMessager.success('msg.success.title', 'msg.success.content');
+      AppMessager.info('msg.info.title', 'msg.info.content');
 
-    // Assert: check that there are five elements with class '.message-box'.
-    const messages = messageContainer.findAll('.message-box');
-    expect(messages).toHaveLength(5);
-    // Assert: ensure they are in correct order.
-    expect(messages[0]?.find('.message-content').text()).toBe('msg.error.content');
-    expect(messages[1]?.find('.message-content').text()).toBe('msg.failure.content');
-    expect(messages[2]?.find('.message-content').text()).toBe('msg.warn.content');
-    expect(messages[3]?.find('.message-content').text()).toBe('msg.success.content');
-    expect(messages[4]?.find('.message-content').text()).toBe('msg.info.content');
+      await nextTick(); // Wait for DOM to update.
+
+      // Assert: check that there are five elements with class '.message-box'.
+      const messages = messageContainer.findAll('.message-box');
+      expect(messages).toHaveLength(5);
+      // Assert: ensure they are in correct order.
+      expect(messages[0]?.find('.message-content').text()).toBe('msg.error.content');
+      expect(messages[1]?.find('.message-content').text()).toBe('msg.failure.content');
+      expect(messages[2]?.find('.message-content').text()).toBe('msg.warn.content');
+      expect(messages[3]?.find('.message-content').text()).toBe('msg.success.content');
+      expect(messages[4]?.find('.message-content').text()).toBe('msg.info.content');
+    });
   });
 });
