@@ -68,18 +68,18 @@ const show = (value: string | boolean | null): string => {
       <hr />
 
       <div class="form-subform-custom">
-        <label for="testTextbox">{{ t('testArea.inputs.inputText') }}:</label>
+        <label for="testTextbox">{{ t('testArea.inputs.inputText.label') }}:</label>
         <TextBox
           id="testTextbox"
           v-model="form.textBox"
           autocomplete="off"
-          placeholder="Enter some text"
+          :placeholder="t('testArea.inputs.inputText.placeholder')"
           :disabled="disabled"
           :invalid="invalid"
         />
         <div>{{ show(form.textBox) }}</div>
 
-        <label for="testCombobox">{{ t('testArea.inputs.comboBox') }}:</label>
+        <label for="testCombobox">{{ t('testArea.inputs.comboBox.label') }}:</label>
         <ComboBox
           id="testCombobox"
           v-model="form.comboBox"
@@ -91,7 +91,7 @@ const show = (value: string | boolean | null): string => {
         />
         <div>{{ show(form.comboBox) }}</div>
 
-        <label for="testCheckbox">{{ t('testArea.inputs.checkBox') }}:</label>
+        <label for="testCheckbox">{{ t('testArea.inputs.checkBox.label') }}:</label>
         <CheckBox
           id="testCheckbox"
           v-model="form.checkBox"
@@ -112,7 +112,7 @@ const show = (value: string | boolean | null): string => {
         />
         <div>{{ show(form.radioBox) }}</div>
 
-        <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker') }}:</label>
+        <label for="testDateTimePicker">{{ t('testArea.inputs.dateTimePicker.label') }}:</label>
         <DateTimePicker
           id="testDateTimePicker"
           v-model="form.dateTime"
@@ -123,7 +123,7 @@ const show = (value: string | boolean | null): string => {
         />
         <div>{{ show(TimeUtils.cnvFull(form.dateTime)) }}</div>
 
-        <label for="testDatePicker">{{ t('testArea.inputs.datePicker') }}:</label>
+        <label for="testDatePicker">{{ t('testArea.inputs.datePicker.label') }}:</label>
         <DateTimePicker
           id="testDatePicker"
           v-model="form.date"
@@ -135,7 +135,7 @@ const show = (value: string | boolean | null): string => {
         />
         <div>{{ show(TimeUtils.cnvFull(form.date)) }}</div>
 
-        <label for="testTimePicker">{{ t('testArea.inputs.timePicker') }}:</label>
+        <label for="testTimePicker">{{ t('testArea.inputs.timePicker.label') }}:</label>
         <DateTimePicker
           id="testTimePicker"
           v-model="form.time"

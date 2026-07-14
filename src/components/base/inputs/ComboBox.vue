@@ -50,7 +50,7 @@ const props = withDefaults(
     id?: string;
     /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
     options: (number | string | null)[];
-    /**  If true, acts as disabled component (panels do not show). Optional, default is false. */
+    /** If true, acts as disabled component (panels do not show). Optional, default is false. */
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
     invalid?: boolean;

@@ -704,6 +704,10 @@
           "content": "This is error message. Number: {count}."
         }
       },
+      "placeholder": {
+        "title": "Enter custom title",
+        "content": "Enter custom content"
+      },
       "inMessages": {
         "legend": "Permanent messages",
         "info": "This is <b>info</b> message.",
@@ -733,15 +737,28 @@
         "1": "Disabled",
         "2": "Error"
       },
-      "inputText": "Normal input field",
-      "comboBox": "Combobox",
-      "checkBox": "Checkbox",
+      "inputText": {
+        "label": "Normal input field",
+        "placeholder": "Enter some text"
+      },
+      "comboBox": {
+        "label": "Combobox"
+      },
+      "checkBox": {
+        "label": "Checkbox"
+      },
       "radioBox": {
         "label": "Radiobox"
       },
-      "dateTimePicker": "Date/time picker (UTC)",
-      "datePicker": "Date picker (UTC)",
-      "timePicker": "Time picker (UTC)"
+      "dateTimePicker": {
+        "label": "Date/time picker (UTC)"
+      },
+      "datePicker": {
+        "label": "Date picker (UTC)"
+      },
+      "timePicker": {
+        "label": "Time picker (UTC)"
+      }
     },
     "other": {
       "generalButtons": {

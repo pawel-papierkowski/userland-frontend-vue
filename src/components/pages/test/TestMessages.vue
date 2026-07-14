@@ -8,10 +8,14 @@ import { useLogger } from 'vue-logger-plugin';
 import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
+import TextBox from '@/components/base/inputs/TextBox.vue';
+
 const log = useLogger();
 const { t } = useI18n();
 
 const count: Ref<number> = ref(0);
+const customTitle = ref('');
+const customContent = ref('');
 
 /**
  * Generate message.
@@ -19,24 +23,33 @@ const count: Ref<number> = ref(0);
  */
 const genMessage = (level: EnMessageLevel) => {
   count.value++;
-  const titleKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.title';
-  const contentKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.content';
+  let title = customTitle.value;
+  let content = customContent.value;
+
+  if (!title) {
+    const titleKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.title';
+    title = t(titleKey);
+  }
+  if (!content) {
+    const contentKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.content';
+    content = t(contentKey, { count: count.value });
+  }
 
   switch (level) {
     case EnMessageLevel.Info:
-      AppMessager.info(t(titleKey), t(contentKey, { count: count.value }));
+      AppMessager.info(title, content);
       break;
     case EnMessageLevel.Success:
-      AppMessager.success(t(titleKey), t(contentKey, { count: count.value }));
+      AppMessager.success(title, content);
       break;
     case EnMessageLevel.Warning:
-      AppMessager.warning(t(titleKey), t(contentKey, { count: count.value }));
+      AppMessager.warning(title, content);
       break;
     case EnMessageLevel.Failure:
-      AppMessager.failure(t(titleKey), t(contentKey, { count: count.value }));
+      AppMessager.failure(title, content);
       break;
     case EnMessageLevel.Error:
-      AppMessager.error(null, t(titleKey), t(contentKey, { count: count.value }));
+      AppMessager.error(null, title, content);
       break;
   }
 };
@@ -84,6 +97,7 @@ const logVue = (level: EnMessageLevel) => {
         <button @click="logVue(EnMessageLevel.Error)">{{ t('testArea.messages.logs.vue.err') }}</button>
       </div>
     </fieldset>
+    
     <fieldset>
       <legend>{{ t('testArea.messages.msgButtons.legend') }}</legend>
       <div class="items-vertical">
@@ -98,9 +112,23 @@ const logVue = (level: EnMessageLevel) => {
           {{ t('testArea.messages.msgButtons.failure.label') }}
         </button>
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.messages.msgButtons.error.label') }}</button>
+
+        <TextBox
+          id="titleTextbox"
+          v-model="customTitle"
+          autocomplete="off"
+          :placeholder="t('testArea.messages.placeholder.title')"
+        />
+        <TextBox
+          id="contentTextbox"
+          v-model="customContent"
+          autocomplete="off"
+          :placeholder="t('testArea.messages.placeholder.content')"
+        />
       </div>
     </fieldset>
   </div>
+
   <div class="testArea-wrapper">
     <fieldset>
       <legend>{{ t('testArea.messages.inMessages.legend') }}</legend>

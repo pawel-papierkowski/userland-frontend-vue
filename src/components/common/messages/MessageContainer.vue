@@ -23,11 +23,7 @@ const messageStore = useMessageStore();
   <div
     class="message-wrapper"
     data-testid="msgContainer"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
     :aria-label="t('msgs.aria.container')"
-    aria-relevant="additions removals"
   >
     <TransitionGroup name="msg-list" tag="div" class="messages">
       <div v-for="msg in messageStore.messages" :key="msg.id" class="msg-item">
@@ -42,6 +38,10 @@ const messageStore = useMessageStore();
 </template>
 
 <style scoped>
+.message-wrapper {
+  --msg-padding: 0.5rem;
+}
+
 /* Whole message container. Causes all messages to appear on top right. */
 .message-wrapper {
   position: fixed;
@@ -74,7 +74,7 @@ const messageStore = useMessageStore();
   gap: 1rem; /* Adds consistent spacing between items without margins */
 
   width: 100%;
-  padding: 0.5rem;
+  padding: var(--msg-padding);
   position: relative; /* Needed for absolute positioning of leaving items */
 }
 
@@ -84,31 +84,53 @@ const messageStore = useMessageStore();
   pointer-events: all;
 }
 
-/* Animations for message boxes handled by <<TransitionGroup>. */
+/*** Animations for message boxes handled by <<TransitionGroup>. ***/
+
+/* Entering message container: start state. */
 .msg-list-enter-from {
   opacity: 0.5;
   transform: translateX(100%);
 }
 
+/* Entering message container: transformation of state. */
 .msg-list-enter-active {
   transition: all 0.4s ease-out;
 }
 
+/* Entering message container: end state. */
+.msg-list-enter-to {
+  opacity: 1.0;
+  transform: none;
+}
+
+/* Leaving message container: start state. */
+.msg-list-leave-from {
+  opacity: 1.0;
+  transform: none;
+}
+
+/* Leaving message container: transformation of state. */
+.msg-list-leave-active {
+  transition: all 0.3s ease-in;
+  /* If present, in conjuction with allows smootch sliding up components below if current
+     component is removed. But it causes diagonal movement for component that is leaving.
+     TODO check if we can have both sliding out of current component and sliding up rest
+     of components without undesirable side effects. */
+  /*position: absolute;*/
+  left: var(--msg-padding);
+  right: var(--msg-padding);
+  width: auto;
+}
+
+/* Leaving message container: end state. */
 .msg-list-leave-to {
   opacity: 0.5;
   transform: translateX(100%);
 }
 
-.msg-list-leave-active {
-  transition: all 0.3s ease-in;
-  /* Ensure all messages below slids up (instead of jumping up) when current message leaves. */
-  position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
-  width: auto;
-}
-
+/* Moving within message container: transformation of state. */
 .msg-list-move {
-  transition: transform 0.4s ease;
+  /* TODO: it seems to interfere with sliding out, making it diagonal */
+  /*transition: transform 0.4s ease;*/
 }
 </style>

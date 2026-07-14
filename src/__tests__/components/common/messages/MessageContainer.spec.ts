@@ -79,6 +79,30 @@ describe('MessageContainer', () => {
       expect(messages[3]?.find('.message-content').text()).toBe('msg.success.content');
       expect(messages[4]?.find('.message-content').text()).toBe('msg.info.content');
     });
+
+    it('caps at maxMessages and removes oldest on overflow', async () => {
+      // Checks that when the message queue exceeds the limit (20), the oldest
+      // message is removed and only the newest 20 remain.
+
+      // Arrange: Create component.
+      const messageContainer = createComponent();
+
+      // Act: Add 21 messages (one over cap).
+      for (let i = 0; i < 21; i++) {
+        AppMessager.info(`Title ${i}`, `Content ${i}`);
+      }
+
+      await nextTick(); // Wait for DOM to update.
+
+      // Assert: only 20 messages are rendered.
+      const messages = messageContainer.findAll('.message-box');
+      expect(messages).toHaveLength(20);
+
+      // Assert: The oldest message (Content 0) was removed.
+      expect(messages[0]?.find('.message-content').text()).toBe('Content 1');
+      // Assert: The newest message (Content 20) is present at the end.
+      expect(messages[19]?.find('.message-content').text()).toBe('Content 20');
+    });
   });
 
   describe('accessibility', () => {

@@ -704,6 +704,10 @@
           "content": "To jest wiadomość o błędzie. Numer: {count}."
         }
       },
+      "placeholder": {
+        "title": "Wprowadź własny tytuł",
+        "content": "Wprowadź własną zawartość"
+      },
       "inMessages": {
         "legend": "Stałe wiadomości",
         "info": "To jest wiadomość <b>informacyjna</b>.",
@@ -733,15 +737,28 @@
         "1": "Zablokowany",
         "2": "Błąd"
       },
-      "inputText": "Pole do wpisania tekstu",
-      "comboBox": "Lista rozwijana",
-      "checkBox": "Wybór tak/nie",
+      "inputText": {
+        "label": "Pole do wpisania tekstu",
+        "placeholder": "Wpisz jakiś tekst"
+      },
+      "comboBox": {
+        "label": "Lista rozwijana"
+      },
+      "checkBox": {
+        "label": "Wybór tak/nie"
+      },
       "radioBox": {
         "label": "Wybór jeden z wielu"
       },
-      "dateTimePicker": "Wybór daty/czasu (UTC)",
-      "datePicker": "Wybór daty (UTC)",
-      "timePicker": "Wybór czasu (UTC)"
+      "dateTimePicker": {
+        "label": "Wybór daty/czasu (UTC)"
+      },
+      "datePicker": {
+        "label": "Wybór daty (UTC)"
+      },
+      "timePicker": {
+        "label": "Wybór czasu (UTC)"
+      }
     },
     "other": {
       "generalButtons": {
