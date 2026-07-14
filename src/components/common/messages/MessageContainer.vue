@@ -80,7 +80,9 @@ const messageStore = useMessageStore();
 
 /* Individual message wrapper to handle animations better than component root. */
 .msg-item {
+  min-width: 100%;
   width: 100%;
+  max-width: 100%;
   pointer-events: all;
 }
 

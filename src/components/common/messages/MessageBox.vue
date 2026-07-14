@@ -102,6 +102,10 @@ function handleKeydown(event: KeyboardEvent) {
     tabindex="0"
     @keydown="handleKeydown"
   >
+    <div class="message-close-btn" :aria-label="t('msgs.aria.close')" @click.stop="emit('close')">
+      &times;
+    </div>
+
     <div class="message-whole">
       <div class="message-icon" aria-hidden="true">{{ icon }}</div>
       <div class="message-body">
@@ -133,7 +137,88 @@ function handleKeydown(event: KeyboardEvent) {
 
   pointer-events: all;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  position: relative;
 }
+
+.message-close-btn {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.3rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 1.2rem;
+  height: 1.2rem;
+
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.message-close-btn:hover,
+.message-close-btn:focus-visible {
+  opacity: 1;
+}
+
+.message-close-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 1px;
+}
+
+/**/
+
+.message-whole {
+  display: flex;
+  align-items: top;
+  width: 100%;
+}
+
+.message-icon {
+  margin-right: var(--spacing-sm);
+  font-size: 1.1em;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.message-body {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.message-title {
+  font-weight: bold;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.message-content {
+  font-size: 0.95em;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.message-divider {
+  border-top: 1px solid currentColor;
+  opacity: 0.2;
+  margin-bottom: var(--spacing-xs);
+}
+
+.message-errCode {
+  text-align: center;
+  margin-top: var(--spacing-xs);
+}
+
+/**/
 
 .message-info {
   background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
@@ -159,47 +244,5 @@ function handleKeydown(event: KeyboardEvent) {
   background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
   border: 1px solid #f5c2c7;
   color: #842029;
-}
-
-.message-icon {
-  margin-right: var(--spacing-sm);
-  font-size: 1.1em;
-  flex-shrink: 0;
-  user-select: none;
-}
-
-.message-whole {
-  display: flex;
-  align-items: top;
-  width: 100%;
-}
-
-.message-body {
-  flex-grow: 1;
-}
-
-.message-title {
-  font-weight: bold;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.message-content {
-  font-size: 0.95em;
-  overflow-wrap: break-word;
-  word-break: break-word;
-}
-
-.message-divider {
-  border-top: 1px solid currentColor;
-  opacity: 0.2;
-  margin-bottom: var(--spacing-xs);
-  width: 100%;
-}
-
-.message-errCode {
-  width: 100%;
-  text-align: center;
-  margin-top: var(--spacing-xs);
 }
 </style>

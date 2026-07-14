@@ -865,6 +865,7 @@
   "msgs": {
     "aria": {
       "container": "Notyfikacje",
+      "close": "Zamknij",
       "level": {
         "info": "Informacja",
         "success": "Sukces",
