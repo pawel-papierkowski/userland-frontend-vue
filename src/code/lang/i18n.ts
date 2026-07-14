@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n';
 
-import en from '@/locales/en.json';
-import pl from '@/locales/pl.json';
+import en from '@/locales/en/en.json';
+import pl from '@/locales/pl/pl.json';
 // Add other language files here as needed...
 
 /** Vue i18n plugin.
