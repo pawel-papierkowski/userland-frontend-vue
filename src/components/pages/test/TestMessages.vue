@@ -8,48 +8,67 @@ import { useLogger } from 'vue-logger-plugin';
 import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
+import type { TestAreaMessageForm } from '@/code/data/other/test-area.ts';
+
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const { t } = useI18n();
 
-const count: Ref<number> = ref(0);
-const customTitle = ref('');
-const customContent = ref('');
+const form: Ref<TestAreaMessageForm> = ref({
+  count: 0,
+  time: -1,
+  title: '',
+  content: '',
+});
 
 /**
  * Generate message.
  * @param level Level of message.
  */
 const genMessage = (level: EnMessageLevel) => {
-  count.value++;
-  let title = customTitle.value;
-  let content = customContent.value;
+  form.value.count++;
+  let duration: number|undefined = form.value.time;
+  let title = form.value.title;
+  let content = form.value.content;
 
-  if (!title) {
+  if (form.value.time === -1) {
+    duration = undefined; // use default duration
+  }
+  if (!form.value.title) {
     const titleKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.title';
     title = t(titleKey);
   }
-  if (!content) {
+  if (!form.value.content) {
     const contentKey = 'testArea.messages.msgButtons.' + messageLevelStr(level) + '.content';
-    content = t(contentKey, { count: count.value });
+    content = t(contentKey, { count: form.value.count });
   }
 
   switch (level) {
     case EnMessageLevel.Info:
-      AppMessager.info(title, content);
+      AppMessager.info(title, content, duration);
       break;
     case EnMessageLevel.Success:
-      AppMessager.success(title, content);
+      AppMessager.success(title, content, duration);
       break;
     case EnMessageLevel.Warning:
-      AppMessager.warning(title, content);
+      AppMessager.warning(title, content, duration);
       break;
     case EnMessageLevel.Failure:
-      AppMessager.failure(title, content);
+      AppMessager.failure(title, content, duration);
       break;
     case EnMessageLevel.Error:
-      AppMessager.error(null, title, content);
+      // we need to create fake axios error
+      const axiosError = {
+        isAxiosError: true,
+        response: {
+          status: 500,
+          data: {
+            errCode: 'test_0001',
+          },
+        },
+      };
+      AppMessager.error(axiosError, title, content, duration);
       break;
   }
 };
@@ -97,7 +116,7 @@ const logVue = (level: EnMessageLevel) => {
         <button @click="logVue(EnMessageLevel.Error)">{{ t('testArea.messages.logs.vue.err') }}</button>
       </div>
     </fieldset>
-    
+
     <fieldset>
       <legend>{{ t('testArea.messages.msgButtons.legend') }}</legend>
       <div class="items-vertical">
@@ -113,15 +132,16 @@ const logVue = (level: EnMessageLevel) => {
         </button>
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.messages.msgButtons.error.label') }}</button>
 
+        <div class="items-horizontal"><input type="range" min="-1" max="100" step="1" v-model="form.time" /> {{ form.time }}</div>
         <TextBox
           id="titleTextbox"
-          v-model="customTitle"
+          v-model="form.title"
           autocomplete="off"
           :placeholder="t('testArea.messages.placeholder.title')"
         />
         <TextBox
           id="contentTextbox"
-          v-model="customContent"
+          v-model="form.content"
           autocomplete="off"
           :placeholder="t('testArea.messages.placeholder.content')"
         />

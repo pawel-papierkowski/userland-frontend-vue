@@ -912,6 +912,11 @@
       "content": "Serwer napotkał sytuację, której nie był w stanie obsłużyć."
     },
 
+    "test_0001": {
+      "title": "Testowy tytuł o błędzie",
+      "content": "Testowa wiadomość o błędzie."
+    },
+
     "lock_0001": {
       "title": "Blokada systemowa",
       "content": "System jest w stanie blokady. Spróbuj ponownie później."

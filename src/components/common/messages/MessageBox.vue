@@ -102,16 +102,16 @@ function handleKeydown(event: KeyboardEvent) {
     tabindex="0"
     @keydown="handleKeydown"
   >
-    <div class="message-header">
+    <div class="message-whole">
       <div class="message-icon" aria-hidden="true">{{ icon }}</div>
-      <div class="message-title">{{ msg.title }}</div>
-    </div>
-    <div class="message-body">
-      <div class="message-content">{{ msg.content }}</div>
-    </div>
-    <div v-if="msg.errCode" class="message-errCode">
-      <div class="message-divider"></div>
-      {{ t('msgs.errorCode') }}: <b>{{ msg.errCode }}</b>
+      <div class="message-body">
+        <div class="message-title">{{ msg.title }}</div>
+        <div class="message-content">{{ msg.content }}</div>
+        <div v-if="msg.errCode" class="message-errCode">
+          <div class="message-divider"></div>
+          {{ t('msgs.errorCode') }}: <b>{{ msg.errCode }}</b>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -168,23 +168,25 @@ function handleKeydown(event: KeyboardEvent) {
   user-select: none;
 }
 
-.message-header {
+.message-whole {
   display: flex;
-  align-items: center;
+  align-items: top;
   width: 100%;
 }
 
 .message-body {
   flex-grow: 1;
-  margin-left: 1.8rem; /* align content with title text */
 }
 
 .message-title {
   font-weight: bold;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .message-content {
   font-size: 0.95em;
+  overflow-wrap: break-word;
   word-break: break-word;
 }
 

@@ -1,3 +1,15 @@
+/*** Test area: messages tab. ***/
+
+/** Form for messages area. */
+export type TestAreaMessageForm = {
+  count: number;
+  time: number|undefined;
+  title: string;
+  content: string;
+};
+
+/*** Test area: input tab. ***/
+
 /** Mode of inputs in test area. */
 export enum EnInputMode {
   /** Show inputs normally. */
@@ -11,7 +23,7 @@ export enum EnInputMode {
 /** List of values for mode radiobox. */
 export const enModeOptions: (number | null)[] = [EnInputMode.Standard, EnInputMode.Disabled, EnInputMode.Error];
 
-/** Form for test area. */
+/** Form for input area. */
 export type TestAreaInputForm = {
   mode: EnInputMode;
   textBox: string | null;

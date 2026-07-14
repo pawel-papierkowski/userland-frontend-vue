@@ -10,6 +10,7 @@
 /* Inputs. */
 
 input {
+  width: 100%;
   margin: var(--input-margin);
   padding: var(--input-padding);
 

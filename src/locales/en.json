@@ -912,6 +912,11 @@
       "content": "The server has encountered a situation it does not know how to handle."
     },
 
+    "test_0001": {
+      "title": "Test error title",
+      "content": "Test error message."
+    },
+
     "lock_0001": {
       "title": "Lockdown",
       "content": "System is in lockdown state. Try again later."
