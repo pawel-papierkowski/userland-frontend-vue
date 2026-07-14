@@ -1,0 +1,35 @@
+{
+  "tech": {
+    "user": {
+      "status": {
+        "null": "-",
+        "PENDING": "Oczekujący",
+        "ACTIVE": "Aktywny",
+        "DEMO": "Demo"
+      },
+      "who": {
+        "null": "-",
+        "USER": "Użytkownik",
+        "OPERATOR": "Operator",
+        "SYSTEM": "System"
+      },
+      "what": {
+        "null": "-",
+        "CREATE": "Utworzenie",
+        "ACTIVATE": "Aktywacja",
+        "EDIT": "Edycja",
+        "EMAIL_CHANGE_REQ": "Prośba o zmianę emaila",
+        "EMAIL_CHANGE": "Zmiana emaila",
+        "PASS_RESET_REQ": "Prośba o reset hasła",
+        "PASS_RESET": "Zresetowanie hasła",
+        "DELETE_REQ": "Prośba o usunięcie konta",
+        "LOGIN": "Zalogowanie",
+        "LOGOUT": "Wylogowanie",
+        "PROLONG": "Przedłużenie sesji"
+      },
+      "permissionName": {
+        "null": "Wybierz uprawnienie z listy"
+      }
+    }
+  }
+}

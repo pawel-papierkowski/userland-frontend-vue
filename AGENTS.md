@@ -10,7 +10,9 @@ UserLand is portfolio project for frontend in Vue.
 
 ## Development Guidelines
 - **Modifications:** Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
-- **Comments:** Preserve comments or update them whenever possible. New code must be properly commented.
+- **Comments:**
+  - Preserve comments or update them whenever possible. New code must be properly commented.
+  - Provide @param and @returns where appropriate.
 - **Custom components:**:
   - Must support ARIA.
   - Must support keyboard.

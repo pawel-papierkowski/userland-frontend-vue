@@ -1,0 +1,303 @@
+{
+  "homeArea": {
+    "welcome": "Welcome to demonstration project <b>UserLand</b>!",
+    "description": "This portfolio project demonstrates basic knowledge about backend and frontend programming (fullstack). See README.md in repository for details on project, its structure, how to deploy it etc.",
+    "techstack": {
+      "title": "Tech",
+      "backend": "Backend tech stack:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
+      "frontend": "Frontend tech stack:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
+    },
+    "features": {
+      "title": "Features",
+      "website": {
+        "descr": "<b>Main website</b> is available to everyone. You can visit pages below:",
+        "home": "Homepage available to everyone - you are here.",
+        "member": "Member area available only to logged-in users.",
+        "test": "Test area to show off smaller components.",
+        "debug": "Debug area to show JWT data and buttons to call certain backend endpoints."
+      },
+      "user": {
+        "descr": "<b>User</b> is main focus of this project. You can:",
+        "register": "Register user account.",
+        "login": "Login/logout user.",
+        "edit": "Edit user profile.",
+        "email": "Change email.",
+        "reset": "Reset password.",
+        "delete": "Delete user account."
+      },
+      "admin": {
+        "descr": "<b>Administration panel</b> can be accessed only by users with correct permissions. You can:",
+        "user": "View user table, view details of selected user and edit user data.",
+        "userSub": "View subtables for user like history and edit some of them, like configuration or permissions."
+      }
+    },
+    "components": {
+      "title": "Components",
+      "ComboBox": "<code>ComboBox</code> is custom component replacing <code>select</code> and <code>options</code>.",
+      "CheckBox": "<code>CheckBox</code> is custom component replacing <code>input</code> with <code>type='checkbox'</code>.",
+      "DateTimePicker": "<code>DateTimePicker</code> allows picking date and/or time.",
+      "SlideShow": "You can see <code>SlideShow</code>! This is where you see this text.",
+      "MessageContainer": "<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
+      "Table": "Family of <code>Table*</code> components handle showing and editing table. Used in administration panel.",
+      "SpinnerTorus": "<code>SpinnerTorus</code> shows activity when you wait for frontend to finish action like calling backend."
+    }
+  },
+
+  "memberArea": {
+    "title": "Member Area",
+    "welcome": "This page is available only for members.",
+    "description": "This means that you must be logged in to have access to this page. You do not have to have any other permissions. If you try to enter this page while not being logged in, system will redirect you to login page.",
+    "msg": {
+      "mustBeLogged": {
+        "title": "Failure",
+        "content": "You must be logged in to access member zone."
+      }
+    }
+  },
+
+  "testArea": {
+    "tabs": {
+      "messages": "Messages",
+      "inputs": "Inputs",
+      "other": "Other"
+    },
+    "messages": {
+      "msgButtons": {
+        "legend": "Tests of temporary messages",
+        "info": {
+          "label": "Generate info message",
+          "title": "Info",
+          "content": "This is informational message. Number: {count}."
+        },
+        "success": {
+          "label": "Generate success message",
+          "title": "Success",
+          "content": "This is success message. Number: {count}."
+        },
+        "warning": {
+          "label": "Generate warning message",
+          "title": "Warning",
+          "content": "This is warning message. Number: {count}."
+        },
+        "failure": {
+          "label": "Generate failure message",
+          "title": "Failure",
+          "content": "This is failure message. Number: {count}."
+        },
+        "error": {
+          "label": "Generate error message",
+          "title": "Error",
+          "content": "This is error message. Number: {count}."
+        }
+      },
+      "placeholder": {
+        "title": "Enter custom title",
+        "content": "Enter custom content"
+      },
+      "inMessages": {
+        "legend": "Permanent messages",
+        "info": "This is <b>info</b> message.",
+        "success": "This is <b>success</b> message.",
+        "warning": "This is <b>warning</b> message.",
+        "failure": "This is <b>failure</b> message.",
+        "error": "This is <b>error</b> message."
+      },
+      "logs": {
+        "legend": "Logging to console",
+        "browser": {
+          "info": "Via browser: INFO",
+          "warn": "Via browser: WARN",
+          "err": "Via browser: ERR"
+        },
+        "vue": {
+          "info": "Via Vue: INFO",
+          "warn": "Via Vue: WARN",
+          "err": "Via Vue: ERR"
+        }
+      }
+    },
+    "inputs": {
+      "mode": {
+        "name": "Mode",
+        "0": "Standard",
+        "1": "Disabled",
+        "2": "Error"
+      },
+      "inputText": {
+        "label": "Normal input field",
+        "placeholder": "Enter some text"
+      },
+      "comboBox": {
+        "label": "Combobox"
+      },
+      "checkBox": {
+        "label": "Checkbox"
+      },
+      "radioBox": {
+        "label": "Radiobox"
+      },
+      "dateTimePicker": {
+        "label": "Date/time picker (UTC)"
+      },
+      "datePicker": {
+        "label": "Date picker (UTC)"
+      },
+      "timePicker": {
+        "label": "Time picker (UTC)"
+      }
+    },
+    "other": {
+      "generalButtons": {
+        "legend": "Button visuals",
+        "standard": "Standard",
+        "danger": "Danger",
+        "disabled": "Disabled"
+      },
+      "spinner": {
+        "legend": "Spinner",
+        "start": "Start",
+        "stop": "Stop"
+      }
+    }
+  },
+
+  "debugArea": {
+    "login": {
+      "legend": "Login data (JWT)",
+      "logged": "Logged",
+      "username": "Username",
+      "email": "Email",
+      "issuedAt": "Issued",
+      "expiresAt": "Valid until",
+      "permissions": "Permissions"
+    },
+    "checks": {
+      "legend": "API for /api/checks",
+      "alive": {
+        "button": "Call /api/checks/alive",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/alive."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/alive."
+          }
+        }
+      },
+      "logged": {
+        "button": "Call /api/checks/must-be-logged",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/must-be-logged."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/must-be-logged."
+          }
+        }
+      },
+      "admin": {
+        "button": "Call /api/checks/must-be-admin",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/must-be-admin."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/must-be-admin."
+          }
+        }
+      },
+      "exception": {
+        "button": "Call /api/checks/exception",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully called /api/checks/exception."
+          },
+          "error": {
+            "title": "Failure",
+            "content": "Failed to call /api/checks/exception."
+          }
+        }
+      }
+    },
+    "options": {
+      "legend": "Options",
+      "prolong": {
+        "button": "Prolong your session",
+        "msg": {
+          "success": {
+            "title": "Success",
+            "content": "Successfully prolonged user session."
+          },
+          "failure": {
+            "title": "Failure",
+            "content": "Failed to prolong user session."
+          },
+          "error": {
+            "title": "Error",
+            "content": "Failed to prolong user session."
+          }
+        }
+      }
+    }
+  },
+
+  "test": {
+    "notify": "First connection with server might take more time, please wait.",
+    "msg": {
+      "fallback": {
+        "title": "Fallback title",
+        "content": "Fallback content."
+      }
+    },
+    "radioBox": {
+      "null": "Option UNSELECTED (null)",
+      "one": "Option One",
+      "two": "Option Two",
+      "three": "Option Three"
+    },
+    "comboBox": {
+      "null": "Option UNSELECTED (null)",
+      "a": "Option A",
+      "b": "Option B",
+      "c": "Option C"
+    },
+    "tabGroup": {
+      "a": "Tab A",
+      "b": "Tab B",
+      "c": "Tab C"
+    },
+    "slideshow": {
+      "label": "{id} slideshow",
+      "slide": "Slide {n} of {total}"
+    },
+    "table": {
+      "column": {
+        "createdAt": "Created",
+        "name": "Name",
+        "value": "Value",
+        "options": "Options"
+      },
+      "entryOptions": {
+        "add": {
+          "button": "A",
+          "action": "Execute ADD."
+        },
+        "del": {
+          "button": "D",
+          "action": "Execute DEL.",
+          "disabled": "Disabled DEL."
+        }
+      },
+      "page": {
+        "empty": "⚠️ No entries to show. ⚠️"
+      }
+    }
+  }
+}

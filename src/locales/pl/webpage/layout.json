@@ -1,0 +1,27 @@
+{
+  "app": {
+    "title": "UserLand"
+  },
+
+  "header": {
+    "general": {
+      "home": "🏠 Strona główna",
+      "test": "🧪 Strefa testów",
+      "debug": "🐛 Strefa debugu",
+      "member": "⭐ Strefa członków"
+    },
+    "user": {
+      "options": "⚙️ Opcje",
+      "registration": "📝 Rejestracja",
+      "login": "🔑 Logowanie",
+      "profile": "👤 Profil",
+      "logout": "🚪 Wylogowanie"
+    }
+  },
+
+  "footer": {
+    "frontendRepository": "Repozytorium frontendu",
+    "backendRepository": "Repozytorium backendu",
+    "framework": "Framework"
+  }
+}

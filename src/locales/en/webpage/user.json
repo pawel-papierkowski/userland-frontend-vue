@@ -1,0 +1,233 @@
+{
+  "user": {
+    "registration": {
+      "form": {
+        "title": "Create an account",
+        "warning": "Important note:<br/>Due to nature of portfolio project, any account created here will be <b>removed automatically</b> after 72h from last activity.<br/>Also, accounts can get <b>admin permissions</b>.",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "isAdmin": "I want to be admin",
+        "button": "Create",
+        "buttonBusy": "Creating account...",
+        "hasAccount": "Do you already have account?"
+      },
+      "msg": {
+        "success": {
+          "title": "User registered successfully",
+          "content": "Please check your mailbox. You will need to confirm registration by clicking on link in email."
+        },
+        "user_0201": {
+          "title": "Registration failure",
+          "content": "User registration failed."
+        }
+      }
+    },
+    "activation": {
+      "title": "Activating account...",
+      "msg": {
+        "success": {
+          "title": "User activated successfully",
+          "content": "You can now log in."
+        },
+        "error": {
+          "title": "Activation failure",
+          "content": "User activation failed."
+        }
+      }
+    },
+    "login": {
+      "form": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "button": "Log in",
+        "buttonBusy": "Logging in...",
+        "noAccount": "No account?",
+        "passwordReset": "Forgot password?"
+      },
+      "formAdmin": {
+        "title": "Login to administration panel"
+      },
+      "msg": {
+        "success": {
+          "title": "User logged in successfully",
+          "content": ""
+        },
+        "successAdmin": {
+          "title": "Admin panel user logged in successfully",
+          "content": ""
+        },
+        "error": {
+          "title": "Login failure",
+          "content": "User login failed."
+        }
+      }
+    },
+    "logout": {
+      "msg": {
+        "info": {
+          "title": "User logged out successfully",
+          "content": ""
+        }
+      }
+    },
+    "prolong": {
+      "msg": {
+        "info": {
+          "title": "User session prolonged successfully",
+          "content": ""
+        }
+      }
+    },
+    "passwordResetStart": {
+      "form": {
+        "title": "I forgot my password",
+        "info": "You will receive an email with a link to reset your password.",
+        "email": "Email",
+        "button": "Send email",
+        "buttonBusy": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "Check your inbox in a few minutes for a email with link to password change."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for password reset."
+        }
+      }
+    },
+    "passwordReset": {
+      "form": {
+        "title": "Set new password",
+        "password": "New password",
+        "confirmPassword": "Confirm new password",
+        "button": "Set password",
+        "buttonBusy": "Setting..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "New password was set successfully."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to set new password."
+        }
+      }
+    },
+    "emailChangeStart": {
+      "form": {
+        "title": "Change email address",
+        "info": "You will receive an email with a link to change your email address.",
+        "newEmail": "New email",
+        "password": "Password",
+        "button": "Send email",
+        "buttonBusy": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "Check your inbox in a few minutes for a email with link to confirm email address change."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for email change."
+        }
+      }
+    },
+    "emailChange": {
+      "title": "Setting up new email address...",
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "New email address was set successfully. You need to log in again."
+        },
+        "mustBeLogged": {
+          "title": "Failure",
+          "content": "You must be logged in to change email address. Log in, then use link from email again."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to set new email address."
+        }
+      }
+    },
+    "accountDeleteStart": {
+      "form": {
+        "title": "Delete account",
+        "info": "You will receive an email with a link to delete your account.",
+        "password": "Password",
+        "button": "Send email",
+        "buttonBusy": "Sending..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "Check your inbox in a few minutes for a email with link to confirm your account deletion."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to send request for account deletion."
+        }
+      }
+    },
+    "accountDelete": {
+      "form": {
+        "title": "Delete account",
+        "warning": "Confirm that you want to delete your account. This action is irreversible.",
+        "button": "Delete",
+        "buttonBusy": "Deleting..."
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "User account was deleted."
+        },
+        "mustBeLogged": {
+          "title": "Failure",
+          "content": "You must be logged in to delete user account. Log in, then use link from email again."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to delete user account."
+        }
+      }
+    },
+    "profile": {
+      "form": {
+        "title": "User profile",
+        "username": "Username",
+        "email": "Email",
+        "name": "Name",
+        "surname": "Surname"
+      },
+      "formAdmin": {
+        "title": "User profile for administration panel"
+      },
+      "button": {
+        "update": "Update profile",
+        "updateBusy": "Updating profile...",
+        "emailChange": "Change email address",
+        "deleteAccount": "Delete account"
+      },
+      "msg": {
+        "loadError": {
+          "title": "Error",
+          "content": "Failed to load user data."
+        },
+        "success": {
+          "title": "Success",
+          "content": "User data updated successfully."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to update user data."
+        }
+      }
+    }
+  }
+}

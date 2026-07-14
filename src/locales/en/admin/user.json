@@ -1,0 +1,292 @@
+{
+  "admin": {
+    "user": {
+      "filter": {
+        "title": "🔍 User filter",
+        "username": "Username",
+        "email": "Email",
+        "status": "Status",
+        "locked": "Locked",
+        "createdFromAt": "Created from",
+        "createdToAt": "Created to",
+        "button": "Refresh",
+        "buttonBusy": "Loading..."
+      },
+      "table": {
+        "empty": "⚠️ No users to show. Check filter settings. ⚠️",
+        "col": {
+          "id": "Id",
+          "createdAt": "Created",
+          "username": "Username",
+          "email": "Email"
+        }
+      },
+      "main": {
+        "tab": "👤 User",
+        "form": {
+          "general": "🆔 General data",
+          "createdAt": "Created",
+          "modifiedAt": "Modified",
+          "username": "Username",
+          "email": "Email",
+          "status": "Status",
+          "locked": "Locked",
+          "lang": "Language",
+          "profile": "👤 Profile data",
+          "name": "Name",
+          "surname": "Surname"
+        },
+        "button": {
+          "update": "Update user data",
+          "lock": "🔒 Lock",
+          "unlock": "🔓 Unlock",
+          "busy": "Please wait..."
+        }
+      },
+      "history": {
+        "tab": "📅 History",
+        "filter": {
+          "title": "🔍 User history filter",
+          "who": "Who",
+          "what": "What",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No history to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No history to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "who": "Who",
+            "what": "What",
+            "params": "Parameters"
+          }
+        }
+      },
+      "permissions": {
+        "tab": "🔐 Permissions",
+        "filter": {
+          "title": "🔍 User permission filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No permissions to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No permissions to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "name": "Name",
+            "value": "Value",
+            "options": "Options"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Add permission entry.",
+              "notYourself": "You cannot add your own permission.",
+              "adminOnly": "You need administration permissions to add permission entry."
+            },
+            "save": {
+              "button": "💾",
+              "action": "Save permission entry."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Cancel editing the permission entry."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edit permission entry.",
+              "notYourself": "You cannot edit your own permissions.",
+              "adminOnly": "You need administration permissions to edit permission entry."
+            },
+            "delete": {
+              "button": "🗑️",
+              "action": "Delete configuration entry.",
+              "notYourself": "You cannot delete your own permissions.",
+              "adminOnly": "You need administration permissions to delete permission entry."
+            }
+          },
+          "msg": {
+            "save": {
+              "success": {
+                "title": "Success",
+                "content": "User permission entry was saved."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to saved user permission entry!"
+              },
+              "badName": {
+                "title": "Failed to save",
+                "content": "Invalid permission name."
+              },
+              "badValue": {
+                "title": "Failed to save",
+                "content": "Invalid permission value."
+              }
+            },
+            "delete": {
+              "success": {
+                "title": "Success",
+                "content": "User permission entry was deleted."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to delete user permission entry!"
+              }
+            }
+          }
+        }
+      },
+      "config": {
+        "tab": "⚙️ Configuration",
+        "filter": {
+          "title": "🔍 User configuration filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No configuration to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No configuration to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "name": "Name",
+            "value": "Value",
+            "options": "Options"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Add configuration entry.",
+              "notYourself": "You cannot add your own configuration.",
+              "adminOnly": "You need administration permissions to add configuration entry."
+            },
+            "save": {
+              "button": "💾",
+              "action": "Save configuration entry."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Cancel editing the configuration entry."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edit configuration entry.",
+              "notYourself": "You cannot edit your own configuration.",
+              "adminOnly": "You need administration permissions to edit configuration entry."
+            },
+            "delete": {
+              "button": "🗑️",
+              "action": "Delete configuration entry.",
+              "notYourself": "You cannot delete your own configuration.",
+              "adminOnly": "You need administration permissions to delete configuration entry."
+            }
+          },
+          "msg": {
+            "save": {
+              "success": {
+                "title": "Success",
+                "content": "User config entry was saved."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to save user config entry!"
+              },
+              "badName": {
+                "title": "Failed to save",
+                "content": "Invalid config name."
+              },
+              "badValue": {
+                "title": "Failed to save",
+                "content": "Invalid config value."
+              }
+            },
+            "delete": {
+              "success": {
+                "title": "Success",
+                "content": "User config entry was deleted."
+              },
+              "fail": {
+                "title": "Failure",
+                "content": "Failed to delete user config entry!"
+              }
+            }
+          }
+        }
+      },
+      "tokens": {
+        "tab": "🔗 Tokens",
+        "filter": {
+          "title": "🔍 User tokens filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No tokens to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No tokens to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "expiresAt": "Expires",
+            "token": "Token",
+            "payload": "Payload"
+          }
+        }
+      },
+      "jwt": {
+        "tab": "🎫 JWT",
+        "filter": {
+          "title": "🔍 User JWT filter",
+          "createdFromAt": "Created from",
+          "createdToAt": "Created to",
+          "button": "Refresh",
+          "buttonBusy": "Loading..."
+        },
+        "table": {
+          "empty": "⚠️ No JWTs to show. Check filter settings. ⚠️",
+          "emptyNoUser": "No JWTs to show.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Created",
+            "expiresAt": "Expires",
+            "token": "Token"
+          }
+        }
+      },
+      "msg": {
+        "success": {
+          "title": "Success",
+          "content": "User data updated successfully."
+        },
+        "errorLoadTable": {
+          "title": "Error",
+          "content": "Failed to load user table."
+        },
+        "errorLoadUser": {
+          "title": "Error",
+          "content": "Failed to load user data."
+        },
+        "error": {
+          "title": "Failure",
+          "content": "Failed to update user data."
+        },
+        "info": {
+          "cannotEditYourself": "You cannot edit your own account.",
+          "noEditPermission": "You do not have permission to edit users."
+        }
+      }
+    }
+  }
+}

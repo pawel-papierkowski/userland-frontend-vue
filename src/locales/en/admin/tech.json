@@ -1,0 +1,35 @@
+{
+  "tech": {
+    "user": {
+      "status": {
+        "null": "-",
+        "PENDING": "Pending",
+        "ACTIVE": "Active",
+        "DEMO": "Demo"
+      },
+      "who": {
+        "null": "-",
+        "USER": "User",
+        "OPERATOR": "Operator",
+        "SYSTEM": "System"
+      },
+      "what": {
+        "null": "-",
+        "CREATE": "Create",
+        "ACTIVATE": "Activate",
+        "EDIT": "Edit",
+        "EMAIL_CHANGE_REQ": "Email change request",
+        "EMAIL_CHANGE": "Email change",
+        "PASS_RESET_REQ": "Password reset request",
+        "PASS_RESET": "Password reset",
+        "DELETE_REQ": "Account deletion request",
+        "LOGIN": "Login",
+        "LOGOUT": "Logout",
+        "PROLONG": "Session prolong"
+      },
+      "permissionName": {
+        "null": "Select permission from list"
+      }
+    }
+  }  
+}

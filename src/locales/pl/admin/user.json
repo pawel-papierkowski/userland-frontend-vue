@@ -1,0 +1,292 @@
+{
+  "admin": {
+    "user": {
+      "filter": {
+        "title": "🔍 Filtr użytkowników",
+        "username": "Nazwa",
+        "email": "Email",
+        "status": "Status",
+        "locked": "Zablokowany",
+        "createdFromAt": "Utworzony od",
+        "createdToAt": "Utworzony do",
+        "button": "Odśwież",
+        "buttonBusy": "Ładowanie..."
+      },
+      "table": {
+        "empty": "⚠️ Brak użytkowników do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+        "col": {
+          "id": "Id",
+          "createdAt": "Utworzony",
+          "username": "Nazwa",
+          "email": "Email"
+        }
+      },
+      "main": {
+        "tab": "👤 Użytkownik",
+        "form": {
+          "general": "🆔 Dane ogólne",
+          "createdAt": "Utworzony",
+          "modifiedAt": "Zmodyfikowany",
+          "username": "Nazwa",
+          "email": "Email",
+          "status": "Status",
+          "locked": "Zablokowany",
+          "lang": "Język",
+          "profile": "👤 Dane profilu",
+          "name": "Imię",
+          "surname": "Nazwisko"
+        },
+        "button": {
+          "update": "Zaktualizuj dane użytkownika",
+          "lock": "🔒 Zablokuj",
+          "unlock": "🔓 Odblokuj",
+          "busy": "Proszę zaczekać..."
+        }
+      },
+      "history": {
+        "tab": "📅 Historia",
+        "filter": {
+          "title": "🔍 Filtr historii użytkownika",
+          "who": "Kto",
+          "what": "Co",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak historii do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak historii do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "who": "Kto",
+            "what": "Co",
+            "params": "Parametry"
+          }
+        }
+      },
+      "permissions": {
+        "tab": "🔐 Uprawnienia",
+        "filter": {
+          "title": "🔍 Filtr uprawnień użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak uprawnień do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak uprawnień do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "name": "Nazwa",
+            "value": "Wartość",
+            "options": "Opcje"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Dodaj wpis uprawnień.",
+              "notYourself": "Nie możesz dodawać swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis uprawnienia."
+            },
+            "save": {
+              "button": "💾",
+              "action": "Zapisz wpis uprawnień."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Anuluj edycję wpisu uprawnień."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edytuj wpis uprawnień.",
+              "notYourself": "Nie możesz edytować swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis uprawnienia."
+            },
+            "delete": {
+              "button": "🗑️",
+              "action": "Usuń wpis uprawnień.",
+              "notYourself": "Nie możesz usuwać swoich własnych uprawnień.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis uprawnienia."
+            }
+          },
+          "msg": {
+            "save": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis uprawnień użytkownika został zapisany."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się zapisać wpisu uprawnień użytkownika!"
+              },
+              "badName": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa nazwa uprawnienia."
+              },
+              "badValue": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa wartość uprawnienia."
+              }
+            },
+            "delete": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis uprawnień użytkownika został usunięty."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się usunąć wpisu uprawnień użytkownika!"
+              }
+            }
+          }
+        }
+      },
+      "config": {
+        "tab": "⚙️ Konfiguracja",
+        "filter": {
+          "title": "🔍 Filtr konfiguracji użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak konfiguracji do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak konfiguracji do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "name": "Nazwa",
+            "value": "Wartość",
+            "options": "Opcje"
+          },
+          "texts": {
+            "add": {
+              "button": "➕",
+              "action": "Dodaj wpis konfiguracji.",
+              "notYourself": "Nie możesz dodawać swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis konfiguracji."
+            },
+            "save": {
+              "button": "💾",
+              "action": "Zapisz wpis konfiguracji."
+            },
+            "cancel": {
+              "button": "❌",
+              "action": "Anuluj edycję wpisu konfiguracji."
+            },
+            "edit": {
+              "button": "✏️",
+              "action": "Edytuj wpis konfiguracji.",
+              "notYourself": "Nie możesz edytować swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis konfiguracji."
+            },
+            "delete": {
+              "button": "🗑️",
+              "action": "Usuń wpis konfiguracji.",
+              "notYourself": "Nie możesz usuwać swojej własnej konfiguracji.",
+              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis konfiguracji."
+            }
+          },
+          "msg": {
+            "save": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis konfiguracji użytkownika został zapisany."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się zapisać wpisu konfiguracji użytkownika!"
+              },
+              "badName": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa nazwa konfiguracji."
+              },
+              "badValue": {
+                "title": "Zapis nieudany",
+                "content": "Niewłaściwa wartość konfiguracji."
+              }
+            },
+            "delete": {
+              "success": {
+                "title": "Sukces",
+                "content": "Wpis konfiguracji użytkownika został usunięty."
+              },
+              "fail": {
+                "title": "Niepowodzenie",
+                "content": "Nie udało się usunąć wpisu konfiguracji użytkownika!"
+              }
+            }
+          }
+        }
+      },
+      "tokens": {
+        "tab": "🔗 Tokeny",
+        "filter": {
+          "title": "🔍 Filtr tokenów użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak tokenów do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak tokenów do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "expiresAt": "Ważny do",
+            "token": "Token",
+            "payload": "Zawartość"
+          }
+        }
+      },
+      "jwt": {
+        "tab": "🎫 JWT",
+        "filter": {
+          "title": "🔍 Filtr JWT użytkownika",
+          "createdFromAt": "Utworzony od",
+          "createdToAt": "Utworzony do",
+          "button": "Odśwież",
+          "buttonBusy": "Ładowanie..."
+        },
+        "table": {
+          "empty": "⚠️ Brak JWT do wyświetlenia. Sprawdź ustawienia filtra. ⚠️",
+          "emptyNoUser": "Brak JWT do wyświetlenia.",
+          "col": {
+            "id": "Id",
+            "createdAt": "Utworzony",
+            "expiresAt": "Ważny do",
+            "token": "Token"
+          }
+        }
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Dane użytkownika zostały pomyślnie zaktualizowane."
+        },
+        "errorLoadTable": {
+          "title": "Błąd",
+          "content": "Nie udało się pobrać danych z tabeli użytkowników."
+        },
+        "errorLoadUser": {
+          "title": "Błąd",
+          "content": "Nie udało się pobrać danych użytkownika."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się zaktualizować danych użytkownika."
+        },
+        "info": {
+          "cannotEditYourself": "Nie możesz edytować swojego własnego konta.",
+          "noEditPermission": "Nie masz uprawnień do edycji użytkowników."
+        }
+      }
+    }
+  }
+}

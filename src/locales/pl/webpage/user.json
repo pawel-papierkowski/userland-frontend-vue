@@ -1,0 +1,233 @@
+{
+  "user": {
+    "registration": {
+      "form": {
+        "title": "Utwórz konto",
+        "warning": "Ważna informacja:<br/>Ponieważ jest to projekt portfolio, każde utworzone tutaj konto zostanie <b>automatycznie usunięte</b> po 72h od ostatniej aktywności.<br/>Ponadto nowe konta mogą otrzymać <b>uprawnienia administratora</b>.",
+        "username": "Nazwa użytkownika",
+        "email": "Email",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło",
+        "isAdmin": "Chcę być adminem",
+        "button": "Utwórz",
+        "buttonBusy": "Tworzenie konta...",
+        "hasAccount": "Już masz konto?"
+      },
+      "msg": {
+        "success": {
+          "title": "Użytkownik pomyślnie zarejestrowany",
+          "content": "Proszę sprawdzić skrzynkę email. Musisz potwierdzić rejestrację poprzez kliknięcie na link w emailu."
+        },
+        "user_0201": {
+          "title": "Niepowodzenie rejestracji",
+          "content": "Rejestracja użytkownika nieudana."
+        }
+      }
+    },
+    "activation": {
+      "title": "Aktywowanie konta...",
+      "msg": {
+        "success": {
+          "title": "Aktywacja użytkownika udana",
+          "content": "Możesz się teraz zalogować."
+        },
+        "error": {
+          "title": "Niepowodzenie aktywacji",
+          "content": "Aktywacja użytkownika nieudana."
+        }
+      }
+    },
+    "login": {
+      "form": {
+        "title": "Logowanie",
+        "email": "Email",
+        "password": "Hasło",
+        "button": "Zaloguj się",
+        "buttonBusy": "Logowanie...",
+        "noAccount": "Nie masz konta?",
+        "passwordReset": "Zapomniane hasło?"
+      },
+      "formAdmin": {
+        "title": "Logowanie do panelu administracyjnego"
+      },
+      "msg": {
+        "success": {
+          "title": "Użytkownik pomyślnie zalogowany",
+          "content": ""
+        },
+        "successAdmin": {
+          "title": "Użytkownik panelu administracyjnego pomyślnie zalogowany",
+          "content": ""
+        },
+        "error": {
+          "title": "Niepowodzenie logowania",
+          "content": "Logowanie użytkownika nieudane."
+        }
+      }
+    },
+    "logout": {
+      "msg": {
+        "info": {
+          "title": "Użytkownik pomyślnie wylogowany",
+          "content": ""
+        }
+      }
+    },
+    "prolong": {
+      "msg": {
+        "info": {
+          "title": "Sesja użytkownika pomyślnie przedłużona",
+          "content": ""
+        }
+      }
+    },
+    "passwordResetStart": {
+      "form": {
+        "title": "Zapomniałem hasła",
+        "info": "Otrzymasz e-mail z linkiem do zresetowania hasła.",
+        "email": "Email",
+        "button": "Wyślij email",
+        "buttonBusy": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do zmiany hasła."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o reset hasła."
+        }
+      }
+    },
+    "passwordReset": {
+      "form": {
+        "title": "Ustaw nowe hasło",
+        "password": "Nowe hasło",
+        "confirmPassword": "Potwierdź nowe hasło",
+        "button": "Ustaw hasło",
+        "buttonBusy": "Ustawianie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Nowe hasło zostało pomyślnie ustawione."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się zresetować hasła."
+        }
+      }
+    },
+    "emailChangeStart": {
+      "form": {
+        "title": "Zmień adres email",
+        "info": "Otrzymasz e-mail z linkiem do zmiany adresu email.",
+        "newEmail": "Nowy email",
+        "password": "Hasło",
+        "button": "Wyślij email",
+        "buttonBusy": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do potwierdzenia zmiany adresu email."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o zmianę adresu email."
+        }
+      }
+    },
+    "emailChange": {
+      "title": "Zapisywanie nowego adresu email...",
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Nowy adres email został pomyślnie ustawiony. Musisz się ponownie zalogować."
+        },
+        "mustBeLogged": {
+          "title": "Niepowodzenie",
+          "content": "Musisz być zalogowany, by zmienić adres email. Zaloguj się, po czym użyj linku z emaila jeszcze raz."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się ustawić nowego adresu email."
+        }
+      }
+    },
+    "accountDeleteStart": {
+      "form": {
+        "title": "Usuń konto",
+        "info": "Otrzymasz e-mail z linkiem do usunięcia swojego konta.",
+        "password": "Hasło",
+        "button": "Wyślij email",
+        "buttonBusy": "Wysyłanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Sprawdź skrzynkę odbiorczą za kilka minut - otrzymasz e-mail z linkiem do potwierdzenia usunięcia konta."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się wysłać prośby o zmianę adresu email."
+        }
+      }
+    },
+    "accountDelete": {
+      "form": {
+        "title": "Usuń konto",
+        "warning": "Potwierdź zamiar usunięcia swojego konta. Ta czynność jest nieodwracalna.",
+        "button": "Usuń",
+        "buttonBusy": "Usuwanie..."
+      },
+      "msg": {
+        "success": {
+          "title": "Sukces",
+          "content": "Konto użytkownika zostało usunięte."
+        },
+        "mustBeLogged": {
+          "title": "Niepowodzenie",
+          "content": "Musisz być zalogowany, by móc usunąć konto. Zaloguj się, po czym użyj linku z emaila jeszcze raz."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się usunąć konta."
+        }
+      }
+    },
+    "profile": {
+      "form": {
+        "title": "Profil użytkownika",
+        "username": "Nazwa",
+        "email": "Email",
+        "name": "Imię",
+        "surname": "Nazwisko"
+      },
+      "formAdmin": {
+        "title": "Profil użytkownika panelu administracyjnego"
+      },
+      "button": {
+        "update": "Zaktualizuj profil",
+        "updateBusy": "Aktualizacja profilu...",
+        "emailChange": "Zmień adres email",
+        "deleteAccount": "Usuń konto"
+      },
+      "msg": {
+        "loadError": {
+          "title": "Błąd",
+          "content": "Nie udało się pobrać danych użytkownika."
+        },
+        "success": {
+          "title": "Sukces",
+          "content": "Dane użytkownika zostały pomyślnie zaktualizowane."
+        },
+        "error": {
+          "title": "Niepowodzenie",
+          "content": "Nie udało się zaktualizować danych użytkownika."
+        }
+      }
+    }
+  }
+}

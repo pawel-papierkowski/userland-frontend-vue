@@ -1,0 +1,160 @@
+{
+  "languages": {
+    "pl": {
+      "name": "Polish",
+      "flag": "🇵🇱"
+    },
+    "en": {
+      "name": "English",
+      "flag": "🇬🇧"
+    }
+  },
+
+  "token": {
+    "invalid": {
+      "title": "Invalid token",
+      "content": "No token provided or it is malformed."
+    }
+  },
+
+  "form": {
+    "errFieldEmpty": "Field cannot be empty.",
+    "errEmailBad": "Need to enter correct email.",
+    "errPasswordTooShort": "Password is too short. It must have at least {count} characters.",
+    "errPasswordTooLong": "Password is too long. It must have at most {count} characters.",
+    "errPasswordWeak": "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+    "errPasswordMatch": "Passwords do not match."
+  },
+
+  "msgs": {
+    "aria": {
+      "container": "Notifications",
+      "close": "Close",
+      "level": {
+        "info": "Information",
+        "success": "Success",
+        "warning": "Warning",
+        "failure": "Failure",
+        "error": "Error"
+      }
+    },
+    "errorCode": "Error code",
+
+    "networkError": {
+      "title": "Network error",
+      "content": "Cannot connect with server. Make sure your Internet connection is not down."
+    },
+    "400": {
+      "title": "Bad request",
+      "content": "Request has invalid or missing data."
+    },
+    "401": {
+      "title": "Unauthorized",
+      "content": "You need authorization to access this."
+    },
+    "403": {
+      "title": "Forbidden",
+      "content": "You need proper permissions to access this."
+    },
+    "404": {
+      "title": "Not found",
+      "content": "Resource does not exist."
+    },
+    "409": {
+      "title": "Conflict",
+      "content": "A request conflicts with the current state of the server."
+    },
+    "423": {
+      "title": "Locked",
+      "content": "You tried to access resource that is locked."
+    },
+    "429": {
+      "title": "Too many requests",
+      "content": "You sent too many requests in a given amount of time."
+    },
+    "500": {
+      "title": "Internal server error",
+      "content": "The server has encountered a situation it does not know how to handle."
+    },
+
+    "test_0001": {
+      "title": "Test error title",
+      "content": "Test error message."
+    },
+
+    "lock_0001": {
+      "title": "Lockdown",
+      "content": "System is in lockdown state. Try again later."
+    },
+    "lock_0002": {
+      "title": "Lockdown",
+      "content": "System is in lockdown state. Try again later."
+    },
+    "jwt_0001": {
+      "title": "JWT issue",
+      "content": "JWT token is malformed or expired."
+    },
+
+    "user_0001": {
+      "title": "Failure",
+      "content": "User not found."
+    },
+    "user_0011": {
+      "title": "Failure",
+      "content": "User token is missing."
+    },
+    "user_0012": {
+      "title": "Failure",
+      "content": "User token is expired."
+    },
+    "user_0013": {
+      "title": "Failure",
+      "content": "User token already exists."
+    },
+    "user_0021": {
+      "title": "Failure",
+      "content": "User config entry is missing."
+    },
+    "user_0022": {
+      "title": "Failure",
+      "content": "Same user config entry already exists."
+    },
+    "user_0031": {
+      "title": "Failure",
+      "content": "User permission entry is missing."
+    },
+    "user_0032": {
+      "title": "Failure",
+      "content": "Same user permission entry already exists."
+    },
+    "user_0041": {
+      "title": "Failure",
+      "content": "Permission is missing."
+    },
+    "user_0111": {
+      "title": "Failure",
+      "content": "Email already exists."
+    },
+    "user_0112": {
+      "title": "Failure",
+      "content": "Invalid password or account."
+    },
+    "user_0121": {
+      "title": "Failure",
+      "content": "User has invalid status."
+    },
+    "user_0122": {
+      "title": "Failure",
+      "content": "User is locked."
+    },
+    "user_0201": {
+      "title": "Failure",
+      "content": "Cannot edit this user."
+    }
+  },
+
+  "state": {
+    "true": "true",
+    "false": "false"
+  }
+}

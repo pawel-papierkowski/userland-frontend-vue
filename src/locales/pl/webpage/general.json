@@ -1,0 +1,303 @@
+{
+  "homeArea": {
+    "welcome": "Witamy w projekcie demonstracyjnym <b>UserLand</b>!",
+    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz README.md w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itd.",
+    "techstack": {
+      "title": "Technikalia",
+      "backend": "Stos technologiczny backendu:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
+      "frontend": "Stos technologiczny frontendu:<br/><ul><li><b>HTML</b></li><li><b>CSS</b></li><li><b>JavaScript/TypeScript</b></li><li><b>Vue</b> 3.22.3</li></ul>"
+    },
+    "features": {
+      "title": "Cechy",
+      "website": {
+        "descr": "<b>Główna strona</b> jest dostępna dla każdego. Możesz odwiedzić:",
+        "home": "Stronę domową dostępną dla wszystkich - jesteś tutaj.",
+        "member": "Strefę członków dostępną tylko dla zalogowanych użytkowników.",
+        "test": "Strefę testów pokazującą mniejsze komponenty.",
+        "debug": "Strefę debugu pokazującą dane JWT i przyciski do wywołania pewnych endpointów backendu."
+      },
+      "user": {
+        "descr": "<b>Użytkownik</b> jest is main focus of this project. Możesz:",
+        "register": "Zarejestrować konto użytkownika.",
+        "login": "Zalogować/wylogować się.",
+        "edit": "Edytować profil użytkownika.",
+        "email": "Zmienić email.",
+        "reset": "Zresetować hasło.",
+        "delete": "Usunąć konto użytkownika."
+      },
+      "admin": {
+        "descr": "<b>Panel administracyjny</b>, na który można wejść tylko będąc użytkownikiem z odpowiednimi uprawnieniami. Możesz:",
+        "user": "Przeglądać tabelę użytkowników, zobaczyć szczegóły wybranego użytkownika oraz edytować dane użytkownika.",
+        "userSub": "Przeglądać podtabele dla użytkownika takie jak historia oraz edytować niektóre z nich jak konfiguracja lub uprawnienia."
+      }
+    },
+    "components": {
+      "title": "Komponenty",
+      "ComboBox": "<code>ComboBox</code> jest komponentem zastępującym <code>select</code> i <code>options</code>.",
+      "CheckBox": "<code>CheckBox</code> jest komponentem zastępującym <code>input</code> z <code>type='checkbox'</code>.",
+      "DateTimePicker": "<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
+      "SlideShow": "Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
+      "MessageContainer": "<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",
+      "Table": "Rodzina komponentów <code>Table*</code> obsługuje pokazywanie i edycję tabeli. Używane w panelu administracyjnym.",
+      "SpinnerTorus": "<code>SpinnerTorus</code> sygnalizuje aktywność, gdy czekasz, aż frontend zakończy operację, taką jak np. wywołanie backendu."
+    }
+  },
+
+  "memberArea": {
+    "title": "Strefa członków",
+    "welcome": "Ta strona jest dostępna tylko dla członków.",
+    "description": "Oznacza to, że musisz być zalogowany, by wejść na tę stronę. Nie musisz posiadać żadnych innych uprawnień. Jeśli spróbujesz wejść na tę stronę będąc wylogowany, system przekieruje cię na stronę logowania.",
+    "msg": {
+      "mustBeLogged": {
+        "title": "Niepowodzenie",
+        "content": "Musisz być zalogowany, by mieć dostęp do strefy członków."
+      }
+    }
+  },
+
+  "testArea": {
+    "tabs": {
+      "messages": "Wiadomości",
+      "inputs": "Pola formularza",
+      "other": "Inne"
+    },
+    "messages": {
+      "msgButtons": {
+        "legend": "Testy wiadomości tymczasowych",
+        "info": {
+          "label": "Wygeneruj wiadomość informacyjną",
+          "title": "Informacja",
+          "content": "To jest wiadomość informacyjna. Numer: {count}."
+        },
+        "success": {
+          "label": "Wygeneruj wiadomość o sukcesie",
+          "title": "Sukces",
+          "content": "To jest wiadomość o sukcesie. Numer: {count}."
+        },
+        "warning": {
+          "label": "Wygeneruj ostrzeżenie",
+          "title": "Ostrzeżenie",
+          "content": "To jest wiadomość - ostrzeżenie. Numer: {count}."
+        },
+        "failure": {
+          "label": "Wygeneruj wiadomość o niepowodzeniu",
+          "title": "Niepowodzenie",
+          "content": "To jest wiadomość o niepowodzeniu. Numer: {count}."
+        },
+        "error": {
+          "label": "Wygeneruj wiadomość o błędzie",
+          "title": "Błąd",
+          "content": "To jest wiadomość o błędzie. Numer: {count}."
+        }
+      },
+      "placeholder": {
+        "title": "Wprowadź własny tytuł",
+        "content": "Wprowadź własną zawartość"
+      },
+      "inMessages": {
+        "legend": "Stałe wiadomości",
+        "info": "To jest wiadomość <b>informacyjna</b>.",
+        "success": "To jest wiadomość o <b>sukcesie</b>.",
+        "warning": "To jest wiadomość - <b>ostrzeżenie</b>.",
+        "failure": "To jest wiadomość o <b>niepowodzeniu</b>.",
+        "error": "To jest wiadomość o <b>błędzie</b>."
+      },
+      "logs": {
+        "legend": "Informacje w konsoli",
+        "browser": {
+          "info": "Przez przeglądarkę: INFO",
+          "warn": "Przez przeglądarkę: WARN",
+          "err": "Przez przeglądarkę: ERR"
+        },
+        "vue": {
+          "info": "Przez Vue: INFO",
+          "warn": "Przez Vue: WARN",
+          "err": "Przez Vue: ERR"
+        }
+      }
+    },
+    "inputs": {
+      "mode": {
+        "name": "Tryb",
+        "0": "Standardowy",
+        "1": "Zablokowany",
+        "2": "Błąd"
+      },
+      "inputText": {
+        "label": "Pole do wpisania tekstu",
+        "placeholder": "Wpisz jakiś tekst"
+      },
+      "comboBox": {
+        "label": "Lista rozwijana"
+      },
+      "checkBox": {
+        "label": "Wybór tak/nie"
+      },
+      "radioBox": {
+        "label": "Wybór jeden z wielu"
+      },
+      "dateTimePicker": {
+        "label": "Wybór daty/czasu (UTC)"
+      },
+      "datePicker": {
+        "label": "Wybór daty (UTC)"
+      },
+      "timePicker": {
+        "label": "Wybór czasu (UTC)"
+      }
+    },
+    "other": {
+      "generalButtons": {
+        "legend": "Wygląd przycisków",
+        "standard": "Standardowy",
+        "danger": "Niebezpieczny",
+        "disabled": "Zablokowany"
+      },
+      "spinner": {
+        "legend": "Kręciołek",
+        "start": "Start",
+        "stop": "Stop"
+      }
+    }
+  },
+
+  "debugArea": {
+    "login": {
+      "legend": "Dane loginu (JWT)",
+      "logged": "Zalogowany",
+      "username": "Nazwa",
+      "email": "Email",
+      "issuedAt": "Wystawiony",
+      "expiresAt": "Ważny do",
+      "permissions": "Uprawnienia"
+    },
+    "checks": {
+      "legend": "API dla /api/checks",
+      "alive": {
+        "button": "Wywołaj /api/checks/alive",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/alive."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/alive."
+          }
+        }
+      },
+      "logged": {
+        "button": "Wywołaj /api/checks/must-be-logged",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/must-be-logged."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/must-be-logged."
+          }
+        }
+      },
+      "admin": {
+        "button": "Wywołaj /api/checks/must-be-admin",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się wywołać /api/checks/must-be-admin."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/must-be-admin."
+          }
+        }
+      },
+      "exception": {
+        "button": "Wywołaj /api/checks/exception",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Successfully called /api/checks/exception."
+          },
+          "error": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się wywołać /api/checks/exception."
+          }
+        }
+      }
+    },
+    "options": {
+      "legend": "Opcje",
+      "prolong": {
+        "button": "Przedłuż swoją sesję",
+        "msg": {
+          "success": {
+            "title": "Sukces",
+            "content": "Udało się przedłużyć sesję użytkownika."
+          },
+          "failure": {
+            "title": "Niepowodzenie",
+            "content": "Nie udało się przedłużyć sesji użytkownika."
+          },
+          "error": {
+            "title": "Błąd",
+            "content": "Nie udało się przedłużyć sesji użytkownika."
+          }
+        }
+      }
+    }
+  },
+
+  "test": {
+    "notify": "Pierwsze połączenie z serwerem może potrwać trochę dłużej. Proszę zaczekać.",
+    "msg": {
+      "fallback": {
+        "title": "Fallback title",
+        "content": "Fallback content."
+      }
+    },
+    "radioBox": {
+      "null": "Opcja BRAK (null)",
+      "one": "Opcja Jeden",
+      "two": "Opcja Dwa",
+      "three": "Opcja Trzy"
+    },
+    "comboBox": {
+      "null": "Opcja BRAK (null)",
+      "A": "Opcja A",
+      "b": "Opcja B",
+      "c": "Opcja C"
+    },
+    "tabGroup": {
+      "a": "Tab A",
+      "b": "Tab B",
+      "c": "Tab C"
+    },
+    "slideshow": {
+      "label": "{id} pokaz slajdów",
+      "slide": "Slajd {n} z {total}"
+    },
+    "table": {
+      "column": {
+        "createdAt": "Utworzony",
+        "name": "Nazwa",
+        "value": "Wartość",
+        "options": "Opcje"
+      },
+      "entryOptions": {
+        "add": {
+          "button": "A",
+          "action": "Wykonuje ADD."
+        },
+        "del": {
+          "button": "D",
+          "action": "Wykonuje DEL.",
+          "disabled": "Zablokowane DEL."
+        }
+      },
+      "page": {
+        "empty": "⚠️ Brak wpisów do wyświetlenia. ⚠️"
+      }
+    }
+  }
+}
