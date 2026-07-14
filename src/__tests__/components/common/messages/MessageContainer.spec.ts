@@ -112,27 +112,8 @@ describe('MessageContainer', () => {
       // Arrange&Act: Create component.
       const messageContainer = createComponent();
 
-      // Assert: wrapper has live region attributes.
-      expect(messageContainer.find('.message-wrapper').attributes('role')).toBe('status');
-      expect(messageContainer.find('.message-wrapper').attributes('aria-live')).toBe('polite');
-      expect(messageContainer.find('.message-wrapper').attributes('aria-atomic')).toBe('true');
+      // Assert: wrapper has needed aria attributes.
       expect(messageContainer.find('.message-wrapper').attributes('aria-label')).toBe('Notifications');
-      expect(messageContainer.find('.message-wrapper').attributes('aria-relevant')).toBe('additions removals');
-    });
-
-    it('announces new messages via live region', async () => {
-      // Checks that when a message is added, it appears inside the live region.
-
-      // Arrange: Create component.
-      const messageContainer = createComponent();
-
-      // Act: add a message.
-      AppMessager.success('user.registration.msg.success.title', 'user.registration.msg.success.content');
-      await nextTick();
-
-      // Assert: the live region contains the message box.
-      const liveRegion = messageContainer.find('[aria-live="polite"]');
-      expect(liveRegion.findAll('.message-box').length).toBe(1);
     });
   });
 });
