@@ -42,141 +42,204 @@ describe('UserPasswordResetStart', () => {
     vi.clearAllMocks();
   });
 
-  it('is correctly filled and submits successfully', async () => {
-    // Ensures that after successful action user gets feedback.
+  // //////////////////////////////////////////////////////////////////////////
+  // API interaction
 
-    const userPasswordResetStart = createComponent();
-    const messageStore = useMessageStore();
+  describe('api', () => {
+    it('submits successfully and redirects home', async () => {
+      // Ensures that after a successful password-reset-link request the user
+      // gets feedback and is redirected.
 
-    // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.passwordResetLink).mockResolvedValue({ data: {} } as any);
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
 
-    // Arrange: fill form fields correctly.
-    await userPasswordResetStart.find('[data-testid="email"]').setValue('test@example.com');
+      // Arrange: mock successful API response.
+      vi.mocked(backendApiUser.passwordResetLink).mockResolvedValue({ data: {} } as any);
 
-    // Act: click on password reset link button.
-    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
+      // Arrange: fill form.
+      await wrapper.find('[data-testid="email"]').setValue('test@example.com');
 
-    await flushPromises(); // Wait for all promises (API call) to resolve.
+      // Act: submit.
+      await wrapper.find('button[type="submit"]').trigger('submit');
 
-    // Assert: verify API call.
-    expect(backendApiUser.passwordResetLink).toHaveBeenCalledWith(
-      expect.objectContaining({
+      await flushPromises();
+
+      // Assert: verify API call with exact payload.
+      expect(backendApiUser.passwordResetLink).toHaveBeenCalledWith({
         email: 'test@example.com',
-      }),
-    );
+        frontend: 'VUE',
+      });
 
-    // Assert: verify success message is present in store.
-    expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0]?.title).toBe('Success');
-    expect(messageStore.messages[0]?.content).toBe(
-      'Check your inbox in a few minutes for a email with link to password change.',
-    );
+      // Assert: verify success message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+      expect(messageStore.messages[0]?.title).toBe('Success');
+      expect(messageStore.messages[0]?.content).toBe(
+        'Check your inbox in a few minutes for a email with link to password change.',
+      );
 
-    // Assert: verify redirection to home page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
-  });
-
-  it('shows error message when server returns 404 error', async () => {
-    // Ensures that after failed action user gets feedback.
-
-    // Arrange: mock API returning 404 error.
-    const errorResponse = {
-      isAxiosError: true,
-      response: {
-        status: 404,
-        data: {
-          detail: "User with email 'test@example.com' does not exist.",
-          instance: '/api/users/password/link',
-          status: 404,
-          title: 'User cannot be found.',
-          type: 'https://api.userland.org/errors/user/doesNotExist',
-          errCode: 'user_0001',
-        },
-      },
-    };
-    vi.mocked(backendApiUser.passwordResetLink).mockRejectedValue(errorResponse);
-
-    const userPasswordResetStart = createComponent();
-    const messageStore = useMessageStore();
-
-    // Arrange: fill form fields correctly.
-    await userPasswordResetStart.find('[data-testid="email"]').setValue('test@example.com');
-
-    // Act: click on password reset button.
-    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
-
-    await flushPromises();
-
-    // Assert: verify API was called.
-    expect(backendApiUser.passwordResetLink).toHaveBeenCalled();
-
-    // Assert: verify error message is present in store.
-    expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0]?.title).toBe('Failure');
-    expect(messageStore.messages[0]?.content).toBe('User not found.');
-
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
-  });
-
-  //
-
-  it('form is empty', async () => {
-    // Ensures that after failed action user gets feedback.
-
-    const userPasswordResetStart = createComponent();
-    const messageStore = useMessageStore();
-
-    // No arrange here - form is untouched.
-
-    // Act: click on password reset link button while form is completely empty.
-    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
-
-    await flushPromises();
-
-    // Assert: verify that error messages properly shown up for all fields.
-    const errorMessages = userPasswordResetStart.findAll('.form-text-error');
-    expect(errorMessages).toHaveLength(1);
-    errorMessages.forEach((msg) => {
-      expect(msg.text()).not.toBe('');
+      // Assert: verify redirection.
+      expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
-    // Assert: verify API was not called.
-    expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
-    expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
+    it('shows error and does not redirect on API failure', async () => {
+      // Ensures that after a failed API call the user gets an error message
+      // and stays on the page.
+
+      // Arrange: mock API returning 404 error.
+      const errorResponse = {
+        isAxiosError: true,
+        response: {
+          status: 404,
+          data: {
+            detail: "User with email 'test@example.com' does not exist.",
+            instance: '/api/users/password/link',
+            status: 404,
+            title: 'User cannot be found.',
+            type: 'https://api.userland.org/errors/user/doesNotExist',
+            errCode: 'user_0001',
+          },
+        },
+      };
+      vi.mocked(backendApiUser.passwordResetLink).mockRejectedValue(errorResponse);
+
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
+
+      // Arrange: fill form.
+      await wrapper.find('[data-testid="email"]').setValue('test@example.com');
+
+      // Act: submit.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+
+      await flushPromises();
+
+      // Assert: verify API was called.
+      expect(backendApiUser.passwordResetLink).toHaveBeenCalled();
+
+      // Assert: verify error message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+      expect(messageStore.messages[0]?.title).toBe('Failure');
+      expect(messageStore.messages[0]?.content).toBe('User not found.');
+
+      // Assert: verify no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
   });
 
-  it('shows error when invalid email is entered', async () => {
-    // Ensures that after failed action user gets feedback.
+  // //////////////////////////////////////////////////////////////////////////
+  // Client-side validation
 
-    const userPasswordResetStart = createComponent();
-    const messageStore = useMessageStore();
+  describe('validation', () => {
+    it('blocks submission and shows error when form is empty', async () => {
+      // Client-side validation: empty email field should show an error and
+      // prevent API call.
 
-    // Arrange: fill form fields with invalid email.
-    await userPasswordResetStart.find('[data-testid="email"]').setValue('invalid-email');
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
 
-    // Act: click on password reset link button.
-    await userPasswordResetStart.find('button[type="submit"]').trigger('submit');
+      // Act: submit empty form.
+      await wrapper.find('button[type="submit"]').trigger('submit');
 
-    await flushPromises();
+      await flushPromises();
 
-    // Assert: verify that error message is shown for email.
-    expect(userPasswordResetStart.find('#email').classes()).toContain('err');
-    const errorMessages = userPasswordResetStart.findAll('.form-text-error');
-    expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0]?.text()).not.toBe('');
+      // Assert: error is shown.
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
+      expect(errorMessages[0]?.text()).toBe('Field cannot be empty.');
 
-    // Assert: verify API was not called.
-    expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
-    expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
+      // Assert: no messages in store.
+      expect(messageStore.messages).toHaveLength(0);
+      // Assert: no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('blocks submission when email is invalid', async () => {
+      // Client-side validation: malformed email should show an error.
+
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
+
+      // Arrange: fill with invalid email.
+      await wrapper.find('[data-testid="email"]').setValue('invalid-email');
+
+      // Act: submit.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+
+      await flushPromises();
+
+      // Assert: error is shown on email field.
+      expect(wrapper.find('#email').classes()).toContain('err');
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
+      expect(errorMessages[0]?.text()).toBe('Need to enter correct email.');
+
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
+      // Assert: no messages in store.
+      expect(messageStore.messages).toHaveLength(0);
+      // Assert: no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('shows errors eagerly after first submit attempt', async () => {
+      // After the first submission attempt usedButton is set to true, so
+      // validation errors appear immediately as the user types.
+
+      const wrapper = createComponent();
+
+      // Act: submit empty form to set usedButton = true.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+      await flushPromises();
+
+      // The email field should show an error.
+      expect(wrapper.findAll('.form-text-error')).toHaveLength(1);
+
+      // Now type an invalid email — error should appear immediately.
+      await wrapper.find('[data-testid="email"]').setValue('bad');
+
+      // Assert: error shows eagerly.
+      const emailErrorSpan = wrapper.find('#email + span.form-text-error');
+      expect(emailErrorSpan.exists()).toBe(true);
+      expect(emailErrorSpan.text()).toBe('Need to enter correct email.');
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Rendering
+
+  describe('render', () => {
+    it('renders the heading', () => {
+      // The page should display a title.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Title is present.
+      expect(wrapper.find('h2').text()).toBe('I forgot my password');
+    });
+
+    it('renders a form with an email field', () => {
+      // The form should have an email input.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Email input exists.
+      expect(wrapper.find('#email').exists()).toBe(true);
+    });
+
+    it('renders submit button with default label', () => {
+      // The submit button shows the default text before submission starts.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Button shows the correct text.
+      expect(wrapper.find('button[type="submit"]').text()).toBe('Send email');
+    });
   });
 });
