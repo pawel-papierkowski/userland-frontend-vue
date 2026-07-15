@@ -6,6 +6,7 @@
  *
  * Properties:
  * - canSpin: True if can spin, false if it cannot spin.
+ * - descr: Description of spinner for screen readers and the like. Undefined means no aria will be present.
  * - display: You can set CSS display property directly.
  * - size: Size of the spinner (e.g., "1rem", "100px").
  *

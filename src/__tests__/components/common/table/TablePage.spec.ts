@@ -43,6 +43,7 @@ function createComponent(
   inlineEdit: boolean,
   addNewEntry: boolean,
   empty: string,
+  descr?: string,
 ) {
   return mount(TablePage, {
     global: {
@@ -65,6 +66,7 @@ function createComponent(
       inlineEdit,
       addNewEntry,
       empty,
+      descr,
     },
   });
 }
@@ -533,10 +535,10 @@ describe('TablePage', () => {
     });
 
     it('provides accessible label on the loading spinner', () => {
-      // Arrange: Loading state.
+      // Arrange: Loading state with a description.
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
-      // Act: Create table in loading state.
+      // Act: Create table in loading state with descr prop.
       const wrapper = createComponent(
         null,
         null,
@@ -554,11 +556,12 @@ describe('TablePage', () => {
         false,
         false,
         'test.table.page.empty',
+        'Loading table...',
       );
 
-      // Assert: Spinner has aria-label.
+      // Assert: Spinner has aria-label from descr prop.
       const spinner = wrapper.find('[data-testid="spinner"]');
-      expect(spinner.attributes('aria-label')).toBe('Loading table data...');
+      expect(spinner.attributes('aria-label')).toBe('Loading table...');
     });
   });
 

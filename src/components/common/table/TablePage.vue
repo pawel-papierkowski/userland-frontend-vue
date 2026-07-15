@@ -29,6 +29,7 @@
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - empty - I18n key to show when table is empty. Optional.
+ * - descr: Description of loading state for screen readers and the like. Undefined means no aria will be present.
  *
  * Slots:
  * - custom slots defined for colums, with name 'column_[column name]'.
@@ -64,6 +65,7 @@ const props = withDefaults(
     inlineEdit?: boolean;
     addNewEntry?: boolean;
     empty?: string;
+    descr?: string;
   }>(),
   {
     isLoading: false,
@@ -261,13 +263,7 @@ defineExpose({
 
     <template v-if="isLoading">
       <div class="spinner-container table-entire-row">
-        <SpinnerTorus
-          data-testid="spinner"
-          display="block"
-          size="100px"
-          :canSpin="canSpin"
-          :descr="t('test.table.loading')"
-        />
+        <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" :descr="descr" />
       </div>
     </template>
 
