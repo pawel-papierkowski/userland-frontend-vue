@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** Page for requesting password reset. */
 import { reactive, ref, computed } from 'vue';
-import type { Ref, ComputedRef } from 'vue';
+import type { ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -24,9 +24,9 @@ const form: UserPasswordResetLinkForm = reactive({
 });
 
 /** True if submit button was clicked at least once. */
-const usedButton: Ref<boolean> = ref(false);
+const usedButton = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyEmail(form.email, usedButton.value);

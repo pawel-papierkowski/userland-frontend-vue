@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /** Standalone page for activating account. Accessed via link from email. */
 import { onMounted, ref } from 'vue';
-import type { Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -20,7 +19,7 @@ const router = useRouter();
 const { t } = useI18n();
 
 /** Can spinner spin? */
-const canSpin: Ref<boolean> = ref(true);
+const canSpin = ref(true);
 /** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 
@@ -59,7 +58,13 @@ onMounted(() => {
   <div>
     <h2>{{ t('user.activation.title') }}</h2>
     <div class="spinner-container">
-      <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
+      <SpinnerTorus
+        data-testid="spinner"
+        display="block"
+        size="100px"
+        :canSpin="canSpin"
+        :descr="t('user.activation.title')"
+      />
     </div>
   </div>
 </template>

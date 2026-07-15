@@ -50,169 +50,302 @@ describe('UserPasswordReset', () => {
     mockRoute.query.token = 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs';
   });
 
-  it('is correctly filled and submits successfully', async () => {
-    // Ensures that after successful action user gets feedback and redirection.
+  // //////////////////////////////////////////////////////////////////////////
+  // API interaction
 
-    const userPasswordReset = createComponent();
-    const messageStore = useMessageStore();
+  describe('api', () => {
+    it('submits successfully and redirects to home', async () => {
+      // Ensures that after successful password reset the user gets feedback
+      // and is redirected to the home page.
 
-    // Arrange: mock successful API response.
-    vi.mocked(backendApiUser.passwordResetConfirm).mockResolvedValue({ data: {} } as any);
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
 
-    // Arrange: fill form fields correctly.
-    await userPasswordReset.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
-    await userPasswordReset.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
+      // Arrange: mock successful API response.
+      vi.mocked(backendApiUser.passwordResetConfirm).mockResolvedValue({ data: {} } as any);
 
-    // Act: click on password reset confirmation button.
-    await userPasswordReset.find('button[type="submit"]').trigger('submit');
+      // Arrange: fill form fields correctly.
+      await wrapper.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
+      await wrapper.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
 
-    await flushPromises(); // Wait for all promises (API call) to resolve.
+      // Act: submit form.
+      await wrapper.find('button[type="submit"]').trigger('submit');
 
-    // Assert: verify API call.
-    expect(backendApiUser.passwordResetConfirm).toHaveBeenCalledWith(
-      expect.objectContaining({
+      await flushPromises();
+
+      // Assert: verify API call with exact payload.
+      expect(backendApiUser.passwordResetConfirm).toHaveBeenCalledWith({
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
         password: 'n3wP@s5w0rD',
-      }),
-    );
+      });
 
-    // Assert: verify success message is present in store.
-    expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
-    expect(messageStore.messages[0]?.title).toBe('Success');
-    expect(messageStore.messages[0]?.content).toBe('New password was set successfully.');
+      // Assert: verify success message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
+      expect(messageStore.messages[0]?.title).toBe('Success');
+      expect(messageStore.messages[0]?.content).toBe('New password was set successfully.');
 
-    // Assert: verify redirection to home page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
-  });
-
-  it('shows error message when server returns 404 error', async () => {
-    // Ensures that after failed action user gets feedback.
-
-    // Arrange: mock API returning 404 error.
-    const errorResponse = {
-      isAxiosError: true,
-      response: {
-        status: 404,
-        data: {
-          detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-          instance: '/api/users/password/confirm',
-          status: 404,
-          title: 'User token is missing.',
-          type: 'https://api.userland.org/errors/user/token/missing',
-          errCode: 'user_0011',
-        },
-      },
-    };
-    vi.mocked(backendApiUser.passwordResetConfirm).mockRejectedValue(errorResponse);
-
-    const userPasswordReset = createComponent();
-    const messageStore = useMessageStore();
-
-    // Arrange: fill form fields correctly.
-    await userPasswordReset.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
-    await userPasswordReset.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
-
-    // Act: click on password reset confirmation button.
-    await userPasswordReset.find('button[type="submit"]').trigger('submit');
-
-    await flushPromises();
-
-    // Assert: verify API was called.
-    expect(backendApiUser.passwordResetConfirm).toHaveBeenCalled();
-
-    // Assert: verify error message is present in store.
-    expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
-    expect(messageStore.messages[0]?.title).toBe('Failure');
-    expect(messageStore.messages[0]?.content).toBe('User token is missing.');
-
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
-  });
-
-  //
-
-  it('form is empty', async () => {
-    // Ensures that after failed action user gets feedback.
-
-    const userPasswordReset = createComponent();
-    const messageStore = useMessageStore();
-
-    // No arrange here - form is untouched.
-
-    // Act: click on password reset confirmation button while form is completely empty.
-    await userPasswordReset.find('button[type="submit"]').trigger('submit');
-
-    await flushPromises();
-
-    // Assert: verify that error messages properly shown up for all fields.
-    const errorMessages = userPasswordReset.findAll('.form-text-error');
-    expect(errorMessages).toHaveLength(2);
-    errorMessages.forEach((msg) => {
-      expect(msg.text()).not.toBe('');
+      // Assert: verify redirection to home page.
+      expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
-    // Assert: verify API was not called.
-    expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
-    expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
+    it('shows error, clears form, and does not redirect on API failure', async () => {
+      // Ensures that after a failed API call the form is cleared, an error
+      // message appears, and the user stays on the page.
+
+      // Arrange: mock API returning 404 error.
+      const errorResponse = {
+        isAxiosError: true,
+        response: {
+          status: 404,
+          data: {
+            detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
+            instance: '/api/users/password/confirm',
+            status: 404,
+            title: 'User token is missing.',
+            type: 'https://api.userland.org/errors/user/token/missing',
+            errCode: 'user_0011',
+          },
+        },
+      };
+      vi.mocked(backendApiUser.passwordResetConfirm).mockRejectedValue(errorResponse);
+
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
+
+      // Arrange: fill form fields correctly.
+      await wrapper.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
+      await wrapper.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
+
+      // Act: submit form.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+
+      await flushPromises();
+
+      // Assert: verify API was called.
+      expect(backendApiUser.passwordResetConfirm).toHaveBeenCalled();
+
+      // Assert: verify error message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
+      expect(messageStore.messages[0]?.title).toBe('Failure');
+      expect(messageStore.messages[0]?.content).toBe('User token is missing.');
+
+      // Assert: form fields are cleared (clearForm behaviour).
+      const passwordInput = wrapper.find('[data-testid="password"]') as any;
+      const confirmInput = wrapper.find('[data-testid="confirmPassword"]') as any;
+      expect(passwordInput.element.value).toBe('');
+      expect(confirmInput.element.value).toBe('');
+
+      // Assert: verify no redirection occurred.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
   });
 
-  it('shows error when passwords do not match', async () => {
-    // Ensures that after failed action user gets feedback.
+  // //////////////////////////////////////////////////////////////////////////
+  // Client-side validation
 
-    const userPasswordReset = createComponent();
-    const messageStore = useMessageStore();
+  describe('validation', () => {
+    it('blocks submission and shows all errors when form is empty', async () => {
+      // Client-side validation: empty form should show two error messages
+      // and not call the API.
 
-    // Arrange: fill form fields with mismatching passwords.
-    await userPasswordReset.find('[data-testid="password"]').setValue('Password123!');
-    await userPasswordReset.find('[data-testid="confirmPassword"]').setValue('Different123!');
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
 
-    // Act: click on password reset confirmation button.
-    await userPasswordReset.find('button[type="submit"]').trigger('submit');
+      // Act: submit empty form.
+      await wrapper.find('button[type="submit"]').trigger('submit');
 
-    await flushPromises();
+      await flushPromises();
 
-    // Assert: verify that error message is shown for confirmPassword.
-    expect(userPasswordReset.find('#confirmPassword').classes()).toContain('err');
-    const errorMessages = userPasswordReset.findAll('.form-text-error');
-    expect(errorMessages).toHaveLength(1);
-    expect(errorMessages[0]?.text()).not.toBe('');
+      // Assert: both fields show errors.
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(2);
+      errorMessages.forEach((msg) => {
+        expect(msg.text()).toBe('Field cannot be empty.');
+      });
 
-    // Assert: verify API was not called.
-    expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
-    expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
-    expect(mockPush).not.toHaveBeenCalled();
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
+      // Assert: no messages in store.
+      expect(messageStore.messages).toHaveLength(0);
+      // Assert: no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('blocks submission when passwords do not match', async () => {
+      // Client-side validation: mismatched passwords should show an error
+      // only on the confirm-password field.
+
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
+
+      // Arrange: fill form with mismatching passwords.
+      await wrapper.find('[data-testid="password"]').setValue('Password123!');
+      await wrapper.find('[data-testid="confirmPassword"]').setValue('Different123!');
+
+      // Act: submit.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+
+      await flushPromises();
+
+      // Assert: error is on confirmPassword only.
+      expect(wrapper.find('#confirmPassword').classes()).toContain('err');
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
+      expect(errorMessages[0]?.text()).toBe('Passwords do not match.');
+
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
+      // Assert: no messages in store.
+      expect(messageStore.messages).toHaveLength(0);
+      // Assert: no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('blocks submission when password is weak (no digit)', async () => {
+      // Client-side validation: password that meets length requirements but
+      // lacks a digit should be rejected.
+
+      const wrapper = createComponent();
+      const messageStore = useMessageStore();
+
+      // Arrange: fill form with a password missing a digit.
+      await wrapper.find('[data-testid="password"]').setValue('Abcdefgh@');
+      await wrapper.find('[data-testid="confirmPassword"]').setValue('Abcdefgh@');
+
+      // Act: submit.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+
+      await flushPromises();
+
+      // Assert: error is on password field.
+      expect(wrapper.find('#password').classes()).toContain('err');
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
+      expect(errorMessages[0]?.text()).toBe(
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+      );
+
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
+      // Assert: no messages in store.
+      expect(messageStore.messages).toHaveLength(0);
+      // Assert: no redirection.
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+
+    it('shows errors eagerly after first submit attempt', async () => {
+      // After the first submission attempt usedButton is set to true, so
+      // validation errors appear immediately as the user types.
+
+      const wrapper = createComponent();
+
+      // Act: trigger a submit on an empty form to set usedButton = true.
+      await wrapper.find('button[type="submit"]').trigger('submit');
+      await flushPromises();
+
+      // Both fields should show errors.
+      expect(wrapper.findAll('.form-text-error')).toHaveLength(2);
+
+      // Now type a short password — error should appear immediately.
+      await wrapper.find('[data-testid="password"]').setValue('Ab1@');
+
+      // Assert: password error shows eagerly.
+      const passwordErrorSpan = wrapper.find('#password + span.form-text-error');
+      expect(passwordErrorSpan.exists()).toBe(true);
+      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
+    });
   });
 
-  it('fails when no token is provided', async () => {
-    // Ensures that after failed action user gets feedback.
+  // //////////////////////////////////////////////////////////////////////////
+  // Token validation on mount
 
-    // Arrange: set token to undefined for this test.
-    mockRoute.query.token = undefined as any;
+  describe('token-validation', () => {
+    it('rejects missing token and redirects home', async () => {
+      // When the URL has no token, the component should show a failure
+      // message and navigate home without rendering the form.
 
-    // Act: create page. Yes, it is enough here, as it will do stuff on mount already.
-    // oxlint-disable-next-line no-unused-vars
-    const userPasswordReset = createComponent();
-    const messageStore = useMessageStore();
+      // Arrange: set token to undefined.
+      mockRoute.query.token = undefined as any;
 
-    await flushPromises();
+      // Act: create page — will check token on mount.
+      createComponent();
+      const messageStore = useMessageStore();
 
-    // Assert: verify API call was NOT made.
-    expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
+      await flushPromises();
 
-    // Assert: verify failure message.
-    expect(messageStore.messages).toHaveLength(1);
-    expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
-    expect(messageStore.messages[0]?.title).toBe('Invalid token');
-    expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
 
-    // Assert: verify redirection to home page.
-    expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+      // Assert: failure message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+      expect(messageStore.messages[0]?.title).toBe('Invalid token');
+      expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
+
+      // Assert: redirect to home.
+      expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+    });
+
+    it('rejects too-short token and redirects home', async () => {
+      // Tokens shorter than 32 characters should be rejected as malformed.
+
+      // Arrange: set token to a short value.
+      mockRoute.query.token = 'shortToken';
+
+      // Act: create page.
+      createComponent();
+      const messageStore = useMessageStore();
+
+      await flushPromises();
+
+      // Assert: API was not called.
+      expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
+
+      // Assert: failure message.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
+      expect(messageStore.messages[0]?.title).toBe('Invalid token');
+
+      // Assert: redirect to home.
+      expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Rendering
+
+  describe('render', () => {
+    it('renders the heading', () => {
+      // The page should display a title describing the current action.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Title is present.
+      expect(wrapper.find('h2').text()).toBe('Set new password');
+    });
+
+    it('renders a form with two password fields', () => {
+      // The form should have password and confirm-password inputs.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Both inputs exist.
+      expect(wrapper.find('#password').exists()).toBe(true);
+      expect(wrapper.find('#confirmPassword').exists()).toBe(true);
+    });
+
+    it('renders submit button with default label', () => {
+      // The submit button shows the default text before submission starts.
+
+      // Arrange&Act: Mount component.
+      const wrapper = createComponent();
+
+      // Assert: Button shows "Set password".
+      expect(wrapper.find('button[type="submit"]').text()).toBe('Set password');
+    });
   });
 });

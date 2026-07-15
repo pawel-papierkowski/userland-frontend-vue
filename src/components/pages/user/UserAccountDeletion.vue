@@ -4,7 +4,6 @@
  * Note: you need to be logged in to access endpoint successfully.
  */
 import { onMounted, ref } from 'vue';
-import type { Ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -26,7 +25,7 @@ const { t } = useI18n();
 /** Token needed for confirmation of action. */
 const tokenStr = TokenUtils.resolve(route);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 
 //
 
