@@ -52,7 +52,17 @@ describe('DateTimePicker', () => {
     const maxDate: Date = new Date('2027-01-22T00:00:00Z');
 
     // Act: Create the component.
-    const dateTimePicker = createComponent(null, 'someDateTime', 'datetime', false, true, false, false, minDate, maxDate);
+    const dateTimePicker = createComponent(
+      null,
+      'someDateTime',
+      'datetime',
+      false,
+      true,
+      false,
+      false,
+      minDate,
+      maxDate,
+    );
 
     // Assert: State of DatePicker is correct.
     const datePicker = dateTimePicker.findComponent(DatePicker);

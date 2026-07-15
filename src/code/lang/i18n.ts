@@ -1,6 +1,6 @@
 import { createI18n } from 'vue-i18n';
 
-type DeepRecord = { [key: string]: string | DeepRecord };
+type DeepRecord = { [key: string]: string | string[] | DeepRecord };
 
 const enModules = import.meta.glob('@/locales/en/**/*.json', { eager: true });
 const plModules = import.meta.glob('@/locales/pl/**/*.json', { eager: true });
@@ -15,11 +15,7 @@ const plModules = import.meta.glob('@/locales/pl/**/*.json', { eager: true });
 export function deepMerge(target: DeepRecord, source: DeepRecord): DeepRecord {
   const result = { ...target };
   for (const key in source) {
-    if (
-      source[key] instanceof Object &&
-      !Array.isArray(source[key]) &&
-      key in result
-    ) {
+    if (source[key] instanceof Object && !Array.isArray(source[key]) && key in result) {
       result[key] = deepMerge(result[key] as DeepRecord, source[key] as DeepRecord);
     } else {
       result[key] = source[key]!;

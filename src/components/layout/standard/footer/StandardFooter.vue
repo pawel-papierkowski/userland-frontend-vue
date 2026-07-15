@@ -10,9 +10,7 @@ const { t } = useI18n();
 
 <template>
   <footer>
-    <p>
-      {{ t('footer.framework') }}: Vue {{ version }}
-    </p>
+    <p>{{ t('footer.framework') }}: Vue {{ version }}</p>
     <p>
       {{ t('footer.frontendRepository') }}:
       <a href="https://github.com/pawel-papierkowski/userland-frontend-vue" target="_blank" rel="noopener"

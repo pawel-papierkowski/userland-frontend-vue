@@ -152,8 +152,8 @@ const focusNext = () => {
       role="radiogroup"
       tabindex="-1"
       @keydown="handleKeydown"
-      @focus="onGroupFocus">
-
+      @focus="onGroupFocus"
+    >
       <div
         v-for="(option, index) in options"
         :id="optionId(index)"
@@ -170,7 +170,6 @@ const focusNext = () => {
         </div>
         <div class="radiobox-label">{{ showOption(option) }}</div>
       </div>
-
     </div>
   </div>
 </template>

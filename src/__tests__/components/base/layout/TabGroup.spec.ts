@@ -59,7 +59,7 @@ describe('TabGroup', () => {
       expect(tabMenu[2]?.text()).toBe('Tab C');
       expect(tabMenu[2]?.classes()).toEqual(['tabgroup-header-name']);
 
-      const visiblePanel = tabGroup.findAll('[role="tabpanel"]').find(p => p.isVisible());
+      const visiblePanel = tabGroup.findAll('[role="tabpanel"]').find((p) => p.isVisible());
       expect(visiblePanel?.text()).toBe('CONTENT A');
     });
 
@@ -83,7 +83,7 @@ describe('TabGroup', () => {
       expect(tabMenu[2]?.text()).toBe('Tab C');
       expect(tabMenu[2]?.classes()).toEqual(['tabgroup-header-name', 'active']);
 
-      const visiblePanel = tabGroup.findAll('[role="tabpanel"]').find(p => p.isVisible());
+      const visiblePanel = tabGroup.findAll('[role="tabpanel"]').find((p) => p.isVisible());
       expect(visiblePanel?.text()).toBe('CONTENT C');
     });
   });

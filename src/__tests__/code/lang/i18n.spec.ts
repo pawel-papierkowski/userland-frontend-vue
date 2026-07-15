@@ -188,12 +188,7 @@ describe('i18n instance', () => {
     // Translations from the en locale directory should be available.
 
     // Arrange: known keys from the en locale files.
-    const knownKeys = [
-      'app.title',
-      'header.general.home',
-      'header.user.login',
-      'footer.frontendRepository',
-    ];
+    const knownKeys = ['app.title', 'header.general.home', 'header.user.login', 'footer.frontendRepository'];
 
     // Act: Translate each key.
     for (const key of knownKeys) {

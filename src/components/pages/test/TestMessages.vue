@@ -28,7 +28,7 @@ const form: Ref<TestAreaMessageForm> = ref({
  */
 const genMessage = (level: EnMessageLevel) => {
   form.value.count++;
-  let duration: number|undefined = form.value.time;
+  let duration: number | undefined = form.value.time;
   let title = form.value.title;
   let content = form.value.content;
 
@@ -132,7 +132,9 @@ const logVue = (level: EnMessageLevel) => {
         </button>
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.messages.msgButtons.error.label') }}</button>
 
-        <div class="items-horizontal"><input type="range" min="-1" max="100" step="1" v-model="form.time" /> {{ form.time }}</div>
+        <div class="items-horizontal">
+          <input type="range" min="-1" max="100" step="1" v-model="form.time" /> {{ form.time }}
+        </div>
         <TextBox
           id="titleTextbox"
           v-model="form.title"

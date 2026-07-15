@@ -6,7 +6,7 @@ import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 //
 
 /** Convenience function to create component. */
-function createComponent(canSpin: boolean, descr: string|undefined, display: string, size: string) {
+function createComponent(canSpin: boolean, descr: string | undefined, display: string, size: string) {
   return mount(SpinnerTorus, {
     props: {
       canSpin,

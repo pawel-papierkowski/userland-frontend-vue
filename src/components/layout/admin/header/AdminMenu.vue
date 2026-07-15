@@ -38,11 +38,9 @@ function onKeydown(event: KeyboardEvent) {
       <div tabindex="-1" class="dropdown-content">
         <router-link class="nav-major" :to="{ name: 'admin-profile' }">{{ t('header.user.profile') }}</router-link>
         <hr />
-        <div
-          class="nav-major"
-          tabindex="0"
-          @click="handleLogout()"
-          @keydown="onKeydown">{{ t('header.user.logout') }}</div>
+        <div class="nav-major" tabindex="0" @click="handleLogout()" @keydown="onKeydown">
+          {{ t('header.user.logout') }}
+        </div>
       </div>
     </template>
   </DropdownMenu>

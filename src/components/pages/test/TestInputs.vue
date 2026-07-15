@@ -92,13 +92,7 @@ const show = (value: string | boolean | null): string => {
         <div>{{ show(form.comboBox) }}</div>
 
         <label for="testCheckbox">{{ t('testArea.inputs.checkBox.label') }}:</label>
-        <CheckBox
-          id="testCheckbox"
-          v-model="form.checkBox"
-          :allowNull="true"
-          :disabled="disabled"
-          :invalid="invalid"
-        />
+        <CheckBox id="testCheckbox" v-model="form.checkBox" :allowNull="true" :disabled="disabled" :invalid="invalid" />
         <div>{{ show(form.checkBox) }}</div>
 
         <label for="testRadiobox">{{ t('testArea.inputs.radioBox.label') }}:</label>

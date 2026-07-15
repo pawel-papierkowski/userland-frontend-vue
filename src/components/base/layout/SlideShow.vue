@@ -184,13 +184,10 @@ onUnmounted(() => {
     :data-testid="`slideshow_${id}`"
     role="region"
     :aria-label="t(langPrefix + '.label', { id: id || 'slideshow' })"
-    @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()">
-    <div
-      ref="tablistRef"
-      class="slideshow-header"
-      role="tablist"
-      @keydown="onTablistKeydown"
-    >
+    @mouseenter="stopAutoplay()"
+    @mouseleave="startAutoplay()"
+  >
+    <div ref="tablistRef" class="slideshow-header" role="tablist" @keydown="onTablistKeydown">
       <!-- Loop through all slot names passed to this component. -->
       <div
         v-for="(slotName, index) in activeSlots"

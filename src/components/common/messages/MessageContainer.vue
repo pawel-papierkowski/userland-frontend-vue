@@ -20,11 +20,7 @@ const messageStore = useMessageStore();
 </script>
 
 <template>
-  <div
-    class="message-wrapper"
-    data-testid="msgContainer"
-    :aria-label="t('msgs.aria.container')"
-  >
+  <div class="message-wrapper" data-testid="msgContainer" :aria-label="t('msgs.aria.container')">
     <TransitionGroup name="msg-list" tag="div" class="messages">
       <div v-for="msg in messageStore.messages" :key="msg.id" class="msg-item">
         <MessageBox
@@ -101,13 +97,13 @@ const messageStore = useMessageStore();
 
 /* Entering message container: end state. */
 .msg-list-enter-to {
-  opacity: 1.0;
+  opacity: 1;
   transform: none;
 }
 
 /* Leaving message container: start state. */
 .msg-list-leave-from {
-  opacity: 1.0;
+  opacity: 1;
   transform: none;
 }
 

@@ -102,9 +102,7 @@ function handleKeydown(event: KeyboardEvent) {
     tabindex="0"
     @keydown="handleKeydown"
   >
-    <div class="message-close-btn" :aria-label="t('msgs.aria.close')" @click.stop="emit('close')">
-      &times;
-    </div>
+    <div class="message-close-btn" :aria-label="t('msgs.aria.close')" @click.stop="emit('close')">&times;</div>
 
     <div class="message-whole">
       <div class="message-icon" aria-hidden="true">{{ icon }}</div>

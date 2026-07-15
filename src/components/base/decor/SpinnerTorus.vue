@@ -40,7 +40,6 @@ const role = computed(() => {
   if (!props.descr) return undefined;
   return 'status';
 });
-
 </script>
 
 <template>
@@ -48,8 +47,8 @@ const role = computed(() => {
     class="spinner-wrapper"
     :style="{ display: display, width: size, height: size }"
     :role="role"
-    :aria-label="descr">
-
+    :aria-label="descr"
+  >
     <svg
       class="spinner spins"
       :class="{ paused: !canSpin }"

@@ -43,15 +43,40 @@ const routes = [
   // STANDARD WEBPAGES
 
   { name: 'home', path: '/', component: UserLandHome, meta: meta4unlogged },
-  { name: 'testArea', path: '/testArea', component: () => import('@/components/pages/test/UserLandTestArea.vue'), meta: meta4unlogged },
-  { name: 'debugArea', path: '/debugArea', component: () => import('@/components/pages/test/UserLandDebugArea.vue'), meta: meta4unlogged },
-  { name: 'memberArea', path: '/memberArea', component: () => import('@/components/pages/member/UserLandMember.vue'), meta: meta4logged },
+  {
+    name: 'testArea',
+    path: '/testArea',
+    component: () => import('@/components/pages/test/UserLandTestArea.vue'),
+    meta: meta4unlogged,
+  },
+  {
+    name: 'debugArea',
+    path: '/debugArea',
+    component: () => import('@/components/pages/test/UserLandDebugArea.vue'),
+    meta: meta4unlogged,
+  },
+  {
+    name: 'memberArea',
+    path: '/memberArea',
+    component: () => import('@/components/pages/member/UserLandMember.vue'),
+    meta: meta4logged,
+  },
   { name: 'registration', path: '/registration', component: UserRegistration, meta: meta4unlogged },
   { name: 'login', path: '/login', component: UserLandLogin, meta: meta4unlogged },
 
   // User-related pages.
-  { name: 'user-activate', path: '/user/activate', component: () => import('@/components/pages/user/UserActivation.vue'), meta: meta4unlogged },
-  { name: 'user-profile', path: '/user/profile', component: () => import('@/components/pages/common/user/UserLandProfile.vue'), meta: meta4logged },
+  {
+    name: 'user-activate',
+    path: '/user/activate',
+    component: () => import('@/components/pages/user/UserActivation.vue'),
+    meta: meta4unlogged,
+  },
+  {
+    name: 'user-profile',
+    path: '/user/profile',
+    component: () => import('@/components/pages/common/user/UserLandProfile.vue'),
+    meta: meta4logged,
+  },
 
   // Starting point for user actions that require additional security.
   {
@@ -74,19 +99,53 @@ const routes = [
   },
 
   // These pages are accessible only via email: link with token.
-  { name: 'user-passwordReset', path: '/user/passwordReset', component: () => import('@/components/pages/user/UserPasswordReset.vue'), meta: meta4unlogged },
-  { name: 'user-emailChange', path: '/user/emailChange', component: () => import('@/components/pages/user/UserEmailChange.vue'), meta: meta4unlogged },
-  { name: 'user-accountDel', path: '/user/accountDel', component: () => import('@/components/pages/user/UserAccountDeletion.vue'), meta: meta4unlogged },
+  {
+    name: 'user-passwordReset',
+    path: '/user/passwordReset',
+    component: () => import('@/components/pages/user/UserPasswordReset.vue'),
+    meta: meta4unlogged,
+  },
+  {
+    name: 'user-emailChange',
+    path: '/user/emailChange',
+    component: () => import('@/components/pages/user/UserEmailChange.vue'),
+    meta: meta4unlogged,
+  },
+  {
+    name: 'user-accountDel',
+    path: '/user/accountDel',
+    component: () => import('@/components/pages/user/UserAccountDeletion.vue'),
+    meta: meta4unlogged,
+  },
 
   // ADMINISTRATION PANEL PAGES
 
   { name: 'admin-login', path: '/admin', component: UserLandLogin, meta: meta4adminLogin },
-  { name: 'admin-main', path: '/admin/main', component: () => import('@/components/pages/admin/general/AdminMain.vue'), meta: meta4admin },
-  { name: 'admin-profile', path: '/admin/profile', component: () => import('@/components/pages/common/user/UserLandProfile.vue'), meta: meta4admin },
-  { name: 'admin-user', path: '/admin/user', component: () => import('@/components/pages/admin/user/main/AdminUser.vue'), meta: meta4admin },
+  {
+    name: 'admin-main',
+    path: '/admin/main',
+    component: () => import('@/components/pages/admin/general/AdminMain.vue'),
+    meta: meta4admin,
+  },
+  {
+    name: 'admin-profile',
+    path: '/admin/profile',
+    component: () => import('@/components/pages/common/user/UserLandProfile.vue'),
+    meta: meta4admin,
+  },
+  {
+    name: 'admin-user',
+    path: '/admin/user',
+    component: () => import('@/components/pages/admin/user/main/AdminUser.vue'),
+    meta: meta4admin,
+  },
 
   // Catch-all 404 route MUST be at the end
-  { path: '/:pathMatch(.*)*', component: () => import('@/components/pages/common/AppNotFound.vue'), meta: meta4unlogged },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/components/pages/common/AppNotFound.vue'),
+    meta: meta4unlogged,
+  },
 ];
 
 const router = createRouter({

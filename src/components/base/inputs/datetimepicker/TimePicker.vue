@@ -264,7 +264,9 @@ const onHourKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedHour.value =
         focusedHour.value !== null
-          ? (focusedHour.value > 0 ? focusedHour.value - 1 : 23)
+          ? focusedHour.value > 0
+            ? focusedHour.value - 1
+            : 23
           : (selectedHour.value ?? viewHour.value ?? 0);
       scrollHourIntoView(focusedHour.value);
       break;
@@ -272,7 +274,9 @@ const onHourKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedHour.value =
         focusedHour.value !== null
-          ? (focusedHour.value < 23 ? focusedHour.value + 1 : 0)
+          ? focusedHour.value < 23
+            ? focusedHour.value + 1
+            : 0
           : (selectedHour.value ?? viewHour.value ?? 0);
       scrollHourIntoView(focusedHour.value);
       break;
@@ -312,7 +316,9 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedMinute.value =
         focusedMinute.value !== null
-          ? (focusedMinute.value > 0 ? focusedMinute.value - 1 : 59)
+          ? focusedMinute.value > 0
+            ? focusedMinute.value - 1
+            : 59
           : (selectedMinute.value ?? viewMinute.value ?? 0);
       scrollMinuteIntoView(focusedMinute.value);
       break;
@@ -320,7 +326,9 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
       focusedMinute.value =
         focusedMinute.value !== null
-          ? (focusedMinute.value < 59 ? focusedMinute.value + 1 : 0)
+          ? focusedMinute.value < 59
+            ? focusedMinute.value + 1
+            : 0
           : (selectedMinute.value ?? viewMinute.value ?? 0);
       scrollMinuteIntoView(focusedMinute.value);
       break;
@@ -443,7 +451,7 @@ const setupFocus = (force: boolean) => {
     focusedHour.value = selDateTime.value ? selDateTime.value.getUTCHours() : viewHour.value;
   if (force || focusedMinute.value === null)
     focusedMinute.value = selDateTime.value ? selDateTime.value.getUTCMinutes() : viewMinute.value;
-}
+};
 
 /**
  * Resolve class of hour item.

@@ -3,7 +3,7 @@
 /** Form for messages area. */
 export type TestAreaMessageForm = {
   count: number;
-  time: number|undefined;
+  time: number | undefined;
   title: string;
   content: string;
 };

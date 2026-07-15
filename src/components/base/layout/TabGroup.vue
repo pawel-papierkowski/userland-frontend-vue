@@ -103,12 +103,7 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <div class="tabgroup-wrapper">
-    <div
-      ref="tablistRef"
-      class="tabgroup-header"
-      role="tablist"
-      @keydown="onKeydown"
-    >
+    <div ref="tablistRef" class="tabgroup-header" role="tablist" @keydown="onKeydown">
       <!-- Loop through all slot names passed to this component. -->
       <div
         v-for="slotName in activeSlots"
