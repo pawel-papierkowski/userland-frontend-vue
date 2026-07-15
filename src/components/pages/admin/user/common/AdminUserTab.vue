@@ -85,7 +85,7 @@ const data: Ref<{ entries: E[]; tableMeta: TableMetaResp }> = ref({
 });
 
 /** Current page. */
-const currPage: Ref<number> = ref(0);
+const currPage = ref(0);
 /** Current sort column. Null means default sorting. */
 const currSortBy: Ref<string | null> = ref(null);
 /** Current sort order. Null means default sort order. */
@@ -94,11 +94,11 @@ const currSortOrder: Ref<string | null> = ref(null);
 /** Reference to tab component. */
 const tablePageRef = ref<TablePageExpose | null>(null);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 /** True if data load is in progress, otherwise false. */
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 /** Can spinner spin? */
-const canSpin: Ref<boolean> = ref(true);
+const canSpin = ref(true);
 
 // COMPUTATIONS
 

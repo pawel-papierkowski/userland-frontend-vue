@@ -49,13 +49,13 @@ const slots = useSlots();
 /** Extracted names (keys) of the slots that were actually provided. */
 const activeSlots = computed(() => Object.keys(slots));
 /** Currently selected slot. */
-const selectedSlot: Ref<string> = ref(activeSlots?.value[0] || '');
+const selectedSlot = ref(activeSlots?.value[0] || '');
 /** Timer for automatic slideshow. */
 let autoplayTimer: ReturnType<typeof setInterval> | null = null;
 /** Timer for slideshow delay. */
 let delayTimer: ReturnType<typeof setTimeout> | null = null;
 /** If true, autoplay is stopped and cannot resume. */
-const stopped: Ref<boolean> = ref(false);
+const stopped = ref(false);
 
 //
 

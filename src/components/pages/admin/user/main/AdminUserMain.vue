@@ -37,11 +37,11 @@ const diffForm: Ref<UserFullDataForm> = ref({ ...emptyUserForm });
 const selUserRecord = defineModel<UserTableEntry | null>();
 
 /** True if busy doing something, otherwise false. Used to disable buttons. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
-const isLoading: Ref<boolean> = ref(false);
+const isLoading = ref(false);
 /** Can spinner spin? */
-const canSpin: Ref<boolean> = ref(true);
+const canSpin = ref(true);
 
 /** Change in selection requires reload of form. */
 watch(selUserRecord, () => {

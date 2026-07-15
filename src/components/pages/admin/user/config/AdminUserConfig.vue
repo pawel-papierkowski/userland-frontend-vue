@@ -6,7 +6,6 @@
  * - v-model - Holds selected user.
  */
 import { ref, reactive, shallowRef, watch } from 'vue';
-import type { Ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import backendApi from '@/services/api-common.ts';
@@ -53,9 +52,9 @@ const formEntry: UserConfigEntryEditForm = reactive({
 /** Reference to tab component. */
 const tabRef = ref<AdminUserTabExpose | null>(null);
 /** True if adding new entry. */
-const addNewEntry: Ref<boolean> = ref(false);
+const addNewEntry = ref(false);
 /** True if busy executing options. */
-const isBusyOptions: Ref<boolean> = ref(false);
+const isBusyOptions = ref(false);
 
 //
 

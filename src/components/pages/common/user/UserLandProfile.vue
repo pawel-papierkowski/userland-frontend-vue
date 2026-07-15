@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** User profile page. */
 import { onMounted, reactive, ref, computed } from 'vue';
-import type { Ref, ComputedRef } from 'vue';
+import type { ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -33,13 +33,13 @@ const form: UserEditForm = reactive({
 });
 
 /** True if submit button was clicked at least once. */
-const usedButton: Ref<boolean> = ref(false);
+const usedButton = ref(false);
 /** True if busy doing something, otherwise false. Used to disable edit button. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
-const isLoading: Ref<boolean> = ref(true);
+const isLoading = ref(true);
 /** Can spinner spin? */
-const canSpin: Ref<boolean> = ref(true);
+const canSpin = ref(true);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyField(form.username, usedButton.value);

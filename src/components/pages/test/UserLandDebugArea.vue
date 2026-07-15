@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /** Page that provides various debug information. */
 import { ref } from 'vue';
-import type { Ref } from 'vue';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
@@ -18,7 +17,7 @@ const log = useLogger();
 const { t } = useI18n();
 
 /** True if option call is in progress, otherwise false. Used to disable option buttons. */
-const isOptionBusy: Ref<boolean> = ref(false);
+const isOptionBusy = ref(false);
 
 //
 

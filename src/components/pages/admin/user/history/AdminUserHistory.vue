@@ -6,7 +6,6 @@
  * - v-model - Holds selected user.
  */
 import { onActivated, ref, reactive, watch } from 'vue';
-import type { Ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -42,7 +41,7 @@ const formFilter: UserHistoryTableFilterForm = reactive({
 /** Reference to tab component. */
 const tabRef = ref<AdminUserTabExpose | null>(null);
 /** True if table should be reloaded. */
-const shouldReload: Ref<boolean> = ref(false);
+const shouldReload = ref(false);
 
 //
 

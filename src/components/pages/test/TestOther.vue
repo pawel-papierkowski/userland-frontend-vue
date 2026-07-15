@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const { t } = useI18n();
 
-const canSpin: Ref<boolean> = ref(true);
+const canSpin = ref(true);
 
 /** Starts spinner. */
 const startSpinner = () => {

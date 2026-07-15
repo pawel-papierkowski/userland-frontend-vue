@@ -36,7 +36,7 @@ const slots = useSlots();
 /** Extracted names (keys) of the slots that were actually provided. */
 const activeSlots = computed(() => Object.keys(slots));
 /** Currently selected slot. */
-const selectedSlot: Ref<string> = ref(activeSlots?.value[0] || '');
+const selectedSlot = ref(activeSlots?.value[0] || '');
 
 //
 
