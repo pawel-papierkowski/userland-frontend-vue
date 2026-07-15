@@ -198,9 +198,7 @@ describe('UserAccountDeletion', () => {
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
-      expect(messageStore.messages[0]?.content).toBe(
-        'No token provided or it is malformed.',
-      );
+      expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
       // Assert: redirect to home.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });

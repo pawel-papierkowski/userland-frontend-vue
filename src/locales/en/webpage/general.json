@@ -295,6 +295,7 @@
           "disabled": "Disabled DEL."
         }
       },
+      "loading": "Loading table data...",
       "page": {
         "empty": "⚠️ No entries to show. ⚠️"
       }

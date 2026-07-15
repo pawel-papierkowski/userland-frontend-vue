@@ -20,9 +20,8 @@ interface TestForm {
   [key: string]: any;
 }
 
-/** Convenience function to create component. Version with slots. */
-function createComponentWithSlots(
-  slots: Record<string, string>,
+/** Convenience function to create component with optional slots. */
+function createComponent(
   modelValue: TestEntry | null,
   formEntry: TestForm | null,
   tableId: string,
@@ -31,6 +30,7 @@ function createComponentWithSlots(
   entry: TestEntry | null,
   inlineEdit?: boolean,
   rowMeta?: RowMeta | null,
+  slots?: Record<string, string>,
 ) {
   return mount(TableRow, {
     props: {
@@ -43,28 +43,21 @@ function createComponentWithSlots(
       inlineEdit,
       rowMeta,
     },
-    slots,
+    slots: slots ?? {},
   });
 }
 
 //
 
 function createEntry(): TestEntry {
-  return {
-    id: 42,
-    name: 'Entry Name',
-    value: 'Entry Value',
-  };
+  return { id: 42, name: 'Entry Name', value: 'Entry Value' };
 }
 
 function createForm(): TestForm {
-  return {
-    name: 'Form Name',
-    value: 'Form Value',
-  };
+  return { name: 'Form Name', value: 'Form Value' };
 }
 
-/** Create test data for entire row. */
+/** Create a standard set of four columns (one hidden, one custom). */
 function createData(): { testEntry: TestEntry; testForm: TestForm; columns: ColumnData[] } {
   const testEntry: TestEntry = createEntry();
   const testForm: TestForm = createForm();
@@ -109,63 +102,150 @@ function createData(): { testEntry: TestEntry; testForm: TestForm; columns: Colu
 
 /** Tests of TableRow component. */
 describe('TableRow', () => {
-  it('correct for typical columns, not selected row, inline edit false', async () => {
-    // Simple case: show cells in row.
+  // //////////////////////////////////////////////////////////////////////////
+  // Rendering
 
-    // Arrange: Prepare data for row.
-    const { testEntry, testForm, columns } = createData();
+  describe('rendering', () => {
+    it('renders visible cells with correct content when row is not selected', () => {
+      // Arrange: typical columns, row not selected.
+      const { testEntry, testForm, columns } = createData();
 
-    // Act: Create component.
-    const tableRow = createComponentWithSlots(
-      { column_options: 'OPTIONS' },
-      null,
-      testForm,
-      'testTable',
-      columns,
-      0,
-      testEntry,
-      false,
-      null,
-    );
+      // Act: Create component.
+      const wrapper = createComponent(null, testForm, 'testTable', columns, 0, testEntry, false, null, {
+        column_options: 'OPTIONS',
+      });
 
-    // Assert: Cells in row are present and correct.
-    const cells = tableRow.findAll('.table-cell');
-    expect(cells).toHaveLength(3); // column 'id' is hidden, so only 3 columns visible
-    expect(cells[0]?.text()).toBe('Entry Name');
-    expect(cells[1]?.text()).toBe('Entry Value');
-    expect(cells[2]?.text()).toBe('OPTIONS');
+      // Assert: Root has correct data-testid.
+      const root = wrapper.find('[data-testid="row_testTable_0"]');
+      expect(root.exists()).toBe(true);
+
+      // Assert: Only visible columns are rendered (id is hidden).
+      const cells = root.findAll('.table-cell');
+      expect(cells).toHaveLength(3);
+
+      // Assert: Each cell shows the correct content.
+      expect(cells[0]?.text()).toBe('Entry Name');
+      expect(cells[1]?.text()).toBe('Entry Value');
+      expect(cells[2]?.text()).toBe('OPTIONS');
+    });
+
+    it('shows empty cells when entry is null', () => {
+      // Arrange: Typical columns, null entry.
+      const { testEntry: _te, testForm, columns } = createData();
+
+      // Act: Create component with null entry.
+      const wrapper = createComponent(null, testForm, 'testTable', columns, 0, null, false, null, {
+        column_options: 'OPTIONS',
+      });
+
+      // Assert: Each data cell shows empty text (custom cell still shows slot).
+      const cells = wrapper.findAll('.table-cell');
+      expect(cells).toHaveLength(3);
+      expect(cells[0]?.text()).toBe('');
+      expect(cells[1]?.text()).toBe('');
+      expect(cells[2]?.text()).toBe('OPTIONS');
+    });
+
+    it('renders no cells when columns array is empty', () => {
+      // Arrange: Empty columns array.
+      const { testEntry, testForm } = createData();
+
+      // Act: Create component with no columns.
+      const wrapper = createComponent(null, testForm, 'testTable', [], 0, testEntry, false, null);
+
+      // Assert: No cells are rendered.
+      expect(wrapper.findAll('.table-cell')).toHaveLength(0);
+    });
   });
 
-  it('correct for typical columns, selected row, inline edit true', async () => {
-    // Simple case: show editable cells in row.
+  // //////////////////////////////////////////////////////////////////////////
+  // Edit mode
 
-    // Arrange: Prepare data for row.
-    const { testEntry, testForm, columns } = createData();
+  describe('edit mode', () => {
+    it('renders input for editable column when row is selected and inlineEdit is on', () => {
+      // Arrange: Row selected, inline edit enabled.
+      const { testEntry, testForm, columns } = createData();
 
-    // Act: Create component.
-    const tableRow = createComponentWithSlots(
-      { column_options: 'OPTIONS' },
-      testEntry,
-      testForm,
-      'testTable',
-      columns,
-      0,
-      testEntry,
-      true,
-      null,
-    );
+      // Act: Create component.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', columns, 0, testEntry, true, null, {
+        column_options: 'OPTIONS',
+      });
 
-    // Assert: Cells in row are present and correct.
-    const cells = tableRow.findAll('.table-cell');
-    expect(cells).toHaveLength(3); // column 'id' is hidden, so only 3 columns visible
-    expect(cells[0]?.text()).toBe('Entry Name'); // column 'name' is not editable
+      // Assert: Three visible cells.
+      const cells = wrapper.findAll('.table-cell');
+      expect(cells).toHaveLength(3);
 
-    expect(cells[1]?.text()).toBe(''); // column 'value' is editable, so it has input element by default
-    const inputInCell = cells[1]?.find('input');
-    expect(inputInCell?.exists()).toBe(true);
-    expect(inputInCell?.classes()).toEqual([]); // no field metadata
-    expect(inputInCell?.element.value).toBe('Form Value'); // content from testForm
+      // Assert: Non-editable 'name' column shows text.
+      expect(cells[0]?.text()).toBe('Entry Name');
 
-    expect(cells[2]?.text()).toBe('OPTIONS'); // column 'options' is fully custom
+      // Assert: Editable 'value' column shows an input with form data.
+      const inputInCell = cells[1]?.find('input');
+      expect(inputInCell?.exists()).toBe(true);
+      expect(inputInCell?.classes()).toEqual([]);
+      expect(inputInCell?.element.value).toBe('Form Value');
+
+      // Assert: Custom 'options' column shows slot content (text is empty
+      // because input swallowed it).
+      expect(cells[2]?.text()).toBe('OPTIONS');
+    });
+
+    it('shows text instead of input when formEntry is null', () => {
+      // Arrange: Row selected, inline edit on, but no form entry provided.
+      const { testEntry, testForm: _tf, columns } = createData();
+
+      // Act: Create component with null formEntry.
+      const wrapper = createComponent(testEntry, null, 'testTable', columns, 0, testEntry, true, null, {
+        column_options: 'OPTIONS',
+      });
+
+      // Assert: Editable column shows entry text instead of input.
+      const cells = wrapper.findAll('.table-cell');
+      expect(cells).toHaveLength(3);
+      expect(cells[0]?.text()).toBe('Entry Name');
+
+      // Editable column with null formEntry — should fall back to text.
+      expect(cells[1]?.text()).toBe('Entry Value');
+      expect(cells[1]?.find('input').exists()).toBe(false);
+
+      expect(cells[2]?.text()).toBe('OPTIONS');
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Row metadata
+
+  describe('row meta', () => {
+    it('applies field meta CSS to the editable cell input', () => {
+      // Arrange: Row metadata with a CSS class for the 'value' column.
+      const { testEntry, testForm, columns } = createData();
+      const rowMeta: RowMeta = { value: { css: 'err' } };
+
+      // Act: Row selected, inline edit on, with rowMeta.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', columns, 0, testEntry, true, rowMeta, {
+        column_options: 'OPTIONS',
+      });
+
+      // Assert: Editable cell's input has the CSS class from meta.
+      const cells = wrapper.findAll('.table-cell');
+      const inputInCell = cells[1]?.find('input');
+      expect(inputInCell?.exists()).toBe(true);
+      expect(inputInCell?.classes()).toEqual(['err']);
+    });
+
+    it('ignores rowMeta when it is null', () => {
+      // Arrange: rowMeta is null (default).
+      const { testEntry, testForm, columns } = createData();
+
+      // Act: Row selected, inline edit on, null rowMeta.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', columns, 0, testEntry, true, null, {
+        column_options: 'OPTIONS',
+      });
+
+      // Assert: Editable cell's input has no extra CSS classes.
+      const cells = wrapper.findAll('.table-cell');
+      const inputInCell = cells[1]?.find('input');
+      expect(inputInCell?.exists()).toBe(true);
+      expect(inputInCell?.classes()).toEqual([]);
+    });
   });
 });

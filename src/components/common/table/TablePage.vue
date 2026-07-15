@@ -261,7 +261,13 @@ defineExpose({
 
     <template v-if="isLoading">
       <div class="spinner-container table-entire-row">
-        <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
+        <SpinnerTorus
+          data-testid="spinner"
+          display="block"
+          size="100px"
+          :canSpin="canSpin"
+          :descr="t('test.table.loading')"
+        />
       </div>
     </template>
 

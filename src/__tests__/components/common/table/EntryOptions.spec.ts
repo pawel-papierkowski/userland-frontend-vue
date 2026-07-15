@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 
@@ -41,7 +41,7 @@ function createComponent(
 
 //
 
-function createData(): EntryMeta {
+function createMeta(): EntryMeta {
   return {
     options: {
       info: {
@@ -62,11 +62,7 @@ function createData(): EntryMeta {
 }
 
 function createEntry(): TestEntry {
-  return {
-    id: 42,
-    name: 'Entry Name',
-    value: 'Entry Value',
-  };
+  return { id: 42, name: 'Entry Name', value: 'Entry Value' };
 }
 
 function createActions(): Record<string, (entry: Record<string, any> | null) => void | Promise<void>> {
@@ -80,73 +76,195 @@ function createActions(): Record<string, (entry: Record<string, any> | null) => 
 
 /** Tests of EntryOptions component. */
 describe('EntryOptions', () => {
-  it('presents properly', async () => {
-    // Ensure that entry options shows correctly.
-
-    // Arrange: Data.
-    const meta = createData();
-    const entry = createEntry();
-    const actions = createActions();
-
-    // Act: Create component.
-    const entryOptions = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
-
-    // Assert: Entries are shown correctly.
-    const options = entryOptions.findAll('.entry-btn');
-    expect(options).toHaveLength(2); // note 'info' button is not present as it is invisible
-    expect(options[0]?.text()).toBe('A');
-    expect(options[0]?.attributes('title')).toBe('Execute ADD.');
-    expect(options[1]?.text()).toBe('D');
-    expect(options[1]?.attributes('title')).toBe('Disabled DEL.');
+  beforeEach(() => {
+    vi.restoreAllMocks();
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Rendering
 
-  it('calls action when clicking enabled option', async () => {
-    // Ensure that entry options can be clicked and action was correctly handled.
+  describe('rendering', () => {
+    it('shows visible options with correct label and tooltip', () => {
+      // Arrange: Standard meta with one INVISIBLE, one ENABLED, one DISABLED.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
 
-    // Arrange: Data.
-    const meta = createData();
-    const entry = createEntry();
-    const actions = createActions();
+      // Act: Create component.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
 
-    // Act: Create component.
-    const entryOptions = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
-    const options = entryOptions.findAll('.entry-btn');
+      // Assert: Only visible options are rendered.
+      const options = wrapper.findAll('.entry-btn');
+      expect(options).toHaveLength(2);
 
-    // Act: Click 'add' button.
-    await options[0]?.trigger('click'); // add is first visible button
-    await nextTick();
+      // Assert: First visible option is 'add' (ENABLED).
+      expect(options[0]?.text()).toBe('A');
+      expect(options[0]?.attributes('title')).toBe('Execute ADD.');
 
-    // Assert: 'add' action was called with correct parameter.
-    expect(actions.add).toHaveBeenCalledTimes(1);
-    expect(actions.add).toHaveBeenCalledWith(entry);
+      // Assert: Second visible option is 'del' (DISABLED).
+      expect(options[1]?.text()).toBe('D');
+      expect(options[1]?.attributes('title')).toBe('Disabled DEL.');
+    });
 
-    // Act: Click 'del' button.
-    await options[1]?.trigger('click'); // del is second visible button
-    await nextTick();
+    it('renders nothing when meta is null', () => {
+      // Arrange: Null metadata.
+      const entry = createEntry();
+      const actions = createActions();
 
-    // Assert: 'del' action was NOT called, as this option is disabled.
-    expect(actions.del).not.toHaveBeenCalled();
+      // Act: Create component with null meta.
+      const wrapper = createComponent(null, entry, 'test.table.entryOptions', actions, false);
+
+      // Assert: No buttons rendered.
+      expect(wrapper.findAll('.entry-btn')).toHaveLength(0);
+    });
+
+    it('renders nothing when meta.options is null', () => {
+      // Arrange: Meta with null options.
+      const meta: EntryMeta = { options: null, data: null };
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+
+      // Assert: No buttons rendered.
+      expect(wrapper.findAll('.entry-btn')).toHaveLength(0);
+    });
+
+    it('renders nothing when meta.options is empty', () => {
+      // Arrange: Meta with empty options.
+      const meta: EntryMeta = { options: {}, data: null };
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+
+      // Assert: No buttons rendered.
+      expect(wrapper.findAll('.entry-btn')).toHaveLength(0);
+    });
   });
 
-  it('cannot do anything when busy', async () => {
-    // Ensure that entry options can be clicked and action was correctly handled.
+  // //////////////////////////////////////////////////////////////////////////
+  // Interaction
 
-    // Arrange: Data.
-    const meta = createData();
-    const entry = createEntry();
-    const actions = createActions();
+  describe('interaction', () => {
+    it('calls the matching action with the entry when clicking an enabled option', async () => {
+      // Arrange: Standard data.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
 
-    // Act: Create component.
-    const entryOptions = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
-    const options = entryOptions.findAll('.entry-btn');
+      // Act: Create component.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
 
-    // Act: Click 'add' button.
-    await options[0]?.trigger('click'); // add is first visible button
-    await nextTick();
+      // Act: Click the 'add' (ENABLED) button.
+      await options[0]?.trigger('click');
+      await nextTick();
 
-    // Assert: 'add' action was NOT called, as component is in busy state.
-    expect(actions.add).not.toHaveBeenCalled();
+      // Assert: 'add' action was called with the entry.
+      expect(actions.add).toHaveBeenCalledTimes(1);
+      expect(actions.add).toHaveBeenCalledWith(entry);
+
+      // Act: Click the 'del' (DISABLED) button.
+      await options[1]?.trigger('click');
+      await nextTick();
+
+      // Assert: 'del' action was NOT called (option is disabled).
+      expect(actions.del).not.toHaveBeenCalled();
+    });
+
+    it('does not call any action when isBusy is true', async () => {
+      // Arrange: Busy state.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component with isBusy=true.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Click the 'add' button.
+      await options[0]?.trigger('click');
+      await nextTick();
+
+      // Assert: No action was called.
+      expect(actions.add).not.toHaveBeenCalled();
+    });
+
+    it('calls action with null entry when entry is null', async () => {
+      // Arrange: Null entry.
+      const meta = createMeta();
+      const actions = createActions();
+
+      // Act: Create component with null entry.
+      const wrapper = createComponent(meta, null, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Click the 'add' button.
+      await options[0]?.trigger('click');
+      await nextTick();
+
+      // Assert: Action was called with null.
+      expect(actions.add).toHaveBeenCalledWith(null);
+    });
+
+    it('warns via console when action key is missing from actions map', async () => {
+      // Arrange: Meta with an option that has no matching action.
+      const meta = createMeta();
+      const entry = createEntry();
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      // Act: Create component without 'add' action (only 'del').
+      const actions = { del: vi.fn<() => void>() };
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Click the first button ('add') which has no matching action.
+      await options[0]?.trigger('click');
+      await nextTick();
+
+      // Assert: Console.warn was called with a message about missing action.
+      expect(warnSpy).toHaveBeenCalledWith("Action 'add' not implemented in parent.");
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Disabled state
+
+  describe('disabled state', () => {
+    it('adds disabled CSS class to DISABLED and busy options', () => {
+      // Arrange: Standard meta.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component, not busy.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Assert: ENABLED option does not have 'disabled' class.
+      expect(options[0]?.classes()).not.toContain('disabled');
+
+      // Assert: DISABLED option has 'disabled' class.
+      expect(options[1]?.classes()).toContain('disabled');
+    });
+
+    it('adds disabled class to all options when busy', () => {
+      // Arrange: Busy state.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component with isBusy=true.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Assert: All visible options have 'disabled' class.
+      options.forEach((opt) => {
+        expect(opt.classes()).toContain('disabled');
+      });
+    });
   });
 });

@@ -295,6 +295,7 @@
           "disabled": "Zablokowane DEL."
         }
       },
+      "loading": "Ładowanie danych tabeli...",
       "page": {
         "empty": "⚠️ Brak wpisów do wyświetlenia. ⚠️"
       }

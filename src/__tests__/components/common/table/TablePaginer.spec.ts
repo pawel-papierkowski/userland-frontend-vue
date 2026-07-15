@@ -8,12 +8,14 @@ import TablePaginer from '@/components/common/table/TablePaginer.vue';
 
 //
 
+const tableId = 'T';
+
 /** Convenience function to create component. */
 function createComponent(currPage: number, meta: TableMetaResp, isDisabled?: boolean) {
   return mount(TablePaginer, {
     props: {
       currPage,
-      tableId: '',
+      tableId,
       meta,
       isDisabled,
     },
@@ -26,9 +28,8 @@ function createTableMetaLarge(page: number): TableMetaResp {
   return {
     pageCount: 3,
     entryCount: 25,
-
     pageSize: 10,
-    page: page,
+    page,
     sortBy: 'name',
     sortOrder: 'ASC',
   };
@@ -38,9 +39,8 @@ function createTableMetaMedium(page: number): TableMetaResp {
   return {
     pageCount: 2,
     entryCount: 8,
-
     pageSize: 5,
-    page: page,
+    page,
     sortBy: 'name',
     sortOrder: 'ASC',
   };
@@ -50,9 +50,8 @@ function createTableMetaSmall(): TableMetaResp {
   return {
     pageCount: 1,
     entryCount: 4,
-
     pageSize: 10,
-    page: 1,
+    page: 0,
     sortBy: 'name',
     sortOrder: 'ASC',
   };
@@ -62,9 +61,8 @@ function createTableMetaZero(): TableMetaResp {
   return {
     pageCount: 0,
     entryCount: 0,
-
     pageSize: 10,
-    page: 1,
+    page: 0,
     sortBy: 'name',
     sortOrder: 'ASC',
   };
@@ -74,434 +72,390 @@ function createTableMetaZero(): TableMetaResp {
 
 /** Tests of TablePaginer component. */
 describe('TablePaginer', () => {
-  describe('has correct presentation', () => {
-    it('only one page', async () => {
-      // Check how it looks for provided table metadata. Currently on first page.
+  // //////////////////////////////////////////////////////////////////////////
+  // Presentation
 
+  describe('presentation', () => {
+    it('renders root with data-testid', () => {
       // Arrange&Act: Create component.
-      const tablePaginer = createComponent(0, createTableMetaSmall(), false);
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('1'); // we are on first page
-
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('1'); // there is only one page in total
+      // Assert: Root has correct data-testid.
+      const root = wrapper.find('[data-testid="paginer_T"]');
+      expect(root.exists()).toBe(true);
     });
 
-    //
+    it('shows all buttons and input disabled for single page', () => {
+      // Arrange&Act: Create component on single-page meta.
+      const wrapper = createComponent(0, createTableMetaSmall(), false);
 
-    it('two pages, first page', async () => {
-      // Check how it looks for provided table metadata. Currently on first page.
-
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(0, createTableMetaMedium(0), false);
-
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
+      // Assert: All nav buttons are disabled.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
       expect(navButtons).toHaveLength(4);
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+      navButtons.forEach((btn) => {
+        expect(btn.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      });
 
-      const input = tablePaginer.find('input');
+      // Assert: Input shows page 1, not disabled (user can type same page).
+      const input = wrapper.find('input');
       expect(input.exists()).toBe(true);
       expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('1'); // we are on first page
+      expect(input.element.value).toBe('1');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('2'); // there are two pages in total
+      // Assert: Page count shows 1.
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('1');
     });
 
-    it('two pages, second page', async () => {
-      // Check how it looks for provided table metadata. Currently on second page.
+    it('shows prev buttons disabled on first page (2 pages)', () => {
+      // Arrange&Act: On first page of two total.
+      const wrapper = createComponent(0, createTableMetaMedium(0), false);
 
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(1, createTableMetaMedium(1), false);
-
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('2'); // we are on second page
-
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('2'); // there are two pages in total
-    });
-
-    //
-
-    it('for first page', async () => {
-      // Check how it looks for provided table metadata. Currently on first page.
-
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(0, createTableMetaLarge(0), false);
-
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
+      // Assert: Prev buttons disabled, next buttons enabled.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
       expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
       expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
       expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
       expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
 
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('1'); // we are on first page
+      const input = wrapper.find('input');
+      expect(input.element.value).toBe('1');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('3'); // there are three pages in total
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('2');
     });
 
-    it('for middle page', async () => {
-      // Check how it looks for provided table metadata. Currently on middle page.
+    it('shows next buttons disabled on last page (2 pages)', () => {
+      // Arrange&Act: On last page of two total.
+      const wrapper = createComponent(1, createTableMetaMedium(1), false);
 
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), false);
-
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
+      // Assert: Prev buttons enabled, next buttons disabled.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
       expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
       expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
+      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+
+      const input = wrapper.find('input');
+      expect(input.element.value).toBe('2');
+
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('2');
+    });
+
+    it('shows correct state for first of three pages', () => {
+      // Arrange&Act: On first of three pages.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
+
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
       expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
       expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
 
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('2'); // we are on second page
+      const input = wrapper.find('input');
+      expect(input.element.value).toBe('1');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('3'); // there are three pages in total
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('3');
     });
 
-    it('for last page', async () => {
-      // Check how it looks for provided table metadata. Currently on last page.
+    it('shows all buttons enabled for middle of three pages', () => {
+      // Arrange&Act: On middle of three pages.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
 
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(2, createTableMetaLarge(2), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      navButtons.forEach((btn) => {
+        expect(btn.classes()).toEqual(['table-paginer-navbtn']);
+      });
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
+      const input = wrapper.find('input');
+      expect(input.element.value).toBe('2');
+
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('3');
+    });
+
+    it('shows next buttons disabled on last of three pages', () => {
+      // Arrange&Act: On last of three pages.
+      const wrapper = createComponent(2, createTableMetaLarge(2), false);
+
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
       expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
       expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
       expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
       expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
 
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('3'); // we are on third page
+      const input = wrapper.find('input');
+      expect(input.element.value).toBe('3');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('3'); // there are three pages in total
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('3');
     });
 
-    it('for no pages', async () => {
-      // Check how it looks for provided table metadata.
+    it('shows everything disabled for zero pages', () => {
+      // Arrange&Act: Meta with no pages.
+      const wrapper = createComponent(0, createTableMetaZero(), false);
 
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(0, createTableMetaZero(), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      navButtons.forEach((btn) => {
+        expect(btn.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      });
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
+      const input = wrapper.find('input');
       expect(input.element.disabled).toBe(true);
       expect(input.element.value).toBe('1');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('0'); // there are no pages in total
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('0');
     });
 
-    it('when disabled', async () => {
-      // Check how it looks for provided table metadata. Currently on middle page. Component is disabled as a whole.
+    it('shows everything disabled when isDisabled is true', () => {
+      // Arrange&Act: Component disabled, on middle of three pages.
+      const wrapper = createComponent(1, createTableMetaLarge(1), true);
 
-      // Arrange&Act: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), true);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      navButtons.forEach((btn) => {
+        expect(btn.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      });
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons).toHaveLength(4);
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-
-      // Assert: State of page indicator.
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
+      const input = wrapper.find('input');
       expect(input.element.disabled).toBe(true);
-      expect(input.element.value).toBe('2'); // we are on second page
+      expect(input.element.value).toBe('2');
 
-      const pageNumber = tablePaginer.find('[data-testid="paginer__pageNumber"]');
-      expect(pageNumber.text()).toBe('3'); // there are three pages in total
+      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      expect(pageNumber.text()).toBe('3');
+    });
 
-      // Act: Try to click on disabled buttons.
-      await navButtons[0]?.trigger('click'); // go to first page
-      await nextTick();
-      await navButtons[1]?.trigger('click'); // go to next page
-      await nextTick();
-      await navButtons[2]?.trigger('click'); // go to previous page
-      await nextTick();
-      await navButtons[3]?.trigger('click'); // go to last page
-      await nextTick();
+    it('does not emit on button clicks when disabled', async () => {
+      // Arrange: Component disabled.
+      const wrapper = createComponent(1, createTableMetaLarge(1), true);
 
-      // Assert: model never emitted anything.
-      expect(tablePaginer.emitted('update:currPage')).toBeUndefined();
+      // Act: Click all nav buttons.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      for (const btn of navButtons) {
+        await btn.trigger('click');
+        await nextTick();
+      }
+
+      // Assert: No emits.
+      expect(wrapper.emitted('update:currPage')).toBeUndefined();
     });
   });
 
-  describe('press navigation button that', () => {
+  // //////////////////////////////////////////////////////////////////////////
+  // Navigation buttons
+
+  describe('navigation buttons', () => {
     it('goes to first page', async () => {
-      // Check actions and their results.
+      // Arrange: On last page.
+      const wrapper = createComponent(2, createTableMetaLarge(2), false);
 
-      // Arrange: Create component. We are on last page.
-      const tablePaginer = createComponent(2, createTableMetaLarge(2), false);
-
-      // Act: Click on navigation button.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      await navButtons[0]?.trigger('click'); // go to first page
+      // Act: Click first-page button.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      await navButtons[0]?.trigger('click');
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(0);
+      // Assert: Emitted page 0.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(0);
 
-      // Assert: State of buttons.
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+      // Assert: Prev buttons now disabled.
+      expect(navButtons[0]?.classes()).toContain('disabled');
+      expect(navButtons[1]?.classes()).toContain('disabled');
 
-      // Assert: State of page indicator.
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('1'); // we are on first page now
+      // Assert: Input shows page 1.
+      expect(wrapper.find('input').element.value).toBe('1');
     });
 
     it('goes to previous page', async () => {
-      // Check actions and their results.
+      // Arrange: On last page.
+      const wrapper = createComponent(2, createTableMetaLarge(2), false);
 
-      // Arrange: Create component. We are on last page.
-      const tablePaginer = createComponent(2, createTableMetaLarge(2), false);
-
-      // Act: Click on navigation button.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      await navButtons[1]?.trigger('click'); // go to previous page
+      // Act: Click prev-page button.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      await navButtons[1]?.trigger('click');
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+      // Assert: Emitted page 1.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(1);
 
-      // Assert: State of buttons.
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+      // Assert: All buttons now enabled (middle page).
+      expect(navButtons[0]?.classes()).not.toContain('disabled');
+      expect(navButtons[1]?.classes()).not.toContain('disabled');
+      expect(navButtons[2]?.classes()).not.toContain('disabled');
+      expect(navButtons[3]?.classes()).not.toContain('disabled');
 
-      // Assert: State of page indicator.
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('2'); // we are on second page now
+      expect(wrapper.find('input').element.value).toBe('2');
     });
 
     it('goes to next page', async () => {
-      // Check actions and their results.
+      // Arrange: On first page.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
 
-      // Arrange: Create component. We are on first page.
-      const tablePaginer = createComponent(0, createTableMetaLarge(0), false);
-
-      // Act: Click on navigation button.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      await navButtons[2]?.trigger('click'); // go to next page
+      // Act: Click next-page button.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      await navButtons[2]?.trigger('click');
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+      // Assert: Emitted page 1.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(1);
 
-      // Assert: State of buttons.
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+      expect(navButtons[0]?.classes()).not.toContain('disabled');
+      expect(navButtons[1]?.classes()).not.toContain('disabled');
 
-      // Assert: State of page indicator.
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('2'); // we are on second page now
+      expect(wrapper.find('input').element.value).toBe('2');
     });
 
     it('goes to last page', async () => {
-      // Check actions and their results.
+      // Arrange: On first page.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
 
-      // Arrange: Create component. We are on first page.
-      const tablePaginer = createComponent(0, createTableMetaLarge(0), false);
-
-      // Act: Click on navigation button.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      await navButtons[3]?.trigger('click'); // go to last page
+      // Act: Click last-page button.
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      await navButtons[3]?.trigger('click');
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(2);
+      // Assert: Emitted page 2.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(2);
 
-      // Assert: State of buttons.
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      // Assert: Next buttons now disabled.
+      expect(navButtons[2]?.classes()).toContain('disabled');
+      expect(navButtons[3]?.classes()).toContain('disabled');
 
-      // Assert: State of page indicator.
-      const input = tablePaginer.find('input');
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('3'); // we are on third page now
+      expect(wrapper.find('input').element.value).toBe('3');
     });
   });
 
-  describe('edit input with current page number', () => {
-    it('from middle to last page', async () => {
-      // Try to change page to third page via input. Currently on middle page.
+  // //////////////////////////////////////////////////////////////////////////
+  // Input field
 
-      // Arrange: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), false);
+  describe('input field', () => {
+    it('jumps to valid page on Enter', async () => {
+      // Arrange: On middle page.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const input = wrapper.find('input');
 
-      // Act: Fill input and confirm.
-      const input = tablePaginer.find('input');
+      // Act: Type a valid page number and press Enter.
       await input.setValue('3');
       await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(2);
+      // Assert: Emitted correct zero-indexed page.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(2);
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      // Assert: Next buttons disabled (we're on last page).
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      expect(navButtons[2]?.classes()).toContain('disabled');
+      expect(navButtons[3]?.classes()).toContain('disabled');
 
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('3'); // we are on third page
+      expect(input.element.value).toBe('3');
     });
 
-    it('too small', async () => {
-      // Try changing page to too small value (outside range) via input. Currently on middle page.
+    it('jumps to valid page on blur', async () => {
+      // Arrange: On middle page.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const input = wrapper.find('input');
 
-      // Arrange: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), false);
+      // Act: Type a valid page number and blur.
+      await input.setValue('3');
+      await input.trigger('blur');
+      await nextTick();
 
-      // Act: Fill input and confirm.
-      const input = tablePaginer.find('input');
-      await input.setValue('-1'); // outside range: too small
+      // Assert: Emitted correct zero-indexed page.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(2);
+
+      expect(input.element.value).toBe('3');
+    });
+
+    it('clamps too-small value to first page', async () => {
+      // Arrange: On middle page.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const input = wrapper.find('input');
+
+      // Act: Type negative value.
+      await input.setValue('-1');
       await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(0);
+      // Assert: Clamped to page 0.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(0);
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+      expect(input.element.value).toBe('1');
 
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('1'); // we are on first page
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      expect(navButtons[0]?.classes()).toContain('disabled');
+      expect(navButtons[1]?.classes()).toContain('disabled');
     });
 
-    it('too large', async () => {
-      // Try changing page to too large value (outside range) via input. Currently on middle page.
+    it('clamps too-large value to last page', async () => {
+      // Arrange: On middle page.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const input = wrapper.find('input');
 
-      // Arrange: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), false);
-
-      // Act: Fill input and confirm.
-      const input = tablePaginer.find('input');
-      await input.setValue('666'); // outside range: too large
+      // Act: Type oversized value.
+      await input.setValue('666');
       await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
-      // Assert: model emitted correct value.
-      expect(tablePaginer.emitted('update:currPage')).toHaveLength(1);
-      expect(tablePaginer.emitted('update:currPage')?.[0]?.[0]).toBe(2);
+      // Assert: Clamped to last page.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(2);
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn', 'disabled']);
+      expect(input.element.value).toBe('3');
 
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('3'); // we are on last page
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+      expect(navButtons[2]?.classes()).toContain('disabled');
+      expect(navButtons[3]?.classes()).toContain('disabled');
     });
 
-    it('to invalid value', async () => {
-      // Try to enter invalid data (not a number) in input. Currently on middle page.
+    it('reverts to current page on invalid input', async () => {
+      // Arrange: On middle page.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const input = wrapper.find('input');
 
-      // Arrange: Create component.
-      const tablePaginer = createComponent(1, createTableMetaLarge(1), false);
-
-      // Act: Fill input and confirm.
-      const input = tablePaginer.find('input');
-      await input.setValue('aaa'); // invalid input: not a number!
+      // Act: Type non-numeric value.
+      await input.setValue('aaa');
       await input.trigger('keyup', { key: 'Enter' });
       await nextTick();
 
-      // Assert: model never emitted anything.
-      expect(tablePaginer.emitted('update:currPage')).toBeUndefined();
+      // Assert: No emit, value reverted.
+      expect(wrapper.emitted('update:currPage')).toBeUndefined();
+      expect(input.element.value).toBe('2');
+    });
+  });
 
-      // Assert: State of buttons.
-      const navButtons = tablePaginer.findAll('.table-paginer-navbtn');
-      expect(navButtons[0]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[1]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[2]?.classes()).toEqual(['table-paginer-navbtn']);
-      expect(navButtons[3]?.classes()).toEqual(['table-paginer-navbtn']);
+  // //////////////////////////////////////////////////////////////////////////
+  // Slots
 
-      expect(input.exists()).toBe(true);
-      expect(input.element.disabled).toBe(false);
-      expect(input.element.value).toBe('2'); // we are still on second page
+  describe('slots', () => {
+    it('renders paginer_options slot content', () => {
+      // The paginer provides a slot for additional option controls.
+
+      // Arrange&Act: Create component with slot content.
+      const wrapper = mount(TablePaginer, {
+        props: {
+          currPage: 0,
+          tableId,
+          meta: createTableMetaLarge(0),
+          isDisabled: false,
+        },
+        slots: {
+          paginer_options: '<div class="test-option">OPTION</div>',
+        },
+      });
+
+      // Assert: Slot content is rendered inside the options container.
+      const optionsContainer = wrapper.find('.table-paginer-options');
+      expect(optionsContainer.exists()).toBe(true);
+      expect(optionsContainer.find('.test-option').exists()).toBe(true);
+      expect(optionsContainer.find('.test-option').text()).toBe('OPTION');
     });
   });
 });

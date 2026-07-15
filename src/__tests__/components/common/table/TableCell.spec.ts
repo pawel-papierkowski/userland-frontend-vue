@@ -45,7 +45,7 @@ function createComponent(
   });
 }
 
-/** Convenience function to create component. Version with slots. */
+/** Convenience function to create component with slots. */
 function createComponentWithSlots(
   slots: Record<string, string>,
   modelValue: TestEntry | null,
@@ -75,27 +75,18 @@ function createComponentWithSlots(
 //
 
 function createEntry(): TestEntry {
-  return {
-    id: 42,
-    name: 'Entry Name',
-    value: 'Entry Value',
-  };
+  return { id: 42, name: 'Entry Name', value: 'Entry Value' };
 }
 
 function createForm(): TestForm {
-  return {
-    name: 'Form Name',
-    value: 'Form Value',
-  };
+  return { name: 'Form Name', value: 'Form Value' };
 }
 
 function createFieldMeta(): FieldMeta {
-  return {
-    css: 'err',
-  };
+  return { css: 'err' };
 }
 
-/** Create test data for cell in 'name' column. */
+/** Create test data for a non-editable 'name' column. */
 function createDataName(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
   const testEntry: TestEntry = createEntry();
   const testForm: TestForm = createForm();
@@ -110,7 +101,7 @@ function createDataName(): { testEntry: TestEntry; testForm: TestForm; column: C
   return { testEntry, testForm, column };
 }
 
-/** Create test data for cell in 'value' column. */
+/** Create test data for an editable 'value' column. */
 function createDataValue(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
   const testEntry: TestEntry = createEntry();
   const testForm: TestForm = createForm();
@@ -125,7 +116,7 @@ function createDataValue(): { testEntry: TestEntry; testForm: TestForm; column: 
   return { testEntry, testForm, column };
 }
 
-/** Create test data for cell in 'options' column. */
+/** Create test data for a custom 'options' column. */
 function createDataOptions(): { testEntry: TestEntry; testForm: TestForm; column: ColumnData } {
   const testEntry: TestEntry = createEntry();
   const testForm: TestForm = createForm();
@@ -144,155 +135,184 @@ function createDataOptions(): { testEntry: TestEntry; testForm: TestForm; column
 
 /** Tests of TableCell component. */
 describe('TableCell', () => {
-  it('correct for non-editable column, not selected row, inline edit false without slot', async () => {
-    // Set up cell and check content for standard column.
+  // //////////////////////////////////////////////////////////////////////////
+  // Data column — display modes
 
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataName();
+  describe('data column', () => {
+    it('shows entry text when not editable and not selected', () => {
+      // Arrange: non-editable name column, row not selected, no inline edit.
+      const { testEntry, testForm, column } = createDataName();
 
-    // Act: Create component.
-    const tableCell = createComponent(null, testForm, 'testTable', column, 0, testEntry, false, null);
+      // Act: Create component.
+      const wrapper = createComponent(null, testForm, 'testTable', column, 0, testEntry, false, null);
 
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('Entry Name'); // content from testEntry
+      // Assert: Content from entry is shown.
+      expect(wrapper.text()).toBe('Entry Name');
 
-    // Assert: <input> should not be present.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(false);
+      // Assert: No input is rendered.
+      expect(wrapper.find('input').exists()).toBe(false);
+
+      // Assert: ARIA role and data-testid are set.
+      const cell = wrapper.find('[role="cell"]');
+      expect(cell.exists()).toBe(true);
+      expect(cell.attributes('data-testid')).toBe('cell_testTable_0_name');
+    });
+
+    it('shows slot content when slot is provided', () => {
+      // Arrange: Non-editable column with a custom slot.
+      const { testEntry, testForm, column } = createDataName();
+
+      // Act: Create component with slot.
+      const wrapper = createComponentWithSlots(
+        { column_name: 'Other Name' },
+        null,
+        testForm,
+        'testTable',
+        column,
+        0,
+        testEntry,
+        false,
+        null,
+      );
+
+      // Assert: Slot content overrides entry value.
+      expect(wrapper.text()).toBe('Other Name');
+    });
+
+    it('shows empty string when entry is null', () => {
+      // Arrange: Non-editable column with null entry.
+      const { testEntry: _te, testForm, column } = createDataName();
+
+      // Act: Create component with null entry.
+      const wrapper = createComponent(null, testForm, 'testTable', column, 0, null, false, null);
+
+      // Assert: Content is empty.
+      expect(wrapper.text()).toBe('');
+    });
   });
 
-  it('correct for non-editable column, not selected row, inline edit false with slot', async () => {
-    // Set up cell and check content for standard column using custom slot.
+  // //////////////////////////////////////////////////////////////////////////
+  // Edit mode
 
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataName();
+  describe('edit mode', () => {
+    it('shows text when column is non-editable even if row is selected', () => {
+      // Arrange: Non-editable column, row selected, inline edit enabled.
+      const { testEntry, testForm, column } = createDataName();
 
-    // Act: Create component.
-    const tableCell = createComponentWithSlots(
-      { column_name: 'Other Name' },
-      null,
-      testForm,
-      'testTable',
-      column,
-      0,
-      testEntry,
-      false,
-      null,
-    );
+      // Act: Create component.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, null);
 
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('Other Name'); // content from slot assigned for this column
+      // Assert: Text is shown (no input because column is not editable).
+      expect(wrapper.text()).toBe('Entry Name');
+      expect(wrapper.find('input').exists()).toBe(false);
+    });
+
+    it('shows text when row is not selected even if column is editable', () => {
+      // Arrange: Editable column, row not selected, inline edit enabled.
+      const { testEntry, testForm, column } = createDataValue();
+
+      // Act: Create component.
+      const wrapper = createComponent(null, testForm, 'testTable', column, 0, testEntry, true, null);
+
+      // Assert: Text is shown (no input because row is not selected).
+      expect(wrapper.text()).toBe('Entry Value');
+      expect(wrapper.find('input').exists()).toBe(false);
+    });
+
+    it('shows text when inline edit is disabled even if row is selected', () => {
+      // Arrange: Editable column, row selected, inline edit disabled.
+      const { testEntry, testForm, column } = createDataValue();
+
+      // Act: Create component.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, false, null);
+
+      // Assert: Text is shown (no input because inline edit is off).
+      expect(wrapper.text()).toBe('Entry Value');
+      expect(wrapper.find('input').exists()).toBe(false);
+    });
+
+    it('renders input when editable, selected, and inline edit is on', () => {
+      // Arrange: Editable column, row selected, inline edit enabled.
+      const { testEntry, testForm, column } = createDataValue();
+
+      // Act: Create component.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, null);
+
+      // Assert: Input is rendered with form value.
+      const input = wrapper.find('input');
+      expect(input.exists()).toBe(true);
+      expect(input.classes()).toEqual([]);
+      expect(input.element.value).toBe('Form Value');
+    });
+
+    it('applies field meta CSS class to input', () => {
+      // Arrange: Editable column with field metadata.
+      const { testEntry, testForm, column } = createDataValue();
+
+      // Act: Create component with field meta.
+      const wrapper = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, createFieldMeta());
+
+      // Assert: Input has the CSS class from field meta.
+      const input = wrapper.find('input');
+      expect(input.exists()).toBe(true);
+      expect(input.classes()).toEqual(['err']);
+      expect(input.element.value).toBe('Form Value');
+    });
+
+    it('shows text instead of input when formEntry is null', () => {
+      // Arrange: Editable column, row selected, inline edit on, but no form
+      // entry provided — should fall back to displaying entry text.
+      const { testEntry, testForm: _tf, column } = createDataValue();
+
+      // Act: Create component with null formEntry.
+      const wrapper = createComponent(testEntry, null, 'testTable', column, 0, testEntry, true, null);
+
+      // Assert: No input rendered; entry text shown instead.
+      expect(wrapper.find('input').exists()).toBe(false);
+      expect(wrapper.text()).toBe('Entry Value');
+    });
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Custom column
 
-  it('correct for non-editable column, selected row, inline edit true', async () => {
-    // Set up cell and check content for noneditable column while this row was selected.
+  describe('custom column', () => {
+    it('renders slot content for custom column', () => {
+      // Arrange: Custom column with a slot.
+      const { testEntry, testForm, column } = createDataOptions();
 
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataName();
+      // Act: Create component with slot.
+      const wrapper = createComponentWithSlots(
+        { column_options: 'OPTIONS' },
+        null,
+        testForm,
+        'testTable',
+        column,
+        0,
+        testEntry,
+        false,
+        null,
+      );
 
-    // Act: Create component.
-    const tableCell = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, null);
-
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('Entry Name'); // content from testEntry
-
-    // Assert: <input> should not be present. While row was selected and inline edit is true, this column is not editable.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(false);
+      // Assert: Slot content is rendered.
+      expect(wrapper.text()).toBe('OPTIONS');
+    });
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Visibility
 
-  it('correct for editable column, not selected row, inline edit true', async () => {
-    // Set up cell and check content for editable column, but this row was not selected.
+  describe('visibility', () => {
+    it('renders nothing when column is hidden', () => {
+      // Arrange: Column with visible=false.
+      const { testEntry, testForm, column: visibleColumn } = createDataName();
+      const column: ColumnData = { ...visibleColumn, visible: false };
 
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataValue();
+      // Act: Create component.
+      const wrapper = createComponent(null, testForm, 'testTable', column, 0, testEntry, false, null);
 
-    // Act: Create component.
-    const tableCell = createComponent(null, testForm, 'testTable', column, 0, testEntry, true, null);
-
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('Entry Value'); // content from testEntry
-
-    // Assert: <input> should not be present. While cell is editable and inline edit is true, it's row was not selected.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(false);
-  });
-
-  it('correct for editable column, selected row, inline edit false', async () => {
-    // Set up cell and check content for editable column and this row was selected, but inline edit is false.
-
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataValue();
-
-    // Act: Create component.
-    const tableCell = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, false, null);
-
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('Entry Value'); // content from testEntry
-
-    // Assert: <input> should not be present. While cell is editable and it's row was selected, inline edit is false.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(false);
-  });
-
-  it('correct for editable column, selected row, inline edit true, without field meta', async () => {
-    // Set up cell and check content for editable column with default content (input).
-
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataValue();
-
-    // Act: Create component.
-    const tableCell = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, null);
-
-    // Assert: State of cell is correct.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(true);
-    expect(inputInCell.classes()).toEqual([]); // no field metadata
-    expect(inputInCell.element.value).toBe('Form Value'); // content from testForm
-  });
-
-  it('correct for editable column, selected row, inline edit true, with field meta', async () => {
-    // Set up cell and check content for editable column with default content (input) and field meta.
-
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataValue();
-
-    // Act: Create component.
-    const tableCell = createComponent(testEntry, testForm, 'testTable', column, 0, testEntry, true, createFieldMeta());
-
-    // Assert: State of cell is correct.
-    const inputInCell = tableCell.find('input');
-    expect(inputInCell.exists()).toBe(true);
-    expect(inputInCell.classes()).toEqual(['err']); // from field metadata
-    expect(inputInCell.element.value).toBe('Form Value'); // content from testForm
-  });
-
-  //
-
-  it('correct for custom column', async () => {
-    // Set up cell and check content for custom column.
-
-    // Arrange: Prepare data for cell.
-    const { testEntry, testForm, column } = createDataOptions();
-
-    // Act: Create component.
-    const tableCell = createComponentWithSlots(
-      { column_options: 'OPTIONS' },
-      null,
-      testForm,
-      'testTable',
-      column,
-      0,
-      testEntry,
-      false,
-      null,
-    );
-
-    // Assert: State of cell is correct.
-    expect(tableCell.text()).toBe('OPTIONS');
+      // Assert: No cell element is rendered.
+      expect(wrapper.find('[role="cell"]').exists()).toBe(false);
+    });
   });
 });

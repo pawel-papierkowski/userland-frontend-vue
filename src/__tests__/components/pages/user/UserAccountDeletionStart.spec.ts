@@ -92,8 +92,7 @@ describe('UserAccountDeletionStart', () => {
         response: {
           status: 409,
           data: {
-            detail:
-              "Token of type 'DELETE' already exists and is still valid. You cannot do this action twice in row.",
+            detail: "Token of type 'DELETE' already exists and is still valid. You cannot do this action twice in row.",
             instance: '/api/users/delete/link',
             status: 409,
             title: 'Required token already exists.',
@@ -211,9 +210,7 @@ describe('UserAccountDeletionStart', () => {
       // Assert: error shows eagerly.
       const passwordErrorSpan = wrapper.find('#password + span.form-text-error');
       expect(passwordErrorSpan.exists()).toBe(true);
-      expect(passwordErrorSpan.text()).toBe(
-        'Password is too short. It must have at least 8 characters.',
-      );
+      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
     });
   });
 
