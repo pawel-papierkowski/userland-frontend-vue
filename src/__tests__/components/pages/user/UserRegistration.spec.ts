@@ -129,7 +129,7 @@ describe('UserRegistration', () => {
 
   //
 
-  it('form is empty', async () => {
+  it('empty form gets feedback', async () => {
     // Ensures that after failed registration user gets feedback.
 
     const userRegistration = createComponent();

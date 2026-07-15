@@ -3,7 +3,6 @@ import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts
 
 import { TableUtils } from '@/code/utils/TableUtils';
 
-
 describe('TableUtils', () => {
   // ////////////////////////////////////////////////////////////////////////////
   // ExtractOption

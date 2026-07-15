@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** Page where you can register new user. */
 import { reactive, ref, computed } from 'vue';
-import type { Ref, ComputedRef } from 'vue';
+import type { ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
@@ -30,9 +30,9 @@ const form: UserRegisterForm = reactive({
 });
 
 /** True if submit button was clicked at least once. */
-const usedButton: Ref<boolean> = ref(false);
+const usedButton = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
-const isBusy: Ref<boolean> = ref(false);
+const isBusy = ref(false);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyField(form.username, usedButton.value);
