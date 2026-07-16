@@ -65,7 +65,7 @@ const props = withDefaults(
     columns: ColumnData[];
     fetchData: (req: R) => Promise<{ data: { entries: E[]; tableMeta: TableMetaResp } }>;
     convertToReq: (form: F, userId: number) => R;
-    processEntry?: (entry: E) => void;
+    processEntry?: (entry: E) => E;
     resolveRowMeta?: (entry: E | null) => RowMeta | null;
     inlineEdit?: boolean;
     addNewEntry?: boolean;
@@ -115,6 +115,7 @@ const isDisabled = computed(() => selUserRecord.value === null);
 const handleReload = async () => {
   data.value.entries = [];
   if (!selUserRecord.value) {
+    // User is not selected, so show empty space instead of table rows. Note table UI (paginers, column headers etc) is still present.
     isLoading.value = false;
     isBusy.value = false;
     return;
@@ -129,7 +130,7 @@ const handleReload = async () => {
     const resp = result.data;
 
     if (props.processEntry) {
-      resp.entries.forEach((entry: E) => props.processEntry!(entry));
+      resp.entries = resp.entries.map((entry: E) => props.processEntry!(entry));
     }
     data.value = resp;
 
@@ -139,6 +140,8 @@ const handleReload = async () => {
     currSortOrder.value = data.value.tableMeta.sortOrder;
     isLoading.value = false;
   } catch (error) {
+    // Note in case of error spinner stays visible. There is no data to show in table (because error happened during load or processing)
+    // and we want to show feedback for user that there was some issue. So we show spinner, but with spin stopped.
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
     backendApi.logError(error, 'User tab table reload failed!');
@@ -216,9 +219,11 @@ watch(currSortOrder, (_, oldVal) => {
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
+ * @returns Promise.
  */
-const selectEntry = (entry: E | null, force: boolean) => {
-  tablePageRef.value?.selectEntry(entry, force);
+const selectEntry = (entry: E | null, force: boolean): Promise<void> => {
+  if (!tablePageRef.value) return Promise.resolve();
+  return tablePageRef.value.selectEntry(entry, force);
 };
 
 //

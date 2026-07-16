@@ -67,8 +67,8 @@ const convertToReq = (form: UserHistoryTableFilterForm, userId: number): UserHis
  * Process single entry.
  * @param entry Table entry.
  */
-const processEntry = (entry: UserHistoryTableEntry) => {
-  entry.createdAt = TimeUtils.zoned(entry.createdAt);
+const processEntry = (entry: UserHistoryTableEntry): UserHistoryTableEntry => {
+  return { ...entry, createdAt: TimeUtils.zoned(entry.createdAt) };
 };
 
 //

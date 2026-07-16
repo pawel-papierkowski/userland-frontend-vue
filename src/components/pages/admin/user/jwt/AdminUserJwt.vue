@@ -52,9 +52,8 @@ const convertToReq = (form: UserJwtTableFilterForm, userId: number): UserJwtTabl
  * Process single entry.
  * @param entry Table entry.
  */
-const processEntry = (entry: UserJwtTableEntry) => {
-  entry.createdAt = TimeUtils.zoned(entry.createdAt);
-  entry.expiresAt = TimeUtils.zoned(entry.expiresAt);
+const processEntry = (entry: UserJwtTableEntry): UserJwtTableEntry => {
+  return { ...entry, createdAt: TimeUtils.zoned(entry.createdAt), expiresAt: TimeUtils.zoned(entry.expiresAt) };
 };
 </script>
 

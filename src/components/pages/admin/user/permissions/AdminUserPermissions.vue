@@ -100,8 +100,8 @@ const convertEditToReq = (
  * Process single entry.
  * @param entry Table entry.
  */
-const processEntry = (entry: UserPermissionTableEntry) => {
-  entry.createdAt = TimeUtils.zoned(entry.createdAt);
+const processEntry = (entry: UserPermissionTableEntry): UserPermissionTableEntry => {
+  return { ...entry, createdAt: TimeUtils.zoned(entry.createdAt) };
 };
 
 //

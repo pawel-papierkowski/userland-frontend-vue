@@ -95,8 +95,8 @@ const convertEditToReq = (form: UserConfigEntryEditForm, id: number | null, user
  * Process single entry.
  * @param entry Table entry.
  */
-const processEntry = (entry: UserConfigTableEntry) => {
-  entry.createdAt = TimeUtils.zoned(entry.createdAt);
+const processEntry = (entry: UserConfigTableEntry): UserConfigTableEntry => {
+  return { ...entry, createdAt: TimeUtils.zoned(entry.createdAt) };
 };
 
 //
