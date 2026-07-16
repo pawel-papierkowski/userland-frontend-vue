@@ -246,59 +246,5 @@
         }
       }
     }
-  },
-
-  "test": {
-    "notify": "Pierwsze połączenie z serwerem może potrwać trochę dłużej. Proszę zaczekać.",
-    "msg": {
-      "fallback": {
-        "title": "Fallback title",
-        "content": "Fallback content."
-      }
-    },
-    "radioBox": {
-      "null": "Opcja BRAK (null)",
-      "one": "Opcja Jeden",
-      "two": "Opcja Dwa",
-      "three": "Opcja Trzy"
-    },
-    "comboBox": {
-      "null": "Opcja BRAK (null)",
-      "A": "Opcja A",
-      "b": "Opcja B",
-      "c": "Opcja C"
-    },
-    "tabGroup": {
-      "a": "Tab A",
-      "b": "Tab B",
-      "c": "Tab C"
-    },
-    "slideshow": {
-      "label": "{id} pokaz slajdów",
-      "slide": "Slajd {n} z {total}"
-    },
-    "table": {
-      "column": {
-        "createdAt": "Utworzony",
-        "name": "Nazwa",
-        "value": "Wartość",
-        "options": "Opcje"
-      },
-      "entryOptions": {
-        "add": {
-          "button": "A",
-          "action": "Wykonuje ADD."
-        },
-        "del": {
-          "button": "D",
-          "action": "Wykonuje DEL.",
-          "disabled": "Zablokowane DEL."
-        }
-      },
-      "loading": "Ładowanie danych tabeli...",
-      "page": {
-        "empty": "⚠️ Brak wpisów do wyświetlenia. ⚠️"
-      }
-    }
   }
 }

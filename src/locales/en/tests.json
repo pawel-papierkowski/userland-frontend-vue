@@ -1,0 +1,56 @@
+{
+  "test": {
+    "notify": "First connection with server might take more time, please wait.",
+    "msg": {
+      "fallback": {
+        "title": "Fallback title",
+        "content": "Fallback content."
+      }
+    },
+    "radioBox": {
+      "null": "Option UNSELECTED (null)",
+      "one": "Option One",
+      "two": "Option Two",
+      "three": "Option Three"
+    },
+    "comboBox": {
+      "null": "Option UNSELECTED (null)",
+      "a": "Option A",
+      "b": "Option B",
+      "c": "Option C"
+    },
+    "tabGroup": {
+      "a": "Tab A",
+      "b": "Tab B",
+      "c": "Tab C"
+    },
+    "slideshow": {
+      "label": "{id} slideshow",
+      "slide": "Slide {n} of {total}"
+    },
+    "table": {
+      "column": {
+        "createdAt": "Created",
+        "name": "Name",
+        "value": "Value",
+        "options": "Options"
+      },
+      "entryOptions": {
+        "add": {
+          "button": "A",
+          "action": "Execute ADD."
+        },
+        "del": {
+          "button": "D",
+          "action": "Execute DEL.",
+          "disabled": "Disabled DEL."
+        }
+      },
+      "loading": "Loading table data...",
+      "page": {
+        "empty": "⚠️ No entries to show. ⚠️",
+        "emptyNoUser": "Select user to show data."
+      }
+    }
+  }
+}
