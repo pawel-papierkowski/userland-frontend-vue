@@ -55,10 +55,18 @@ const emit = defineEmits(['reload']);
         </div>
         <div class="form-subform">
           <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
-          <DateTimePicker id="createdFromAt" v-model="form.createdFromAt" mode="date" :dateTimeMax="form.createdToAt" />
+          <DateTimePicker id="createdFromAt"
+            v-model="form.createdFromAt"
+            mode="date"
+            :dateTimeMax="form.createdToAt"
+            :allowNull="true" />
 
           <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
-          <DateTimePicker id="createdToAt" v-model="form.createdToAt" mode="date" :dateTimeMin="form.createdFromAt" />
+          <DateTimePicker id="createdToAt"
+            v-model="form.createdToAt"
+            mode="date"
+            :dateTimeMin="form.createdFromAt"
+            :allowNull="true" />
 
           <label for="locked">{{ t('admin.user.filter.locked') }}:</label>
           <CheckBox id="locked" v-model="form.locked" :allowNull="true" />

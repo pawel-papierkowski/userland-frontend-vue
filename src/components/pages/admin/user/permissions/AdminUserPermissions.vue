@@ -26,6 +26,8 @@ import type {
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userPermissionsTableColumns, enUserPermissionName } from '@/code/data/features/user/user-const.ts';
 
+import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
@@ -90,9 +92,10 @@ const convertEditToReq = (
   userId: number,
 ): UserPermissionEntryEditReq => {
   return {
-    ...form,
     id: id,
     userId: userId,
+    name: form.name,
+    value: form.value
   };
 };
 
@@ -111,7 +114,7 @@ const processEntry = (entry: UserPermissionTableEntry): UserPermissionTableEntry
  * @param entry Table entry.
  */
 const addEntry = async () => {
-  if (addNewEntry.value) return; // already in add entry mode
+  if (!selUserRecord.value || addNewEntry.value) return; // user must be selected, already in add entry mode
   formEntry.name = ''; // Force user to pick name from combobox list.
   formEntry.value = '';
   await tabRef.value?.selectEntry(null, true); // deselect in case something is selected
@@ -127,7 +130,7 @@ const saveEntry = async (entry: UserPermissionTableEntry | null) => {
   isBusyOptions.value = true;
 
   try {
-    const req = convertEditToReq(formEntry, entry?.id || null, selUserRecord.value?.id || -1);
+    const req = convertEditToReq(formEntry, entry?.id ?? null, selUserRecord.value?.id || -1);
     await backendApiAdminUser.editPermissionEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();
@@ -151,14 +154,14 @@ const saveEntry = async (entry: UserPermissionTableEntry | null) => {
 /** Verify form state. */
 const verifyForm = (): boolean => {
   // Note we do not check if permission entry with same name/value already exists - error from backend is clear enough.
-  if (!formEntry.name) {
+  if (formEntry.name === '') {
     AppMessager.failureT(
       'admin.user.permissions.table.msg.save.badName.title',
       'admin.user.permissions.table.msg.save.badName.content',
     );
     return false;
   }
-  if (!formEntry.value) {
+  if (formEntry.value === '') {
     AppMessager.failureT(
       'admin.user.permissions.table.msg.save.badValue.title',
       'admin.user.permissions.table.msg.save.badValue.content',
@@ -216,13 +219,13 @@ const deleteEntry = async (entry: UserPermissionTableEntry | null) => {
 };
 
 /** Actions for EntryOptions. */
-const actions: Record<string, (entry: UserPermissionTableEntry | null) => Promise<void>> = reactive({
+const actions: Record<string, (entry: UserPermissionTableEntry | null) => Promise<void>> = {
   add: addEntry,
   save: saveEntry,
   cancel: cancelEntry,
   edit: editEntry,
   delete: deleteEntry,
-});
+};
 
 //
 
@@ -232,7 +235,8 @@ const actions: Record<string, (entry: UserPermissionTableEntry | null) => Promis
  * @param entry Entry.
  */
 const isBusyForEntry = (paginer: boolean, entry: UserPermissionTableEntry | null): boolean => {
-  if (isBusyOptions.value) return true;
+  if (!selUserRecord.value) return true; // no user is selected
+  if (isBusyOptions.value) return true; // explicitly busy for whatever reason
   if (paginer && addNewEntry.value) return true;
 
   if (addNewEntry.value && entry !== null) return true;
@@ -240,19 +244,44 @@ const isBusyForEntry = (paginer: boolean, entry: UserPermissionTableEntry | null
   return false;
 };
 
-/** Determine available general options. */
+//
+
+/**
+ * Determine available general options.
+ * @returns Entry meta.
+ */
 const metaGeneral = (): EntryMeta | null => {
+  if (!selUserRecord.value) return null; // hide options completely if no user is selected
+
   const options: Record<string, EntryOption> = {
-    add: {
-      access: 'ENABLED',
-      reason: null,
-    },
+    add: resolveAdd(),
   };
   return {
     options: options,
     data: null,
   };
 };
+
+/**
+ * Determine state of Add option.
+ * @returns State of Add option.
+ */
+const resolveAdd = (): EntryOption => {
+  if (selUserRecord.value?.email === AppLoginer.getEmail()) return {
+    access: 'DISABLED',
+    reason: 'notYourself',
+  };
+  if (!AppLoginer.hasPermissionsAny(['role_admin', 'user_edit'])) return {
+    access: 'DISABLED',
+    reason: 'adminOnly',
+  };
+  return {
+    access: 'ENABLED',
+    reason: null,
+  };
+}
+
+//
 
 /**
  * Determine available options for given entry.

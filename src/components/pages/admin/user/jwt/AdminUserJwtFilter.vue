@@ -55,6 +55,7 @@ const isBtnDisabled = () => {
           id="createdFromAt"
           mode="date"
           :dateTimeMax="form.createdToAt"
+          :allowNull="true"
           :disabled="disabled"
         />
 
@@ -64,6 +65,7 @@ const isBtnDisabled = () => {
           id="createdToAt"
           mode="date"
           :dateTimeMin="form.createdFromAt"
+          :allowNull="true"
           :disabled="disabled"
         />
       </div>

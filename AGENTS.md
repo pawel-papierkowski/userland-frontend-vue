@@ -44,8 +44,9 @@ When I ask for review, in order of importance:
 - Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps - we need to fix that stuff first.
 - Verify algorithm and logic. Is this correct way to do it? Can it be done better?
 - Find tests for reviewed code and review them too. If tests are missing, note their absence and plan what tests should be added. Do not add them automatically unless explicitly asked.
-
-I might ask to review same code multiple times (to re-check code after changes implemented from previous review). In this case you can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
+- I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
+  - You can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
+  - If previously reported issues still exist, inform about them again unless they were explained or rejected.
 
 ## Testing
 - We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
