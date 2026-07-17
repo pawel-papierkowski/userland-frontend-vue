@@ -54,7 +54,7 @@ watch(selUserRecord, () => {
 const loadUserData = async () => {
   clearForm();
   const data = await resolveUserData();
-  if (data === null) return null; // no user selected or failed to load user data
+  if (data === null) return; // no user selected or failed to load user data
 
   fillFormData(data);
   diffForm.value = { ...form }; // remember loaded state
@@ -191,15 +191,7 @@ const convertLockToReq = (locked: boolean): UserFullDataReq => {
 
 /** Clear entire form. */
 const clearForm = () => {
-  form.createdAt = '';
-  form.modifiedAt = '';
-  form.username = '';
-  form.email = '';
-  form.status = '';
-  form.locked = null;
-  form.lang = '';
-  form.name = '';
-  form.surname = '';
+  Object.assign(form, emptyUserForm);
 };
 
 /**
@@ -257,19 +249,12 @@ const canEditUsers = (): boolean => {
 };
 
 /**
- * Check if inputs should be disabled.
- * @returns True if should be disabled, otherwise false.
+ * Check if form should be disabled. It will happen if we are busy, user is not selected,
+ * we are viewing our own account or currently logged user has no user edit permissions.
+ * @returns True if form should be disabled, otherwise false.
  */
-const isInputDisabled = (): boolean => {
-  return selUserRecord.value === null || isYourOwnAccount() || !canEditUsers();
-};
-
-/**
- * Check if edit buttons should be disabled.
- * @returns True if should be disabled, otherwise false.
- */
-const isBtnDisabled = (): boolean => {
-  return isBusy.value || selUserRecord.value === null || isYourOwnAccount();
+const isFormDisabled = (): boolean => {
+  return isBusy.value || selUserRecord.value === null || isYourOwnAccount() || !canEditUsers();
 };
 </script>
 
@@ -296,7 +281,7 @@ const isBtnDisabled = (): boolean => {
             type="text"
             v-model="form.username"
             required
-            :disabled="isInputDisabled()"
+            :disabled="isFormDisabled()"
             autocomplete="off"
           />
 
@@ -307,7 +292,7 @@ const isBtnDisabled = (): boolean => {
             type="email"
             v-model="form.email"
             required
-            :disabled="isInputDisabled()"
+            :disabled="isFormDisabled()"
             autocomplete="off"
           />
 
@@ -330,7 +315,7 @@ const isBtnDisabled = (): boolean => {
             type="text"
             v-model="form.name"
             required
-            :disabled="isInputDisabled()"
+            :disabled="isFormDisabled()"
             autocomplete="off"
           />
 
@@ -341,7 +326,7 @@ const isBtnDisabled = (): boolean => {
             type="text"
             v-model="form.surname"
             required
-            :disabled="isInputDisabled()"
+            :disabled="isFormDisabled()"
             autocomplete="off"
           />
         </div>
@@ -354,10 +339,10 @@ const isBtnDisabled = (): boolean => {
       />
 
       <div class="items-horizontal" v-if="canEditUsers()">
-        <button data-testid="btn-update" :disabled="isBtnDisabled()" @click="handleUserUpdate()">
+        <button data-testid="btn-update" :disabled="isFormDisabled()" @click="handleUserUpdate()">
           {{ isBusy ? t('admin.user.main.button.busy') : t('admin.user.main.button.update') }}
         </button>
-        <button data-testid="btn-lock" class="danger" :disabled="isBtnDisabled()" @click="handleUserLock()">
+        <button data-testid="btn-lock" class="danger" :disabled="isFormDisabled()" @click="handleUserLock()">
           {{
             isBusy
               ? t('admin.user.main.button.busy')

@@ -58,7 +58,7 @@ When I ask for review, in order of importance:
 - Tests are NOT co-located. We have mirror directory structure in separate `src/__tests__/` directory. Test files have `.spec.ts` at end of their names.
 - Use test suites.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
-- When you add `vi.fn()`, you forget to add type parameter and IDE throws a fit. Always add appropriate type parameter.
+- When you add `vi.fn()`, you need to add appropriate type parameter, for example `vi.fn<() => void>()`.
 
 ### Style of test code
 
