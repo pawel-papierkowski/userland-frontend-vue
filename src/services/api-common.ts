@@ -7,7 +7,7 @@ import axios from 'axios';
 import { isAxiosError } from 'axios';
 
 import { logger } from '@/code/utils/logger.ts';
-import { apiAddress } from '@/code/data/app/const.ts';
+import { apiAddress, locstLastApiCall } from '@/code/data/app/const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
@@ -34,14 +34,19 @@ export default {
       const isAuthRequest =
         config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
 
-      if (!isAuthRequest && AppLoginer.shouldProlong()) {
-        logger.debug('Session close to expiration, prolonging...');
-        try {
-          const { jwt } = await AppLoginer.prolongSilently();
-          token = jwt; // we need to use new token
-        } catch (error) {
-          logger.error(error, 'Failed to prolong.');
+      if (!isAuthRequest) {
+        if (AppLoginer.shouldProlong()) {
+          logger.debug('Prolonging session...');
+          try {
+            const { jwt } = await AppLoginer.prolongSilently();
+            token = jwt; // we need to use new token
+          } catch (error) {
+            logger.error(error, 'Failed to prolong.');
+          }
         }
+
+        // Remember when we last made a non-auth API call.
+        localStorage.setItem(locstLastApiCall, String(Date.now()));
       }
 
       // Attach authorization header.

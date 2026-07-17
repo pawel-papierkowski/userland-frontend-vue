@@ -3,7 +3,7 @@ import { logger } from '@/code/utils/logger.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { useLoginStore } from '@/stores/login.ts';
-import { locstJwt, prolongExpiration } from '@/code/data/app/const.ts';
+import { locstJwt, prolongExpiration, locstLastApiCall, prolongAfterLongTime } from '@/code/data/app/const.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 
 import backendApi from '@/services/api-common.ts';
@@ -111,6 +111,14 @@ export class AppLoginer {
    * @returns True if session should be prolonged, otherwise false.
    */
   public static shouldProlong(): boolean {
+    return AppLoginer.isExpiringSoon() || AppLoginer.isIdleTooLong();
+  }
+
+  /**
+   * Check if user session is expiring soon.
+   * @returns True if session is expiring soon, otherwise false.
+   */
+  private static isExpiringSoon(): boolean {
     const loginStore = useLoginStore();
     if (!loginStore.loginState.isLogged) return false;
 
@@ -120,6 +128,16 @@ export class AppLoginer {
 
     // If less than 5 minutes left, prolong.
     return diff > 0 && diff < prolongExpiration * 60 * 1000;
+  }
+
+  /**
+   * Check if user session was idle for long time.
+   * @returns True if session was idle for long time, otherwise false.
+   */
+  private static isIdleTooLong(): boolean {
+    const lastCallStr = localStorage.getItem(locstLastApiCall);
+    if (!lastCallStr) return false;
+    return Date.now() - Number(lastCallStr) >= prolongAfterLongTime * 60 * 1000;
   }
 
   //

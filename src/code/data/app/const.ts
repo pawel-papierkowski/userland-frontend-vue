@@ -24,12 +24,21 @@ export const languages: string[] = ['en', 'pl'];
 /** List of permission prefixes. */
 export const permissions: string[] = ['role', 'user'];
 
+// ////////////////////////////////////////////////////////////////////////////
+// Prolong.
+
 /** How close to expiration we should be before automatic prolongation in minutes. */
 export const prolongExpiration = 15;
 
+/** For JWT with long validity, if last api call happened in past more than this value, prolong silently. In minutes. */
+export const prolongAfterLongTime = 12 * 60; // 12h
+
+// ////////////////////////////////////////////////////////////////////////////
 // LOCAL STORAGE
 
 /** Local storage: currently selected language. */
 export const locstLang = 'app-language';
 /** Local storage: currently used JWT token. */
 export const locstJwt = 'app-jwt';
+/** Local storage: timestamp (ms) of the last non-auth API call. Used to detect idle sessions. */
+export const locstLastApiCall = 'app-last-api-call';
