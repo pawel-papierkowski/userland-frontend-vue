@@ -130,7 +130,7 @@ const saveEntry = async (entry: UserPermissionTableEntry | null) => {
   isBusyOptions.value = true;
 
   try {
-    const req = convertEditToReq(formEntry, entry?.id ?? null, selUserRecord.value?.id || -1);
+    const req = convertEditToReq(formEntry, entry?.id ?? null, selUserRecord.value?.id ?? -1);
     await backendApiAdminUser.editPermissionEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();

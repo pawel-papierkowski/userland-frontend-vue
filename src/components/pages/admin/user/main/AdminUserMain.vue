@@ -122,11 +122,11 @@ const saveUserData = async (): Promise<UserFullDataResp | null> => {
  */
 const convertToReq = (form: UserFullDataForm): UserFullDataReq => {
   return {
-    id: selUserRecord.value?.id || -1,
+    id: selUserRecord.value?.id ?? -1,
     username: form.username,
     email: form.email,
-    locked: null,
-    lang: null,
+    locked: null, // no change, we lock via separate button
+    lang: null, // no change, we do not change language of user at all
     profile: {
       name: form.name,
       surname: form.surname,
@@ -176,8 +176,9 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp | null> => {
  * @returns User full edit request.
  */
 const convertLockToReq = (locked: boolean): UserFullDataReq => {
+  // null here means "do not change given value", so we only change field locked
   return {
-    id: selUserRecord.value?.id || -1,
+    id: selUserRecord.value?.id ?? -1,
     username: null,
     email: null,
     locked: locked,
@@ -243,6 +244,7 @@ const resetDiffField = (fieldName: string) => {
  * @returns True if selected account is same as currently logged in account, otherwise false.
  */
 const isYourOwnAccount = (): boolean => {
+  // Safe, as we cannot edit our own user and changing email via profile will log you out, invalidating token.
   return AppLoginer.getEmail() === form.email;
 };
 

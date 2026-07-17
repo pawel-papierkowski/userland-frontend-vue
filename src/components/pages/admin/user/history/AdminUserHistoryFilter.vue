@@ -71,8 +71,9 @@ const isBtnDisabled = () => {
           :disabled="disabled"
         />
 
-        <label for="status">{{ t('admin.user.history.filter.who') }}:</label>
+        <label for="who">{{ t('admin.user.history.filter.who') }}:</label>
         <ComboBox
+          id="who"
           data-testid="who"
           v-model="form.who"
           :options="enUserHistoryWho"
@@ -81,8 +82,9 @@ const isBtnDisabled = () => {
           placeholder="tech.user.who.null"
         />
 
-        <label for="status">{{ t('admin.user.history.filter.what') }}:</label>
+        <label for="what">{{ t('admin.user.history.filter.what') }}:</label>
         <ComboBox
+          id="what"
           data-testid="what"
           v-model="form.what"
           :options="enUserHistoryWhat"

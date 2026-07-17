@@ -42,7 +42,7 @@ export type UserTableEntry = {
 
 //
 
-/** User full data request. */
+/** User full data update request. Note: null here means "do not change this field". */
 export type UserFullDataReq = {
   id: number; // Identificator of user.
   username: string | null;

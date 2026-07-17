@@ -100,7 +100,4 @@ const resolveClass = (tab: TabData) => {
   border-bottom: 2px solid var(--color-text-primary);
   font-weight: bold;
 }
-
-.tab-content {
-}
 </style>

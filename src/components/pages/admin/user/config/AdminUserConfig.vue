@@ -125,7 +125,7 @@ const saveEntry = async (entry: UserConfigTableEntry | null) => {
   isBusyOptions.value = true;
 
   try {
-    const req = convertEditToReq(formEntry, entry?.id ?? null, selUserRecord.value?.id || -1);
+    const req = convertEditToReq(formEntry, entry?.id ?? null, selUserRecord.value?.id ?? -1);
     await backendApiAdminUser.editConfigEntry(req);
     await tabRef.value?.selectEntry(entry, true); // since same entry is already selected, this will deselect
     await tabRef.value?.handleReload();
@@ -148,7 +148,7 @@ const saveEntry = async (entry: UserConfigTableEntry | null) => {
 
 /** Verify form state. */
 const verifyForm = (): boolean => {
-  // Note we do not check if permission entry with same name/value already exists - error from backend is clear enough.
+  // Note we do not check if config entry with same name/value already exists - error from backend is clear enough.
   if (formEntry.name === '') {
     AppMessager.failureT(
       'admin.user.config.table.msg.save.badName.title',
