@@ -9,7 +9,8 @@ import i18n from '@/code/lang/i18n.ts';
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
+
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
@@ -30,6 +31,10 @@ vi.mock('@/services/features/api-admin-users.ts', () => ({
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -171,7 +176,7 @@ describe('AdminUser', () => {
       // Act: Mount component.
       createComponent();
 
-      // Assert: loadPage was called on mount.
+      // Assert: LoadPage was called on mount.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup: Resolve to avoid hanging promise.
@@ -280,7 +285,7 @@ describe('AdminUser', () => {
       await nextTick();
 
       // Assert: Error was logged.
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'User table reload failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'User table reload failed!');
     });
   });
 
@@ -342,7 +347,7 @@ describe('AdminUser', () => {
       await filterComp.vm.$emit('reload');
       await nextTick();
 
-      // Assert: cnvDate was called with the date, and the request has the
+      // Assert: CnvDate was called with the date, and the request has the
       // correctly formatted string.
       expect(TimeUtils.cnvDate).toHaveBeenCalledWith(formWithDate.createdFromAt);
       const callArg = mockLoadPage.mock.calls[0]?.[0] as any;
@@ -389,7 +394,7 @@ describe('AdminUser', () => {
       await filterComp.vm.$emit('reload');
       await nextTick();
 
-      // Assert: cnvDate was called with the date, and the request has the
+      // Assert: CnvDate was called with the date, and the request has the
       // correctly formatted string.
       expect(TimeUtils.cnvDate).toHaveBeenCalledWith(formWithDate.createdToAt);
       const callArg = mockLoadPage.mock.calls[0]?.[0] as any;
@@ -452,7 +457,7 @@ describe('AdminUser', () => {
       await tablePageComp.vm.$emit('update:currPage', 1);
       await nextTick();
 
-      // Assert: loadPage was called again.
+      // Assert: LoadPage was called again.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup.
@@ -486,7 +491,7 @@ describe('AdminUser', () => {
       await tablePageComp.vm.$emit('update:currSortBy', 'email');
       await nextTick();
 
-      // Assert: loadPage was called again.
+      // Assert: LoadPage was called again.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup.
@@ -515,7 +520,7 @@ describe('AdminUser', () => {
       await tablePageComp.vm.$emit('update:currSortOrder', 'DESC');
       await nextTick();
 
-      // Assert: loadPage was called again.
+      // Assert: LoadPage was called again.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup.
@@ -550,7 +555,7 @@ describe('AdminUser', () => {
       userEventStore.notifyUserUpdated(diffData);
       await nextTick();
 
-      // Assert: loadPage was called again.
+      // Assert: LoadPage was called again.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup.
@@ -580,7 +585,7 @@ describe('AdminUser', () => {
       userEventStore.notifyUserUpdated(diffData);
       await nextTick();
 
-      // Assert: loadPage was called again.
+      // Assert: LoadPage was called again.
       expect(mockLoadPage).toHaveBeenCalledTimes(1);
 
       // Cleanup.
@@ -608,7 +613,7 @@ describe('AdminUser', () => {
       await nextTick();
       await nextTick();
 
-      // Assert: loadPage was not called.
+      // Assert: LoadPage was not called.
       expect(mockLoadPage).not.toHaveBeenCalled();
     });
   });

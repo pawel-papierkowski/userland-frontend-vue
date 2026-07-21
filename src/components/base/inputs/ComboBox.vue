@@ -180,9 +180,9 @@ const showOption = (option: number | string | null): number | string | null => {
 <template>
   <div
     :id="id"
+    :data-testid="`combobox_${id}`"
     class="combobox"
     :class="{ disabled: disabled, err: invalid }"
-    :data-testid="`combobox_${id}`"
     ref="combobox"
     role="combobox"
     :aria-expanded="isOpen"

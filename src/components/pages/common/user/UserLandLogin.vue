@@ -6,13 +6,15 @@ import { useRouter, useRoute } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user-type';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const router = useRouter();
@@ -29,7 +31,7 @@ const form: UserLoginForm = reactive({
 
 /** True if submit button was clicked at least once. */
 const usedButton = ref(false);
-/** True if submission is in progress, otherwise false. Used to disable submit button. */
+/** True if we are busy (submission is in progress), otherwise false. Used to disable form fields and submit button. */
 const isBusy = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
@@ -65,14 +67,14 @@ const handleLogin = async () => {
     } else {
       // token was rejected for some reason
       clearForm();
+      isBusy.value = false;
       showMessage(false);
     }
   } catch (error) {
     clearForm();
+    isBusy.value = false;
     AppMessager.errorT(error, 'user.login.msg.error.title', 'user.login.msg.error.content');
-    backendApi.logError(error, 'Login failed!');
-  } finally {
-    isBusy.value = false; // Enable submit button.
+    apiLogging.logError(error, 'Login failed!');
   }
 };
 
@@ -116,7 +118,7 @@ const showMessage = (success: boolean) => {
 /** Clear entire form. */
 const clearForm = () => {
   usedButton.value = false;
-  form.email = '';
+  //form.email = '';
   form.password = '';
 };
 
@@ -128,7 +130,7 @@ const handleRedirection = () => {
       return;
     }
     // If we are here, it means standard user tried to login to admin panel, ouch.
-    // We do not logout them, we just kick out them to normal webpage.
+    // We do not logout them or show error, we just kick out them to normal webpage.
   }
   router.push({ name: 'home' });
 };
@@ -146,9 +148,8 @@ const goPasswordReset = () => {
 };
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 </script>
 
@@ -160,28 +161,28 @@ const getInputClass = (msgError: string | null): string => {
       <div class="form-group">
         <div class="form-entry">
           <label for="email">{{ t('user.login.form.email') }}:</label>
-          <input
+          <TextBox
             id="email"
-            data-testid="email"
             type="email"
             v-model="form.email"
-            required
             autocomplete="email"
-            :class="getInputClass(emailError)"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(emailError)"
           />
           <span v-if="emailError" class="form-text-error">{{ emailError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="password">{{ t('user.login.form.password') }}:</label>
-          <input
+          <TextBox
             id="password"
-            data-testid="password"
             type="password"
             v-model="form.password"
-            required
             autocomplete="new-password"
-            :class="getInputClass(passwordError)"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordError)"
           />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>

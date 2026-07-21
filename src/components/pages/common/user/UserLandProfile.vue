@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useLoginStore } from '@/stores/login.ts';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
 
@@ -16,6 +16,8 @@ import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const router = useRouter();
@@ -70,7 +72,7 @@ const resolveUserData = async (): Promise<UserDataResp | null> => {
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'user.profile.msg.loadError.title', 'user.profile.msg.loadError.content');
-    backendApi.logError(error, 'Loading user data for profile failed!');
+    apiLogging.logError(error, 'Loading user data for profile failed!');
     canSpin.value = false;
     return null;
   }
@@ -92,7 +94,7 @@ const saveUserData = async () => {
     showMessage();
   } catch (error) {
     AppMessager.errorT(error, 'user.profile.msg.error.title', 'user.profile.msg.error.content');
-    backendApi.logError(error, 'Profile update failed!');
+    apiLogging.logError(error, 'Profile update failed!');
   } finally {
     isBusy.value = false; // Enable submit button.
   }
@@ -167,9 +169,8 @@ const clearForm = () => {
 };
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 
 //
@@ -192,54 +193,64 @@ onMounted(async () => {
       <div class="form-group">
         <div class="form-entry">
           <label for="username">{{ t('user.profile.form.username') }}:</label>
-          <input
+          <TextBox
             id="username"
-            data-testid="username"
-            type="text"
             v-model="form.username"
-            required
             autocomplete="off"
-            :class="getInputClass(usernameError)"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(usernameError)"
           />
           <span v-if="usernameError" class="form-text-error">{{ usernameError }}</span>
         </div>
 
         <div class="form-entry">
+          <!-- Note it is read-only field, we change email separately. -->
           <label for="email">{{ t('user.profile.form.email') }}:</label>
-          <input
+          <TextBox
             id="email"
-            data-testid="email"
             type="email"
             v-model="form.email"
-            required
-            disabled
-            autocomplete="email"
+            autocomplete="off"
+            :disabled="true"
           />
         </div>
 
         <div class="form-entry">
           <label for="name">{{ t('user.profile.form.name') }}:</label>
-          <input id="name" data-testid="name" type="text" v-model="form.name" required autocomplete="off" />
+          <TextBox
+            id="name"
+            v-model="form.name"
+            autocomplete="off"
+            :required="true"
+            :disabled="isBusy"
+          />
         </div>
 
         <div class="form-entry">
           <label for="surname">{{ t('user.profile.form.surname') }}:</label>
-          <input id="surname" data-testid="surname" type="text" v-model="form.surname" required autocomplete="off" />
+          <TextBox
+            id="surname"
+            v-model="form.surname"
+            autocomplete="off"
+            :required="true"
+            :disabled="isBusy"
+          />
         </div>
       </div>
 
       <button data-testid="btn-submit" type="submit" :disabled="isBusy">
         {{ isBusy ? t('user.profile.button.updateBusy') : t('user.profile.button.update') }}
       </button>
-      <div class="items-horizontal">
-        <button data-testid="btn-emailChange" :disabled="isBusy" @click="handleEmailChange()">
-          {{ t('user.profile.button.emailChange') }}
-        </button>
-        <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDelete()">
-          {{ t('user.profile.button.deleteAccount') }}
-        </button>
-      </div>
     </form>
+    <div class="items-horizontal">
+      <button data-testid="btn-emailChange" :disabled="isBusy" @click="handleEmailChange()">
+        {{ t('user.profile.button.emailChange') }}
+      </button>
+      <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDelete()">
+        {{ t('user.profile.button.deleteAccount') }}
+      </button>
+    </div>
   </div>
 </template>
 

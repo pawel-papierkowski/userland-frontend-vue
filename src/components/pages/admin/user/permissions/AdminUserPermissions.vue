@@ -8,7 +8,7 @@
 import { ref, reactive, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
@@ -145,7 +145,7 @@ const saveEntry = async (entry: UserPermissionTableEntry | null) => {
       'admin.user.permissions.table.msg.save.fail.title',
       'admin.user.permissions.table.msg.save.fail.content',
     );
-    backendApi.logError(error, 'Failed to save user permission entry!');
+    apiLogging.logError(error, 'Failed to save user permission entry!');
   } finally {
     isBusyOptions.value = false;
   }
@@ -212,7 +212,7 @@ const deleteEntry = async (entry: UserPermissionTableEntry | null) => {
       'admin.user.permissions.table.msg.delete.fail.title',
       'admin.user.permissions.table.msg.delete.fail.content',
     );
-    backendApi.logError(error, 'Failed to delete user permission entry!');
+    apiLogging.logError(error, 'Failed to delete user permission entry!');
   } finally {
     isBusyOptions.value = false;
   }

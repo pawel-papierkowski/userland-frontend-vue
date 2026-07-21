@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
 import { createPinia, setActivePinia } from 'pinia';
 import apiCommon from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 
 import { logger } from '@/code/utils/logger.ts';
 import { locstLastApiCall, prolongAfterLongTime } from '@/code/data/app/const.ts';
@@ -29,6 +30,9 @@ vi.mock('axios', () => {
       request: {
         use: vi.fn<any>(),
       },
+      response: {
+        use: vi.fn<any>(),
+      },
     },
   };
   return {
@@ -48,6 +52,8 @@ vi.mock('@/code/stores/login/AppLoginer.ts', async () => {
       getJwt: vi.fn<typeof AppLoginer.getJwt>(),
       shouldProlong: actual.AppLoginer.shouldProlong,
       prolongSilently: vi.fn<typeof AppLoginer.prolongSilently>(),
+      isLogged: vi.fn<() => boolean>(),
+      expireSession: vi.fn<() => void>(),
     },
   };
 });
@@ -66,6 +72,7 @@ vi.mock('@/code/utils/logger.ts', () => ({
 
 describe('api-common', () => {
   let interceptor: (config: any) => Promise<any>;
+  let responseErrorHandler: (error: any) => Promise<any>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -75,6 +82,10 @@ describe('api-common', () => {
     apiCommon.create('/test-base');
     const mockAxiosInstance = vi.mocked(axios.create).mock.results[0]?.value;
     interceptor = mockAxiosInstance.interceptors.request.use.mock.calls[0][0];
+    responseErrorHandler = mockAxiosInstance.interceptors.response.use.mock.calls[0][1];
+
+    // By default, mock user as logged in. Individual tests can override.
+    vi.mocked(AppLoginer.isLogged).mockReturnValue(true);
   });
 
   // //////////////////////////////////////////////////////////////////////////
@@ -82,70 +93,70 @@ describe('api-common', () => {
 
   describe('general', () => {
     it('should NOT add Authorization header if no token is present', async () => {
-      // Arrange: no token present.
+      // Arrange: No token present.
       vi.mocked(AppLoginer.getJwt).mockReturnValue(null);
       const config = { headers: {} };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: no prolong, continue without token.
+      // Assert: No prolong, continue without token.
       expect(result.headers.Authorization).toBeUndefined();
     });
 
     it('should add Authorization header if token is present and no prolong needed', async () => {
-      // Arrange: token present and no prolong needed (not idle, not expiring).
+      // Arrange: Token present and no prolong needed (not idle, not expiring).
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: no prolong, continue normally with old token.
+      // Assert: No prolong, continue normally with old token.
       expect(result.headers.Authorization).toBe('Bearer old-token');
       expect(AppLoginer.prolongSilently).not.toHaveBeenCalled();
     });
 
     it('should prolong session and use new token if prolong is needed', async () => {
-      // Arrange: token present and shouldProlong returns true (expiry).
+      // Arrange: Token present and shouldProlong returns true (expiry).
       vi.spyOn(AppLoginer, 'shouldProlong').mockReturnValueOnce(true);
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ jwt: 'new-token' } as any);
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: prolong, continue with new token.
+      // Assert: Prolong, continue with new token.
       expect(AppLoginer.prolongSilently).toHaveBeenCalled();
       expect(result.headers.Authorization).toBe('Bearer new-token');
       expect(logger.debug).toHaveBeenCalledWith('Prolonging session...');
     });
 
     it('should NOT prolong session for auth requests even if prolong is needed', async () => {
-      // Arrange: token present.
+      // Arrange: Token present.
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
 
       for (const url of authUrls) {
         const config = { headers: {}, url };
         const result = await interceptor(config);
-        // Assert: no prolong, because auth endpoints skip the prolong block entirely.
+        // Assert: No prolong, because auth endpoints skip the prolong block entirely.
         expect(AppLoginer.prolongSilently).not.toHaveBeenCalled();
         expect(result.headers.Authorization).toBe('Bearer old-token');
       }
     });
 
     it('should proceed with old token if prolong fails', async () => {
-      // Arrange: token present and shouldProlong returns true (expiry).
+      // Arrange: Token present and shouldProlong returns true (expiry).
       vi.spyOn(AppLoginer, 'shouldProlong').mockReturnValueOnce(true);
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       vi.mocked(AppLoginer.prolongSilently).mockRejectedValue(new Error('Prolong failed'));
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: prolong was attempted but failed, continue with old token.
+      // Assert: Prolong was attempted but failed, continue with old token.
       expect(AppLoginer.prolongSilently).toHaveBeenCalled();
       expect(result.headers.Authorization).toBe('Bearer old-token');
       expect(logger.error).toHaveBeenCalledWith(expect.any(Error), 'Failed to prolong.');
@@ -163,10 +174,10 @@ describe('api-common', () => {
       vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ jwt: 'new-token' } as any);
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: prolong was called due to idle timeout (isIdleTooLong returns true).
+      // Assert: Prolong was called due to idle timeout (isIdleTooLong returns true).
       expect(AppLoginer.prolongSilently).toHaveBeenCalled();
       expect(result.headers.Authorization).toBe('Bearer new-token');
     });
@@ -176,10 +187,10 @@ describe('api-common', () => {
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: no prolong triggered (isIdleTooLong returns false).
+      // Assert: No prolong triggered (isIdleTooLong returns false).
       expect(AppLoginer.prolongSilently).not.toHaveBeenCalled();
       expect(result.headers.Authorization).toBe('Bearer old-token');
     });
@@ -190,10 +201,10 @@ describe('api-common', () => {
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       const result = await interceptor(config);
 
-      // Assert: no prolong triggered (isIdleTooLong returns false).
+      // Assert: No prolong triggered (isIdleTooLong returns false).
       expect(AppLoginer.prolongSilently).not.toHaveBeenCalled();
       expect(result.headers.Authorization).toBe('Bearer old-token');
     });
@@ -206,7 +217,7 @@ describe('api-common', () => {
       for (const url of authUrls) {
         const config = { headers: {}, url };
         const result = await interceptor(config);
-        // Assert: no prolong because auth endpoints skip the prolong block.
+        // Assert: No prolong because auth endpoints skip the prolong block.
         expect(AppLoginer.prolongSilently).not.toHaveBeenCalled();
         expect(result.headers.Authorization).toBe('Bearer old-token');
       }
@@ -218,7 +229,7 @@ describe('api-common', () => {
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       const config = { headers: {}, url: '/some-endpoint' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       await interceptor(config);
 
       // Assert: timestamp was saved.
@@ -233,11 +244,89 @@ describe('api-common', () => {
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
       const config = { headers: {}, url: '/login' };
 
-      // Act: call interceptor.
+      // Act: Call interceptor.
       await interceptor(config);
 
-      // Assert: no timestamp was saved (block is skipped for auth URLs).
+      // Assert: No timestamp was saved (block is skipped for auth URLs).
       expect(localStorage.getItem(locstLastApiCall)).toBeNull();
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Response interceptor: 401 handling.
+
+  describe('401 response interceptor', () => {
+    it('should call expireSession on 401 for non-login endpoint when logged in', async () => {
+      // Arrange: 401 error from a non-login endpoint.
+      const error = {
+        isAxiosError: true,
+        response: { status: 401 },
+        config: { url: '/some-endpoint' },
+      };
+
+      // Act: Call the response error handler.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
+
+      // Assert: ExpireSession was called (session expired).
+      expect(AppLoginer.expireSession).toHaveBeenCalled();
+    });
+
+    it('should NOT call expireSession on 401 for /login endpoint', async () => {
+      // Arrange: 401 error from the login endpoint.
+      const error = {
+        isAxiosError: true,
+        response: { status: 401 },
+        config: { url: '/login' },
+      };
+
+      // Act: Call the response error handler.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
+
+      // Assert: ExpireSession was NOT called (wrong credentials, not expired session).
+      expect(AppLoginer.expireSession).not.toHaveBeenCalled();
+    });
+
+    it('should NOT call expireSession on 401 when already not logged in', async () => {
+      // Arrange: Ser is not logged in.
+      vi.mocked(AppLoginer.isLogged).mockReturnValue(false);
+      const error = {
+        isAxiosError: true,
+        response: { status: 401 },
+        config: { url: '/some-endpoint' },
+      };
+
+      // Act: Call the response error handler.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
+
+      // Assert: ExpireSession was NOT called (already logged out).
+      expect(AppLoginer.expireSession).not.toHaveBeenCalled();
+    });
+
+    it('should NOT call expireSession on non-401 errors', async () => {
+      // Arrange: 403 Forbidden (not 401).
+      const error = {
+        isAxiosError: true,
+        response: { status: 403 },
+        config: { url: '/some-endpoint' },
+      };
+
+      // Act: Call the response error handler.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
+
+      // Assert: ExpireSession was NOT called (not a 401).
+      expect(AppLoginer.expireSession).not.toHaveBeenCalled();
+    });
+
+    it('should reject the promise so the caller can also handle the error', async () => {
+      // Arrange: 401 error.
+      const error = {
+        isAxiosError: true,
+        response: { status: 401 },
+        config: { url: '/some-endpoint' },
+      };
+
+      // Act & assert: the error is still propagated to the caller.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
     });
   });
 
@@ -246,7 +335,7 @@ describe('api-common', () => {
 
   describe('logError', () => {
     it('should log detailed error if it is an Axios error with response', () => {
-      // Arrange: error that should be processed.
+      // Arrange: Error that should be processed.
       const error = {
         isAxiosError: true,
         message: 'Request failed',
@@ -256,10 +345,10 @@ describe('api-common', () => {
         },
       };
 
-      // Act: call error logging.
-      apiCommon.logError(error, 'API Error');
+      // Act: Call error logging.
+      apiLogging.logError(error, 'API Error');
 
-      // Assert: called logger.error internally with correct parameters.
+      // Assert: Called logger.error internally with correct parameters.
       expect(logger.error).toHaveBeenCalledWith('API Error', {
         status: 400,
         message: 'Request failed',
@@ -268,27 +357,27 @@ describe('api-common', () => {
     });
 
     it('should log unreachable error if it is an Axios error without response', () => {
-      // Arrange: error that should be processed.
+      // Arrange: Error that should be processed.
       const error = {
         isAxiosError: true,
         request: {},
       };
 
-      // Act: call error logging.
-      apiCommon.logError(error, 'API Error');
+      // Act: Call error logging.
+      apiLogging.logError(error, 'API Error');
 
-      // Assert: called logger.error internally with correct parameters.
+      // Assert: Called logger.error internally with correct parameters.
       expect(logger.error).toHaveBeenCalledWith('API Error', 'Backend is unreachable. No response received.');
     });
 
     it('should log unexpected error if it is not an Axios error', () => {
-      // Arrange: error that should be processed.
+      // Arrange: Error that should be processed.
       const error = new Error('Some other error');
 
-      // Act: call error logging.
-      apiCommon.logError(error, 'General Error');
+      // Act: Call error logging.
+      apiLogging.logError(error, 'General Error');
 
-      // Assert: called logger.error internally with correct parameters.
+      // Assert: Called logger.error internally with correct parameters.
       expect(logger.error).toHaveBeenCalledWith('General Error', 'An unexpected error occurred:', error);
     });
   });

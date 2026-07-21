@@ -6,7 +6,7 @@ import { useI18n } from 'vue-i18n';
 
 import { useLoginStore } from '@/stores/login.ts';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiCheck from '@/services/features/api-checks.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -31,7 +31,7 @@ const callCheckAlive = async () => {
     log.debug('Called /api/checks/alive successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.alive.msg.error.title', 'debugArea.checks.alive.msg.error.content');
-    backendApi.logError(error, 'Failed to call /api/checks/alive!');
+    apiLogging.logError(error, 'Failed to call /api/checks/alive!');
   } finally {
     isOptionBusy.value = false; // Enable checks buttons.
   }
@@ -47,7 +47,7 @@ const callCheckLogged = async () => {
     log.debug('Called /api/checks/must-be-logged successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.logged.msg.error.title', 'debugArea.checks.logged.msg.error.content');
-    backendApi.logError(error, 'Failed to call /api/checks/must-be-logged!');
+    apiLogging.logError(error, 'Failed to call /api/checks/must-be-logged!');
   } finally {
     isOptionBusy.value = false; // Enable checks buttons.
   }
@@ -63,7 +63,7 @@ const callCheckAdmin = async () => {
     log.debug('Called /api/checks/must-be-admin successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.admin.msg.error.title', 'debugArea.checks.admin.msg.error.content');
-    backendApi.logError(error, 'Failed to call /api/checks/must-be-admin!');
+    apiLogging.logError(error, 'Failed to call /api/checks/must-be-admin!');
   } finally {
     isOptionBusy.value = false; // Enable checks buttons.
   }
@@ -86,7 +86,7 @@ const callCheckException = async () => {
       'debugArea.checks.exception.msg.error.title',
       'debugArea.checks.exception.msg.error.content',
     );
-    backendApi.logError(error, 'Failed to call /api/checks/exception!');
+    apiLogging.logError(error, 'Failed to call /api/checks/exception!');
   } finally {
     isOptionBusy.value = false; // Enable checks buttons.
   }
@@ -117,7 +117,7 @@ const callProlong = async () => {
       'debugArea.options.prolong.msg.error.title',
       'debugArea.options.prolong.msg.error.content',
     );
-    backendApi.logError(error, 'Failed to prolong user session!');
+    apiLogging.logError(error, 'Failed to prolong user session!');
   } finally {
     isOptionBusy.value = false; // Enable checks buttons.
   }

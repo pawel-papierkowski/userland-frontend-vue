@@ -53,21 +53,21 @@ describe('UserRegistration', () => {
       const userRegistration = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.register).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: fill form fields correctly.
+      // Arrange: Fill form fields correctly.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
       await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
       await userRegistration.find('[data-testid="password"]').setValue('Password123!');
       await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
 
-      // Act: click on registration button.
+      // Act: Click on registration button.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises(); // Wait for all promises (API call) to resolve.
 
-      // Assert: verify API call.
+      // Assert: Verify API call.
       expect(backendApiUser.register).toHaveBeenCalledWith({
         username: 'testuser',
         email: 'test@example.com',
@@ -78,7 +78,7 @@ describe('UserRegistration', () => {
         frontend: 'VUE',
       });
 
-      // Assert: verify success message is present in store.
+      // Assert: Verify success message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('User registered successfully');
@@ -86,7 +86,7 @@ describe('UserRegistration', () => {
         'Please check your mailbox. You will need to confirm registration by clicking on link in email.',
       );
 
-      // Assert: verify redirection to home page.
+      // Assert: Verify redirection to home page.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -94,7 +94,7 @@ describe('UserRegistration', () => {
       // Ensures that after failed registration user gets feedback through the
       // AppMessager.
 
-      // Arrange: mock API returning 500 error.
+      // Arrange: Mock API returning 500 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -107,21 +107,21 @@ describe('UserRegistration', () => {
       const userRegistration = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form fields correctly.
+      // Arrange: Fill form fields correctly.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
       await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
       await userRegistration.find('[data-testid="password"]').setValue('Password123!');
       await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
 
-      // Act: click on registration button.
+      // Act: Click on registration button.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.register).toHaveBeenCalled();
 
-      // Assert: verify error message is present in store.
+      // Assert: Verify error message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Internal server error');
@@ -129,7 +129,7 @@ describe('UserRegistration', () => {
         'The server has encountered a situation it does not know how to handle.',
       );
 
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -147,23 +147,23 @@ describe('UserRegistration', () => {
 
       // No arrange here — form is untouched.
 
-      // Act: click on registration button while form is completely empty.
+      // Act: Click on registration button while form is completely empty.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify that error messages properly shown up for all fields.
+      // Assert: Verify that error messages properly shown up for all fields.
       const errorMessages = userRegistration.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(4);
       errorMessages.forEach((msg) => {
         expect(msg.text()).not.toBe('');
       });
 
-      // Assert: verify API was not called.
+      // Assert: Verify API was not called.
       expect(backendApiUser.register).not.toHaveBeenCalled();
-      // Assert: verify no messages are present in store.
+      // Assert: Verify no messages are present in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -174,28 +174,28 @@ describe('UserRegistration', () => {
       const userRegistration = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form fields with mismatching passwords.
+      // Arrange: Fill form fields with mismatching passwords.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
       await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
       await userRegistration.find('[data-testid="password"]').setValue('Password123!');
       await userRegistration.find('[data-testid="confirmPassword"]').setValue('Different123!');
 
-      // Act: click on registration button.
+      // Act: Click on registration button.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify that error message is shown for confirmPassword.
+      // Assert: Verify that error message is shown for confirmPassword.
       expect(userRegistration.find('#confirmPassword').classes()).toContain('err');
       const errorMessages = userRegistration.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
       expect(errorMessages[0]?.text()).toBe('Passwords do not match.');
 
-      // Assert: verify API was not called.
+      // Assert: Verify API was not called.
       expect(backendApiUser.register).not.toHaveBeenCalled();
-      // Assert: verify no messages are present in store.
+      // Assert: Verify no messages are present in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -206,28 +206,28 @@ describe('UserRegistration', () => {
       const userRegistration = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form fields with invalid email.
+      // Arrange: Fill form fields with invalid email.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
       await userRegistration.find('[data-testid="email"]').setValue('invalid-email');
       await userRegistration.find('[data-testid="password"]').setValue('Password123!');
       await userRegistration.find('[data-testid="confirmPassword"]').setValue('Password123!');
 
-      // Act: click on registration button.
+      // Act: Click on registration button.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify that error message is shown for email.
+      // Assert: Verify that error message is shown for email.
       expect(userRegistration.find('#email').classes()).toContain('err');
       const errorMessages = userRegistration.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
       expect(errorMessages[0]?.text()).toBe('Need to enter correct email.');
 
-      // Assert: verify API was not called.
+      // Assert: Verify API was not called.
       expect(backendApiUser.register).not.toHaveBeenCalled();
-      // Assert: verify no messages are present in store.
+      // Assert: Verify no messages are present in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -238,18 +238,18 @@ describe('UserRegistration', () => {
       const userRegistration = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form with a password missing a digit.
+      // Arrange: Fill form with a password missing a digit.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
       await userRegistration.find('[data-testid="email"]').setValue('test@example.com');
       await userRegistration.find('[data-testid="password"]').setValue('Abcdefgh@');
       await userRegistration.find('[data-testid="confirmPassword"]').setValue('Abcdefgh@');
 
-      // Act: click on registration button.
+      // Act: Click on registration button.
       await userRegistration.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify that error message is shown for password.
+      // Assert: Verify that error message is shown for password.
       expect(userRegistration.find('#password').classes()).toContain('err');
       const errorMessages = userRegistration.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -257,11 +257,11 @@ describe('UserRegistration', () => {
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
       );
 
-      // Assert: verify API was not called.
+      // Assert: Verify API was not called.
       expect(backendApiUser.register).not.toHaveBeenCalled();
-      // Assert: verify no messages are present in store.
+      // Assert: Verify no messages are present in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -271,20 +271,20 @@ describe('UserRegistration', () => {
 
       const userRegistration = createComponent();
 
-      // Act: trigger a submit on an empty form to set usedButton = true.
+      // Act: Trigger a submit on an empty form to set usedButton = true.
       await userRegistration.find('button[type="submit"]').trigger('submit');
       await flushPromises();
 
-      // No errors should be showing yet — form is still empty.
-      expect(userRegistration.findAll('.form-text-error')).toHaveLength(4);
+      // Assert: Standard errors should be showing ("Field is empty.") — form is still empty.
+      const errorMessages = userRegistration.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(4);
 
-      // Now type a short password (password error should appear immediately).
+      // Act: Now type a short password (password error should appear immediately).
       await userRegistration.find('[data-testid="password"]').setValue('Ab1@');
 
-      // Assert: password error shows eagerly (no second submit needed).
-      const passwordErrorSpan = userRegistration.find('#password + span.form-text-error');
-      expect(passwordErrorSpan.exists()).toBe(true);
-      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
+      // Assert: Password error shows eagerly (no second submit needed).
+      expect(errorMessages[2]?.exists()).toBe(true);
+      expect(errorMessages[2]?.text()).toBe('Password is too short. It must have at least 8 characters.');
     });
   });
 

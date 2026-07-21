@@ -69,7 +69,7 @@ describe('RadioBox', () => {
       // Assert: Radiobox has correct data-testid attribute.
       expect(radioBox.attributes('data-testid')).toBe('radiobox_someRadioBox');
 
-      // Assert: options are present.
+      // Assert: Options are present.
       const optionElements = radioBox.findAll('.radiobox-option');
 
       // Assert: All options are shown correctly and first option is marked as selected.
@@ -110,7 +110,7 @@ describe('RadioBox', () => {
       // Arrange: Set up radiobox.
       const radioBox = createComponent('one', '', createOptions(), false, false, 'test.radioBox');
 
-      // Assert: correct option is marked as selected.
+      // Assert: Correct option is marked as selected.
       const optionElements = radioBox.findAll('.radiobox-option');
       testOptions(optionElements, 4, 1);
 
@@ -219,7 +219,7 @@ describe('RadioBox', () => {
       options.forEach((opt) => {
         expect(opt.attributes('role')).toBe('radio');
       });
-      // Assert: aria-checked is true for selected option 'two' (index 2).
+      // Assert: Aria-checked is true for selected option 'two' (index 2).
       expect(options[0]?.attributes('aria-checked')).toBe('false');
       expect(options[1]?.attributes('aria-checked')).toBe('false');
       expect(options[2]?.attributes('aria-checked')).toBe('true');

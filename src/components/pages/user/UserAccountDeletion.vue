@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
 import type { UserAccountDeleteReq } from '@/code/data/features/user/user-type';
@@ -65,10 +65,9 @@ const handleAccountDeletion = async () => {
     AppLoginer.logout(false);
     router.push({ name: 'home' }); // go to home page
   } catch (error) {
-    AppMessager.errorT(error, 'user.accountDelete.msg.error.title', 'user.accountDelete.msg.error.content');
-    backendApi.logError(error, 'User account deletion failed! Token: ' + tokenStr);
-  } finally {
     isBusy.value = false; // Enable submit button.
+    AppMessager.errorT(error, 'user.accountDelete.msg.error.title', 'user.accountDelete.msg.error.content');
+    apiLogging.logError(error, 'User account deletion failed! Token: ' + tokenStr);
   }
 };
 

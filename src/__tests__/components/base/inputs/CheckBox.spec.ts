@@ -187,9 +187,9 @@ describe('CheckBox', () => {
 
       // Assert: Root has role checkbox.
       expect(checkBox.find('.checkbox').attributes('role')).toBe('checkbox');
-      // Assert: aria-checked reflects null as 'mixed'.
+      // Assert: Aria-checked reflects null as 'mixed'.
       expect(checkBox.find('.checkbox').attributes('aria-checked')).toBe('mixed');
-      // Assert: aria-disabled is not present when enabled.
+      // Assert: Aria-disabled is not present when enabled.
       expect(checkBox.find('.checkbox').attributes('aria-disabled')).toBeUndefined();
       // Assert: tabindex is 0 when enabled.
       expect(checkBox.find('.checkbox').attributes('tabindex')).toBe('0');
@@ -197,13 +197,13 @@ describe('CheckBox', () => {
       // Act: Click to set true.
       await checkBox.find('.checkbox').trigger('click');
 
-      // Assert: aria-checked reflects true.
+      // Assert: Aria-checked reflects true.
       expect(checkBox.find('.checkbox').attributes('aria-checked')).toBe('true');
 
       // Act: Click to set false.
       await checkBox.find('.checkbox').trigger('click');
 
-      // Assert: aria-checked reflects false.
+      // Assert: Aria-checked reflects false.
       expect(checkBox.find('.checkbox').attributes('aria-checked')).toBe('false');
     });
 
@@ -213,7 +213,7 @@ describe('CheckBox', () => {
       // Arrange&Act: Create check box that is disabled.
       const checkBox = createComponent(true, '', false, true, false);
 
-      // Assert: aria-disabled is present and true on the checkbox element.
+      // Assert: Aria-disabled is present and true on the checkbox element.
       expect(checkBox.find('.checkbox').attributes('aria-disabled')).toBe('true');
     });
   });

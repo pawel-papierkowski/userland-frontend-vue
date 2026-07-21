@@ -9,6 +9,8 @@ import { useLoginStore } from '@/stores/login.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { locstJwt } from '@/code/data/app/const.ts';
+import type { LoginState } from '@/code/data/app/types.ts';
 
 vi.mock('@/services/features/api-users.ts', () => ({
   default: {
@@ -16,6 +18,25 @@ vi.mock('@/services/features/api-users.ts', () => ({
     prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve({} as any)), // Return a resolved promise
   },
 }));
+
+//
+
+/**
+ * Verifies that login state is unlogged.
+ * @param loginStore Pinia storage with login state.
+ */
+const verifyEmptyLoginStore = (loginStore: { loginState: LoginState }) => {
+  // If you are unlogged, login state is always same.
+  expect(loginStore.loginState.isLogged).toBe(false);
+  expect(loginStore.loginState.token).toBe('');
+  expect(loginStore.loginState.username).toBe('');
+  expect(loginStore.loginState.email).toBe('');
+  expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
+  expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
+  expect(loginStore.loginState.permissions).toStrictEqual([]);
+};
+
+// ////////////////////////////////////////////////////////////////////////////
 
 /** Tests AppLoginer class. */
 describe('AppLoginer', () => {
@@ -30,7 +51,8 @@ describe('AppLoginer', () => {
     vi.useRealTimers();
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Logging in.
 
   describe('logs in', () => {
     it('not at all', () => {
@@ -43,32 +65,26 @@ describe('AppLoginer', () => {
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
     });
 
     it('as standard user', () => {
       vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
 
-      // Arrange: create valid token for user without any permissions.
+      // Arrange: Create valid token for user without any permissions.
       const token =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
 
-      // Act: log in user using given token.
+      // Act: Log in user using given token.
       AppLoginer.login(token);
 
       // Assert: AppLoginer returns correct results.
       expect(AppLoginer.isLogged()).toBe(true);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
+      // Assert: Verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
@@ -82,18 +98,18 @@ describe('AppLoginer', () => {
       vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
       const loginStore = useLoginStore();
 
-      // Arrange: create valid token for user with many permissions.
+      // Arrange: Create valid token for user with many permissions.
       const token =
         'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0Iiwic3ViIjoicGF3ZWwucGFwaWVya293c2tpQGdtYWlsLmNvbSIsImlhdCI6MTc3OTQ2NDkxOCwiZXhwIjoxNzc5NDg2NTE4fQ.tSJ_l785hoinpYkzezJtLRx2ldBb0XQ6DKvKGZvLdw0';
 
-      // Act: log in user using given token.
+      // Act: Log in user using given token.
       AppLoginer.login(token);
 
       // Assert: AppLoginer returns correct results.
       expect(AppLoginer.isLogged()).toBe(true);
       expect(AppLoginer.hasPermission('role_operator')).toBe(true);
 
-      // Assert: verify content of login store.
+      // Assert: Verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(token);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
@@ -107,53 +123,42 @@ describe('AppLoginer', () => {
       vi.setSystemTime(new Date('2026-05-20T12:00:00Z'));
       const loginStore = useLoginStore();
 
-      // Arrange: create valid token for user without any permissions.
+      // Arrange: Create valid token for user without any permissions.
       const token =
         'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
 
-      // Act: log in user using given token.
+      // Act: Log in user using given token.
       AppLoginer.login(token);
 
       // Assert: AppLoginer returns correct results (not logged in as token is expired, therefore rejected).
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
     });
 
     it('with invalid token', () => {
       vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
 
-      // Arrange: create invalid token.
+      // Arrange: Create invalid token.
       const token = '';
 
-      // Act: log in user using given token.
+      // Act: Log in user using given token.
       AppLoginer.login(token);
 
       // Assert: AppLoginer returns correct results (not logged in as token was completely invalid).
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
     });
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Logging out.
 
   describe('logs out', () => {
     it('normally', async () => {
@@ -161,10 +166,10 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.logout).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: set loginStore to logged in state.
+      // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
@@ -174,26 +179,20 @@ describe('AppLoginer', () => {
       loginStore.loginState.expiresAt = new Date(1779130192000);
       loginStore.loginState.permissions = [];
 
-      // Act: log out user.
+      // Act: Log out user.
       await AppLoginer.logout();
 
-      // Assert: logout endpoint was called.
+      // Assert: Logout endpoint was called.
       expect(backendApiUser.logout).toHaveBeenCalled();
 
       // Assert: AppLoginer returns correct results (not logged in anymore).
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
 
-      // Assert: verify info message is present in store.
+      // Assert: Verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
       expect(messageStore.messages[0]?.title).toBe('User logged out successfully');
@@ -207,26 +206,20 @@ describe('AppLoginer', () => {
 
       // No arrange - we are not logged in by default.
 
-      // Act: log out user.
+      // Act: Log out user.
       await AppLoginer.logout();
 
-      // Assert: logout endpoint was NOT called.
+      // Assert: Logout endpoint was NOT called.
       expect(backendApiUser.logout).not.toHaveBeenCalled();
 
       // Assert: AppLoginer returns correct results (still not logged in).
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
 
-      // Assert: verify no message is present in store.
+      // Assert: Verify no message is present in store.
       expect(messageStore.messages).toHaveLength(0);
     });
 
@@ -235,7 +228,7 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      // Arrange: mock API returning 500 error.
+      // Arrange: Mock API returning 500 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -245,7 +238,7 @@ describe('AppLoginer', () => {
       };
       vi.mocked(backendApiUser.logout).mockRejectedValue(errorResponse);
 
-      // Arrange: set loginStore to logged in state.
+      // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
@@ -255,26 +248,20 @@ describe('AppLoginer', () => {
       loginStore.loginState.expiresAt = new Date(1779485775000);
       loginStore.loginState.permissions = [];
 
-      // Act: log out user.
+      // Act: Log out user.
       await AppLoginer.logout();
 
-      // Assert: logout endpoint was called.
+      // Assert: Logout endpoint was called.
       expect(backendApiUser.logout).toHaveBeenCalled();
 
       // Assert: AppLoginer returns correct results (not logged in anymore).
       expect(AppLoginer.isLogged()).toBe(false);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
-      expect(loginStore.loginState.isLogged).toBe(false);
-      expect(loginStore.loginState.token).toBe('');
-      expect(loginStore.loginState.username).toBe('');
-      expect(loginStore.loginState.email).toBe('');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(0));
-      expect(loginStore.loginState.permissions).toStrictEqual([]);
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
 
-      // Assert: verify info message is present in store.
+      // Assert: Verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
       expect(messageStore.messages[0]?.title).toBe('User logged out successfully');
@@ -282,15 +269,16 @@ describe('AppLoginer', () => {
     });
   });
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
+  // Prolongation.
 
-  describe('prolongs user session', () => {
+  describe('session prolongation', () => {
     it('successfully', async () => {
       vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       const newToken =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
       vi.mocked(backendApiUser.prolong).mockResolvedValue({
@@ -299,7 +287,7 @@ describe('AppLoginer', () => {
         },
       } as any);
 
-      // Arrange: set loginStore to logged in state.
+      // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
@@ -309,17 +297,17 @@ describe('AppLoginer', () => {
       loginStore.loginState.expiresAt = new Date(1779485775000);
       loginStore.loginState.permissions = [];
 
-      // Act: prolong user session.
+      // Act: Prolong user session.
       await AppLoginer.prolong();
 
-      // Assert: prolong endpoint was called.
+      // Assert: Prolong endpoint was called.
       expect(backendApiUser.prolong).toHaveBeenCalled();
 
       // Assert: AppLoginer returns correct results (still logged in, but time of expiration updated).
       expect(AppLoginer.isLogged()).toBe(true);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
+      // Assert: Verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(newToken);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
@@ -328,7 +316,7 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486265000));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
 
-      // Assert: verify info message is present in store.
+      // Assert: Verify info message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
       expect(messageStore.messages[0]?.title).toBe('User session prolonged successfully');
@@ -340,7 +328,7 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      // Arrange: mock API returning 500 error.
+      // Arrange: Mock API returning 500 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -353,7 +341,7 @@ describe('AppLoginer', () => {
       const oldToken =
         'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
 
-      // Arrange: set loginStore to logged in state.
+      // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
       loginStore.loginState.token = oldToken;
       loginStore.loginState.username = 'Paweł Papierkowski';
@@ -362,17 +350,17 @@ describe('AppLoginer', () => {
       loginStore.loginState.expiresAt = new Date(1779485775000);
       loginStore.loginState.permissions = [];
 
-      // Act: prolong user session.
+      // Act: Prolong user session.
       await AppLoginer.prolong();
 
-      // Assert: prolong endpoint was called.
+      // Assert: Prolong endpoint was called.
       expect(backendApiUser.prolong).toHaveBeenCalled();
 
       // Assert: AppLoginer returns correct results (still logged in, but time of expiration updated).
       expect(AppLoginer.isLogged()).toBe(true);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 
-      // Assert: verify content of login store.
+      // Assert: Verify content of login store.
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.token).toBe(oldToken);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
@@ -381,12 +369,12 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779485775000));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
 
-      // Assert: verify no message is present in store. In other words, prolong fails silently.
+      // Assert: Verify no message is present in store. In other words, prolong fails silently.
       expect(messageStore.messages).toHaveLength(0);
     });
-  });
 
-  describe('session prolongation logic', () => {
+    //
+
     it('should NOT prolong when not logged in', () => {
       expect(AppLoginer.shouldProlong()).toBe(false);
     });
@@ -444,6 +432,62 @@ describe('AppLoginer', () => {
 
       expect(r1).toBe(r2); // Should be the same result object
       expect(backendApiUser.prolong).toHaveBeenCalledTimes(1); // Should only call API once
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Session expiration.
+
+  describe('expireSession', () => {
+    it('clears login state and shows warning when logged in', () => {
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+      const loginStore = useLoginStore();
+      const messageStore = useMessageStore();
+
+      // Arrange: Set loginStore to logged in state and seed localStorage.
+      loginStore.loginState.isLogged = true;
+      loginStore.loginState.token =
+        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.username = 'Paweł Papierkowski';
+      loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
+      loginStore.loginState.issuedAt = new Date(1779464175000);
+      loginStore.loginState.expiresAt = new Date(1779485775000);
+      loginStore.loginState.permissions = [];
+      localStorage.setItem(locstJwt, 'some-jwt');
+
+      // Act: Expire the session.
+      AppLoginer.expireSession();
+
+      // Assert: AppLoginer returns correct results (not logged in anymore).
+      expect(AppLoginer.isLogged()).toBe(false);
+      expect(AppLoginer.hasPermission('role_operator')).toBe(false);
+
+      // Assert: Verify content of login store.
+      verifyEmptyLoginStore(loginStore);
+
+      // Assert: JWT was removed from localStorage.
+      expect(localStorage.getItem(locstJwt)).toBeNull();
+
+      // Assert: warning message is present in store.
+      expect(messageStore.messages).toHaveLength(1);
+      expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Warning);
+      expect(messageStore.messages[0]?.title).toBe('Session expired');
+    });
+
+    it('is no-op when already not logged in', () => {
+      vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+      const messageStore = useMessageStore();
+
+      // No arrange — we are not logged in by default.
+
+      // Act: Expire the session.
+      AppLoginer.expireSession();
+
+      // Assert: Still not logged in.
+      expect(AppLoginer.isLogged()).toBe(false);
+
+      // Assert: No message was added.
+      expect(messageStore.messages).toHaveLength(0);
     });
   });
 });

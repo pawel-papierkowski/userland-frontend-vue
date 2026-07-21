@@ -6,7 +6,8 @@ import { useLoginStore } from '@/stores/login.ts';
 import { locstJwt, prolongExpiration, locstLastApiCall, prolongAfterLongTime } from '@/code/data/app/const.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
+
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 
 /**
@@ -49,7 +50,7 @@ export class AppLoginer {
       try {
         await backendApiUser.logout(); // API CALL. We don't care if this call fails.
       } catch (error) {
-        backendApi.logError(error, 'Logout failed on backend!');
+        apiLogging.logError(error, 'Logout failed on backend!');
       }
     }
 
@@ -58,6 +59,21 @@ export class AppLoginer {
 
     AppMessager.infoT('user.logout.msg.info.title', 'user.logout.msg.info.content');
     logger.debug('Logged out successfully.');
+  }
+
+  /**
+   * Handle expired session. Clears login state without calling backend, removes JWT and shows warning message.
+   * Used by response interceptor when backend returns 401 (unauthorized) for non-login requests.
+   */
+  public static expireSession() {
+    const loginStore = useLoginStore();
+    if (!loginStore.loginState.isLogged) return;
+
+    loginStore.loginState = loginStore.resetLoginState();
+    localStorage.removeItem(locstJwt);
+
+    AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content');
+    logger.debug('Session expired.');
   }
 
   /**
@@ -73,7 +89,7 @@ export class AppLoginer {
         logger.warn('Prolong failed!');
       }
     } catch (error) {
-      backendApi.logError(error, 'Prolong failed!');
+      apiLogging.logError(error, 'Prolong failed!');
     }
   }
 

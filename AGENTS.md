@@ -11,6 +11,7 @@ UserLand is portfolio project for frontend in Vue.
 ## Development Guidelines
 - **Modifications:**
   - Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
+  - Do NOT install npm modules, unless explicitly asked. If you think installing new module is necessary, explain what module is needed and why.
 - **Language files:**
   - This project uses multiple languages.
   - Languages are in `/src/locales`. Each language has its own subdirectory (name is code of language, for example `/en` subdirectory for English).

@@ -63,22 +63,22 @@ describe('UserAccountDeletion', () => {
       // Ensures that after successful account deletion the user gets
       // feedback, is logged out, and redirected.
 
-      // Arrange: login user.
+      // Arrange: Login user.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.accountDeleteConfirm).mockResolvedValue({ data: {} } as any);
 
-      // Act: click on delete button.
+      // Act: Click on delete button.
       await wrapper.find('[data-testid="btn-deleteAccount"]').trigger('click');
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.accountDeleteConfirm).toHaveBeenCalledWith({
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       });
@@ -86,7 +86,7 @@ describe('UserAccountDeletion', () => {
       // Assert: we were logged out.
       expect(AppLoginer.isLogged()).toBe(false);
 
-      // Assert: verify success and logout messages.
+      // Assert: Verify success and logout messages.
       expect(messageStore.messages).toHaveLength(2);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('Success');
@@ -95,7 +95,7 @@ describe('UserAccountDeletion', () => {
       expect(messageStore.messages[1]?.title).toBe('User logged out successfully');
       expect(messageStore.messages[1]?.content).toBe('');
 
-      // Assert: verify redirection.
+      // Assert: Verify redirection.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -103,11 +103,11 @@ describe('UserAccountDeletion', () => {
       // Ensures that after a failed API call the user gets an error message
       // and stays on the page.
 
-      // Arrange: login user.
+      // Arrange: Login user.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
-      // Arrange: mock API returning 404 error.
+      // Arrange: Mock API returning 404 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -127,21 +127,21 @@ describe('UserAccountDeletion', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Act: click on delete button.
+      // Act: Click on delete button.
       await wrapper.find('[data-testid="btn-deleteAccount"]').trigger('click');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.accountDeleteConfirm).toHaveBeenCalled();
 
-      // Assert: verify error message.
+      // Assert: Verify error message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
-      // Assert: verify no redirection.
+      // Assert: Verify no redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -154,7 +154,7 @@ describe('UserAccountDeletion', () => {
       // If the user is not logged in, they should be redirected to the login
       // page with an appropriate message.
 
-      // Act: create page — check runs on mount.
+      // Act: Create page — check runs on mount.
       createComponent();
       const messageStore = useMessageStore();
 
@@ -163,7 +163,7 @@ describe('UserAccountDeletion', () => {
       // Assert: API was not called.
       expect(backendApiUser.accountDeleteConfirm).not.toHaveBeenCalled();
 
-      // Assert: failure message.
+      // Assert: Failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Failure');
@@ -171,21 +171,21 @@ describe('UserAccountDeletion', () => {
         'You must be logged in to delete user account. Log in, then use link from email again.',
       );
 
-      // Assert: redirect to login.
+      // Assert: Redirect to login.
       expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
     });
 
     it('redirects to home when no token is provided', async () => {
       // When the URL has no token, the user should be redirected home.
 
-      // Arrange: login user.
+      // Arrange: Login user.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
-      // Arrange: set token to undefined.
+      // Arrange: Set token to undefined.
       mockRoute.query.token = undefined as any;
 
-      // Act: create page.
+      // Act: Create page.
       createComponent();
       const messageStore = useMessageStore();
 
@@ -194,27 +194,27 @@ describe('UserAccountDeletion', () => {
       // Assert: API was not called.
       expect(backendApiUser.accountDeleteConfirm).not.toHaveBeenCalled();
 
-      // Assert: failure message.
+      // Assert: Failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
       expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
-      // Assert: redirect to home.
+      // Assert: Redirect to home.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
     it('redirects to home when token is too short', async () => {
       // Tokens shorter than 32 characters should be rejected.
 
-      // Arrange: login user.
+      // Arrange: Login user.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
-      // Arrange: set short token.
+      // Arrange: Set short token.
       mockRoute.query.token = 'shortToken';
 
-      // Act: create page.
+      // Act: Create page.
       createComponent();
       const messageStore = useMessageStore();
 
@@ -223,12 +223,12 @@ describe('UserAccountDeletion', () => {
       // Assert: API was not called.
       expect(backendApiUser.accountDeleteConfirm).not.toHaveBeenCalled();
 
-      // Assert: failure message.
+      // Assert: Failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
 
-      // Assert: redirect to home.
+      // Assert: Redirect to home.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
   });
@@ -240,7 +240,7 @@ describe('UserAccountDeletion', () => {
     it('renders the heading', () => {
       // The page should display a title.
 
-      // Arrange: login user so verifyAll passes.
+      // Arrange: Login user so verifyAll passes.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
@@ -254,7 +254,7 @@ describe('UserAccountDeletion', () => {
     it('renders the delete button with default label', () => {
       // The delete button shows the default text.
 
-      // Arrange: login user so verifyAll passes.
+      // Arrange: Login user so verifyAll passes.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
@@ -268,7 +268,7 @@ describe('UserAccountDeletion', () => {
     it('renders the warning message', () => {
       // The irreversible-action warning should be visible.
 
-      // Arrange: login user so verifyAll passes.
+      // Arrange: Login user so verifyAll passes.
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 

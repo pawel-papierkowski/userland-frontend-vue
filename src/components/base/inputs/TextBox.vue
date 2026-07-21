@@ -11,6 +11,8 @@
  *
  * Properties:
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
+ * - type - Type of input. Optional, default is 'text'.
+ * - required - Is required?
  * - autocomplete - For autocomplete attribute of <input>. Optional.
  * - placeholder - Shows grayed out text in background of input if null/empty. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
@@ -25,6 +27,10 @@ const props = withDefaults(
   defineProps<{
     /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
     id?: string;
+    /** Type of input. Optional, default is 'text'. */
+    type?: string;
+    /** If true, this input has required attribute. Optional, default is false. */
+    required?: boolean;
     /** For autocomplete attribute of <input>. Optional. */
     autocomplete?: string;
     /** Shows grayed out text in background of input if null/empty. Optional. */
@@ -36,6 +42,8 @@ const props = withDefaults(
   }>(),
   {
     id: '',
+    type: 'text',
+    required: false,
     placeholder: '',
     disabled: false,
     invalid: false,
@@ -47,11 +55,13 @@ const props = withDefaults(
   <div class="input-wrapper" :data-testid="`textbox_${id}`">
     <input
       :id="id"
-      type="text"
+      :data-testid="id"
+      :class="{ err: invalid }"
+      :type="type"
       v-model="currValue"
       :autocomplete="autocomplete"
       :placeholder="placeholder"
-      :class="{ err: invalid }"
+      :required="required"
       :disabled="disabled"
       :tabindex="disabled ? -1 : 0"
     />

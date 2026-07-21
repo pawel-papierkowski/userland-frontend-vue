@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { TokenActivationReq } from '@/code/data/features/user/user-type';
 
@@ -41,7 +41,7 @@ const callActivationApi = async () => {
     router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
-    backendApi.logError(error, 'Activation failed! Token: ' + tokenStr);
+    apiLogging.logError(error, 'Activation failed! Token: ' + tokenStr);
     canSpin.value = false;
   }
 };

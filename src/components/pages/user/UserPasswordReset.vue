@@ -6,7 +6,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
 
@@ -14,6 +14,8 @@ import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user-type';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const route = useRoute();
@@ -68,10 +70,9 @@ const handlePasswordResetConfirmation = async () => {
     router.push({ name: 'home' });
   } catch (error) {
     clearForm();
-    AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
-    backendApi.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
-  } finally {
     isBusy.value = false; // Enable submit button.
+    AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
+    apiLogging.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
   }
 };
 
@@ -116,9 +117,8 @@ const clearForm = () => {
 //
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 
 //
@@ -137,28 +137,28 @@ onMounted(() => {
       <div class="form-group">
         <div class="form-entry">
           <label for="password">{{ t('user.passwordReset.form.password') }}:</label>
-          <input
-            :class="getInputClass(passwordError)"
+          <TextBox
             id="password"
-            data-testid="password"
             type="password"
             v-model="form.password"
-            required
             autocomplete="new-password"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordError)"
           />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="confirmPassword">{{ t('user.passwordReset.form.confirmPassword') }}:</label>
-          <input
-            :class="getInputClass(passwordConfirmError)"
+          <TextBox
             id="confirmPassword"
-            data-testid="confirmPassword"
             type="password"
             v-model="form.confirmPassword"
-            required
             autocomplete="new-password"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordConfirmError)"
           />
           <span v-if="passwordConfirmError" class="form-text-error">{{ passwordConfirmError }}</span>
         </div>

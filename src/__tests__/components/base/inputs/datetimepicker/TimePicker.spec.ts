@@ -111,7 +111,7 @@ describe('TimePicker', () => {
       // Act: Create the component.
       createComponent(null, '', false, false, false);
 
-      // Assert: onClickOutside was called once.
+      // Assert: OnClickOutside was called once.
       expect(mockOnClickOutside).toHaveBeenCalledOnce();
     });
 
@@ -130,7 +130,7 @@ describe('TimePicker', () => {
       // Assert: Ensure panel is not present.
       expect(timePicker.find('.clock-container').exists()).toBe(false);
 
-      // Assert: model has correct value.
+      // Assert: Model has correct value.
       const model = timePicker.props('modelValue') as Date | null;
       expect(model).toBe(null);
 
@@ -180,7 +180,7 @@ describe('TimePicker', () => {
       // Assert: Ensure panel is not present.
       expect(timePicker.find('.clock-container').exists()).toBe(false);
 
-      // Assert: model has correct value.
+      // Assert: Model has correct value.
       const model = timePicker.props('modelValue') as Date | null;
       expect(model?.getUTCFullYear()).toBe(2026); // date is untouched
       expect(model?.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
@@ -228,7 +228,7 @@ describe('TimePicker', () => {
       await timePicker.find('.picker-input-time').trigger('click');
       await nextTick();
 
-      // Act: select hour and minute.
+      // Act: Select hour and minute.
       await timePicker.find('[data-testid="timepicker__h8"]').trigger('click');
       await nextTick();
       await timePicker.find('[data-testid="timepicker__m51"]').trigger('click');
@@ -386,7 +386,7 @@ describe('TimePicker', () => {
       await timePicker.find('.picker-input-time').trigger('click');
       await nextTick();
 
-      // Act: select hour and minute.
+      // Act: Select hour and minute.
       await timePicker.find('[data-testid="timepicker__h10"]').trigger('click');
       await nextTick();
       await timePicker.find('[data-testid="timepicker__m33"]').trigger('click');
@@ -424,16 +424,16 @@ describe('TimePicker', () => {
       expect(input.attributes('role')).toBe('combobox');
       expect(input.attributes('aria-haspopup')).toBe('listbox');
 
-      // Assert: aria-expanded is false when panel is hidden.
+      // Assert: Aria-expanded is false when panel is hidden.
       expect(input.attributes('aria-expanded')).toBe('false');
 
-      // Assert: aria-controls matches panel id convention.
+      // Assert: Aria-controls matches panel id convention.
       expect(input.attributes('aria-controls')).toBe('timepicker_test_panel');
 
-      // Assert: aria-label is present with placeholder text.
+      // Assert: Aria-label is present with placeholder text.
       expect(input.attributes('aria-label')).toBe('hh:mm');
 
-      // Assert: aria-disabled is not present when not disabled.
+      // Assert: Aria-disabled is not present when not disabled.
       expect(input.attributes('aria-disabled')).toBeUndefined();
     });
 
@@ -449,14 +449,14 @@ describe('TimePicker', () => {
       await input.trigger('click');
       await nextTick();
 
-      // Assert: aria-expanded is true when panel is visible.
+      // Assert: Aria-expanded is true when panel is visible.
       expect(input.attributes('aria-expanded')).toBe('true');
 
       // Act: Close panel by clicking again.
       await input.trigger('click');
       await nextTick();
 
-      // Assert: aria-expanded is false when panel is hidden.
+      // Assert: Aria-expanded is false when panel is hidden.
       expect(input.attributes('aria-expanded')).toBe('false');
     });
 
@@ -470,7 +470,7 @@ describe('TimePicker', () => {
       const timePicker = createComponent(null, '', false, true, false);
       const input = timePicker.find('.picker-input-time');
 
-      // Assert: aria-disabled is present and set to "true".
+      // Assert: Aria-disabled is present and set to "true".
       expect(input.attributes('aria-disabled')).toBe('true');
     });
 
@@ -556,11 +556,11 @@ describe('TimePicker', () => {
       expect(hour5.attributes('role')).toBe('option');
       expect(hour14.attributes('role')).toBe('option');
 
-      // Assert: aria-selected is false when no time is selected.
+      // Assert: Aria-selected is false when no time is selected.
       expect(hour5.attributes('aria-selected')).toBe('false');
       expect(hour14.attributes('aria-selected')).toBe('false');
 
-      // Assert: aria-label includes the value and unit label.
+      // Assert: Aria-label includes the value and unit label.
       expect(hour5.attributes('aria-label')).toBe('5 Hour');
       expect(hour14.attributes('aria-label')).toBe('14 Hour');
     });
@@ -582,11 +582,11 @@ describe('TimePicker', () => {
       expect(minute3.attributes('role')).toBe('option');
       expect(minute45.attributes('role')).toBe('option');
 
-      // Assert: aria-selected is false when no time is selected.
+      // Assert: Aria-selected is false when no time is selected.
       expect(minute3.attributes('aria-selected')).toBe('false');
       expect(minute45.attributes('aria-selected')).toBe('false');
 
-      // Assert: aria-label includes the value and unit label.
+      // Assert: Aria-label includes the value and unit label.
       expect(minute3.attributes('aria-label')).toBe('3 Minute');
       expect(minute45.attributes('aria-label')).toBe('45 Minute');
     });

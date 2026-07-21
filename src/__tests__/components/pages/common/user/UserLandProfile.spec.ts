@@ -48,7 +48,7 @@ describe('UserLandProfile', () => {
   it('is correctly filled and submits successfully', async () => {
     // Ensures form is correctly filled when you enter page and successful submit results in correct feedback.
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
         username: 'SomeNick',
@@ -67,22 +67,22 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: form fields are filled correctly.
+    // Assert: Form fields are filled correctly.
     expect((userProfile.find('[data-testid="username"]').element as HTMLInputElement).value).toBe('SomeNick');
     expect((userProfile.find('[data-testid="email"]').element as HTMLInputElement).value).toBe('some.email@test.com');
     expect((userProfile.find('[data-testid="name"]').element as HTMLInputElement).value).toBe('');
     expect((userProfile.find('[data-testid="surname"]').element as HTMLInputElement).value).toBe('');
 
-    // Arrange: change some fields.
+    // Arrange: Change some fields.
     await userProfile.find('[data-testid="name"]').setValue('John');
     await userProfile.find('[data-testid="surname"]').setValue('Smith');
 
-    // Act: click on profile update button.
+    // Act: Click on profile update button.
     await userProfile.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API calls.
+    // Assert: Verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
     expect(backendApiUser.edit).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -93,20 +93,20 @@ describe('UserLandProfile', () => {
       }),
     );
 
-    // Assert: verify success message is present in store.
+    // Assert: Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
     expect(messageStore.messages[0]?.title).toBe('Success');
     expect(messageStore.messages[0]?.content).toBe('User data updated successfully.');
 
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('clicks on email change button', async () => {
     // Ensure correct action (redirection) happens when you click on email change button.
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
         username: 'SomeNick',
@@ -123,23 +123,23 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Act: click on email change button.
+    // Act: Click on email change button.
     await userProfile.find('[data-testid="btn-emailChange"]').trigger('click');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API calls.
+    // Assert: Verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
     expect(backendApiUser.edit).not.toHaveBeenCalled();
 
-    // Assert: verify redirection to email change page.
+    // Assert: Verify redirection to email change page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'user-emailChange-start' });
   });
 
   it('clicks on account delete button', async () => {
     // Ensure correct action (redirection) happens when you click on account delete button.
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
         username: 'SomeNick',
@@ -156,16 +156,16 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Act: click on account delete button.
+    // Act: Click on account delete button.
     await userProfile.find('[data-testid="btn-deleteAccount"]').trigger('click');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API calls.
+    // Assert: Verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
     expect(backendApiUser.edit).not.toHaveBeenCalled();
 
-    // Assert: verify redirection to account delete page.
+    // Assert: Verify redirection to account delete page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'user-accountDel-start' });
   });
 
@@ -174,7 +174,7 @@ describe('UserLandProfile', () => {
   it('user data loading failed', async () => {
     // Ensure correct form state when loading user data failed.
 
-    // Arrange: mock API returning 500 error.
+    // Arrange: Mock API returning 500 error.
     const errorResponse = {
       isAxiosError: true,
       response: {
@@ -188,24 +188,24 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: form is not shown, only stopped spinner.
+    // Assert: Form is not shown, only stopped spinner.
     expect(userProfile.find('[data-testid="spinner"]').exists()).toBe(true);
     expect(userProfile.find('[data-testid="form"]').exists()).toBe(false);
     const spinner = userProfile.getComponent({ name: 'SpinnerTorus' });
     expect(spinner.props('canSpin')).toBe(false);
 
-    // Assert: verify API calls.
+    // Assert: Verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
     expect(backendApiUser.edit).not.toHaveBeenCalled();
 
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
   });
 
   it('sends invalid field', async () => {
     // Ensure correct form state when sending user data failed.
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
         username: 'SomeNick',
@@ -223,31 +223,31 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: form fields are filled correctly.
+    // Assert: Form fields are filled correctly.
     expect((userProfile.find('[data-testid="username"]').element as HTMLInputElement).value).toBe('SomeNick');
     expect((userProfile.find('[data-testid="email"]').element as HTMLInputElement).value).toBe('some.email@test.com');
     expect((userProfile.find('[data-testid="name"]').element as HTMLInputElement).value).toBe('');
     expect((userProfile.find('[data-testid="surname"]').element as HTMLInputElement).value).toBe('');
 
-    // Arrange: change field username to invalid value.
+    // Arrange: Change field username to invalid value.
     await userProfile.find('[data-testid="username"]').setValue('');
 
-    // Act: click on profile update button.
+    // Act: Click on profile update button.
     await userProfile.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API calls.
+    // Assert: Verify API calls.
     expect(backendApiUser.view).toHaveBeenCalled();
     expect(backendApiUser.edit).not.toHaveBeenCalled();
 
-    // Assert: verify that error message is shown for username.
+    // Assert: Verify that error message is shown for username.
     expect(userProfile.find('#username').classes()).toContain('err');
     const errorMessages = userProfile.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     expect(errorMessages[0]?.text()).not.toBe('');
 
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
   });
 });

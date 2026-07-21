@@ -140,7 +140,7 @@ describe('TableCell', () => {
 
   describe('data column', () => {
     it('shows entry text when not editable and not selected', () => {
-      // Arrange: non-editable name column, row not selected, no inline edit.
+      // Arrange: Non-editable name column, row not selected, no inline edit.
       const { testEntry, testForm, column } = createDataName();
 
       // Act: Create component.

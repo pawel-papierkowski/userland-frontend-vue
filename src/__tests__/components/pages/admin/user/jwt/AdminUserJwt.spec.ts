@@ -7,8 +7,8 @@ import i18n from '@/code/lang/i18n.ts';
 
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
-import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
+import apiLogging from '@/services/api-logging.ts';
 
 import AdminUserJwt from '@/components/pages/admin/user/jwt/AdminUserJwt.vue';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -20,6 +20,10 @@ import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -311,7 +315,7 @@ describe('AdminUserJwt', () => {
       await nextTick();
 
       // Assert: Error was logged.
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
     });
   });
 });

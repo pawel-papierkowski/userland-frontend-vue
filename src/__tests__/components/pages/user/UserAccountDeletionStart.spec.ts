@@ -53,24 +53,24 @@ describe('UserAccountDeletionStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.accountDeleteLink).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.accountDeleteLink).toHaveBeenCalledWith({
         password: '5trOnGP@ssw0rd',
         frontend: 'VUE',
       });
 
-      // Assert: verify success message.
+      // Assert: Verify success message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('Success');
@@ -78,7 +78,7 @@ describe('UserAccountDeletionStart', () => {
         'Check your inbox in a few minutes for a email with link to confirm your account deletion.',
       );
 
-      // Assert: verify redirection.
+      // Assert: Verify redirection.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -86,7 +86,7 @@ describe('UserAccountDeletionStart', () => {
       // Ensures that after a failed API call the form is cleared, an error
       // message appears, and the user stays on the page.
 
-      // Arrange: mock API returning 409 error.
+      // Arrange: Mock API returning 409 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -106,28 +106,28 @@ describe('UserAccountDeletionStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.accountDeleteLink).toHaveBeenCalled();
 
-      // Assert: verify error message.
+      // Assert: Verify error message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User token already exists.');
 
-      // Assert: form field is cleared (clearForm behaviour).
+      // Assert: Form field is cleared (clearForm behaviour).
       const passwordInput = wrapper.find('[data-testid="password"]') as any;
       expect(passwordInput.element.value).toBe('');
 
-      // Assert: verify no redirection.
+      // Assert: Verify no redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -143,21 +143,21 @@ describe('UserAccountDeletionStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Act: submit empty form.
+      // Act: Submit empty form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown.
+      // Assert: Error is shown.
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
       expect(errorMessages[0]?.text()).toBe('Field cannot be empty.');
 
       // Assert: API was not called.
       expect(backendApiUser.accountDeleteLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -167,15 +167,15 @@ describe('UserAccountDeletionStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill with a password missing a digit.
+      // Arrange: Fill with a password missing a digit.
       await wrapper.find('[data-testid="password"]').setValue('Abcdefgh@');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown on password field.
+      // Assert: Error is shown on password field.
       expect(wrapper.find('#password').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -185,9 +185,9 @@ describe('UserAccountDeletionStart', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.accountDeleteLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -197,20 +197,20 @@ describe('UserAccountDeletionStart', () => {
 
       const wrapper = createComponent();
 
-      // Act: submit empty form to set usedButton = true.
+      // Act: Submit empty form to set usedButton = true.
       await wrapper.find('button[type="submit"]').trigger('submit');
       await flushPromises();
 
       // The password field should show an error.
-      expect(wrapper.findAll('.form-text-error')).toHaveLength(1);
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
 
       // Now type a short password — error should appear immediately.
       await wrapper.find('[data-testid="password"]').setValue('Ab1@');
 
-      // Assert: error shows eagerly.
-      const passwordErrorSpan = wrapper.find('#password + span.form-text-error');
-      expect(passwordErrorSpan.exists()).toBe(true);
-      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
+      // Assert: Error shows eagerly.
+      expect(errorMessages[0]?.exists()).toBe(true);
+      expect(errorMessages[0]?.text()).toBe('Password is too short. It must have at least 8 characters.');
     });
   });
 

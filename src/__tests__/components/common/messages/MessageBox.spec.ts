@@ -231,7 +231,7 @@ describe('MessageBox', () => {
       const messageBox = createComponent(message);
       await messageBox.trigger('keydown', { key: 'Escape' });
 
-      // Assert: close event was emitted.
+      // Assert: Close event was emitted.
       expect(messageBox.emitted('close')?.length).toBe(1);
     });
 

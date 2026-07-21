@@ -1,6 +1,7 @@
 {
   "header": {
     "admin": {
+      "login": "🚪 Strona logowania",
       "main": "🏁 Strona główna",
       "user": "👥 Użytkownicy"
     }

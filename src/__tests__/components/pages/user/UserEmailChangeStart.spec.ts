@@ -53,26 +53,26 @@ describe('UserEmailChangeStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.emailChangeLink).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="newEmail"]').setValue('test@example.com');
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.emailChangeLink).toHaveBeenCalledWith({
         newEmail: 'test@example.com',
         password: '5trOnGP@ssw0rd',
         frontend: 'VUE',
       });
 
-      // Assert: verify success message.
+      // Assert: Verify success message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('Success');
@@ -80,7 +80,7 @@ describe('UserEmailChangeStart', () => {
         'Check your inbox in a few minutes for a email with link to confirm email address change.',
       );
 
-      // Assert: verify redirection.
+      // Assert: Verify redirection.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -88,7 +88,7 @@ describe('UserEmailChangeStart', () => {
       // Ensures that after a failed API call the form is cleared, an error
       // message appears, and the user stays on the page.
 
-      // Arrange: mock API returning 409 error.
+      // Arrange: Mock API returning 409 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -108,31 +108,31 @@ describe('UserEmailChangeStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="newEmail"]').setValue('test@example.com');
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.emailChangeLink).toHaveBeenCalled();
 
-      // Assert: verify error message.
+      // Assert: Verify error message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User token already exists.');
 
-      // Assert: form fields are cleared (clearForm behaviour).
+      // Assert: Form fields are cleared (clearForm behaviour).
       const emailInput = wrapper.find('[data-testid="newEmail"]') as any;
       const passwordInput = wrapper.find('[data-testid="password"]') as any;
       expect(emailInput.element.value).toBe('');
       expect(passwordInput.element.value).toBe('');
 
-      // Assert: verify no redirection.
+      // Assert: Verify no redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -147,7 +147,7 @@ describe('UserEmailChangeStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Act: submit empty form.
+      // Act: Submit empty form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
@@ -160,9 +160,9 @@ describe('UserEmailChangeStart', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.emailChangeLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -173,16 +173,16 @@ describe('UserEmailChangeStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form with invalid email.
+      // Arrange: Fill form with invalid email.
       await wrapper.find('[data-testid="newEmail"]').setValue('invalid-email');
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown on email field.
+      // Assert: Error is shown on email field.
       expect(wrapper.find('#newEmail').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -190,9 +190,9 @@ describe('UserEmailChangeStart', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.emailChangeLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -203,16 +203,16 @@ describe('UserEmailChangeStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form with weak password.
+      // Arrange: Fill form with weak password.
       await wrapper.find('[data-testid="newEmail"]').setValue('test@example.com');
       await wrapper.find('[data-testid="password"]').setValue('Abcdefgh@');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown on password field.
+      // Assert: Error is shown on password field.
       expect(wrapper.find('#password').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -222,9 +222,9 @@ describe('UserEmailChangeStart', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.emailChangeLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -234,20 +234,20 @@ describe('UserEmailChangeStart', () => {
 
       const wrapper = createComponent();
 
-      // Act: submit empty form to set usedButton = true.
+      // Act: Submit empty form to set usedButton = true.
       await wrapper.find('button[type="submit"]').trigger('submit');
       await flushPromises();
 
       // Both fields should show errors.
-      expect(wrapper.findAll('.form-text-error')).toHaveLength(2);
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(2);
 
       // Now type a short password — error should appear immediately.
       await wrapper.find('[data-testid="password"]').setValue('Ab1@');
 
-      // Assert: email error still present, password error shows eagerly.
-      const passwordErrorSpan = wrapper.find('#password + span.form-text-error');
-      expect(passwordErrorSpan.exists()).toBe(true);
-      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
+      // Assert: Email error still present, password error shows eagerly.
+      expect(errorMessages[1]?.exists()).toBe(true);
+      expect(errorMessages[1]?.text()).toBe('Password is too short. It must have at least 8 characters.');
     });
   });
 

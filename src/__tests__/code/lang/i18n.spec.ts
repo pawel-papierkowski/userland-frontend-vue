@@ -16,7 +16,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     const result = deepMerge(target, source);
 
-    // Assert: source key was added.
+    // Assert: Source key was added.
     expect(result).toEqual({ a: '1', b: '2', c: '3' });
   });
 
@@ -30,7 +30,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     const result = deepMerge(target, source);
 
-    // Assert: source wins.
+    // Assert: Source wins.
     expect(result).toEqual({ key: 'new' });
   });
 
@@ -45,7 +45,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     const result = deepMerge(target, source);
 
-    // Assert: nested keys from both are present.
+    // Assert: Nested keys from both are present.
     expect(result).toEqual({ parent: { a: '1', b: '2', c: '3' } });
   });
 
@@ -59,7 +59,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     const result = deepMerge(target, source);
 
-    // Assert: source array replaces target array.
+    // Assert: Source array replaces target array.
     expect(result).toEqual({ items: ['c'] });
   });
 
@@ -73,7 +73,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     const result = deepMerge(target, source);
 
-    // Assert: source is returned.
+    // Assert: Source is returned.
     expect(result).toEqual({ a: '1' });
   });
 
@@ -87,7 +87,7 @@ describe('deepMerge', () => {
     // Act: Merge.
     deepMerge(target, source);
 
-    // Assert: originals are untouched.
+    // Assert: Originals are untouched.
     expect(target).toEqual({ a: '1' });
     expect(source).toEqual({ b: '2' });
   });
@@ -187,7 +187,7 @@ describe('i18n instance', () => {
   it('loads all translations from en locale directory', () => {
     // Translations from the en locale directory should be available.
 
-    // Arrange: known keys from the en locale files.
+    // Arrange: Known keys from the en locale files.
     const knownKeys = ['app.title', 'header.general.home', 'header.user.login', 'footer.frontendRepository'];
 
     // Act: Translate each key.

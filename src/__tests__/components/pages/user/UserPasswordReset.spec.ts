@@ -61,31 +61,31 @@ describe('UserPasswordReset', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.passwordResetConfirm).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: fill form fields correctly.
+      // Arrange: Fill form fields correctly.
       await wrapper.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
       await wrapper.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
 
-      // Act: submit form.
+      // Act: Submit form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.passwordResetConfirm).toHaveBeenCalledWith({
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
         password: 'n3wP@s5w0rD',
       });
 
-      // Assert: verify success message.
+      // Assert: Verify success message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('Success');
       expect(messageStore.messages[0]?.content).toBe('New password was set successfully.');
 
-      // Assert: verify redirection to home page.
+      // Assert: Verify redirection to home page.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -93,7 +93,7 @@ describe('UserPasswordReset', () => {
       // Ensures that after a failed API call the form is cleared, an error
       // message appears, and the user stays on the page.
 
-      // Arrange: mock API returning 404 error.
+      // Arrange: Mock API returning 404 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -113,31 +113,31 @@ describe('UserPasswordReset', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form fields correctly.
+      // Arrange: Fill form fields correctly.
       await wrapper.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
       await wrapper.find('[data-testid="confirmPassword"]').setValue('n3wP@s5w0rD');
 
-      // Act: submit form.
+      // Act: Submit form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.passwordResetConfirm).toHaveBeenCalled();
 
-      // Assert: verify error message.
+      // Assert: Verify error message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
-      // Assert: form fields are cleared (clearForm behaviour).
+      // Assert: Form fields are cleared (clearForm behaviour).
       const passwordInput = wrapper.find('[data-testid="password"]') as any;
       const confirmInput = wrapper.find('[data-testid="confirmPassword"]') as any;
       expect(passwordInput.element.value).toBe('');
       expect(confirmInput.element.value).toBe('');
 
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -153,7 +153,7 @@ describe('UserPasswordReset', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Act: submit empty form.
+      // Act: Submit empty form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
@@ -167,9 +167,9 @@ describe('UserPasswordReset', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -180,16 +180,16 @@ describe('UserPasswordReset', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form with mismatching passwords.
+      // Arrange: Fill form with mismatching passwords.
       await wrapper.find('[data-testid="password"]').setValue('Password123!');
       await wrapper.find('[data-testid="confirmPassword"]').setValue('Different123!');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is on confirmPassword only.
+      // Assert: Error is on confirmPassword only.
       expect(wrapper.find('#confirmPassword').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -197,9 +197,9 @@ describe('UserPasswordReset', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -210,16 +210,16 @@ describe('UserPasswordReset', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form with a password missing a digit.
+      // Arrange: Fill form with a password missing a digit.
       await wrapper.find('[data-testid="password"]').setValue('Abcdefgh@');
       await wrapper.find('[data-testid="confirmPassword"]').setValue('Abcdefgh@');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is on password field.
+      // Assert: Error is on password field.
       expect(wrapper.find('#password').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -229,9 +229,9 @@ describe('UserPasswordReset', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -246,15 +246,15 @@ describe('UserPasswordReset', () => {
       await flushPromises();
 
       // Both fields should show errors.
-      expect(wrapper.findAll('.form-text-error')).toHaveLength(2);
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(2);
 
       // Now type a short password — error should appear immediately.
       await wrapper.find('[data-testid="password"]').setValue('Ab1@');
 
-      // Assert: password error shows eagerly.
-      const passwordErrorSpan = wrapper.find('#password + span.form-text-error');
-      expect(passwordErrorSpan.exists()).toBe(true);
-      expect(passwordErrorSpan.text()).toBe('Password is too short. It must have at least 8 characters.');
+      // Assert: Password error shows eagerly.
+      expect(errorMessages[0]?.exists()).toBe(true);
+      expect(errorMessages[0]?.text()).toBe('Password is too short. It must have at least 8 characters.');
     });
   });
 
@@ -266,10 +266,10 @@ describe('UserPasswordReset', () => {
       // When the URL has no token, the component should show a failure
       // message and navigate home without rendering the form.
 
-      // Arrange: set token to undefined.
+      // Arrange: Set token to undefined.
       mockRoute.query.token = undefined as any;
 
-      // Act: create page — will check token on mount.
+      // Act: Create page — will check token on mount.
       createComponent();
       const messageStore = useMessageStore();
 
@@ -278,23 +278,23 @@ describe('UserPasswordReset', () => {
       // Assert: API was not called.
       expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
 
-      // Assert: failure message.
+      // Assert: Failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
       expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
-      // Assert: redirect to home.
+      // Assert: Redirect to home.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
     it('rejects too-short token and redirects home', async () => {
       // Tokens shorter than 32 characters should be rejected as malformed.
 
-      // Arrange: set token to a short value.
+      // Arrange: Set token to a short value.
       mockRoute.query.token = 'shortToken';
 
-      // Act: create page.
+      // Act: Create page.
       createComponent();
       const messageStore = useMessageStore();
 
@@ -303,12 +303,12 @@ describe('UserPasswordReset', () => {
       // Assert: API was not called.
       expect(backendApiUser.passwordResetConfirm).not.toHaveBeenCalled();
 
-      // Assert: failure message.
+      // Assert: Failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
 
-      // Assert: redirect to home.
+      // Assert: Redirect to home.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
   });

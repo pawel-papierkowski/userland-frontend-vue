@@ -70,22 +70,22 @@ describe('App', () => {
   // //////////////////////////////////////////////////////////////////////////
   // relog user
 
-  describe('user login behavior', () => {
+  describe('session expiration on page reload', () => {
     beforeEach(() => {
       localStorage.clear();
       setActivePinia(createPinia());
     });
 
     it('shows session expired warning when stored JWT has expired', async () => {
-      // Arrange: seed localStorage with an expired JWT.
+      // Arrange: Seed localStorage with an expired JWT.
       localStorage.setItem(locstJwt, createFakeJwt(-3600));
 
-      // Act: mount triggers relogUser in <script setup>.
+      // Act: Mount triggers relogUser in <script setup>.
       await createWrapper();
       const messageStore = useMessageStore();
       const loginStore = useLoginStore();
 
-      // Assert: warning message should be in the store.
+      // Assert: Warning message should be in the store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Warning);
       expect(messageStore.messages[0]?.title).toBe(i18n.global.t('user.session.msg.warning.title'));
@@ -96,15 +96,15 @@ describe('App', () => {
     });
 
     it('logs in successfully when stored JWT is valid', async () => {
-      // Arrange: seed localStorage with a valid JWT.
+      // Arrange: Seed localStorage with a valid JWT.
       localStorage.setItem(locstJwt, createFakeJwt(3600));
 
-      // Act: mount triggers relogUser in <script setup>.
+      // Act: Mount triggers relogUser in <script setup>.
       await createWrapper();
       const messageStore = useMessageStore();
       const loginStore = useLoginStore();
 
-      // Assert: no messages, user is logged in with correct data.
+      // Assert: No messages, user is logged in with correct data.
       expect(messageStore.messages).toHaveLength(0);
       expect(loginStore.loginState.isLogged).toBe(true);
       expect(loginStore.loginState.email).toBe('test@example.com');
@@ -112,14 +112,14 @@ describe('App', () => {
     });
 
     it('does nothing when no JWT is stored', async () => {
-      // Arrange: localStorage cleared in beforeEach.
+      // Arrange: LocalStorage cleared in beforeEach.
 
-      // Act: mount triggers relogUser in <script setup>.
+      // Act: Mount triggers relogUser in <script setup>.
       await createWrapper();
       const messageStore = useMessageStore();
       const loginStore = useLoginStore();
 
-      // Assert: no messages, not logged in.
+      // Assert: No messages, not logged in.
       expect(messageStore.messages).toHaveLength(0);
       expect(loginStore.loginState.isLogged).toBe(false);
     });

@@ -8,7 +8,7 @@
 import { ref, reactive, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
@@ -140,7 +140,7 @@ const saveEntry = async (entry: UserConfigTableEntry | null) => {
       'admin.user.config.table.msg.save.fail.title',
       'admin.user.config.table.msg.save.fail.content',
     );
-    backendApi.logError(error, 'Failed to save user config entry!');
+    apiLogging.logError(error, 'Failed to save user config entry!');
   } finally {
     isBusyOptions.value = false;
   }
@@ -207,7 +207,7 @@ const deleteEntry = async (entry: UserConfigTableEntry | null) => {
       'admin.user.config.table.msg.delete.fail.title',
       'admin.user.config.table.msg.delete.fail.content',
     );
-    backendApi.logError(error, 'Failed to delete user config entry!');
+    apiLogging.logError(error, 'Failed to delete user config entry!');
   } finally {
     isBusyOptions.value = false;
   }

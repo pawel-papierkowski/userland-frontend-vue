@@ -107,7 +107,7 @@ describe('TableRow', () => {
 
   describe('rendering', () => {
     it('renders visible cells with correct content when row is not selected', () => {
-      // Arrange: typical columns, row not selected.
+      // Arrange: Typical columns, row not selected.
       const { testEntry, testForm, columns } = createData();
 
       // Act: Create component.
@@ -233,7 +233,7 @@ describe('TableRow', () => {
     });
 
     it('ignores rowMeta when it is null', () => {
-      // Arrange: rowMeta is null (default).
+      // Arrange: RowMeta is null (default).
       const { testEntry, testForm, columns } = createData();
 
       // Act: Row selected, inline edit on, null rowMeta.

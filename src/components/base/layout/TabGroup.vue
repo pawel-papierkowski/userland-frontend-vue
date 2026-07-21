@@ -101,7 +101,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="tabgroup-wrapper">
+  <div class="tabgroup-wrapper" :data-testid="`tabgroup_${id}`">
     <div ref="tablistRef" class="tabgroup-header" role="tablist" @keydown="onKeydown">
       <!-- Loop through all slot names passed to this component. -->
       <div

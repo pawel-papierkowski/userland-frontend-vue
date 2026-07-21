@@ -8,7 +8,7 @@ import i18n from '@/code/lang/i18n.ts';
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 
 import AdminUserTokens from '@/components/pages/admin/user/tokens/AdminUserTokens.vue';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -18,6 +18,10 @@ import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -311,7 +315,7 @@ describe('AdminUserTokens', () => {
       await nextTick();
 
       // Assert: Error was logged.
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
     });
   });
 });

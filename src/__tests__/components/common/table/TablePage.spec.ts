@@ -289,7 +289,7 @@ describe('TablePage', () => {
       // Assert: Row components have correct props.
       const rowCmps = wrapper.findAllComponents(TableRow as unknown as VueWrapper);
       expect(rowCmps).toHaveLength(2);
-      // Assert: row 1 has correct data
+      // Assert: Row 1 has correct data
       expect(rowCmps[0]?.props('modelValue')).toBeNull();
       expect(rowCmps[0]?.props('formEntry')).toBeNull();
       expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
@@ -297,7 +297,7 @@ describe('TablePage', () => {
       expect(rowCmps[0]?.props('rowIndex')).toBe(0);
       expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
       expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
-      // Assert: row 2 has correct data
+      // Assert: Row 2 has correct data
       expect(rowCmps[1]?.props('modelValue')).toBeNull();
       expect(rowCmps[1]?.props('formEntry')).toBeNull();
       expect(rowCmps[1]?.props('tableId')).toBe('customTableId');
@@ -306,7 +306,7 @@ describe('TablePage', () => {
       expect(rowCmps[1]?.props('entry')).toStrictEqual(data[1]);
       expect(rowCmps[1]?.props('inlineEdit')).toBe(false);
 
-      // Assert: resolveRowMeta was called for each row.
+      // Assert: ResolveRowMeta was called for each row.
       expect(resolveRowMeta).toHaveBeenCalledTimes(2);
       expect(resolveRowMeta).toHaveBeenCalledWith(data[0]);
       expect(resolveRowMeta).toHaveBeenCalledWith(data[1]);
@@ -361,7 +361,7 @@ describe('TablePage', () => {
       // Assert: Row components reflect new selection.
       const rowCmps = wrapper.findAllComponents(TableRow as unknown as VueWrapper);
       expect(rowCmps).toHaveLength(2);
-      // Assert: row 1 has correct data
+      // Assert: Row 1 has correct data
       expect(rowCmps[0]?.props('modelValue')).toStrictEqual(data[1]);
       expect(rowCmps[0]?.props('formEntry')).toBeNull();
       expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
@@ -369,7 +369,7 @@ describe('TablePage', () => {
       expect(rowCmps[0]?.props('rowIndex')).toBe(0);
       expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
       expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
-      // Assert: row 2 has correct data
+      // Assert: Row 2 has correct data
       expect(rowCmps[1]?.props('modelValue')).toStrictEqual(data[1]);
       expect(rowCmps[1]?.props('formEntry')).toBeNull();
       expect(rowCmps[1]?.props('tableId')).toBe('customTableId');
@@ -428,7 +428,7 @@ describe('TablePage', () => {
     });
 
     it('does not select when canSelect is false', async () => {
-      // Arrange: canSelect disabled.
+      // Arrange: CanSelect disabled.
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
       const wrapper = createComponent(
@@ -466,7 +466,7 @@ describe('TablePage', () => {
       // Assert: Row components are present and in valid state.
       const rowCmps = wrapper.findAllComponents(TableRow as unknown as VueWrapper);
       expect(rowCmps).toHaveLength(2);
-      // Assert: row 1 has correct data
+      // Assert: Row 1 has correct data
       expect(rowCmps[0]?.props('modelValue')).toBeNull();
       expect(rowCmps[0]?.props('formEntry')).toBeNull();
       expect(rowCmps[0]?.props('tableId')).toBe('customTableId');
@@ -474,7 +474,7 @@ describe('TablePage', () => {
       expect(rowCmps[0]?.props('rowIndex')).toBe(0);
       expect(rowCmps[0]?.props('entry')).toStrictEqual(data[0]);
       expect(rowCmps[0]?.props('inlineEdit')).toBe(false);
-      // Assert: row 2 has correct data
+      // Assert: Row 2 has correct data
       expect(rowCmps[1]?.props('modelValue')).toBeNull();
       expect(rowCmps[1]?.props('formEntry')).toBeNull();
       expect(rowCmps[1]?.props('tableId')).toBe('customTableId');

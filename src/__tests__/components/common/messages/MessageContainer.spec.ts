@@ -50,7 +50,7 @@ describe('MessageContainer', () => {
 
       await nextTick(); // Wait for DOM to update.
 
-      // Assert: check that there is single element with class '.message-box'.
+      // Assert: Check that there is single element with class '.message-box'.
       expect(messageContainer.findAll('.message-box')).toHaveLength(1);
     });
 
@@ -69,10 +69,10 @@ describe('MessageContainer', () => {
 
       await nextTick(); // Wait for DOM to update.
 
-      // Assert: check that there are five elements with class '.message-box'.
+      // Assert: Check that there are five elements with class '.message-box'.
       const messages = messageContainer.findAll('.message-box');
       expect(messages).toHaveLength(5);
-      // Assert: ensure they are in correct order.
+      // Assert: Ensure they are in correct order.
       expect(messages[0]?.find('.message-content').text()).toBe('msg.error.content');
       expect(messages[1]?.find('.message-content').text()).toBe('msg.failure.content');
       expect(messages[2]?.find('.message-content').text()).toBe('msg.warn.content');
@@ -94,7 +94,7 @@ describe('MessageContainer', () => {
 
       await nextTick(); // Wait for DOM to update.
 
-      // Assert: only 20 messages are rendered.
+      // Assert: Only 20 messages are rendered.
       const messages = messageContainer.findAll('.message-box');
       expect(messages).toHaveLength(20);
 

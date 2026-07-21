@@ -38,7 +38,7 @@
 import { useSlots, ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
@@ -144,7 +144,7 @@ const handleReload = async () => {
     // and we want to show feedback for user that there was some issue. So we show spinner, but with spin stopped.
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
-    backendApi.logError(error, 'User tab table reload failed!');
+    apiLogging.logError(error, 'User tab table reload failed!');
   } finally {
     isBusy.value = false;
   }

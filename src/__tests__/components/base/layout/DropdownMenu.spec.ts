@@ -104,7 +104,7 @@ describe('DropdownMenu', () => {
       const trigger = dropdownMenu.find('[role="button"]');
       const controlsId = trigger.attributes('aria-controls');
 
-      // Assert: aria-controls is set.
+      // Assert: Aria-controls is set.
       expect(controlsId).toBe('dropdownmenu-content-myDropDown');
 
       // Act: Open to verify the content element carries the matching id.

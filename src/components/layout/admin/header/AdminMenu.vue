@@ -1,15 +1,22 @@
 <script setup lang="ts">
 /** User menu in header. Different depending on your login status. */
-import { nextTick } from 'vue';
+import { computed, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import DropdownMenu from '@/components/base/layout/DropdownMenu.vue';
 
 const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
+
+//
+
+const canShowLoginRedirect = computed(() => {
+  return !AppLoginer.isLogged() && route.name !== 'admin-login';
+});
 
 //
 
@@ -29,6 +36,9 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
+  <div v-if="canShowLoginRedirect">
+    <router-link class="nav-major" :to="{ name: 'admin-login' }">{{ t('header.admin.login') }}</router-link>
+  </div>
   <DropdownMenu v-if="AppLoginer.isLogged()">
     <template #trigger>
       {{ t('header.user.options') }}

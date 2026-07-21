@@ -53,24 +53,24 @@ describe('UserPasswordResetStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.passwordResetLink).mockResolvedValue({ data: {} } as any);
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="email"]').setValue('test@example.com');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.passwordResetLink).toHaveBeenCalledWith({
         email: 'test@example.com',
         frontend: 'VUE',
       });
 
-      // Assert: verify success message.
+      // Assert: Verify success message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('Success');
@@ -78,7 +78,7 @@ describe('UserPasswordResetStart', () => {
         'Check your inbox in a few minutes for a email with link to password change.',
       );
 
-      // Assert: verify redirection.
+      // Assert: Verify redirection.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
@@ -86,7 +86,7 @@ describe('UserPasswordResetStart', () => {
       // Ensures that after a failed API call the user gets an error message
       // and stays on the page.
 
-      // Arrange: mock API returning 404 error.
+      // Arrange: Mock API returning 404 error.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -106,24 +106,24 @@ describe('UserPasswordResetStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill form.
+      // Arrange: Fill form.
       await wrapper.find('[data-testid="email"]').setValue('test@example.com');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: verify API was called.
+      // Assert: Verify API was called.
       expect(backendApiUser.passwordResetLink).toHaveBeenCalled();
 
-      // Assert: verify error message.
+      // Assert: Verify error message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User not found.');
 
-      // Assert: verify no redirection.
+      // Assert: Verify no redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -139,21 +139,21 @@ describe('UserPasswordResetStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Act: submit empty form.
+      // Act: Submit empty form.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown.
+      // Assert: Error is shown.
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
       expect(errorMessages[0]?.text()).toBe('Field cannot be empty.');
 
       // Assert: API was not called.
       expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -163,15 +163,15 @@ describe('UserPasswordResetStart', () => {
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
-      // Arrange: fill with invalid email.
+      // Arrange: Fill with invalid email.
       await wrapper.find('[data-testid="email"]').setValue('invalid-email');
 
-      // Act: submit.
+      // Act: Submit.
       await wrapper.find('button[type="submit"]').trigger('submit');
 
       await flushPromises();
 
-      // Assert: error is shown on email field.
+      // Assert: Error is shown on email field.
       expect(wrapper.find('#email').classes()).toContain('err');
       const errorMessages = wrapper.findAll('.form-text-error');
       expect(errorMessages).toHaveLength(1);
@@ -179,9 +179,9 @@ describe('UserPasswordResetStart', () => {
 
       // Assert: API was not called.
       expect(backendApiUser.passwordResetLink).not.toHaveBeenCalled();
-      // Assert: no messages in store.
+      // Assert: No messages in store.
       expect(messageStore.messages).toHaveLength(0);
-      // Assert: no redirection.
+      // Assert: No redirection.
       expect(mockPush).not.toHaveBeenCalled();
     });
 
@@ -191,20 +191,20 @@ describe('UserPasswordResetStart', () => {
 
       const wrapper = createComponent();
 
-      // Act: submit empty form to set usedButton = true.
+      // Act: Submit empty form to set usedButton = true.
       await wrapper.find('button[type="submit"]').trigger('submit');
       await flushPromises();
 
       // The email field should show an error.
-      expect(wrapper.findAll('.form-text-error')).toHaveLength(1);
+      const errorMessages = wrapper.findAll('.form-text-error');
+      expect(errorMessages).toHaveLength(1);
 
       // Now type an invalid email — error should appear immediately.
       await wrapper.find('[data-testid="email"]').setValue('bad');
 
-      // Assert: error shows eagerly.
-      const emailErrorSpan = wrapper.find('#email + span.form-text-error');
-      expect(emailErrorSpan.exists()).toBe(true);
-      expect(emailErrorSpan.text()).toBe('Need to enter correct email.');
+      // Assert: Error shows eagerly.
+      expect(errorMessages[0]?.exists()).toBe(true);
+      expect(errorMessages[0]?.text()).toBe('Need to enter correct email.');
     });
   });
 

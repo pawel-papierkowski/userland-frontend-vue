@@ -147,7 +147,7 @@ describe('DatePicker', () => {
       // Act: Create the component.
       createComponent(null, '', false, false, false, false);
 
-      // Assert: onClickOutside was called once.
+      // Assert: OnClickOutside was called once.
       expect(mockOnClickOutside).toHaveBeenCalledOnce();
     });
 
@@ -166,7 +166,7 @@ describe('DatePicker', () => {
       // Assert: Ensure panel is not present.
       expect(datePicker.find('.calendar-container').exists()).toBe(false);
 
-      // Assert: model has correct value.
+      // Assert: Model has correct value.
       const model = datePicker.props('modelValue') as Date | null;
       expect(model).toBe(null);
 
@@ -263,7 +263,7 @@ describe('DatePicker', () => {
       // Assert: Panel shows calendar with correct week numbers.
       verifyPanel(datePicker, '', '2025 December', undefined, weekNums1);
 
-      // Act: move one month forward.
+      // Act: Move one month forward.
       await datePicker.find('[data-testid="datepicker__monthPlus"]').trigger('click');
       await nextTick();
 
@@ -291,7 +291,7 @@ describe('DatePicker', () => {
       // Assert: Ensure panel is not present.
       expect(datePicker.find('.calendar-container').exists()).toBe(false);
 
-      // Assert: model has correct value.
+      // Assert: Model has correct value.
       const model = datePicker.props('modelValue') as Date | null;
       expect(model?.getUTCFullYear()).toBe(2026);
       expect(model?.getUTCMonth()).toBe(4); // reminder that months are 0 indexed
@@ -676,16 +676,16 @@ describe('DatePicker', () => {
       expect(input.attributes('role')).toBe('combobox');
       expect(input.attributes('aria-haspopup')).toBe('dialog');
 
-      // Assert: aria-expanded is false when panel is hidden.
+      // Assert: Aria-expanded is false when panel is hidden.
       expect(input.attributes('aria-expanded')).toBe('false');
 
-      // Assert: aria-controls matches panel id convention.
+      // Assert: Aria-controls matches panel id convention.
       expect(input.attributes('aria-controls')).toBe('datepicker_test_panel');
 
-      // Assert: aria-label is present with placeholder text (date format).
+      // Assert: Aria-label is present with placeholder text (date format).
       expect(input.attributes('aria-label')).toBe('YYYY-MM-DD');
 
-      // Assert: aria-disabled is not present when not disabled.
+      // Assert: Aria-disabled is not present when not disabled.
       expect(input.attributes('aria-disabled')).toBeUndefined();
     });
 
@@ -701,14 +701,14 @@ describe('DatePicker', () => {
       await input.trigger('click');
       await nextTick();
 
-      // Assert: aria-expanded is true when panel is visible.
+      // Assert: Aria-expanded is true when panel is visible.
       expect(input.attributes('aria-expanded')).toBe('true');
 
       // Act: Close panel by clicking again.
       await input.trigger('click');
       await nextTick();
 
-      // Assert: aria-expanded is false when panel is hidden.
+      // Assert: Aria-expanded is false when panel is hidden.
       expect(input.attributes('aria-expanded')).toBe('false');
     });
 
@@ -722,7 +722,7 @@ describe('DatePicker', () => {
       const datePicker = createComponent(null, '', false, true, false, false);
       const input = datePicker.find('.picker-input-date');
 
-      // Assert: aria-disabled is present and set to "true".
+      // Assert: Aria-disabled is present and set to "true".
       expect(input.attributes('aria-disabled')).toBe('true');
     });
 
@@ -794,17 +794,17 @@ describe('DatePicker', () => {
       expect(cellFeb6.attributes('role')).toBe('gridcell');
       expect(cellFeb28.attributes('role')).toBe('gridcell');
 
-      // Assert: aria-label includes full date (year, month name, day).
+      // Assert: Aria-label includes full date (year, month name, day).
       expect(cellJan26.attributes('aria-label')).toBe('2026 January 26');
       expect(cellFeb1.attributes('aria-label')).toBe('2026 February 1');
       expect(cellFeb6.attributes('aria-label')).toBe('2026 February 6');
       expect(cellFeb28.attributes('aria-label')).toBe('2026 February 28');
 
-      // Assert: aria-selected is false when no date is selected.
+      // Assert: Aria-selected is false when no date is selected.
       expect(cellFeb1.attributes('aria-selected')).toBe('false');
       expect(cellFeb6.attributes('aria-selected')).toBe('false');
 
-      // Assert: aria-disabled is not set when no date constraints.
+      // Assert: Aria-disabled is not set when no date constraints.
       expect(cellFeb1.attributes('aria-disabled')).toBeUndefined();
     });
 

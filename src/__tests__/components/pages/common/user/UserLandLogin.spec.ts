@@ -60,7 +60,7 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
         jwtToken:
@@ -68,16 +68,16 @@ describe('UserLandLogin', () => {
       },
     } as any);
 
-    // Arrange: fill form fields correctly.
+    // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
     await userLogin.find('[data-testid="password"]').setValue('Password123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API call.
+    // Assert: Verify API call.
     expect(backendApiUser.login).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'test@example.com',
@@ -85,16 +85,16 @@ describe('UserLandLogin', () => {
       }),
     );
 
-    // Assert: verify success message is present in store.
+    // Assert: Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0]?.title).toBe('User logged in successfully');
     expect(messageStore.messages[0]?.content).toBe('');
 
-    // Assert: verify redirection to home page.
+    // Assert: Verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
 
-    // Assert: verify that frontend considers you logged in.
+    // Assert: Verify that frontend considers you logged in.
     expect(AppLoginer.isLogged()).toBe(true);
   });
 
@@ -106,7 +106,7 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
         jwtToken:
@@ -114,16 +114,16 @@ describe('UserLandLogin', () => {
       },
     } as any);
 
-    // Arrange: fill form fields correctly.
+    // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('pawel.papierkowski@gmail.com');
     await userLogin.find('[data-testid="password"]').setValue('abcABC123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API call.
+    // Assert: Verify API call.
     expect(backendApiUser.login).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'pawel.papierkowski@gmail.com',
@@ -131,16 +131,16 @@ describe('UserLandLogin', () => {
       }),
     );
 
-    // Assert: verify success message is present in store.
+    // Assert: Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0]?.title).toBe('Admin panel user logged in successfully');
     expect(messageStore.messages[0]?.content).toBe('');
 
-    // Assert: verify redirection to main admin page.
+    // Assert: Verify redirection to main admin page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'admin-main' });
 
-    // Assert: verify that frontend considers you logged in.
+    // Assert: Verify that frontend considers you logged in.
     expect(AppLoginer.isLogged()).toBe(true);
   });
 
@@ -152,7 +152,7 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: mock successful API response.
+    // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
         jwtToken:
@@ -160,11 +160,11 @@ describe('UserLandLogin', () => {
       },
     } as any);
 
-    // Arrange: fill form fields correctly.
+    // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
     await userLogin.find('[data-testid="password"]').setValue('Password123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
@@ -172,7 +172,7 @@ describe('UserLandLogin', () => {
     // Note that even though user was logging to admin panel without needed permissions, they still logged in successfully as normal user.
     // We simply kick them out of admin panel, as if login was on standard page.
 
-    // Assert: verify API call.
+    // Assert: Verify API call.
     expect(backendApiUser.login).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'test@example.com',
@@ -180,16 +180,16 @@ describe('UserLandLogin', () => {
       }),
     );
 
-    // Assert: verify success message is present in store.
+    // Assert: Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0]?.title).toBe('User logged in successfully');
     expect(messageStore.messages[0]?.content).toBe('');
 
-    // Assert: verify redirection to home page.
+    // Assert: Verify redirection to home page.
     expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
 
-    // Assert: verify that frontend considers you logged in.
+    // Assert: Verify that frontend considers you logged in.
     expect(AppLoginer.isLogged()).toBe(true);
   });
 
@@ -203,7 +203,7 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: mock successful API response, but with expired token.
+    // Arrange: Mock successful API response, but with expired token.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
         jwtToken:
@@ -211,16 +211,16 @@ describe('UserLandLogin', () => {
       },
     } as any);
 
-    // Arrange: fill form fields correctly.
+    // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
     await userLogin.find('[data-testid="password"]').setValue('Password123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: verify API call.
+    // Assert: Verify API call.
     expect(backendApiUser.login).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'test@example.com',
@@ -228,23 +228,23 @@ describe('UserLandLogin', () => {
       }),
     );
 
-    // Assert: verify failure message is present in store.
+    // Assert: Verify failure message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
     expect(messageStore.messages[0]?.title).toBe('Login failure');
     expect(messageStore.messages[0]?.content).toBe('User login failed.');
 
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
-    // Assert: verify that frontend considers you NOT logged in.
+    // Assert: Verify that frontend considers you NOT logged in.
     expect(AppLoginer.isLogged()).toBe(false);
   });
 
   it('shows error message when server returns 409 error', async () => {
     // Ensures error message is shown after failed login.
 
-    // Arrange: mock API returning 409 error (wrong password or account).
+    // Arrange: Mock API returning 409 error (wrong password or account).
     const errorResponse = {
       isAxiosError: true,
       response: {
@@ -264,28 +264,28 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: fill form fields correctly.
+    // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
     await userLogin.find('[data-testid="password"]').setValue('Password123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
-    // Assert: verify API was called.
+    // Assert: Verify API was called.
     expect(backendApiUser.login).toHaveBeenCalled();
 
-    // Assert: verify error message is present in store.
+    // Assert: Verify error message is present in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('Failure');
     expect(messageStore.messages[0]?.content).toBe('Invalid password or account.');
 
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
-    // Assert: verify that frontend considers you logged out.
+    // Assert: Verify that frontend considers you logged out.
     expect(AppLoginer.isLogged()).toBe(false);
   });
 
@@ -299,26 +299,26 @@ describe('UserLandLogin', () => {
 
     // No arrange here - form is untouched.
 
-    // Act: click on login button while form is completely empty.
+    // Act: Click on login button while form is completely empty.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
-    // Assert: verify that error messages properly shown up for all fields.
+    // Assert: Verify that error messages properly shown up for all fields.
     const errorMessages = userLogin.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(2);
     errorMessages.forEach((msg) => {
       expect(msg.text()).not.toBe('');
     });
 
-    // Assert: verify API was not called.
+    // Assert: Verify API was not called.
     expect(backendApiUser.login).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
+    // Assert: Verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
-    // Assert: verify that frontend considers you logged out.
+    // Assert: Verify that frontend considers you logged out.
     expect(AppLoginer.isLogged()).toBe(false);
   });
 
@@ -328,29 +328,29 @@ describe('UserLandLogin', () => {
     const userLogin = createComponent();
     const messageStore = useMessageStore();
 
-    // Arrange: fill form fields with invalid email.
+    // Arrange: Fill form fields with invalid email.
     await userLogin.find('[data-testid="email"]').setValue('invalid-email');
     await userLogin.find('[data-testid="password"]').setValue('Password123!');
 
-    // Act: click on login button.
+    // Act: Click on login button.
     await userLogin.find('button[type="submit"]').trigger('submit');
 
     await flushPromises();
 
-    // Assert: verify that error message is shown for email.
+    // Assert: Verify that error message is shown for email.
     expect(userLogin.find('#email').classes()).toContain('err');
     const errorMessages = userLogin.findAll('.form-text-error');
     expect(errorMessages).toHaveLength(1);
     expect(errorMessages[0]?.text()).not.toBe('');
 
-    // Assert: verify API was not called.
+    // Assert: Verify API was not called.
     expect(backendApiUser.login).not.toHaveBeenCalled();
-    // Assert: verify no messages are present in store.
+    // Assert: Verify no messages are present in store.
     expect(messageStore.messages).toHaveLength(0);
-    // Assert: verify no redirection occurred.
+    // Assert: Verify no redirection occurred.
     expect(mockPush).not.toHaveBeenCalled();
 
-    // Assert: verify that frontend considers you logged out.
+    // Assert: Verify that frontend considers you logged out.
     expect(AppLoginer.isLogged()).toBe(false);
   });
 });

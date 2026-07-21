@@ -6,7 +6,8 @@ import { nextTick } from 'vue';
 import i18n from '@/code/lang/i18n.ts';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
+
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
@@ -27,6 +28,10 @@ vi.mock('@/services/features/api-admin-users.ts', () => ({
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -154,7 +159,7 @@ describe('AdminUserMain', () => {
       await wrapper.setProps({ modelValue: testUser });
       await nextTick();
 
-      // Assert: loadUserData was called with correct user id.
+      // Assert: LoadUserData was called with correct user id.
       expect(mockLoadUserData).toHaveBeenCalledTimes(1);
       expect(mockLoadUserData).toHaveBeenCalledWith(testUser.id);
 
@@ -233,7 +238,7 @@ describe('AdminUserMain', () => {
         'admin.user.msg.errorLoadUser.title',
         'admin.user.msg.errorLoadUser.content',
       );
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'Loading user data failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'Loading user data failed!');
       // Spinner should be stopped (canSpin false) but still visible since isLoading stays true.
       // Because form never loads - user stays in loading state with stopped spinner.
       expect(wrapper.find('[data-testid="form-user-main"]').exists()).toBe(false);
@@ -261,7 +266,7 @@ describe('AdminUserMain', () => {
       await wrapper.find('[data-testid="btn-update"]').trigger('click');
       await nextTick();
 
-      // Assert: editUserData was called with correct payload.
+      // Assert: EditUserData was called with correct payload.
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
       expect(payload.id).toBe(testUser.id);
@@ -291,7 +296,7 @@ describe('AdminUserMain', () => {
       await wrapper.find('[data-testid="btn-update"]').trigger('click');
       await nextTick();
 
-      // Assert: notifyUserUpdated was called.
+      // Assert: NotifyUserUpdated was called.
       expect(AppUserEventer.notifyUserUpdated).toHaveBeenCalledTimes(1);
     });
 
@@ -320,7 +325,7 @@ describe('AdminUserMain', () => {
         'admin.user.msg.error.title',
         'admin.user.msg.error.content',
       );
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'Updating user data failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'Updating user data failed!');
     });
 
     it('does not update or notify when no user is selected', async () => {
@@ -356,7 +361,7 @@ describe('AdminUserMain', () => {
       await wrapper.find('[data-testid="btn-lock"]').trigger('click');
       await nextTick();
 
-      // Assert: editUserData called with locked: true.
+      // Assert: EditUserData called with locked: true.
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
       expect(payload.locked).toBe(true);
@@ -385,7 +390,7 @@ describe('AdminUserMain', () => {
       await wrapper.find('[data-testid="btn-lock"]').trigger('click');
       await nextTick();
 
-      // Assert: editUserData called with locked: false.
+      // Assert: EditUserData called with locked: false.
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
       expect(payload.locked).toBe(false);
     });

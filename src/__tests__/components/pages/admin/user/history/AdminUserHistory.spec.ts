@@ -8,8 +8,8 @@ import i18n from '@/code/lang/i18n.ts';
 
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
-import backendApi from '@/services/api-common.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
+import apiLogging from '@/services/api-logging.ts';
 
 import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -20,6 +20,10 @@ import { useUserEventStore } from '@/stores/events/user-events.ts';
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -292,7 +296,7 @@ describe('AdminUserHistory', () => {
       });
       await nextTick();
 
-      // Assert: loadHistoryPage was NOT called yet (deferred).
+      // Assert: LoadHistoryPage was NOT called yet (deferred).
       expect(mockLoadHistoryPage).not.toHaveBeenCalled();
     });
 
@@ -365,7 +369,7 @@ describe('AdminUserHistory', () => {
       await nextTick();
 
       // Assert: Error was logged.
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
     });
   });
 

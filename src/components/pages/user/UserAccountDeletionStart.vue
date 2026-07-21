@@ -6,13 +6,15 @@ import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import type { UserAccountDeleteLinkForm, UserAccountDeleteLinkReq } from '@/code/data/features/user/user-type';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const router = useRouter();
@@ -48,10 +50,9 @@ const handleAccountDeletionLink = async () => {
     router.push({ name: 'home' });
   } catch (error) {
     clearForm();
-    AppMessager.errorT(error, 'user.accountDeleteStart.msg.error.title', 'user.accountDeleteStart.msg.error.content');
-    backendApi.logError(error, 'Account deletion request failed!');
-  } finally {
     isBusy.value = false; // Enable submit button.
+    AppMessager.errorT(error, 'user.accountDeleteStart.msg.error.title', 'user.accountDeleteStart.msg.error.content');
+    apiLogging.logError(error, 'Account deletion request failed!');
   }
 };
 
@@ -94,9 +95,8 @@ const clearForm = () => {
 //
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 </script>
 
@@ -109,14 +109,14 @@ const getInputClass = (msgError: string | null): string => {
         <div class="onpage-msg info" v-html="t('user.accountDeleteStart.form.info')" />
         <div class="form-entry">
           <label for="password">{{ t('user.accountDeleteStart.form.password') }}:</label>
-          <input
-            :class="getInputClass(passwordError)"
+          <TextBox
             id="password"
-            data-testid="password"
             type="password"
             v-model="form.password"
-            required
             autocomplete="new-password"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordError)"
           />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>

@@ -5,7 +5,7 @@ import type { Ref } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import { useUserEventStore } from '@/stores/events/user-events.ts';
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -112,7 +112,7 @@ const handleReload = async () => {
   } catch (error) {
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
-    backendApi.logError(error, 'User table reload failed!');
+    apiLogging.logError(error, 'User table reload failed!');
   } finally {
     isBusy.value = false;
   }

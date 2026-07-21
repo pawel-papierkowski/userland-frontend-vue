@@ -6,13 +6,15 @@ import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import type { UserPasswordResetLinkForm, UserPasswordResetLinkReq } from '@/code/data/features/user/user-type';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const router = useRouter();
@@ -47,10 +49,9 @@ const handlePasswordResetLink = async () => {
     showMessage();
     router.push({ name: 'home' });
   } catch (error) {
-    AppMessager.errorT(error, 'user.passwordResetStart.msg.error.title', 'user.passwordResetStart.msg.error.content');
-    backendApi.logError(error, 'Password reset request failed!');
-  } finally {
     isBusy.value = false; // Enable submit button.
+    AppMessager.errorT(error, 'user.passwordResetStart.msg.error.title', 'user.passwordResetStart.msg.error.content');
+    apiLogging.logError(error, 'Password reset request failed!');
   }
 };
 
@@ -87,9 +88,8 @@ const showMessage = () => {
 //
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 </script>
 
@@ -102,14 +102,14 @@ const getInputClass = (msgError: string | null): string => {
         <div class="onpage-msg info" v-html="t('user.passwordResetStart.form.info')" />
         <div class="form-entry">
           <label for="email">{{ t('user.passwordResetStart.form.email') }}:</label>
-          <input
-            :class="getInputClass(emailError)"
+          <TextBox
             id="email"
-            data-testid="email"
             type="email"
             v-model="form.email"
-            required
             autocomplete="email"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(emailError)"
           />
           <span v-if="emailError" class="form-text-error">{{ emailError }}</span>
         </div>

@@ -127,7 +127,7 @@ describe('ComboBox', () => {
       expect(options[1]?.classes()).not.toContain('highlighted');
       expect(options[2]?.classes()).toContain('highlighted');
       expect(options[3]?.classes()).not.toContain('highlighted');
-      // Assert: aria-activedescendant updated.
+      // Assert: Aria-activedescendant updated.
       expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
     });
 
@@ -200,15 +200,15 @@ describe('ComboBox', () => {
 
       // Assert: Root has role combobox.
       expect(comboBox.attributes('role')).toBe('combobox');
-      // Assert: aria-expanded starts as false.
+      // Assert: Aria-expanded starts as false.
       expect(comboBox.attributes('aria-expanded')).toBe('false');
-      // Assert: aria-haspopup is listbox.
+      // Assert: Aria-haspopup is listbox.
       expect(comboBox.attributes('aria-haspopup')).toBe('listbox');
-      // Assert: aria-controls is set.
+      // Assert: Aria-controls is set.
       expect(comboBox.attributes('aria-controls')).toBe('combobox-listbox_someCombobox');
-      // Assert: aria-activedescendant is not set when no option is highlighted.
+      // Assert: Aria-activedescendant is not set when no option is highlighted.
       expect(comboBox.attributes('aria-activedescendant')).toBeUndefined();
-      // Assert: aria-disabled is not present when enabled.
+      // Assert: Aria-disabled is not present when enabled.
       expect(comboBox.attributes('aria-disabled')).toBeUndefined();
 
       // Assert: Options container has role listbox.
@@ -230,7 +230,7 @@ describe('ComboBox', () => {
       await comboBox.find('.combobox-selected').trigger('click');
       await nextTick();
 
-      // Assert: aria-expanded reflects open state.
+      // Assert: Aria-expanded reflects open state.
       expect(comboBox.attributes('aria-expanded')).toBe('true');
     });
 
@@ -240,7 +240,7 @@ describe('ComboBox', () => {
       // Arrange&Act: Set up disabled combobox.
       const comboBox = createComponent(null, '', createOptions(), true, false, 'test.comboBox');
 
-      // Assert: aria-disabled is present and true.
+      // Assert: Aria-disabled is present and true.
       expect(comboBox.attributes('aria-disabled')).toBe('true');
     });
   });
@@ -263,7 +263,7 @@ describe('ComboBox', () => {
       expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
       // Assert: First option is highlighted.
       expect(comboBox.find('.combobox-option').classes()).toContain('highlighted');
-      // Assert: aria-activedescendant points to first option.
+      // Assert: Aria-activedescendant points to first option.
       expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_0');
 
       // Act: Press ArrowDown again to move to next option.
@@ -439,7 +439,7 @@ describe('ComboBox', () => {
 
       // Assert: Options are hidden.
       expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
-      // Assert: aria-activedescendant is cleared.
+      // Assert: Aria-activedescendant is cleared.
       expect(comboBox.attributes('aria-activedescendant')).toBeUndefined();
     });
 

@@ -9,13 +9,18 @@ import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/featur
 import { EnColumnKind } from '@/code/data/features/common/const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
+
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 
 // Mock API and message modules.
 vi.mock('@/services/api-common.ts', () => ({
   default: {
     create: vi.fn<() => void>(),
+  },
+}));
+vi.mock('@/services/api-logging.ts', () => ({
+  default: {
     logError: vi.fn<() => void>(),
   },
 }));
@@ -203,7 +208,7 @@ describe('AdminUserTab', () => {
       // Arrange & Act: Mount with no user, fetchData not set up to resolve.
       createComponent();
 
-      // Assert: fetchData was never called.
+      // Assert: FetchData was never called.
       expect(mockFetchData).not.toHaveBeenCalled();
     });
 
@@ -232,11 +237,11 @@ describe('AdminUserTab', () => {
       createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
       await nextTick();
 
-      // Assert: convertToReq called with formFilter and userId.
+      // Assert: ConvertToReq called with formFilter and userId.
       expect(mockConvertToReq).toHaveBeenCalledTimes(1);
       expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser1.id);
 
-      // Assert: fetchData called with the request from convertToReq.
+      // Assert: FetchData called with the request from convertToReq.
       expect(mockFetchData).toHaveBeenCalledTimes(1);
       expect(mockFetchData).toHaveBeenCalledWith({ ...defaultFormFilter, userId: testUser1.id });
 
@@ -284,7 +289,7 @@ describe('AdminUserTab', () => {
       await flushPromises();
       await nextTick();
 
-      // Assert: entry model was reset to null.
+      // Assert: Entry model was reset to null.
       expect(wrapper.emitted('update:entry')).toBeDefined();
       const lastEmit = wrapper.emitted('update:entry')!;
       const lastValue = lastEmit[lastEmit.length - 1]?.[0];
@@ -422,7 +427,7 @@ describe('AdminUserTab', () => {
       await nextTick();
 
       // Assert: Error was logged.
-      expect(backendApi.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
+      expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'User tab table reload failed!');
     });
   });
 
@@ -454,7 +459,7 @@ describe('AdminUserTab', () => {
       (wrapper.vm as any).handleReload();
       await nextTick();
 
-      // Assert: convertToReq and fetchData were called.
+      // Assert: ConvertToReq and fetchData were called.
       expect(mockConvertToReq).toHaveBeenCalledTimes(1);
       expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser1.id);
       expect(mockFetchData).toHaveBeenCalledTimes(1);

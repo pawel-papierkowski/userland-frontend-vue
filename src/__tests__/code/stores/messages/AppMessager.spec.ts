@@ -14,10 +14,10 @@ describe('AppMessager', () => {
   it('adds an info message', () => {
     const messageStore = useMessageStore();
 
-    // Arrange&Act: create message.
+    // Arrange&Act: Create message.
     AppMessager.info('testArea.msgButtons.info.title', 'testArea.msgButtons.info.content');
 
-    // Assert: message exists in store.
+    // Assert: Message exists in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0]?.title).toBe('testArea.msgButtons.info.title'); // as is
@@ -27,10 +27,10 @@ describe('AppMessager', () => {
   it('adds an translated info message', () => {
     const messageStore = useMessageStore();
 
-    // Arrange&Act: create translated message.
+    // Arrange&Act: Create translated message.
     AppMessager.infoT('testArea.messages.msgButtons.info.title', 'testArea.messages.msgButtons.info.content');
 
-    // Assert: message exists in store.
+    // Assert: Message exists in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Info);
     expect(messageStore.messages[0]?.title).toBe('Info'); // translated
@@ -42,7 +42,7 @@ describe('AppMessager', () => {
   it('handles axios response error with known errCode', () => {
     const messageStore = useMessageStore();
 
-    // Arrange: simulate an Axios error object that has expected format.
+    // Arrange: Simulate an Axios error object that has expected format.
     const axiosError = {
       isAxiosError: true,
       response: {
@@ -53,10 +53,10 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create error message.
+    // Act: Create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
-    // Assert: message exists in store.
+    // Assert: Message exists in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('Failure');
@@ -66,7 +66,7 @@ describe('AppMessager', () => {
   it('handles axios response error with unknown errCode and known http code', () => {
     const messageStore = useMessageStore();
 
-    // Arrange: simulate an Axios error object with unknown error code.
+    // Arrange: Simulate an Axios error object with unknown error code.
     const axiosError = {
       isAxiosError: true,
       response: {
@@ -77,10 +77,10 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create error message.
+    // Act: Create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
-    // Assert: message exists in store. It will report error for HTTP status 400.
+    // Assert: Message exists in store. It will report error for HTTP status 400.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('Bad request');
@@ -90,7 +90,7 @@ describe('AppMessager', () => {
   it('handles axios response error with unknown errCode and unhandled http code', () => {
     const messageStore = useMessageStore();
 
-    // Arrange: simulate an Axios error object with unhandled http code.
+    // Arrange: Simulate an Axios error object with unhandled http code.
     const axiosError = {
       isAxiosError: true,
       response: {
@@ -101,10 +101,10 @@ describe('AppMessager', () => {
       },
     };
 
-    // Act: create error message.
+    // Act: Create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
-    // Assert: message exists in store. Will show fallback text.
+    // Assert: Message exists in store. Will show fallback text.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('test.msg.fallback.title'); // shown as is
@@ -114,16 +114,16 @@ describe('AppMessager', () => {
   it('handles axios request error (network error)', () => {
     const messageStore = useMessageStore();
 
-    // Arrange: simulate an Axios error object without response. Can happen if network error occurs.
+    // Arrange: Simulate an Axios error object without response. Can happen if network error occurs.
     const axiosError = {
       isAxiosError: true,
       request: {}, // No response
     };
 
-    // Act: create error message.
+    // Act: Create error message.
     AppMessager.error(axiosError, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
-    // Assert: message exists in store.
+    // Assert: Message exists in store.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('Network error');
@@ -135,13 +135,13 @@ describe('AppMessager', () => {
   it('uses fallback when not an axios error', () => {
     const messageStore = useMessageStore();
 
-    // Arrange: custom error (not an Axios error).
+    // Arrange: Custom error (not an Axios error).
     const error = new Error('Simple error');
 
-    // Act: create translated error message.
+    // Act: Create translated error message.
     AppMessager.errorT(error, 'test.msg.fallback.title', 'test.msg.fallback.content');
 
-    // Assert: message exists in store. Will show fallback text.
+    // Assert: Message exists in store. Will show fallback text.
     expect(messageStore.messages).toHaveLength(1);
     expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
     expect(messageStore.messages[0]?.title).toBe('Fallback title');

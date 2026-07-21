@@ -10,7 +10,7 @@ import { ref, reactive, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
 import type {
@@ -73,7 +73,7 @@ const resolveUserData = async (): Promise<UserFullDataResp | null> => {
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.errorLoadUser.title', 'admin.user.msg.errorLoadUser.content');
-    backendApi.logError(error, 'Loading user data failed!');
+    apiLogging.logError(error, 'Loading user data failed!');
     canSpin.value = false;
     return null;
   } finally {
@@ -108,7 +108,7 @@ const saveUserData = async (): Promise<UserFullDataResp | null> => {
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
-    backendApi.logError(error, 'Updating user data failed!');
+    apiLogging.logError(error, 'Updating user data failed!');
     return null;
   } finally {
     isBusy.value = false;
@@ -163,7 +163,7 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp | null> => {
     return response.data;
   } catch (error) {
     AppMessager.errorT(error, 'admin.user.msg.error.title', 'admin.user.msg.error.content');
-    backendApi.logError(error, 'Updating user data failed!');
+    apiLogging.logError(error, 'Updating user data failed!');
     return null;
   } finally {
     isBusy.value = false;

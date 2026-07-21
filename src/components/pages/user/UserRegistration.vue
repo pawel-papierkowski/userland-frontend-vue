@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
-import backendApi from '@/services/api-common.ts';
+import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
 
@@ -15,6 +15,7 @@ import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
 import CheckBox from '@/components/base/inputs/CheckBox.vue';
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const log = useLogger();
 const router = useRouter();
@@ -62,10 +63,9 @@ const handleRegister = async () => {
     showMessage();
     router.push({ name: 'home' });
   } catch (error) {
-    AppMessager.errorT(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
-    backendApi.logError(error, 'Registration failed!');
-  } finally {
     isBusy.value = false; // Enable submit button.
+    AppMessager.errorT(error, 'user.registration.msg.error.title', 'user.registration.msg.error.content');
+    apiLogging.logError(error, 'Registration failed!');
   }
 };
 
@@ -105,9 +105,8 @@ const goLogin = () => {
 };
 
 /** We can highlight fields that contain errors. */
-const getInputClass = (msgError: string | null): string => {
-  if (msgError !== null) return 'err';
-  return '';
+const isInvalid = (msgError: string | null): boolean => {
+  return msgError !== null;
 };
 </script>
 
@@ -120,63 +119,62 @@ const getInputClass = (msgError: string | null): string => {
         <div class="onpage-msg warning" v-html="t('user.registration.form.warning')" />
         <div class="form-entry">
           <label for="username">{{ t('user.registration.form.username') }}:</label>
-          <input
-            :class="getInputClass(usernameError)"
+          <TextBox
             id="username"
-            data-testid="username"
-            type="text"
             v-model="form.username"
-            required
             autocomplete="off"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(usernameError)"
           />
           <span v-if="usernameError" class="form-text-error">{{ usernameError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="email">{{ t('user.registration.form.email') }}:</label>
-          <input
-            :class="getInputClass(emailError)"
+          <TextBox
             id="email"
-            data-testid="email"
             type="email"
             v-model="form.email"
-            required
             autocomplete="email"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(emailError)"
           />
           <span v-if="emailError" class="form-text-error">{{ emailError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="password">{{ t('user.registration.form.password') }}:</label>
-          <input
-            :class="getInputClass(passwordError)"
+          <TextBox
             id="password"
-            data-testid="password"
             type="password"
             v-model="form.password"
-            required
             autocomplete="new-password"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordError)"
           />
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
 
         <div class="form-entry">
           <label for="confirmPassword">{{ t('user.registration.form.confirmPassword') }}:</label>
-          <input
-            :class="getInputClass(passwordConfirmError)"
+          <TextBox
             id="confirmPassword"
-            data-testid="confirmPassword"
             type="password"
             v-model="form.confirmPassword"
-            required
             autocomplete="new-password"
+            :required="true"
+            :disabled="isBusy"
+            :invalid="isInvalid(passwordConfirmError)"
           />
           <span v-if="passwordConfirmError" class="form-text-error">{{ passwordConfirmError }}</span>
         </div>
 
         <div class="form-entry-inline">
           <label for="isAdmin">{{ t('user.registration.form.isAdmin') }}:</label>
-          <CheckBox id="isAdmin" v-model="form.isAdmin" />
+          <CheckBox id="isAdmin" v-model="form.isAdmin" :disabled="isBusy" />
         </div>
 
         <div class="onpage-msg info" v-html="t('test.notify')" />

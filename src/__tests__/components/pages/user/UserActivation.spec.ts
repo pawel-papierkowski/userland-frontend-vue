@@ -58,28 +58,28 @@ describe('UserActivation', () => {
       // Ensures that after successful activation user gets feedback and
       // redirection to login page.
 
-      // Arrange: mock successful API response.
+      // Arrange: Mock successful API response.
       vi.mocked(backendApiUser.activate).mockResolvedValue({ data: {} } as any);
 
-      // Act: create page — it will call API on mount.
+      // Act: Create page — it will call API on mount.
       createComponent();
       const messageStore = useMessageStore();
 
       await flushPromises();
 
-      // Assert: verify API call with exact payload.
+      // Assert: Verify API call with exact payload.
       expect(backendApiUser.activate).toHaveBeenCalledWith({
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
         frontend: 'VUE',
       });
 
-      // Assert: verify success message is present in store.
+      // Assert: Verify success message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Success);
       expect(messageStore.messages[0]?.title).toBe('User activated successfully');
       expect(messageStore.messages[0]?.content).toBe('You can now log in.');
 
-      // Assert: verify redirection to login page.
+      // Assert: Verify redirection to login page.
       expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
     });
 
@@ -87,7 +87,7 @@ describe('UserActivation', () => {
       // Ensures that after failed activation user gets error feedback, the
       // spinner pauses, and the user is not redirected.
 
-      // Arrange: mock API returning error about non-existing token.
+      // Arrange: Mock API returning error about non-existing token.
       const errorResponse = {
         isAxiosError: true,
         response: {
@@ -104,29 +104,29 @@ describe('UserActivation', () => {
       };
       vi.mocked(backendApiUser.activate).mockRejectedValue(errorResponse);
 
-      // Act: create page.
+      // Act: Create page.
       const wrapper = createComponent();
       const messageStore = useMessageStore();
 
       await flushPromises();
 
-      // Assert: verify API call.
+      // Assert: Verify API call.
       expect(backendApiUser.activate).toHaveBeenCalledWith({
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
         frontend: 'VUE',
       });
 
-      // Assert: verify failure message.
+      // Assert: Verify failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Error);
       expect(messageStore.messages[0]?.title).toBe('Failure');
       expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
-      // Assert: spinner is paused on error.
+      // Assert: Spinner is paused on error.
       const spinner = wrapper.find('[data-testid="spinner"]');
       expect(spinner.find('.paused').exists()).toBe(true);
 
-      // Assert: verify no redirection occurred.
+      // Assert: Verify no redirection occurred.
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -139,49 +139,49 @@ describe('UserActivation', () => {
       // When no token is present in the URL, the component should show a
       // failure message and navigate home without calling the API.
 
-      // Arrange: set token to empty string.
+      // Arrange: Set token to empty string.
       mockRoute.query.token = '';
 
-      // Act: create page.
+      // Act: Create page.
       createComponent();
       const messageStore = useMessageStore();
 
       await flushPromises();
 
-      // Assert: verify API call was NOT made.
+      // Assert: Verify API call was NOT made.
       expect(backendApiUser.activate).not.toHaveBeenCalled();
 
-      // Assert: verify failure message.
+      // Assert: Verify failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
       expect(messageStore.messages[0]?.content).toBe('No token provided or it is malformed.');
 
-      // Assert: verify redirection to home page.
+      // Assert: Verify redirection to home page.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
 
     it('rejects too-short token and redirects home', async () => {
       // Tokens shorter than 32 characters should be rejected as malformed.
 
-      // Arrange: set token to a value that is too short.
+      // Arrange: Set token to a value that is too short.
       mockRoute.query.token = 'abc123';
 
-      // Act: create page.
+      // Act: Create page.
       createComponent();
       const messageStore = useMessageStore();
 
       await flushPromises();
 
-      // Assert: verify API call was NOT made.
+      // Assert: Verify API call was NOT made.
       expect(backendApiUser.activate).not.toHaveBeenCalled();
 
-      // Assert: verify failure message.
+      // Assert: Verify failure message.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Failure);
       expect(messageStore.messages[0]?.title).toBe('Invalid token');
 
-      // Assert: verify redirection to home page.
+      // Assert: Verify redirection to home page.
       expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
     });
   });
