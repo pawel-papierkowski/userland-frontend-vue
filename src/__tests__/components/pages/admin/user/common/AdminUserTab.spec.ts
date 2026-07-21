@@ -77,8 +77,18 @@ const testColumns: ColumnData[] = [
   },
 ];
 
-const testUser1: TestUserEntry = { id: 10, createdAt: '2024-01-15T10:00:00Z', username: 'user1', email: 'user1@test.com' };
-const testUser2: TestUserEntry = { id: 20, createdAt: '2024-02-20T12:00:00Z', username: 'user2', email: 'user2@test.com' };
+const testUser1: TestUserEntry = {
+  id: 10,
+  createdAt: '2024-01-15T10:00:00Z',
+  username: 'user1',
+  email: 'user1@test.com',
+};
+const testUser2: TestUserEntry = {
+  id: 20,
+  createdAt: '2024-02-20T12:00:00Z',
+  username: 'user2',
+  email: 'user2@test.com',
+};
 
 const defaultFormFilter: TestFormFilter = {
   filterParam: null,
@@ -331,7 +341,11 @@ describe('AdminUserTab', () => {
       const { promise: promise1, resolve: resolve1 } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(promise1);
 
-      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
 
       resolve1({ data: { entries: testEntries, tableMeta: testMetaResp } });
       await flushPromises();

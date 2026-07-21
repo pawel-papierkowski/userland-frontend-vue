@@ -81,6 +81,14 @@
         }
       }
     },
+    "session": {
+      "msg": {
+        "warning": {
+          "title": "Sesja wygasła",
+          "content": "Twoja sesja wygasła. Zaloguj się ponownie."
+        }
+      }
+    },
     "passwordResetStart": {
       "form": {
         "title": "Zapomniałem hasła",

@@ -12,13 +12,14 @@ UserLand is portfolio project for frontend in Vue.
 - **Modifications:**
   - Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
 - **Language files:**
-  - Languages are in `/src/locales`. Each language has its own directory (code of language, for example `/en` subdirectory for English).
+  - This project uses multiple languages.
+  - Languages are in `/src/locales`. Each language has its own subdirectory (name is code of language, for example `/en` subdirectory for English).
   - File structure (directories, file names and language keys in files) must be identical for all languages. Only difference is translation strings.
   - Emojis are not allowed to be inserted by AI unless explicitly asked. Existing emojis are ok.
   - If new language keys and translations are needed, always add them for all available languages (even for texts that are used only in tests) for consistency.
 - **Comments:**
   - Preserve comments or update them whenever possible. New code must be properly commented.
-  - Provide @param and @returns where appropriate.
+  - Provide `@param` and `@returns` where appropriate.
 - **Naming:** Use PascalCase for component filenames and classes (e.g., `UserProfile.vue`) and when importing them.
 - **Imports:** Use `@` when importing classes, types etc. Typescript files must end in `.ts`.
 - **Styling:** Use `<style scoped>` for component-specific CSS.

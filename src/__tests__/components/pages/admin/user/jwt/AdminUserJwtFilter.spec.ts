@@ -22,11 +22,7 @@ const defaultForm: UserJwtTableFilterForm = {
 // ////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-function createComponent(
-  form: UserJwtTableFilterForm,
-  isBusy: boolean,
-  disabled?: boolean,
-) {
+function createComponent(form: UserJwtTableFilterForm, isBusy: boolean, disabled?: boolean) {
   return shallowMount(AdminUserJwtFilter, {
     global: {
       plugins: [i18n],
@@ -164,7 +160,10 @@ describe('AdminUserJwtFilter', () => {
   describe('model binding', () => {
     it('updates createdFromAt when from picker emits', async () => {
       const form: UserJwtTableFilterForm = {
-        userId: -1, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
@@ -175,7 +174,10 @@ describe('AdminUserJwtFilter', () => {
 
     it('updates createdToAt when to picker emits', async () => {
       const form: UserJwtTableFilterForm = {
-        userId: -1, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');

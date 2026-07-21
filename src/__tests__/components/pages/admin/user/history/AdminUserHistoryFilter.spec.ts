@@ -26,11 +26,7 @@ const defaultForm: UserHistoryTableFilterForm = {
 // ////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-function createComponent(
-  form: UserHistoryTableFilterForm,
-  isBusy: boolean,
-  disabled?: boolean,
-) {
+function createComponent(form: UserHistoryTableFilterForm, isBusy: boolean, disabled?: boolean) {
   return shallowMount(AdminUserHistoryFilter, {
     global: {
       plugins: [i18n],
@@ -209,7 +205,12 @@ describe('AdminUserHistoryFilter', () => {
   describe('model binding', () => {
     it('updates createdFromAt when from picker emits', async () => {
       const form: UserHistoryTableFilterForm = {
-        userId: -1, who: null, what: null, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        who: null,
+        what: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
@@ -220,7 +221,12 @@ describe('AdminUserHistoryFilter', () => {
 
     it('updates createdToAt when to picker emits', async () => {
       const form: UserHistoryTableFilterForm = {
-        userId: -1, who: null, what: null, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        who: null,
+        what: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
@@ -231,7 +237,12 @@ describe('AdminUserHistoryFilter', () => {
 
     it('updates who when first ComboBox emits', async () => {
       const form: UserHistoryTableFilterForm = {
-        userId: -1, who: null, what: null, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        who: null,
+        what: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const combos = wrapper.findAllComponents(ComboBox as any);
@@ -241,7 +252,12 @@ describe('AdminUserHistoryFilter', () => {
 
     it('updates what when second ComboBox emits', async () => {
       const form: UserHistoryTableFilterForm = {
-        userId: -1, who: null, what: null, createdFromAt: null, createdToAt: null, tableMeta: null,
+        userId: -1,
+        who: null,
+        what: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const combos = wrapper.findAllComponents(ComboBox as any);

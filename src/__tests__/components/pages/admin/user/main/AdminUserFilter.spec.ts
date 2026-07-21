@@ -186,8 +186,13 @@ describe('AdminUserFilter', () => {
   describe('model binding', () => {
     it('updates username on input', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const input = wrapper.find('[data-testid="username"]');
@@ -197,8 +202,13 @@ describe('AdminUserFilter', () => {
 
     it('updates email on input', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const input = wrapper.find('[data-testid="email"]');
@@ -208,8 +218,13 @@ describe('AdminUserFilter', () => {
 
     it('updates status when ComboBox emits', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const combos = wrapper.findAllComponents(ComboBox as any);
@@ -219,8 +234,13 @@ describe('AdminUserFilter', () => {
 
     it('updates createdFromAt when from picker emits', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
@@ -231,8 +251,13 @@ describe('AdminUserFilter', () => {
 
     it('updates createdToAt when to picker emits', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
@@ -243,8 +268,13 @@ describe('AdminUserFilter', () => {
 
     it('updates locked when CheckBox emits', async () => {
       const form: UserTableFilterForm = {
-        username: null, email: null, status: null, locked: null,
-        createdFromAt: null, createdToAt: null, tableMeta: null,
+        username: null,
+        email: null,
+        status: null,
+        locked: null,
+        createdFromAt: null,
+        createdToAt: null,
+        tableMeta: null,
       };
       const wrapper = createComponent(form, false);
       const boxes = wrapper.findAllComponents(CheckBox as any);

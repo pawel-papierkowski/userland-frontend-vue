@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { languages, fallbackLang, locstLang, locstJwt } from '@/code/data/app/const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import AppLayout from '@/components/layout/AppLayout.vue';
 
 const { locale } = useI18n();
@@ -18,7 +19,12 @@ const refreshLang = () => {
 /** If JWT is present in storage, relog user. */
 const relogUser = () => {
   const jwt = localStorage.getItem(locstJwt) || null;
-  if (jwt !== null) AppLoginer.login(jwt);
+  if (jwt !== null) {
+    const result = AppLoginer.login(jwt);
+    if (!result) {
+      AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content');
+    }
+  }
 };
 
 refreshLang();

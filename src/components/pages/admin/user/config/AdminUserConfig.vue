@@ -90,7 +90,7 @@ const convertEditToReq = (form: UserConfigEntryEditForm, id: number | null, user
     id: id,
     userId: userId,
     name: form.name,
-    value: form.value
+    value: form.value,
   };
 };
 
@@ -262,19 +262,21 @@ const metaGeneral = (): EntryMeta | null => {
  * @returns State of Add option.
  */
 const resolveAdd = (): EntryOption => {
-  if (selUserRecord.value?.email === AppLoginer.getEmail()) return {
-    access: 'DISABLED',
-    reason: 'notYourself',
-  };
-  if (!AppLoginer.hasPermissionsAny(['role_admin', 'user_edit'])) return {
-    access: 'DISABLED',
-    reason: 'adminOnly',
-  };
+  if (selUserRecord.value?.email === AppLoginer.getEmail())
+    return {
+      access: 'DISABLED',
+      reason: 'notYourself',
+    };
+  if (!AppLoginer.hasPermissionsAny(['role_admin', 'user_edit']))
+    return {
+      access: 'DISABLED',
+      reason: 'adminOnly',
+    };
   return {
     access: 'ENABLED',
     reason: null,
   };
-}
+};
 
 //
 

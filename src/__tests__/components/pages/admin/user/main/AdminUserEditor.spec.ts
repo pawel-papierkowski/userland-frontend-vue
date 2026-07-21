@@ -11,12 +11,24 @@ import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 // Mocks — must be at module level.
 
 // Tab components have many dependencies — stub them.
-vi.mock('@/components/pages/admin/user/main/AdminUserMain.vue', () => ({ default: { name: 'AdminUserMain', template: '<div>main</div>' } }));
-vi.mock('@/components/pages/admin/user/history/AdminUserHistory.vue', () => ({ default: { name: 'AdminUserHistory', template: '<div>history</div>' } }));
-vi.mock('@/components/pages/admin/user/permissions/AdminUserPermissions.vue', () => ({ default: { name: 'AdminUserPermissions', template: '<div>permissions</div>' } }));
-vi.mock('@/components/pages/admin/user/config/AdminUserConfig.vue', () => ({ default: { name: 'AdminUserConfig', template: '<div>config</div>' } }));
-vi.mock('@/components/pages/admin/user/tokens/AdminUserTokens.vue', () => ({ default: { name: 'AdminUserTokens', template: '<div>tokens</div>' } }));
-vi.mock('@/components/pages/admin/user/jwt/AdminUserJwt.vue', () => ({ default: { name: 'AdminUserJwt', template: '<div>jwt</div>' } }));
+vi.mock('@/components/pages/admin/user/main/AdminUserMain.vue', () => ({
+  default: { name: 'AdminUserMain', template: '<div>main</div>' },
+}));
+vi.mock('@/components/pages/admin/user/history/AdminUserHistory.vue', () => ({
+  default: { name: 'AdminUserHistory', template: '<div>history</div>' },
+}));
+vi.mock('@/components/pages/admin/user/permissions/AdminUserPermissions.vue', () => ({
+  default: { name: 'AdminUserPermissions', template: '<div>permissions</div>' },
+}));
+vi.mock('@/components/pages/admin/user/config/AdminUserConfig.vue', () => ({
+  default: { name: 'AdminUserConfig', template: '<div>config</div>' },
+}));
+vi.mock('@/components/pages/admin/user/tokens/AdminUserTokens.vue', () => ({
+  default: { name: 'AdminUserTokens', template: '<div>tokens</div>' },
+}));
+vi.mock('@/components/pages/admin/user/jwt/AdminUserJwt.vue', () => ({
+  default: { name: 'AdminUserJwt', template: '<div>jwt</div>' },
+}));
 vi.mock('@/code/stores/events/AppUserEventer.ts');
 
 // ////////////////////////////////////////////////////////////////////////////

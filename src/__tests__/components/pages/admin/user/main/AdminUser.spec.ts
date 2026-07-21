@@ -136,7 +136,12 @@ function createComponent() {
 
 /** Helper to get a stub tag name from a PascalCase component name. */
 function stubTag(name: string): string {
-  return name.replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '') + '-stub';
+  return (
+    name
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+      .replace(/^-/, '') + '-stub'
+  );
 }
 
 /** Convenience: find a stub component by its tag name, returning a VueWrapper with vm access. */

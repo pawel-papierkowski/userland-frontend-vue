@@ -81,6 +81,14 @@
         }
       }
     },
+    "session": {
+      "msg": {
+        "warning": {
+          "title": "Session expired",
+          "content": "Your session has expired. Please log in again."
+        }
+      }
+    },
     "passwordResetStart": {
       "form": {
         "title": "I forgot my password",

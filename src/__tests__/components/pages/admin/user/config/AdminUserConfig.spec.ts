@@ -419,7 +419,12 @@ describe('AdminUserConfig', () => {
       mockLoadConfigPage.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(testUser1);
-      loadResolve({ data: { entries: testEntries, tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' } } });
+      loadResolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
       await flushPromises();
       await nextTick();
       await nextTick();
@@ -494,7 +499,12 @@ describe('AdminUserConfig', () => {
       mockLoadConfigPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
-      resolve({ data: { entries: testEntries, tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' } } });
+      resolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
       await flushPromises();
       await nextTick();
       await nextTick();
@@ -522,7 +532,12 @@ describe('AdminUserConfig', () => {
       mockDeleteConfigEntry.mockResolvedValue({ data: {} });
 
       const wrapper = createComponent(testUser1);
-      resolve({ data: { entries: testEntries, tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' } } });
+      resolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
       await flushPromises();
       await nextTick();
       await nextTick();
@@ -595,7 +610,12 @@ describe('AdminUserConfig', () => {
       mockLoadConfigPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
-      resolve({ data: { entries: testEntries, tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' } } });
+      resolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
       await flushPromises();
       await nextTick();
       await nextTick();
@@ -629,7 +649,12 @@ describe('AdminUserConfig', () => {
       mockLoadConfigPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
-      resolve({ data: { entries: testEntries, tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' } } });
+      resolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
       await flushPromises();
       await nextTick();
       await nextTick();

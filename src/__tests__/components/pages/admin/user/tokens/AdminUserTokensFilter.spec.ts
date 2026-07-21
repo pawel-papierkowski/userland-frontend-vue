@@ -22,11 +22,7 @@ const defaultForm: UserTokenTableFilterForm = {
 // ////////////////////////////////////////////////////////////////////////////
 // Helpers
 
-function createComponent(
-  form: UserTokenTableFilterForm,
-  isBusy: boolean,
-  disabled?: boolean,
-) {
+function createComponent(form: UserTokenTableFilterForm, isBusy: boolean, disabled?: boolean) {
   return shallowMount(AdminUserTokensFilter, {
     global: {
       plugins: [i18n],

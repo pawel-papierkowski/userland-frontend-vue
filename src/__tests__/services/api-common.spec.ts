@@ -40,7 +40,9 @@ vi.mock('axios', () => {
 });
 
 vi.mock('@/code/stores/login/AppLoginer.ts', async () => {
-  const actual = await vi.importActual('@/code/stores/login/AppLoginer.ts') as { AppLoginer: { shouldProlong: () => boolean } };
+  const actual = (await vi.importActual('@/code/stores/login/AppLoginer.ts')) as {
+    AppLoginer: { shouldProlong: () => boolean };
+  };
   return {
     AppLoginer: {
       getJwt: vi.fn<typeof AppLoginer.getJwt>(),
