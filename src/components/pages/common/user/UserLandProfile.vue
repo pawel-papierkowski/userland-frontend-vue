@@ -143,11 +143,13 @@ const convertToReq = (form: UserEditForm): UserEditReq => {
 
 /** Sends user to dedicated email change page. */
 const handleEmailChange = async () => {
+  isBusy.value = true;
   router.push({ name: 'user-emailChange-start' });
 };
 
 /** Sends user to dedicated account deletion page. */
 const handleAccountDelete = async () => {
+  isBusy.value = true;
   router.push({ name: 'user-accountDel-start' });
 };
 
@@ -243,6 +245,7 @@ onMounted(async () => {
         {{ isBusy ? t('user.profile.button.updateBusy') : t('user.profile.button.update') }}
       </button>
     </form>
+
     <div class="items-horizontal">
       <button data-testid="btn-emailChange" :disabled="isBusy" @click="handleEmailChange()">
         {{ t('user.profile.button.emailChange') }}

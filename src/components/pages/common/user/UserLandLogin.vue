@@ -139,11 +139,13 @@ const handleRedirection = () => {
 
 /** Go to registration page. */
 const goRegistration = () => {
+  isBusy.value = true;
   router.push({ name: 'registration' });
 };
 
 /** Go to password reset request page. */
 const goPasswordReset = () => {
+  isBusy.value = true;
   router.push({ name: 'user-passwordReset-start' });
 };
 
@@ -193,14 +195,14 @@ const isInvalid = (msgError: string | null): boolean => {
       <button type="submit" :disabled="isBusy">
         {{ isBusy ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}
       </button>
-
-      <div class="form-under-2" v-if="!isAdminPanel">
-        <div class="nav-minor form-under-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
-        <div class="nav-minor form-under-right" @click="goPasswordReset()">
-          {{ t('user.login.form.passwordReset') }}
-        </div>
-      </div>
     </form>
+
+    <div class="form-under-2" v-if="!isAdminPanel">
+      <div class="nav-minor form-under-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
+      <div class="nav-minor form-under-right" @click="goPasswordReset()">
+        {{ t('user.login.form.passwordReset') }}
+      </div>
+    </div>
   </div>
 </template>
 

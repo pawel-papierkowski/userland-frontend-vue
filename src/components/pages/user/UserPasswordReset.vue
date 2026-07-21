@@ -67,7 +67,7 @@ const handlePasswordResetConfirmation = async () => {
     await backendApiUser.passwordResetConfirm(passwordResetReq); // API CALL.
 
     showMessage();
-    router.push({ name: 'home' });
+    router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     clearForm();
     isBusy.value = false; // Enable submit button.

@@ -33,8 +33,10 @@
     },
     "components": {
       "title": "Komponenty",
+      "TextBox": "<code>TextBox</code> jest komponentem zastępującym standardowy element <code>input</code>.",
       "ComboBox": "<code>ComboBox</code> jest komponentem zastępującym <code>select</code> i <code>options</code>.",
       "CheckBox": "<code>CheckBox</code> jest komponentem zastępującym <code>input</code> z <code>type='checkbox'</code>.",
+      "RadioBox": "<code>RadioBox</code> jest komponentem zastępującym <code>input</code> z <code>type='radio'</code>.",
       "DateTimePicker": "<code>DateTimePicker</code> pozwala wybrać datę i/lub czas.",
       "SlideShow": "Możesz zobaczyć <code>SlideShow</code>! Właśnie w nim widzisz ten tekst.",
       "MessageContainer": "<code>MessageContainer</code> i <code>MessageBox</code> wyświetlają krótkie, tymczasowe komunikaty, które pojawiają się po prawej. Służą one do przekazywania informacji zwrotnej po akcji użytkownika.",

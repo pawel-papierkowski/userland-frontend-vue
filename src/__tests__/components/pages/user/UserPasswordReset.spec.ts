@@ -54,9 +54,9 @@ describe('UserPasswordReset', () => {
   // API interaction
 
   describe('api', () => {
-    it('submits successfully and redirects to home', async () => {
+    it('submits successfully and redirects to login', async () => {
       // Ensures that after successful password reset the user gets feedback
-      // and is redirected to the home page.
+      // and is redirected to the login page.
 
       const wrapper = createComponent();
       const messageStore = useMessageStore();
@@ -85,8 +85,8 @@ describe('UserPasswordReset', () => {
       expect(messageStore.messages[0]?.title).toBe('Success');
       expect(messageStore.messages[0]?.content).toBe('New password was set successfully.');
 
-      // Assert: Verify redirection to home page.
-      expect(mockPush).toHaveBeenCalledWith({ name: 'home' });
+      // Assert: Verify redirection to login page.
+      expect(mockPush).toHaveBeenCalledWith({ name: 'login' });
     });
 
     it('shows error, clears form, and does not redirect on API failure', async () => {

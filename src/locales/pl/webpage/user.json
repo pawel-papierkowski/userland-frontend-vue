@@ -11,7 +11,7 @@
         "isAdmin": "Chcę być adminem",
         "button": "Utwórz",
         "buttonBusy": "Tworzenie konta...",
-        "hasAccount": "Już masz konto?"
+        "hasAccount": "Już mam konto"
       },
       "msg": {
         "success": {
@@ -44,8 +44,8 @@
         "password": "Hasło",
         "button": "Zaloguj się",
         "buttonBusy": "Logowanie...",
-        "noAccount": "Nie masz konta?",
-        "passwordReset": "Zapomniane hasło?"
+        "noAccount": "Nie mam konta",
+        "passwordReset": "Zapomniałem hasła"
       },
       "formAdmin": {
         "title": "Logowanie do panelu administracyjnego"

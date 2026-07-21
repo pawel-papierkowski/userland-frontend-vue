@@ -101,6 +101,7 @@ const showMessage = () => {
 
 /** Go to login page. */
 const goLogin = () => {
+  isBusy.value = true;
   router.push({ name: 'login' });
 };
 
@@ -183,11 +184,11 @@ const isInvalid = (msgError: string | null): boolean => {
       <button type="submit" :disabled="isBusy">
         {{ isBusy ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}
       </button>
-
-      <div class="form-under-1">
-        <div class="nav-minor form-under-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
-      </div>
     </form>
+
+    <div class="form-under-1">
+      <div class="nav-minor form-under-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
+    </div>
   </div>
 </template>
 

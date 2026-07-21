@@ -33,8 +33,10 @@
     },
     "components": {
       "title": "Components",
-      "ComboBox": "<code>ComboBox</code> is custom component replacing <code>select</code> and <code>options</code>.",
-      "CheckBox": "<code>CheckBox</code> is custom component replacing <code>input</code> with <code>type='checkbox'</code>.",
+      "TextBox": "<code>TextBox</code> is custom component that replaces standard <code>input</code> element.",
+      "ComboBox": "<code>ComboBox</code> is custom component that replaces <code>select</code> and <code>options</code>.",
+      "CheckBox": "<code>CheckBox</code> is custom component that replaces <code>input</code> with <code>type='checkbox'</code>.",
+      "RadioBox": "<code>RadioBox</code> is custom component that replaces <code>input</code> with <code>type='radio'</code>.",
       "DateTimePicker": "<code>DateTimePicker</code> allows picking date and/or time.",
       "SlideShow": "You can see <code>SlideShow</code>! This is where you see this text.",
       "MessageContainer": "<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
