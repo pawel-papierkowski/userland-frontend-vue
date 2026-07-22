@@ -68,7 +68,12 @@ const props = withDefaults(
   },
 );
 
+
+/** We need to distinguish focus on combobox list from click vs from keyboard, otherwise bad things will happen. */
+let focusFromPointer = false;
+/** Indicates visibility of combobox list. */
 const isOpen = ref(false);
+/** Class of decorative arrow on right. */
 const arrowClass = computed(() => ({ open: isOpen.value }));
 
 /** Index of currently highlighted option. -1 means none highlighted. */
@@ -92,18 +97,19 @@ watch(
 
 //
 
-/** User clicked on input. */
+/** User clicked on combobox. */
 const openOptions = () => {
   if (props.disabled) return;
 
   isOpen.value = !isOpen.value;
   if (!isOpen.value) {
     highlightedIndex.value = -1;
+    focusFromPointer = false;
   }
 };
 
 /**
- * User clicked on option.
+ * User clicked on combobox option.
  * @param option Clicked option.
  */
 const selectOption = (option: number | string | null) => {
@@ -111,6 +117,7 @@ const selectOption = (option: number | string | null) => {
 
   selOption.value = option;
   isOpen.value = false;
+  focusFromPointer = false;
 };
 
 /**
@@ -175,6 +182,18 @@ const showOption = (option: number | string | null): number | string | null => {
   if (props.langPrefix) return t(props.langPrefix + '.' + option);
   return option;
 };
+
+/** Handle mousedown interaction. */
+const handlePointerDown = () => {
+  focusFromPointer = true;
+}
+
+/** Handle focus event. */
+const handleFocus = () => {
+  if (props.disabled) return;
+  if (!focusFromPointer) isOpen.value = true;
+  focusFromPointer = false;
+}
 </script>
 
 <template>
@@ -191,6 +210,8 @@ const showOption = (option: number | string | null): number | string | null => {
     :aria-activedescendant="highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : 0"
+    @mousedown="handlePointerDown()"
+    @focus="handleFocus()"
     @blur="
       isOpen = false;
       highlightedIndex = -1;
