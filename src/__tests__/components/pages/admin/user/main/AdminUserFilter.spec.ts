@@ -28,11 +28,10 @@ const defaultForm: UserTableFilterForm = {
 // ////////////////////////////////////////////////////////////////////////////
 // Helpers
 
+/** Create filter with stubbing. */
 function createComponent(form: UserTableFilterForm, isBusy: boolean) {
   return shallowMount(AdminUserFilter, {
-    global: {
-      plugins: [i18n],
-    },
+    global: { plugins: [i18n], stubs: { TextBox: false } },
     props: {
       modelValue: form,
       isBusy,
@@ -232,7 +231,7 @@ describe('AdminUserFilter', () => {
       expect(form.status).toBe('PENDING');
     });
 
-    it('updates createdFromAt when from picker emits', async () => {
+    it('updates createdFromAt when date from picker emits', async () => {
       const form: UserTableFilterForm = {
         username: null,
         email: null,
@@ -249,7 +248,7 @@ describe('AdminUserFilter', () => {
       expect(form.createdFromAt).toBe(newDate);
     });
 
-    it('updates createdToAt when to picker emits', async () => {
+    it('updates createdToAt when date to picker emits', async () => {
       const form: UserTableFilterForm = {
         username: null,
         email: null,

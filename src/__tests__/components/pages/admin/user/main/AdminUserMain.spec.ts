@@ -130,9 +130,10 @@ beforeEach(() => {
   mockHasPermissionsAny.mockReturnValue(true);
 });
 
+/** Create filter with stubbing. */
 function createComponent(modelValue?: TestUserEntry | null) {
   return shallowMount(AdminUserMain, {
-    global: { plugins: [i18n] },
+    global: { plugins: [i18n], stubs: { TextBox: false } },
     props: { modelValue: modelValue ?? null },
   });
 }
@@ -202,14 +203,24 @@ describe('AdminUserMain', () => {
       await flushPromises();
       await nextTick();
 
-      // Assert: Inputs contain the loaded data.
+      // Assert: Divs and inputs contain the loaded data.
+      const createdAtDiv = wrapper.find('[data-testid="createdAt"]');
+      const modifiedAtDiv = wrapper.find('[data-testid="modifiedAt"]');
       const usernameInput = wrapper.find('[data-testid="username"]') as any;
       const emailInput = wrapper.find('[data-testid="email"]') as any;
+      const statusDiv = wrapper.find('[data-testid="status"]');
+      const lockedDiv = wrapper.find('[data-testid="locked"]');
+      const langDiv = wrapper.find('[data-testid="lang"]');
       const nameInput = wrapper.find('[data-testid="name"]') as any;
       const surnameInput = wrapper.find('[data-testid="surname"]') as any;
 
+      expect(createdAtDiv.element.textContent).toBe('2024-01-15 11:00:00');
+      expect(modifiedAtDiv.element.textContent).toBe('2024-06-01 10:00:00');
       expect(usernameInput.element.value).toBe('alice');
       expect(emailInput.element.value).toBe('alice@test.com');
+      expect(statusDiv.element.textContent).toBe('Active');
+      expect(lockedDiv.element.textContent).toBe('false');
+      expect(langDiv.element.textContent).toBe('English 🇬🇧');
       expect(nameInput.element.value).toBe('Alice');
       expect(surnameInput.element.value).toBe('Smith');
     });

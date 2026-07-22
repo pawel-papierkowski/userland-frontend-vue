@@ -21,10 +21,13 @@ import type {
 } from '@/code/data/features/user/admin-user-type.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
+import { TimeUtils } from '@/code/utils/TimeUtils.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
+
+import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const { t } = useI18n();
 
@@ -199,8 +202,8 @@ const clearForm = () => {
  * @param data Response from endpoint.
  */
 const fillFormData = (data: UserFullDataResp) => {
-  form.createdAt = data.createdAt;
-  form.modifiedAt = data.modifiedAt;
+  form.createdAt = TimeUtils.zoned(data.createdAt);
+  form.modifiedAt = TimeUtils.zoned(data.modifiedAt);
   form.username = data.username;
   form.email = data.email;
   form.status = data.status;
@@ -269,65 +272,57 @@ const isFormDisabled = (): boolean => {
         <h4>{{ t('admin.user.main.form.general') }}</h4>
         <div class="form-subform">
           <div>{{ t('admin.user.main.form.createdAt') }}:</div>
-          <div>{{ form.createdAt }}</div>
+          <div data-testid="createdAt">{{ form.createdAt }}</div>
 
           <div>{{ t('admin.user.main.form.modifiedAt') }}:</div>
-          <div>{{ form.modifiedAt }}</div>
+          <div data-testid="modifiedAt">{{ form.modifiedAt }}</div>
 
           <label for="username">{{ t('admin.user.main.form.username') }}:</label>
-          <input
+          <TextBox
             id="username"
-            data-testid="username"
-            type="text"
             v-model="form.username"
-            required
-            :disabled="isFormDisabled()"
             autocomplete="off"
+            :required="true"
+            :disabled="isFormDisabled()"
           />
 
           <label for="email">{{ t('admin.user.main.form.email') }}:</label>
-          <input
+          <TextBox
             id="email"
-            data-testid="email"
-            type="email"
             v-model="form.email"
-            required
-            :disabled="isFormDisabled()"
             autocomplete="off"
+            :required="true"
+            :disabled="isFormDisabled()"
           />
 
           <div>{{ t('admin.user.main.form.status') }}:</div>
-          <div>{{ form.status }}</div>
+          <div data-testid="status">{{ t(`tech.user.status.${form.status}`) }}</div>
 
           <div>{{ t('admin.user.main.form.locked') }}:</div>
-          <div>{{ form.locked === null ? '' : t('state.' + form.locked) }}</div>
+          <div data-testid="locked">{{ form.locked === null ? '' : t('state.' + form.locked) }}</div>
 
           <div>{{ t('admin.user.main.form.lang') }}:</div>
-          <div>{{ form.lang }}</div>
+          <div data-testid="lang">{{ t(`languages.${form.lang}.name`)}} {{ t(`languages.${form.lang}.flag`) }}</div>
         </div>
 
         <h4>{{ t('admin.user.main.form.profile') }}</h4>
         <div class="form-subform">
           <label for="name">{{ t('admin.user.main.form.name') }}:</label>
-          <input
+          <TextBox
             id="name"
-            data-testid="name"
-            type="text"
             v-model="form.name"
-            required
-            :disabled="isFormDisabled()"
             autocomplete="off"
+            :required="true"
+            :disabled="isFormDisabled()"
           />
 
           <label for="surname">{{ t('admin.user.main.form.surname') }}:</label>
-          <input
+          <TextBox
             id="surname"
-            data-testid="surname"
-            type="text"
             v-model="form.surname"
-            required
-            :disabled="isFormDisabled()"
             autocomplete="off"
+            :required="true"
+            :disabled="isFormDisabled()"
           />
         </div>
       </div>

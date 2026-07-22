@@ -14,8 +14,8 @@ import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
-import CheckBox from '@/components/base/inputs/CheckBox.vue';
 import TextBox from '@/components/base/inputs/TextBox.vue';
+import CheckBox from '@/components/base/inputs/CheckBox.vue';
 
 const log = useLogger();
 const router = useRouter();

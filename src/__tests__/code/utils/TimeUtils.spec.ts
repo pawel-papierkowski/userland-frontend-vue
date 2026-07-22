@@ -1,10 +1,16 @@
 import { describe, it, expect } from 'vitest';
 
-import { TimeUtils } from '@/code/utils/TimeUtils';
+import { TimeUtils } from '@/code/utils/TimeUtils.ts';
 
 /** Tests TimeUtils class. Note: test environment is configured for Polish timezone. */
 describe('TimeUtils', () => {
   describe('Timezone handling', () => {
+    it('Handle invalid input', () => {
+      expect(TimeUtils.zoned(undefined)).toBe('');
+      expect(TimeUtils.zoned(null)).toBe('');
+      expect(TimeUtils.zoned(' ')).toBe('');
+    });
+
     it('Handle first day of year', () => {
       const dateUtc = '2025-01-01T00:00:00.000';
 
@@ -34,6 +40,14 @@ describe('TimeUtils', () => {
 
       const actualDate = TimeUtils.zoned(dateUtc);
       const expectedDate = '2025-07-02 14:00:00';
+      expect(actualDate).toBe(expectedDate);
+    });
+
+    it('Handle input with Z already present', () => {
+      const dateUtc = '2025-02-21T00:00:00.000Z';
+
+      const actualDate = TimeUtils.zoned(dateUtc);
+      const expectedDate = '2025-02-21 01:00:00';
       expect(actualDate).toBe(expectedDate);
     });
   });

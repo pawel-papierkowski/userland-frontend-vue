@@ -16,6 +16,7 @@ import { useI18n } from 'vue-i18n';
 import type { UserTableFilterForm } from '@/code/data/features/user/admin-user-type.ts';
 import { enUserStatus } from '@/code/data/features/user/user-const.ts';
 
+import TextBox from '@/components/base/inputs/TextBox.vue';
 import CheckBox from '@/components/base/inputs/CheckBox.vue';
 import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import DateTimePicker from '@/components/base/inputs/datetimepicker/DateTimePicker.vue';
@@ -39,10 +40,18 @@ const emit = defineEmits(['reload']);
       <div class="form-divide2">
         <div class="form-subform">
           <label for="username">{{ t('admin.user.filter.username') }}:</label>
-          <input id="username" data-testid="username" type="text" v-model="form.username" autocomplete="off" />
+          <TextBox
+            id="username"
+            v-model="form.username"
+            autocomplete="off"
+          />
 
           <label for="email">{{ t('admin.user.filter.email') }}:</label>
-          <input id="email" data-testid="email" type="text" v-model="form.email" autocomplete="off" />
+          <TextBox
+            id="email"
+            v-model="form.email"
+            autocomplete="off"
+          />
 
           <label for="status">{{ t('admin.user.filter.status') }}:</label>
           <ComboBox

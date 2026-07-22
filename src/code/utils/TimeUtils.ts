@@ -5,18 +5,20 @@ export class TimeUtils {
    * @param dateStr Date as string in format `YYYY-MM-DDThh:mm:ss` without timezone. Accepts `.SSS` if present.
    * @returns Date as string with timezone applied in format `YYYY-MM-DD hh:mm:ss`.
    */
-  public static zoned(dateStr: string | null): string {
-    if (dateStr == null) return '';
+  public static zoned(dateStr: string | null | undefined): string {
+    if (dateStr === undefined || dateStr === null) return '';
+    dateStr = dateStr.trim();
 
     // Parse as UTC by adding 'Z' (standard ISO 8601 expects 'T' separator).
-    const dateFixedStr = dateStr.replace('T', ' ') || dateStr;
+    let dateFixedStr = dateStr.replace('T', ' ') || dateStr;
+    dateFixedStr = dateStr.replace('Z', '') || dateStr;
     const date = new Date(dateFixedStr + 'Z');
 
     if (isNaN(date.getTime())) return dateStr; // If parsing fails, return original.
 
     // Note that parsing will take timezone in account, so we do not have to do anything else.
     // JS automatically applies the offset that was valid ON THAT DATE.
-    // If date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
+    // In Polish timezone, if date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
     const YYYY = date.getFullYear();
     const MM = this.pad(date.getMonth() + 1);
     const DD = this.pad(date.getDate());
