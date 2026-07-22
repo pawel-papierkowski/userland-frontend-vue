@@ -63,8 +63,8 @@ describe('AdminUserFilter', () => {
 
     it('renders username and email text inputs', () => {
       const wrapper = createComponent(defaultForm, false);
-      const usernameInput = wrapper.find('[data-testid="username"]');
-      const emailInput = wrapper.find('[data-testid="email"]');
+      const usernameInput = wrapper.find('[data-testid="filter-username"]');
+      const emailInput = wrapper.find('[data-testid="filter-email"]');
       expect(usernameInput.exists()).toBe(true);
       expect(emailInput.exists()).toBe(true);
       expect(usernameInput.element.tagName).toBe('INPUT');
@@ -194,7 +194,7 @@ describe('AdminUserFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const input = wrapper.find('[data-testid="username"]');
+      const input = wrapper.find('[data-testid="filter-username"]');
       await input.setValue('newuser');
       expect(form.username).toBe('newuser');
     });
@@ -210,7 +210,7 @@ describe('AdminUserFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const input = wrapper.find('[data-testid="email"]');
+      const input = wrapper.find('[data-testid="filter-email"]');
       await input.setValue('new@example.com');
       expect(form.email).toBe('new@example.com');
     });

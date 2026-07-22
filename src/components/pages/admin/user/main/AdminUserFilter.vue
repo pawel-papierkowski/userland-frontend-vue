@@ -39,23 +39,23 @@ const emit = defineEmits(['reload']);
     <form @submit.prevent="emit('reload')" novalidate data-testid="form-user-filter">
       <div class="form-divide2">
         <div class="form-subform">
-          <label for="username">{{ t('admin.user.filter.username') }}:</label>
+          <label for="filter-username">{{ t('admin.user.filter.username') }}:</label>
           <TextBox
-            id="username"
+            id="filter-username"
             v-model="form.username"
             autocomplete="off"
           />
 
-          <label for="email">{{ t('admin.user.filter.email') }}:</label>
+          <label for="filter-email">{{ t('admin.user.filter.email') }}:</label>
           <TextBox
-            id="email"
+            id="filter-email"
             v-model="form.email"
             autocomplete="off"
           />
 
-          <label for="status">{{ t('admin.user.filter.status') }}:</label>
+          <label for="filter-status">{{ t('admin.user.filter.status') }}:</label>
           <ComboBox
-            id="status"
+            id="filter-status"
             v-model="form.status"
             :options="enUserStatus"
             langPrefix="tech.user.status"
@@ -63,26 +63,26 @@ const emit = defineEmits(['reload']);
           />
         </div>
         <div class="form-subform">
-          <label for="createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
+          <label for="filter-createdFromAt">{{ t('admin.user.filter.createdFromAt') }}:</label>
           <DateTimePicker
-            id="createdFromAt"
+            id="filter-createdFromAt"
             v-model="form.createdFromAt"
             mode="date"
             :dateTimeMax="form.createdToAt"
             :allowNull="true"
           />
 
-          <label for="createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
+          <label for="filter-createdToAt">{{ t('admin.user.filter.createdToAt') }}:</label>
           <DateTimePicker
-            id="createdToAt"
+            id="filter-createdToAt"
             v-model="form.createdToAt"
             mode="date"
             :dateTimeMin="form.createdFromAt"
             :allowNull="true"
           />
 
-          <label for="locked">{{ t('admin.user.filter.locked') }}:</label>
-          <CheckBox id="locked" v-model="form.locked" :allowNull="true" />
+          <label for="filter-locked">{{ t('admin.user.filter.locked') }}:</label>
+          <CheckBox id="filter-locked" v-model="form.locked" :allowNull="true" />
         </div>
       </div>
 
