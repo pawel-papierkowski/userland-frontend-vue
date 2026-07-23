@@ -18,8 +18,9 @@
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
  * - Can disable or mark as invalid.
- * - Keyboard navigation via arrows. Enter/space selects option and closes list.
  * - Component is integrated with vue-i18n.
+ * - Keyboard navigation via arrows. Enter/space selects option and closes list.
+ * - Supports <label>.
  * - Supports WAI-ARIA.
  *
  * Models:
@@ -46,7 +47,7 @@ const selOption = defineModel<number | string | null>({ required: true });
 
 const props = withDefaults(
   defineProps<{
-    /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
+    /** Used for identification and id attribute on a hidden <button> (so <label for="id"> works). Optional. */
     id?: string;
     /** Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'. */
     options: (number | string | null)[];
@@ -69,8 +70,9 @@ const props = withDefaults(
 );
 
 
-/** We need to distinguish focus on combobox list from click vs from keyboard, otherwise bad things will happen. */
-let focusFromPointer = false;
+/** Template ref for the root element. */
+const combobox = ref<HTMLElement | null>(null);
+
 /** Indicates visibility of combobox list. */
 const isOpen = ref(false);
 /** Class of decorative arrow on right. */
@@ -85,40 +87,74 @@ const listboxId = computed(() => `combobox-listbox_${props.id || 'default'}`);
 /** Get option element ID for aria-activedescendant. */
 const optionId = (index: number): string => `combobox_${props.id}_option_${index}`;
 
+/** Tracks if focus handler just opened the list (to suppress synthetic follow-up click). */
+let focusOpened = false;
+
+/** Reset interaction state (must be called when any interaction completes). */
+const resetInteractionState = () => {
+  focusOpened = false;
+};
+
+/** Forward focus from the hidden button (label target) to the visible combobox root. */
+const handleLabelFocus = () => {
+  if (props.disabled) return;
+  isOpen.value = true;
+  focusOpened = true;
+  combobox.value?.focus();
+};
+
+/** Track new pointer interaction: cancel any pending focus-open so click can toggle. */
+const handleMousedown = () => {
+  focusOpened = false;
+};
+
+/** Handle focus: always open (handles direct clicks, label clicks, and Tab). */
+const handleFocus = () => {
+  if (props.disabled) return;
+  if (!isOpen.value) {
+    isOpen.value = true;
+    focusOpened = true;
+  }
+};
+
+/** Handle click: toggle unless focus already opened (suppress synthetic click from label). */
+const handleClick = () => {
+  if (props.disabled) return;
+
+  if (focusOpened) {
+    // Focus already opened the list (label or Tab). Suppress any synthetic click.
+    focusOpened = false;
+    return;
+  }
+
+  // Toggle for direct clicks and programmatic clicks. Handles both real browser
+  // clicks (preceded by mousedown) and test/programmatic clicks (no mousedown).
+  isOpen.value = !isOpen.value;
+  if (!isOpen.value) {
+    highlightedIndex.value = -1;
+  }
+};
+
+const handleBlur = () => {
+  isOpen.value = false;
+  highlightedIndex.value = -1;
+  resetInteractionState();
+};
+
 //
 
 /** If you disable combobox, list of options will close. */
 watch(
   () => props.disabled,
   () => {
-    if (props.disabled) isOpen.value = false;
+    if (props.disabled) {
+      isOpen.value = false;
+      resetInteractionState();
+    }
   },
 );
 
 //
-
-/** User clicked on combobox. */
-const openOptions = () => {
-  if (props.disabled) return;
-
-  isOpen.value = !isOpen.value;
-  if (!isOpen.value) {
-    highlightedIndex.value = -1;
-    focusFromPointer = false;
-  }
-};
-
-/**
- * User clicked on combobox option.
- * @param option Clicked option.
- */
-const selectOption = (option: number | string | null) => {
-  if (props.disabled) return;
-
-  selOption.value = option;
-  isOpen.value = false;
-  focusFromPointer = false;
-};
 
 /**
  * Handle keyboard events for accessibility.
@@ -165,9 +201,22 @@ const handleKeydown = (event: KeyboardEvent) => {
       event.preventDefault();
       isOpen.value = false;
       highlightedIndex.value = -1;
+      resetInteractionState();
       break;
     }
   }
+};
+
+/**
+ * User clicked on combobox option.
+ * @param option Clicked option.
+ */
+const selectOption = (option: number | string | null) => {
+  if (props.disabled) return;
+
+  selOption.value = option;
+  isOpen.value = false;
+  resetInteractionState();
 };
 
 /**
@@ -183,22 +232,10 @@ const showOption = (option: number | string | null): number | string | null => {
   return option;
 };
 
-/** Handle mousedown interaction. */
-const handlePointerDown = () => {
-  focusFromPointer = true;
-}
-
-/** Handle focus event. */
-const handleFocus = () => {
-  if (props.disabled) return;
-  if (!focusFromPointer) isOpen.value = true;
-  focusFromPointer = false;
-}
 </script>
 
 <template>
   <div
-    :id="id"
     :data-testid="`combobox_${id}`"
     class="combobox"
     :class="{ disabled: disabled, err: invalid }"
@@ -210,15 +247,21 @@ const handleFocus = () => {
     :aria-activedescendant="highlightedIndex >= 0 ? optionId(highlightedIndex) : undefined"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : 0"
-    @mousedown="handlePointerDown()"
+    @mousedown="handleMousedown()"
     @focus="handleFocus()"
-    @blur="
-      isOpen = false;
-      highlightedIndex = -1;
-    "
+    @click="handleClick()"
+    @blur="handleBlur()"
     @keydown="handleKeydown"
   >
-    <div class="combobox-selected" @click="openOptions()">
+    <!-- Hidden button: labelable target for <label for="...">. -->
+    <button
+      :id="id"
+      class="combobox-label-target"
+      tabindex="-1"
+      aria-hidden="true"
+      @focus="handleLabelFocus()"
+    ></button>
+    <div class="combobox-selected">
       <span class="combobox-selected-text">{{ showOption(selOption) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
     </div>
@@ -233,7 +276,7 @@ const handleFocus = () => {
         :data-testid="`combobox_${id}_${index}`"
         role="option"
         :aria-selected="option === selOption"
-        @click="selectOption(option)"
+        @click.stop="selectOption(option)"
         @mouseenter="highlightedIndex = index"
       >
         {{ showOption(option) }}
@@ -339,6 +382,18 @@ const handleFocus = () => {
 }
 .combobox.err .combobox-options {
   background: var(--combobox-option-err-background);
+}
+
+/** Hidden button: label target (labelable element for <label for="...">). */
+.combobox-label-target {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .combobox-option {

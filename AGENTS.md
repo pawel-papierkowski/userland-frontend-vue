@@ -56,11 +56,12 @@ When I ask for review, in order of importance:
 
 ## Testing
 - We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
-- Run tests using `npm run test:ci`.
 - Tests are NOT co-located. We have mirror directory structure in separate `src/__tests__/` directory. Test files have `.spec.ts` at end of their names.
 - Use test suites.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
 - When you add `vi.fn()`, you need to add appropriate type parameter, for example `vi.fn<() => void>()`.
+- When testing changes/fixes to code/components, run only relevant tests (`.spec.ts` file or even only relevant test).
+- Run all tests using `npm run test:ci` when you need to verify everything works after you finish work.
 
 ### Style of test code
 

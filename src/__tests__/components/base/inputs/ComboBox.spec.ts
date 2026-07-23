@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import { nextTick, ref } from 'vue';
 
 import i18n from '@/code/lang/i18n.ts';
 
@@ -129,6 +129,46 @@ describe('ComboBox', () => {
       expect(options[3]?.classes()).not.toContain('highlighted');
       // Assert: Aria-activedescendant updated.
       expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
+    });
+
+    it('opens when paired <label> is clicked', async () => {
+      // Verifies that clicking a <label for="id"> opens the combobox list.
+
+      // Arrange: Mount ComboBox inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testCb">Test Label</label>
+            <ComboBox
+              id="testCb"
+              v-model="value"
+              :options="options"
+              langPrefix="test.comboBox"
+            />
+          </div>
+        `,
+        components: { ComboBox },
+        setup() {
+          const value = ref<string | number | null>(null);
+          return { value, options: createOptions() };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const comboBox = wrapper.findComponent(ComboBox);
+
+      // Assert: Options are initially hidden.
+      expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+
+      // Act: Click the <label>. The browser focuses the hidden <button> (labelable),
+      // which triggers handleLabelFocus → opens the list.
+      await wrapper.find('label').trigger('click');
+      await nextTick();
+
+      // Assert: Options are now visible.
+      expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
     });
 
     //
