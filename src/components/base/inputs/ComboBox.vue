@@ -17,6 +17,7 @@
  *
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
+ * - You provide list of options. Can use null value as option.
  * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
  * - Keyboard navigation via arrows. Enter/space selects option and closes list.
@@ -98,7 +99,7 @@ const resetInteractionState = () => {
 /** Forward focus from the hidden button (label target) to the visible combobox root. */
 const handleLabelFocus = () => {
   if (props.disabled) return;
-  isOpen.value = true;
+  openList();
   focusOpened = true;
   combobox.value?.focus();
 };
@@ -112,7 +113,7 @@ const handleMousedown = () => {
 const handleFocus = () => {
   if (props.disabled) return;
   if (!isOpen.value) {
-    isOpen.value = true;
+    openList();
     focusOpened = true;
   }
 };
@@ -130,9 +131,9 @@ const handleClick = () => {
   // Toggle for direct clicks and programmatic clicks. Handles both real browser
   // clicks (preceded by mousedown) and test/programmatic clicks (no mousedown).
   isOpen.value = !isOpen.value;
-  if (!isOpen.value) {
-    highlightedIndex.value = -1;
-  }
+  if (isOpen.value) openList();
+  else highlightedIndex.value = -1;
+
 };
 
 const handleBlur = () => {
@@ -167,8 +168,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     case 'ArrowDown': {
       event.preventDefault();
       if (!isOpen.value) {
-        isOpen.value = true;
-        highlightedIndex.value = 0;
+        openList(true);
       } else {
         // Wraparound.
         highlightedIndex.value = (highlightedIndex.value + 1) % props.options.length;
@@ -178,8 +178,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     case 'ArrowUp': {
       event.preventDefault();
       if (!isOpen.value) {
-        isOpen.value = true;
-        highlightedIndex.value = props.options.length - 1;
+        openList(false);
       } else {
         // Wraparound.
         highlightedIndex.value = (highlightedIndex.value - 1 + props.options.length) % props.options.length;
@@ -192,8 +191,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       if (isOpen.value && highlightedIndex.value >= 0) {
         selectOption(props.options[highlightedIndex.value] ?? null);
       } else if (!isOpen.value) {
-        isOpen.value = true;
-        highlightedIndex.value = props.options.findIndex((o) => o === selOption.value);
+        openList();
       }
       break;
     }
@@ -206,6 +204,19 @@ const handleKeydown = (event: KeyboardEvent) => {
     }
   }
 };
+
+/** Open list. */
+const openList = (top:boolean|null=null) => {
+  isOpen.value = true;
+
+  // Set visually selected entry, if any. Works with null selection.
+  highlightedIndex.value = props.options.findIndex((o) => o === selOption.value);
+
+  if (highlightedIndex.value === -1 && top !== null) {
+    // Still nothing highlighted and we want to highlight either beginning or end of list.
+    highlightedIndex.value = top ? 0 : props.options.length - 1;
+  }
+}
 
 /**
  * User clicked on combobox option.

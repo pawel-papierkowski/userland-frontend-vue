@@ -17,7 +17,8 @@
       "null": "Opcja BRAK (null)",
       "A": "Opcja A",
       "b": "Opcja B",
-      "c": "Opcja C"
+      "c": "Opcja C",
+      "d": "Opcja D"
     },
     "tabGroup": {
       "a": "Tab A",

@@ -17,7 +17,8 @@
       "null": "Option UNSELECTED (null)",
       "a": "Option A",
       "b": "Option B",
-      "c": "Option C"
+      "c": "Option C",
+      "d": "Option D"
     },
     "tabGroup": {
       "a": "Tab A",
