@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { nextTick, ref } from 'vue';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
@@ -111,6 +112,78 @@ describe('TextBox', () => {
       expect(emitted).toHaveLength(1);
       const result = emitted?.at(-1)![0] as string;
       expect(result).toBe('A');
+    });
+
+    it('clicking <label for> makes <input id> active', async () => {
+      // Verifies that clicking a <label for="id"> makes <input id> active.
+      // In jsdom, the synthetic click from <label> reaches the <input>, but
+      // jsdom does not focus the <input> as a result (real browsers do).
+      // So we verify the click arrives on the <input> (proving the label→input
+      // association) and separately verify focusability.
+
+      // Arrange: Mount TextBox inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testTb">Test Label</label>
+            <TextBox id="testTb" v-model="value" />
+          </div>
+        `,
+        components: { TextBox },
+        setup() {
+          const value = ref<string | null>(null);
+          return { value };
+        },
+      }, {
+        global: {},
+        attachTo: document.body,
+      });
+      await nextTick();
+
+      const textBox = wrapper.findComponent(TextBox);
+      const input = textBox.find('input');
+      const label = wrapper.find('label');
+
+      // Assert: <label> points to the correct <input> id.
+      expect(input.attributes('id')).toBe('testTb');
+      expect(label.attributes('for')).toBe('testTb');
+
+      // Act: Click the <label>. In real browsers this also focuses the <input>.
+      // In jsdom, the synthetic click reaches the input (verified below) but
+      // does not trigger focus — that requires calling .focus() directly.
+      let clickReceived = false;
+      input.element.addEventListener('click', () => { clickReceived = true; });
+      await label.trigger('click');
+      await nextTick();
+
+      // Assert: The synthetic click arrived at the <input>.
+      expect(clickReceived).toBe(true);
+
+      // Act: Manually focus the <input> (what a real browser does on click).
+      input.element.focus();
+      await nextTick();
+
+      // Assert: Input is now active element.
+      expect(document.activeElement).toBe(input.element);
+    });
+
+    it('is focusable via Tab navigation', async () => {
+      // Verifies the TextBox <input> is focusable (has tabindex="0" when
+      // not disabled), which means Tab navigation can reach it.
+
+      // Arrange: Create enabled textbox.
+      let textBox = createComponent(null, 'enabledTb', '', '', false, false);
+      let input = textBox.find('input');
+
+      // Assert: Enabled input has tabindex="0" (reachable via Tab).
+      expect(input.attributes('tabindex')).toBe('0');
+
+      // Arrange: Create disabled textbox.
+      textBox = createComponent(null, 'disabledTb', '', '', true, false);
+      input = textBox.find('input');
+
+      // Assert: Disabled input has tabindex="-1" (skipped by Tab).
+      expect(input.attributes('tabindex')).toBe('-1');
     });
   });
 });
