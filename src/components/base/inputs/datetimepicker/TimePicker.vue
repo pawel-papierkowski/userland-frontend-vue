@@ -501,8 +501,13 @@ const resolveMinuteClass = (m: number) => {
   };
 };
 
+/** Show panel (if not already visible). Used by parent (DateTimePicker) for label clicking. */
+const showPanel = () => {
+  if (!isClockVisible.value) toggleTimePickerVisibility(false);
+};
+
 /** Expose hidePanel so parent (DateTimePicker) can close this panel. */
-defineExpose({ hidePanel });
+defineExpose({ hidePanel, showPanel });
 </script>
 
 <template>

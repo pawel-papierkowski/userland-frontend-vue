@@ -87,17 +87,19 @@ const handleGeneralFocusin = (e: FocusEvent) => {
 
 /**
  * Handle focus arriving on the hidden button via <label> click.
- * Routes focus to the correct input depending on mode, which triggers
- * auto-open of the corresponding panel.
+ * Opens the correct panel directly, then routes focus to the input.
  */
 const handleHiddenButtonFocus = () => {
   if (props.disabled) return;
 
   if (props.mode === 'time') {
+    // For 'time', open clock panel and focus time input.
+    timePickerRef.value?.showPanel();
     const timeInput = document.getElementById(`timepicker_${timeId}`);
     timeInput?.focus();
   } else {
-    // For 'date' and 'datetime', focus the date input.
+    // For 'date' and 'datetime', open calendar panel and focus date input.
+    datePickerRef.value?.showPanel();
     const dateInput = document.getElementById(`datepicker_${dateId}`);
     dateInput?.focus();
   }

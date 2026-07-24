@@ -619,8 +619,13 @@ const hidePanelAndFocusNext = () => {
   });
 };
 
+/** Show panel (if not already visible). Used by parent (DateTimePicker) for label clicking. */
+const showPanel = () => {
+  if (!isCalendarVisible.value) toggleDatePickerVisibility(false);
+};
+
 /** Expose hidePanel so parent (DateTimePicker) can close this panel. */
-defineExpose({ hidePanel });
+defineExpose({ hidePanel, showPanel });
 </script>
 
 <template>

@@ -44,114 +44,116 @@ function createComponent(
 
 /** Tests of DateTimePicker component. */
 describe('DateTimePicker', () => {
-  it('mode datetime', () => {
-    // Ensure component shows DatePicker and TimePicker with correct params for 'datetime' mode.
-
-    // Arrange: Set up date/time.
-    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
-    const minDate: Date = new Date('2027-01-04T00:00:00Z');
-    const maxDate: Date = new Date('2027-01-22T00:00:00Z');
-
-    // Act: Create the component.
-    const dateTimePicker = createComponent(
-      null,
-      'someDateTime',
-      'datetime',
-      false,
-      true,
-      false,
-      false,
-      minDate,
-      maxDate,
-    );
-
-    // Assert: State of DatePicker is correct.
-    const datePicker = dateTimePicker.findComponent(DatePicker);
-    expect(datePicker.exists()).toBe(true);
-    expect(datePicker.props('modelValue')).toBe(null);
-    expect(datePicker.props('id')).toBe('someDateTime');
-    expect(datePicker.props('allowNull')).toBe(false);
-    expect(datePicker.props('disabled')).toBe(true);
-    expect(datePicker.props('invalid')).toBe(false);
-    expect(datePicker.props('showWeeks')).toBe(false);
-    expect(datePicker.props('dateTimeMin')).toBe(minDate);
-    expect(datePicker.props('dateTimeMax')).toBe(maxDate);
-
-    // Assert: State of TimePicker is correct.
-    const timePicker = dateTimePicker.findComponent(TimePicker);
-    expect(timePicker.exists()).toBe(true);
-    expect(timePicker.props('modelValue')).toBe(null);
-    expect(timePicker.props('id')).toBe('tsomeDateTime'); // if both datePicker and timePicker are present, timePicker must have different id
-    expect(timePicker.props('allowNull')).toBe(false);
-    expect(timePicker.props('disabled')).toBe(true);
-    expect(timePicker.props('invalid')).toBe(false);
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // mock scrollIntoView() - jsdom does not implement it.
+    Element.prototype.scrollIntoView = vi.fn<() => void>();
   });
 
-  it('mode date', () => {
-    // Ensure component shows DatePicker and TimePicker with correct params for 'date' mode.
-
-    // Arrange: Set up date/time.
-    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
-    const someDate: Date = new Date('2027-01-10T00:00:00Z');
-
-    // Act: Create the component.
-    const dateTimePicker = createComponent(someDate, 'someDate', 'date', false, false, false, true);
-
-    // Assert: State of DatePicker is correct.
-    const datePicker = dateTimePicker.findComponent(DatePicker);
-    expect(datePicker.exists()).toBe(true);
-    expect(datePicker.props('modelValue')).toBe(someDate);
-    expect(datePicker.props('id')).toBe('someDate');
-    expect(datePicker.props('allowNull')).toBe(false);
-    expect(datePicker.props('disabled')).toBe(false);
-    expect(datePicker.props('invalid')).toBe(false);
-    expect(datePicker.props('showWeeks')).toBe(true);
-    expect(datePicker.props('dateTimeMin')).toBe(null);
-    expect(datePicker.props('dateTimeMax')).toBe(null);
-
-    // Assert: State of TimePicker is correct.
-    const timePicker = dateTimePicker.findComponent(TimePicker);
-    expect(timePicker.exists()).toBe(false);
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
-  it('mode time', () => {
-    // Ensure component shows DatePicker and TimePicker with correct params for 'time' mode.
+  describe('general', () => {
+    it('mode datetime', () => {
+      // Ensure component shows DatePicker and TimePicker with correct params for 'datetime' mode.
 
-    // Arrange: Set up date/time.
-    vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
-    const someDate: Date = new Date('2027-01-10T00:00:00Z');
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const minDate: Date = new Date('2027-01-04T00:00:00Z');
+      const maxDate: Date = new Date('2027-01-22T00:00:00Z');
 
-    // Act: Create the component.
-    const dateTimePicker = createComponent(someDate, 'someTime', 'time', true, false, true, false);
+      // Act: Create the component.
+      const dateTimePicker = createComponent(
+        null,
+        'someDateTime',
+        'datetime',
+        false,
+        true,
+        false,
+        false,
+        minDate,
+        maxDate,
+      );
 
-    // Assert: State of DatePicker is correct.
-    const datePicker = dateTimePicker.findComponent(DatePicker);
-    expect(datePicker.exists()).toBe(false);
+      // Assert: State of DatePicker is correct.
+      const datePicker = dateTimePicker.findComponent(DatePicker);
+      expect(datePicker.exists()).toBe(true);
+      expect(datePicker.props('modelValue')).toBe(null);
+      expect(datePicker.props('id')).toBe('someDateTime');
+      expect(datePicker.props('allowNull')).toBe(false);
+      expect(datePicker.props('disabled')).toBe(true);
+      expect(datePicker.props('invalid')).toBe(false);
+      expect(datePicker.props('showWeeks')).toBe(false);
+      expect(datePicker.props('dateTimeMin')).toBe(minDate);
+      expect(datePicker.props('dateTimeMax')).toBe(maxDate);
 
-    // Assert: State of TimePicker is correct.
-    const timePicker = dateTimePicker.findComponent(TimePicker);
-    expect(timePicker.exists()).toBe(true);
-    expect(timePicker.props('modelValue')).toBe(someDate);
-    expect(timePicker.props('id')).toBe('someTime');
-    expect(timePicker.props('allowNull')).toBe(true);
-    expect(timePicker.props('disabled')).toBe(false);
-    expect(timePicker.props('invalid')).toBe(true);
+      // Assert: State of TimePicker is correct.
+      const timePicker = dateTimePicker.findComponent(TimePicker);
+      expect(timePicker.exists()).toBe(true);
+      expect(timePicker.props('modelValue')).toBe(null);
+      expect(timePicker.props('id')).toBe('tsomeDateTime'); // if both datePicker and timePicker are present, timePicker must have different id
+      expect(timePicker.props('allowNull')).toBe(false);
+      expect(timePicker.props('disabled')).toBe(true);
+      expect(timePicker.props('invalid')).toBe(false);
+    });
+
+    it('mode date', () => {
+      // Ensure component shows DatePicker and TimePicker with correct params for 'date' mode.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const someDate: Date = new Date('2027-01-10T00:00:00Z');
+
+      // Act: Create the component.
+      const dateTimePicker = createComponent(someDate, 'someDate', 'date', false, false, false, true);
+
+      // Assert: State of DatePicker is correct.
+      const datePicker = dateTimePicker.findComponent(DatePicker);
+      expect(datePicker.exists()).toBe(true);
+      expect(datePicker.props('modelValue')).toBe(someDate);
+      expect(datePicker.props('id')).toBe('someDate');
+      expect(datePicker.props('allowNull')).toBe(false);
+      expect(datePicker.props('disabled')).toBe(false);
+      expect(datePicker.props('invalid')).toBe(false);
+      expect(datePicker.props('showWeeks')).toBe(true);
+      expect(datePicker.props('dateTimeMin')).toBe(null);
+      expect(datePicker.props('dateTimeMax')).toBe(null);
+
+      // Assert: State of TimePicker is correct.
+      const timePicker = dateTimePicker.findComponent(TimePicker);
+      expect(timePicker.exists()).toBe(false);
+    });
+
+    it('mode time', () => {
+      // Ensure component shows DatePicker and TimePicker with correct params for 'time' mode.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+      const someDate: Date = new Date('2027-01-10T00:00:00Z');
+
+      // Act: Create the component.
+      const dateTimePicker = createComponent(someDate, 'someTime', 'time', true, false, true, false);
+
+      // Assert: State of DatePicker is correct.
+      const datePicker = dateTimePicker.findComponent(DatePicker);
+      expect(datePicker.exists()).toBe(false);
+
+      // Assert: State of TimePicker is correct.
+      const timePicker = dateTimePicker.findComponent(TimePicker);
+      expect(timePicker.exists()).toBe(true);
+      expect(timePicker.props('modelValue')).toBe(someDate);
+      expect(timePicker.props('id')).toBe('someTime');
+      expect(timePicker.props('allowNull')).toBe(true);
+      expect(timePicker.props('disabled')).toBe(false);
+      expect(timePicker.props('invalid')).toBe(true);
+    });
   });
 
   // ////////////////////////////////////////////////////////////////////////////
   // Cross-panel coordination tests
 
   describe('cross-panel coordination', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-      // mock scrollIntoView() - jsdom does not implement it.
-      Element.prototype.scrollIntoView = vi.fn<() => void>();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
     it('closes date panel when time input receives focus', async () => {
       // Ensure date panel closes when user tabs from date picker to time picker.
 
@@ -244,16 +246,6 @@ describe('DateTimePicker', () => {
   // Auto-open on focus tests
 
   describe('auto-open on focus', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-      // mock scrollIntoView() - jsdom does not implement it.
-      Element.prototype.scrollIntoView = vi.fn<() => void>();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
     it('opens calendar panel when tabbing to date input in datetime mode', async () => {
       // Ensures that when the user Tabs to the date input, the calendar panel opens automatically.
       // Uses an <input> as the previous field (simulating Tab from another component).
@@ -488,18 +480,9 @@ describe('DateTimePicker', () => {
   // Label clicking tests
 
   describe('label clicking', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-      // mock scrollIntoView() - jsdom does not implement it.
-      Element.prototype.scrollIntoView = vi.fn<() => void>();
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
-    it('has a hidden label-target button in date mode', async () => {
-      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+    it('opens calendar panel via hidden button focus in date mode', async () => {
+      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
+      // it opens the calendar panel. Uses createComponent (not wrapper template) for simplicity.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
@@ -508,16 +491,22 @@ describe('DateTimePicker', () => {
       const dateTimePicker = createComponent(null, 'testDt', 'date', false, false, false, false);
       await nextTick();
 
-      // Assert: Hidden button exists with correct id, class, and tabindex.
+      // Assert: Panel is initially closed.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+
+      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
       const hiddenButton = dateTimePicker.find('#testDt');
       expect(hiddenButton.exists()).toBe(true);
-      expect(hiddenButton.element.tagName).toBe('BUTTON');
-      expect(hiddenButton.attributes('tabindex')).toBe('-1');
-      expect(hiddenButton.classes()).toContain('hidden-button');
+      await hiddenButton.trigger('focus');
+      await nextTick();
+
+      // Assert: Calendar panel is now open.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
     });
 
-    it('has a hidden label-target button in time mode', async () => {
-      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+    it('opens clock panel via hidden button focus in time mode', async () => {
+      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
+      // it opens the clock panel.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
@@ -526,16 +515,25 @@ describe('DateTimePicker', () => {
       const dateTimePicker = createComponent(null, 'testDt', 'time', false, false, false, false);
       await nextTick();
 
-      // Assert: Hidden button exists with correct id, class, and tabindex.
+      // Verify the hidden button exists.
       const hiddenButton = dateTimePicker.find('#testDt');
       expect(hiddenButton.exists()).toBe(true);
       expect(hiddenButton.element.tagName).toBe('BUTTON');
-      expect(hiddenButton.attributes('tabindex')).toBe('-1');
-      expect(hiddenButton.classes()).toContain('hidden-button');
+
+      // Assert: Panel is initially closed.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+
+      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
+      await hiddenButton.trigger('focus');
+      await nextTick();
+
+      // Assert: Clock panel is now open.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(true);
     });
 
-    it('has a hidden label-target button in datetime mode', async () => {
-      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+    it('opens calendar panel via hidden button focus in datetime mode', async () => {
+      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
+      // it opens the calendar panel (primary panel in datetime mode).
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
@@ -544,12 +542,23 @@ describe('DateTimePicker', () => {
       const dateTimePicker = createComponent(null, 'testDt', 'datetime', false, false, false, false);
       await nextTick();
 
-      // Assert: Hidden button exists with correct id, class, and tabindex.
+      // Verify the hidden button exists.
       const hiddenButton = dateTimePicker.find('#testDt');
       expect(hiddenButton.exists()).toBe(true);
       expect(hiddenButton.element.tagName).toBe('BUTTON');
-      expect(hiddenButton.attributes('tabindex')).toBe('-1');
-      expect(hiddenButton.classes()).toContain('hidden-button');
+
+      // Assert: Panels are initially closed.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+
+      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
+      await hiddenButton.trigger('focus');
+      await nextTick();
+
+      // Assert: Calendar panel is now open (date is the primary panel in datetime mode).
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      // Assert: Clock panel remains closed.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
     });
   });
 });
