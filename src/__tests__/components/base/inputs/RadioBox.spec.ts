@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { DOMWrapper, mount } from '@vue/test-utils';
+import { nextTick, ref } from 'vue';
 
 import i18n from '@/code/lang/i18n.ts';
 
@@ -367,6 +368,63 @@ describe('RadioBox', () => {
       expect(options[0]?.attributes('aria-checked')).toBe('false');
       // Assert: Model still never emitted.
       expect(radioBox.emitted('update:modelValue')).toBeUndefined();
+    });
+
+    it('can be focused via Tab from previous field', async () => {
+      // Verifies that pressing Tab to focus the radiobox (e.g. after tabbing
+      // through a form) correctly focuses the radiobox, and keyboard
+      // interaction works after focus arrives.
+      // Uses an <input> as the previous field.
+
+      // Arrange: Mount a wrapper with an <input> followed by a <RadioBox>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <RadioBox
+              id="testRb"
+              v-model="value"
+              :options="options"
+              langPrefix="test.radioBox"
+            />
+          </div>
+        `,
+        components: { RadioBox },
+        setup() {
+          const value = ref<string | number | null>('one');
+          return { value, options: createOptions() };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const radioBox = wrapper.findComponent(RadioBox);
+      const input = wrapper.find('input');
+      const options = radioBox.findAll('.radiobox-option');
+
+      // Assert: Selected option (index 1, 'one') has tabindex 0, so it is reachable via Tab.
+      expect(options[1]?.attributes('tabindex')).toBe('0');
+
+      // Act: Focus the <input> (user tabs through the form).
+      await input.trigger('focus');
+      await nextTick();
+
+      // Act: Simulate Tab press moving focus to the radiobox root element.
+      // (In jsdom, Tab keydown does not change focus, so we focus directly.)
+      await radioBox.find('.radiobox').trigger('focus');
+      await nextTick();
+
+      // Act: Press ArrowDown to navigate to next option.
+      await radioBox.find('.radiobox').trigger('keydown', { key: 'ArrowDown' });
+      await nextTick();
+
+      // Assert: Selection moved to 'two' (index 2).
+      expect(options[1]?.attributes('aria-checked')).toBe('false');
+      expect(options[2]?.attributes('aria-checked')).toBe('true');
+      expect(options[2]?.attributes('tabindex')).toBe('0');
+      expect(radioBox.emitted('update:modelValue')).toHaveLength(1);
+      expect(radioBox.emitted('update:modelValue')?.[0]?.[0]).toBe('two');
     });
   });
 });

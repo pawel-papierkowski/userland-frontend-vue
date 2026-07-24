@@ -35,7 +35,8 @@ UserLand is portfolio project for frontend in Vue.
   - Global styles are in `src/styles`.
 - **Custom components:**:
   - Must support ARIA where applicable.
-  - Must support keyboard where applicable.
+  - Must support keyboard navigation inside component where applicable.
+  - Must support tabbing into component and `<label>` clicking (usually via hidden `<button>`, as `<div>` is not labelable). Tests for these two features must use mount with multiple components (like paired label and tested component itself) whenever possible. See relevant tests in `ComboBox.spec.ts` for how to do it.
 
 ## Available Scripts & Commands
 - **Run dev server:** `npm run dev`
@@ -47,7 +48,7 @@ UserLand is portfolio project for frontend in Vue.
 ## Reviewing code
 When I ask for review, in order of importance:
 - Analyze general purpose and functionality.
-- Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps - we need to fix that stuff first.
+- Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps: we need to fix that stuff first.
 - Verify algorithm and logic. Is this correct way to do it? Can it be done better?
 - Find tests for reviewed code and review them too. If tests are missing, note their absence and plan what tests should be added. Do not add them automatically unless explicitly asked.
 - I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
@@ -60,7 +61,7 @@ When I ask for review, in order of importance:
 - Use test suites.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
 - When you add `vi.fn()`, you need to add appropriate type parameter, for example `vi.fn<() => void>()`.
-- When testing changes/fixes to code/components, run only relevant tests (`.spec.ts` file or even only relevant test).
+- When testing changes/fixes to code/components, run only relevant tests (`.spec.ts` file or even only single relevant test).
 - Run all tests using `npm run test:ci` when you need to verify everything works after you finish work.
 
 ### Style of test code

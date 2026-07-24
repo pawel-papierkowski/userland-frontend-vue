@@ -228,55 +228,6 @@ describe('ComboBox', () => {
       expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
     });
 
-    it('opens when Tab navigates from <input> to combobox', async () => {
-      // Verifies that pressing Tab to focus the combobox (e.g. after tabbing
-      // through a form) opens the list. Uses an <input> as the previous field.
-
-      // Arrange: Mount a wrapper with an <input> followed by a <ComboBox>.
-      const wrapper = mount({
-        template: `
-          <div>
-            <input id="prevField" type="text" />
-            <ComboBox
-              id="testCb"
-              v-model="value"
-              :options="options"
-              langPrefix="test.comboBox"
-            />
-          </div>
-        `,
-        components: { ComboBox },
-        setup() {
-          const value = ref<string | number | null>(null);
-          return { value, options: createOptions() };
-        },
-      }, {
-        global: { plugins: [i18n] },
-      });
-      await nextTick();
-
-      const comboBox = wrapper.findComponent(ComboBox);
-      const input = wrapper.find('input');
-
-      // Assert: Options are initially hidden.
-      expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
-
-      // Act: Focus the <input> (user tabs through the form).
-      await input.trigger('focus');
-      await nextTick();
-
-      // Act: Simulate Tab press moving focus to the combobox root element.
-      // (In jsdom, Tab keydown does not change focus, so we focus directly.)
-      //await input.trigger('keydown', { key: 'Tab' }); // does not work, unfortunately
-      await comboBox.find('.combobox').trigger('focus');
-      await nextTick();
-
-      // Assert: Options are now visible (focus from Tab opened the list).
-      expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
-      // Assert: Aria-expanded reflects open state.
-      expect(comboBox.attributes('aria-expanded')).toBe('true');
-    });
-
     //
 
     it('is disabled', async () => {
@@ -621,6 +572,55 @@ describe('ComboBox', () => {
 
       // Assert: Options are still hidden.
       expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+    });
+
+    it('opens when Tab navigates from <input> to combobox', async () => {
+      // Verifies that pressing Tab to focus the combobox (e.g. after tabbing
+      // through a form) opens the list. Uses an <input> as the previous field.
+
+      // Arrange: Mount a wrapper with an <input> followed by a <ComboBox>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <ComboBox
+              id="testCb"
+              v-model="value"
+              :options="options"
+              langPrefix="test.comboBox"
+            />
+          </div>
+        `,
+        components: { ComboBox },
+        setup() {
+          const value = ref<string | number | null>(null);
+          return { value, options: createOptions() };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const comboBox = wrapper.findComponent(ComboBox);
+      const input = wrapper.find('input');
+
+      // Assert: Options are initially hidden.
+      expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
+
+      // Act: Focus the <input> (user tabs through the form).
+      await input.trigger('focus');
+      await nextTick();
+
+      // Act: Simulate Tab press moving focus to the combobox root element.
+      // (In jsdom, Tab keydown does not change focus, so we focus directly.)
+      //await input.trigger('keydown', { key: 'Tab' }); // does not work, unfortunately
+      await comboBox.find('.combobox').trigger('focus');
+      await nextTick();
+
+      // Assert: Options are now visible (focus from Tab opened the list).
+      expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
+      // Assert: Aria-expanded reflects open state.
+      expect(comboBox.attributes('aria-expanded')).toBe('true');
     });
   });
 });
