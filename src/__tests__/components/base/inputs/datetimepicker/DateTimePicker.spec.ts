@@ -205,5 +205,38 @@ describe('DateTimePicker', () => {
       // Assert: Clock panel is now closed.
       expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
     });
+
+    it('closes date panel when tabbing out in date mode', async () => {
+      // Ensure date panel closes when user tabs out of the date picker entirely in date-only mode
+      // (no TimePicker present). Tabbing out means focus moves to an element outside the picker.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create the component with date mode (only DatePicker is shown).
+      const dateTimePicker = createComponent(null, 'testDt', 'date', false, false, false, false);
+      await nextTick();
+
+      // Act: Click on date input to open calendar panel.
+      const dateInput = dateTimePicker.find('#datepicker_testDt');
+      await dateInput.trigger('click');
+      await nextTick();
+
+      // Assert: Calendar panel is visible.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+
+      // Act: Simulate Tab out of the picker by dispatching focusout on the picker wrapper
+      // with relatedTarget pointing outside the DatePicker.
+      const pickerDate = dateTimePicker.find('.picker-date');
+      const event = new FocusEvent('focusout', {
+        bubbles: true,
+        relatedTarget: document.body,
+      });
+      pickerDate.element.dispatchEvent(event);
+      await nextTick();
+
+      // Assert: Calendar panel is now closed.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+    });
   });
 });

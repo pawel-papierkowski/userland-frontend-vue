@@ -82,6 +82,14 @@ onClickOutside(pickerRef, () => {
   hidePanel();
 });
 
+/** Handle focus leaving the picker entirely (e.g. Tab out of grid). */
+const handleFocusOut = (e: FocusEvent) => {
+  const relatedTarget = e.relatedTarget as HTMLElement | null;
+  if (isCalendarVisible.value && relatedTarget && !pickerRef.value?.contains(relatedTarget)) {
+    hidePanel();
+  }
+};
+
 // COMPUTATIONS
 
 /** Compute currently displayed date value in date input. */
@@ -600,7 +608,7 @@ defineExpose({ hidePanel });
 </script>
 
 <template>
-  <div class="picker-date" ref="pickerRef">
+  <div class="picker-date" ref="pickerRef" @focusout="handleFocusOut">
     <input
       :id="`datepicker_${id}`"
       type="text"
