@@ -90,6 +90,22 @@ const handleFocusOut = (e: FocusEvent) => {
   }
 };
 
+/** Tracks if the next focus event is caused by a mouse click (to avoid auto-open on click). */
+let focusFromClick = false;
+
+/** Handle mousedown on input: mark that focus is from a click so auto-open is skipped. */
+const handleMousedown = () => {
+  focusFromClick = true;
+};
+
+/** Handle focus arriving on the input (e.g. via Tab). */
+const handleInputFocus = () => {
+  if (!focusFromClick && !isCalendarVisible.value && !props.disabled) {
+    toggleDatePickerVisibility(false);
+  }
+  focusFromClick = false;
+};
+
 // COMPUTATIONS
 
 /** Compute currently displayed date value in date input. */
@@ -627,6 +643,8 @@ defineExpose({ hidePanel });
       :aria-controls="`datepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.date')"
       :aria-disabled="disabled || undefined"
+      @mousedown="handleMousedown"
+      @focus="handleInputFocus"
       @click="handleClick(false)"
       @keydown="onInputKeydown"
     />

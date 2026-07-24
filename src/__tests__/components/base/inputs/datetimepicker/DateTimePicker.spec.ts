@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import { nextTick, ref } from 'vue';
 
 import i18n from '@/code/lang/i18n.ts';
 
@@ -237,6 +237,250 @@ describe('DateTimePicker', () => {
 
       // Assert: Calendar panel is now closed.
       expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+    });
+  });
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Auto-open on focus tests
+
+  describe('auto-open on focus', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      // mock scrollIntoView() - jsdom does not implement it.
+      Element.prototype.scrollIntoView = vi.fn<() => void>();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('opens calendar panel when tabbing to date input in datetime mode', async () => {
+      // Ensures that when the user Tabs to the date input, the calendar panel opens automatically.
+      // Uses an <input> as the previous field (simulating Tab from another component).
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount a wrapper with an <input> before the DateTimePicker.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <DateTimePicker id="testDt" mode="datetime" v-model="value" />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const dateInput = wrapper.find('#datepicker_testDt');
+
+      // Assert: Panel is initially closed.
+      expect(wrapper.find('.calendar-container').exists()).toBe(false);
+
+      // Act: Focus the previous field.
+      await wrapper.find('input').trigger('focus');
+      await nextTick();
+
+      // Act: Focus the date input (simulates Tab from previous field).
+      await dateInput.trigger('focus');
+      await nextTick();
+
+      // Assert: Calendar panel is now open.
+      expect(wrapper.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('opens clock panel when tabbing to time input in datetime mode', async () => {
+      // Ensures that when the user Tabs to the time input, the clock panel opens automatically.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount a wrapper with an <input> before the DateTimePicker.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <DateTimePicker id="testDt" mode="datetime" v-model="value" />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const timeInput = wrapper.find('#timepicker_ttestDt');
+
+      // Assert: Panel is initially closed.
+      expect(wrapper.find('.clock-container').exists()).toBe(false);
+
+      // Act: Focus the previous field.
+      await wrapper.find('input').trigger('focus');
+      await nextTick();
+
+      // Act: Focus the time input (simulates Tab from previous field).
+      await timeInput.trigger('focus');
+      await nextTick();
+
+      // Assert: Clock panel is now open.
+      expect(wrapper.find('.clock-container').exists()).toBe(true);
+    });
+
+    it('opens calendar panel when tabbing to date input in date mode', async () => {
+      // Ensures that when the user Tabs to the date input in date-only mode,
+      // the calendar panel opens automatically.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount a wrapper with an <input> before the DateTimePicker.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <DateTimePicker id="testDt" mode="datetime" v-model="value" />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const dateInput = wrapper.find('#datepicker_testDt');
+
+      // Assert: Panel is initially closed.
+      expect(wrapper.find('.calendar-container').exists()).toBe(false);
+
+      // Act: Focus the previous field.
+      await wrapper.find('input').trigger('focus');
+      await nextTick();
+
+      // Act: Focus the date input (simulates Tab from previous field).
+      await dateInput.trigger('focus');
+      await nextTick();
+
+      // Assert: Calendar panel is now open.
+      expect(wrapper.find('.calendar-container').exists()).toBe(true);
+    });
+
+    it('opens clock panel when tabbing to time input in time mode', async () => {
+      // Ensures that when the user Tabs to the time input in time-only mode,
+      // the clock panel opens automatically.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount a wrapper with an <input> before the DateTimePicker.
+      const wrapper = mount({
+        template: `
+          <div>
+            <input id="prevField" type="text" />
+            <DateTimePicker id="testDt" mode="time" v-model="value" />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const timeInput = wrapper.find('#timepicker_testDt');
+
+      // Assert: Panel is initially closed.
+      expect(wrapper.find('.clock-container').exists()).toBe(false);
+
+      // Act: Focus the previous field.
+      await wrapper.find('input').trigger('focus');
+      await nextTick();
+
+      // Act: Focus the time input (simulates Tab from previous field).
+      await timeInput.trigger('focus');
+      await nextTick();
+
+      // Assert: Clock panel is now open.
+      expect(wrapper.find('.clock-container').exists()).toBe(true);
+    });
+
+    it('click on date input still toggles panel', async () => {
+      // Ensure that clicking the date input still correctly toggles the panel
+      // (auto-open on focus from Tab does not interfere).
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create the component.
+      const dateTimePicker = createComponent(null, 'testDt', 'datetime', false, false, false, false);
+      await nextTick();
+
+      const dateInput = dateTimePicker.find('#datepicker_testDt');
+
+      // Assert: Panel is initially closed.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+
+      // Act: Click on date input (should open).
+      await dateInput.trigger('click');
+      await nextTick();
+
+      // Assert: Calendar panel is now open.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+
+      // Act: Click on date input again (should close).
+      await dateInput.trigger('click');
+      await nextTick();
+
+      // Assert: Calendar panel is now closed.
+      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+    });
+
+    it('click on time input still toggles panel', async () => {
+      // Ensure that clicking the time input still correctly toggles the panel
+      // (auto-open on focus from Tab does not interfere).
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create the component.
+      const dateTimePicker = createComponent(null, 'testDt', 'datetime', false, false, false, false);
+      await nextTick();
+
+      const timeInput = dateTimePicker.find('#timepicker_ttestDt');
+
+      // Assert: Panel is initially closed.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+
+      // Act: Click on time input (should open).
+      await timeInput.trigger('click');
+      await nextTick();
+
+      // Assert: Clock panel is now open.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(true);
+
+      // Act: Click on time input again (should close).
+      await timeInput.trigger('click');
+      await nextTick();
+
+      // Assert: Clock panel is now closed.
+      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
     });
   });
 });

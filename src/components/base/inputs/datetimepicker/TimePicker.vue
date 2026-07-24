@@ -124,6 +124,22 @@ watch(isClockVisible, (visible) => {
 
 // FUNCTIONS.
 
+/** Tracks if the next focus event is caused by a mouse click (to avoid auto-open on click). */
+let focusFromClick = false;
+
+/** Handle mousedown on input: mark that focus is from a click so auto-open is skipped. */
+const handleMousedown = () => {
+  focusFromClick = true;
+};
+
+/** Handle focus arriving on the input (e.g. via Tab). */
+const handleInputFocus = () => {
+  if (!focusFromClick && !isClockVisible.value && !props.disabled) {
+    toggleTimePickerVisibility(false);
+  }
+  focusFromClick = false;
+};
+
 /** Handle click. */
 const handleClick = async (viaKeyboard: boolean) => {
   if (props.disabled) return;
@@ -509,6 +525,8 @@ defineExpose({ hidePanel });
       :aria-controls="`timepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.time')"
       :aria-disabled="disabled || undefined"
+      @mousedown="handleMousedown"
+      @focus="handleInputFocus"
       @click="handleClick(false)"
       @keydown="onInputKeydown"
     />
