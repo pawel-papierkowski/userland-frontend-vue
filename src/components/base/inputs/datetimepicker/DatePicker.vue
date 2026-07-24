@@ -594,6 +594,9 @@ const hidePanelAndFocusNext = () => {
     NavUtils.FocusNext(inputEl);
   });
 };
+
+/** Expose hidePanel so parent (DateTimePicker) can close this panel. */
+defineExpose({ hidePanel });
 </script>
 
 <template>

@@ -484,6 +484,9 @@ const resolveMinuteClass = (m: number) => {
     focused: activeColumn.value === 'minute' && focusedMinute.value === m,
   };
 };
+
+/** Expose hidePanel so parent (DateTimePicker) can close this panel. */
+defineExpose({ hidePanel });
 </script>
 
 <template>

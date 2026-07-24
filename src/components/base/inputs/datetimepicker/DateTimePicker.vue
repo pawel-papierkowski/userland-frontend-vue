@@ -23,6 +23,7 @@
  * - dateTimeMin - If not null, defines earliest allowed date. Optional, default is null.
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
+import { ref } from 'vue';
 import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
@@ -61,12 +62,35 @@ const props = withDefaults(
 
 const dateId = `${props.id}`;
 const timeId = props.mode === 'datetime' ? `t${props.id}` : `${props.id}`;
+
+//
+// References to child components, used for cross-panel close coordination.
+const datePickerRef = ref<InstanceType<typeof DatePicker> | null>(null);
+const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null);
+
+/**
+ * Handle focus moving between the two pickers.
+ * When one input receives focus, the other picker's panel is closed.
+ */
+const handleGeneralFocusin = (e: FocusEvent) => {
+  const target = e.target as HTMLElement;
+
+  // If time input received focus, close date panel.
+  if (target.id === `timepicker_${timeId}`) {
+    datePickerRef.value?.hidePanel();
+  }
+  // If date input received focus, close time panel.
+  if (target.id === `datepicker_${dateId}`) {
+    timePickerRef.value?.hidePanel();
+  }
+};
 </script>
 
 <template>
-  <div class="picker-general">
+  <div class="picker-general" @focusin="handleGeneralFocusin">
     <DatePicker
       v-if="mode === 'datetime' || mode === 'date'"
+      ref="datePickerRef"
       v-model="currDateTime"
       :id="dateId"
       :allowNull="allowNull"
@@ -79,6 +103,7 @@ const timeId = props.mode === 'datetime' ? `t${props.id}` : `${props.id}`;
 
     <TimePicker
       v-if="mode === 'datetime' || mode === 'time'"
+      ref="timePickerRef"
       v-model="currDateTime"
       :id="timeId"
       :allowNull="allowNull"
