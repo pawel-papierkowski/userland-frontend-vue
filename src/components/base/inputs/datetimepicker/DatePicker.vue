@@ -143,6 +143,45 @@ watch(
 
 // FUNCTIONS.
 
+/** Handle click. */
+const handleClick = async (viaKeyboard: boolean) => {
+  if (props.disabled) return;
+  toggleDatePickerVisibility(viaKeyboard);
+};
+
+/** Toggle visibility of date picker panel. */
+const toggleDatePickerVisibility = async (viaKeyboard: boolean) => {
+  if (isCalendarVisible.value) {
+    hidePanel();
+  } else {
+    // If selected date is null, set viewDate to current date (as in system date of computer).
+    viewDate.value = selDateTime.value ? new Date(selDateTime.value) : new Date();
+    isCalendarVisible.value = true;
+
+    // Initialize keyboard focus state.
+    if (viaKeyboard) {
+      setupFocus(true);
+    }
+
+    await nextTick();
+
+    // Adjust picker position if needed to prevent window overflow.
+    if (calendarContainerRef.value) {
+      const rect = calendarContainerRef.value.getBoundingClientRect();
+      if (rect.right > window.innerWidth) {
+        containerStyle.value = { left: 'auto', right: '0' };
+      } else {
+        containerStyle.value = { left: '0', right: 'auto' };
+      }
+    }
+
+    // Move keyboard focus into the grid so user can navigate immediately.
+    calendarGridRef.value?.focus();
+  }
+};
+
+//
+
 /**
  * Calculate cells for calendar.
  * @returns Array of cells for entire calendar.
@@ -236,37 +275,6 @@ const calcDays = (): CalendarCell[] => {
 };
 
 //
-
-/** Toggle visibility of date picker panel. */
-const toggleDatePickerVisibility = async (viaKeyboard: boolean) => {
-  if (isCalendarVisible.value) {
-    hidePanel();
-  } else {
-    // If selected date is null, set viewDate to current date (as in system date of computer).
-    viewDate.value = selDateTime.value ? new Date(selDateTime.value) : new Date();
-    isCalendarVisible.value = true;
-
-    // Initialize keyboard focus state.
-    if (viaKeyboard) {
-      setupFocus(true);
-    }
-
-    await nextTick();
-
-    // Adjust picker position if needed to prevent window overflow.
-    if (calendarContainerRef.value) {
-      const rect = calendarContainerRef.value.getBoundingClientRect();
-      if (rect.right > window.innerWidth) {
-        containerStyle.value = { left: 'auto', right: '0' };
-      } else {
-        containerStyle.value = { left: '0', right: 'auto' };
-      }
-    }
-
-    // Move keyboard focus into the grid so user can navigate immediately.
-    calendarGridRef.value?.focus();
-  }
-};
 
 /**
  * Change current month.
@@ -417,7 +425,7 @@ const isFocused = (calendarCell: CalendarCell): boolean => {
 
 // KEYBOARD HANDLERS
 
-/** Handle keyboard on the input (combobox). */
+/** Handle keyboard on the input. */
 const onInputKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return;
 
@@ -608,7 +616,7 @@ const hidePanelAndFocusNext = () => {
       :aria-controls="`datepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.date')"
       :aria-disabled="disabled || undefined"
-      @click="toggleDatePickerVisibility(false)"
+      @click="handleClick(false)"
       @keydown="onInputKeydown"
     />
 

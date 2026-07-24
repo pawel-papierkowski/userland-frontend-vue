@@ -72,24 +72,39 @@ const props = withDefaults(
 
 
 /** Template ref for the root element. */
-const combobox = ref<HTMLElement | null>(null);
-
+const comboboxRef = ref<HTMLElement | null>(null);
 /** Indicates visibility of combobox list. */
 const isOpen = ref(false);
-/** Class of decorative arrow on right. */
-const arrowClass = computed(() => ({ open: isOpen.value }));
-
 /** Index of currently highlighted option. -1 means none highlighted. */
 const highlightedIndex = ref(-1);
-
-/** ID for the listbox used by aria-controls and aria-activedescendant. */
-const listboxId = computed(() => `combobox-listbox_${props.id || 'default'}`);
 
 /** Get option element ID for aria-activedescendant. */
 const optionId = (index: number): string => `combobox_${props.id}_option_${index}`;
 
 /** Tracks if focus handler just opened the list (to suppress synthetic follow-up click). */
 let focusOpened = false;
+
+// COMPUTED
+
+/** Class of decorative arrow on right. */
+const arrowClass = computed(() => ({ open: isOpen.value }));
+/** ID for the listbox used by aria-controls and aria-activedescendant. */
+const listboxId = computed(() => `combobox-listbox_${props.id || 'default'}`);
+
+// WATCHES
+
+/** If you disable combobox, list of options will close. */
+watch(
+  () => props.disabled,
+  () => {
+    if (props.disabled) {
+      isOpen.value = false;
+      resetInteractionState();
+    }
+  },
+);
+
+// FUNCTIONS
 
 /** Reset interaction state (must be called when any interaction completes). */
 const resetInteractionState = () => {
@@ -101,7 +116,7 @@ const handleLabelFocus = () => {
   if (props.disabled) return;
   openList();
   focusOpened = true;
-  combobox.value?.focus();
+  comboboxRef.value?.focus();
 };
 
 /** Track new pointer interaction: cancel any pending focus-open so click can toggle. */
@@ -109,13 +124,20 @@ const handleMousedown = () => {
   focusOpened = false;
 };
 
-/** Handle focus: always open (handles direct clicks, label clicks, and Tab). */
+/** Handle focus: handles direct clicks, label clicks, and Tab. */
 const handleFocus = () => {
   if (props.disabled) return;
   if (!isOpen.value) {
     openList();
     focusOpened = true;
   }
+};
+
+/** Handle blur. */
+const handleBlur = () => {
+  isOpen.value = false;
+  highlightedIndex.value = -1;
+  resetInteractionState();
 };
 
 /** Handle click: toggle unless focus already opened (suppress synthetic click from label). */
@@ -136,26 +158,7 @@ const handleClick = () => {
 
 };
 
-const handleBlur = () => {
-  isOpen.value = false;
-  highlightedIndex.value = -1;
-  resetInteractionState();
-};
-
-//
-
-/** If you disable combobox, list of options will close. */
-watch(
-  () => props.disabled,
-  () => {
-    if (props.disabled) {
-      isOpen.value = false;
-      resetInteractionState();
-    }
-  },
-);
-
-//
+// KEYBOARD HANDLERS
 
 /**
  * Handle keyboard events for accessibility.
@@ -250,7 +253,7 @@ const showOption = (option: number | string | null): number | string | null => {
     :data-testid="`combobox_${id}`"
     class="combobox"
     :class="{ disabled: disabled, err: invalid }"
-    ref="combobox"
+    ref="comboboxRef"
     role="combobox"
     :aria-expanded="isOpen"
     aria-haspopup="listbox"
@@ -260,8 +263,8 @@ const showOption = (option: number | string | null): number | string | null => {
     :tabindex="disabled ? -1 : 0"
     @mousedown="handleMousedown()"
     @focus="handleFocus()"
-    @click="handleClick()"
     @blur="handleBlur()"
+    @click="handleClick()"
     @keydown="handleKeydown"
   >
     <!-- Hidden button: labelable target for <label for="...">. -->

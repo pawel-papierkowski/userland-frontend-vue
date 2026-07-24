@@ -94,7 +94,7 @@ onClickOutside(pickerRef, () => {
   hidePanel();
 });
 
-// COMPUTATIONS
+// COMPUTED
 
 /** Compute currently displayed time value in time input. */
 const displayTimeValue = computed(() => {
@@ -123,6 +123,12 @@ watch(isClockVisible, (visible) => {
 });
 
 // FUNCTIONS.
+
+/** Handle click. */
+const handleClick = async (viaKeyboard: boolean) => {
+  if (props.disabled) return;
+  toggleTimePickerVisibility(viaKeyboard);
+};
 
 /** Toggle visibility of time picker panel. */
 const toggleTimePickerVisibility = async (viaKeyboard: boolean) => {
@@ -168,6 +174,8 @@ const findViewTime = () => {
   viewHour.value = date.getUTCHours();
   viewMinute.value = date.getUTCMinutes();
 };
+
+//
 
 /** Select hour. */
 const selectHour = (h: number) => {
@@ -242,7 +250,7 @@ const scrollMinuteIntoView = (m: number) => {
 
 // KEYBOARD HANDLERS
 
-/** Handle keyboard on the input (combobox). */
+/** Handle keyboard on the input. */
 const onInputKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return;
 
@@ -417,7 +425,7 @@ const keyPressSelectMinute = () => {
 
 // UTILITIES.
 
-/** Hide panel. Also removes focus. */
+/** Hide panel. Also removes inner focus on hour/minute. */
 const hidePanel = () => {
   isClockVisible.value = false;
   focusedHour.value = null;
@@ -498,7 +506,7 @@ const resolveMinuteClass = (m: number) => {
       :aria-controls="`timepicker_${id}_panel`"
       :aria-label="t('dateTimePicker.placeholder.time')"
       :aria-disabled="disabled || undefined"
-      @click="toggleTimePickerVisibility(false)"
+      @click="handleClick(false)"
       @keydown="onInputKeydown"
     />
 
