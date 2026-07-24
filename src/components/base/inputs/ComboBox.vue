@@ -39,6 +39,7 @@
  * - Null value is supported as option. Example: const enUserStatus: (string|null)[] = [ null, 'PENDING', 'ACTIVE' ];
  */
 import { ref, computed, watch } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -84,6 +85,10 @@ const optionId = (index: number): string => `combobox_${props.id}_option_${index
 /** Tracks if focus handler just opened the list (to suppress synthetic follow-up click). */
 let focusOpened = false;
 
+onClickOutside(comboboxRef, () => {
+  hidePanel();
+});
+
 // COMPUTED
 
 /** Class of decorative arrow on right. */
@@ -106,11 +111,6 @@ watch(
 
 // FUNCTIONS
 
-/** Reset interaction state (must be called when any interaction completes). */
-const resetInteractionState = () => {
-  focusOpened = false;
-};
-
 /** Track new pointer interaction: cancel any pending focus-open so click can toggle. */
 const handleMousedown = () => {
   focusOpened = false;
@@ -123,13 +123,6 @@ const handleFocus = () => {
     openList();
     focusOpened = true;
   }
-};
-
-/** Handle blur. */
-const handleBlur = () => {
-  isOpen.value = false;
-  highlightedIndex.value = -1;
-  resetInteractionState();
 };
 
 /** Handle click: both from normal mouse click and label click. */
@@ -237,6 +230,19 @@ const showOption = (option: number | string | null): number | string | null => {
   return option;
 };
 
+// UTILITIES
+
+/** Reset interaction state (must be called when any interaction completes). */
+const resetInteractionState = () => {
+  focusOpened = false;
+};
+
+/** Hide panel with list of options. */
+const hidePanel = () => {
+  isOpen.value = false;
+  highlightedIndex.value = -1;
+  resetInteractionState();
+};
 </script>
 
 <template>
@@ -254,7 +260,7 @@ const showOption = (option: number | string | null): number | string | null => {
     :tabindex="disabled ? -1 : 0"
     @mousedown="handleMousedown()"
     @focus="handleFocus()"
-    @blur="handleBlur()"
+    @blur="hidePanel()"
     @click="handleClick()"
     @keydown="handleKeydown"
   >

@@ -240,6 +240,38 @@ describe('DateTimePicker', () => {
       // Assert: Calendar panel is now closed.
       expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
+
+    it('closes time panel when tabbing out in time mode', async () => {
+      // Ensure time panel closes when user tabs out of the time picker entirely in time-only mode.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Create the component with time mode.
+      const dateTimePicker = createComponent(null, 'testDt', 'time', false, false, false, false);
+      await nextTick();
+
+      // Act: Click on time input to open clock panel.
+      const timeInput = dateTimePicker.find('#timepicker_testDt');
+      await timeInput.trigger('click');
+      await nextTick();
+
+      // Assert: Clock panel is visible.
+      expect(dateTimePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
+
+      // Act: Simulate Tab out of the picker by dispatching focusout on the picker wrapper
+      // with relatedTarget pointing outside the TimePicker.
+      const pickerTime = dateTimePicker.find('.picker-time');
+      const event = new FocusEvent('focusout', {
+        bubbles: true,
+        relatedTarget: document.body,
+      });
+      pickerTime.element.dispatchEvent(event);
+      await nextTick();
+
+      // Assert: Clock panel is now closed.
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
+    });
   });
 
   // ////////////////////////////////////////////////////////////////////////////

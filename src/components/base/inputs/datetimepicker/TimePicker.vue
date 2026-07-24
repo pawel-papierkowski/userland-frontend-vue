@@ -447,6 +447,17 @@ const keyPressSelectMinute = () => {
 
 // UTILITIES.
 
+/** Flip panel. Used by parent (DateTimePicker) for label clicking. */
+const flipPanel = () => {
+  console.warn('TimePicker.flipPanel() called.');
+  toggleTimePickerVisibility(false);
+};
+
+/** Show panel (if not already visible). */
+const showPanel = () => {
+  if (!isClockVisible.value) toggleTimePickerVisibility(false);
+};
+
 /** Hide panel. Also removes inner focus on hour/minute. */
 const hidePanel = () => {
   isClockVisible.value = false;
@@ -507,13 +518,8 @@ const resolveMinuteClass = (m: number) => {
   };
 };
 
-/** Show panel (if not already visible). Used by parent (DateTimePicker) for label clicking. */
-const showPanel = () => {
-  if (!isClockVisible.value) toggleTimePickerVisibility(false);
-};
-
-/** Expose hidePanel so parent (DateTimePicker) can close this panel. */
-defineExpose({ hidePanel, showPanel });
+/** Expose panel handling so parent (DateTimePicker) can manage panels for subcomponents. */
+defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
@@ -559,7 +565,7 @@ defineExpose({ hidePanel, showPanel });
           class="clock-column"
           ref="hourRef"
           role="listbox"
-          tabindex="0"
+          tabindex="-1"
           :aria-label="t('dateTimePicker.hour')"
           :aria-activedescendant="hourActiveDesc"
           @keydown="onHourKeydown"
@@ -587,7 +593,7 @@ defineExpose({ hidePanel, showPanel });
           class="clock-column"
           ref="minuteRef"
           role="listbox"
-          tabindex="0"
+          tabindex="-1"
           :aria-label="t('dateTimePicker.minute')"
           :aria-activedescendant="minuteActiveDesc"
           @keydown="onMinuteKeydown"

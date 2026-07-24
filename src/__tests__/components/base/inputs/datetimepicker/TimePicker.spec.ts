@@ -1310,8 +1310,8 @@ describe('TimePicker', () => {
       expect(hourColumn.attributes('aria-activedescendant')).toBeUndefined();
       expect(minuteColumn.attributes('aria-activedescendant')).toBeUndefined();
 
-      // Act: Press tab button. Note focus will appear, but we will NOT switch to minutes column.
-      await hourColumn.trigger('keydown', { key: 'Tab' });
+      // Act: Press right arrow button. Note focus will appear, but we will NOT switch to minutes column.
+      await hourColumn.trigger('keydown', { key: 'ArrowRight' });
       await nextTick();
 
       // Assert: Focus present on hours column.

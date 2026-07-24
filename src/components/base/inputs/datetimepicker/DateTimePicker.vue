@@ -88,23 +88,17 @@ const handleGeneralFocusIn = (e: FocusEvent) => {
 
 /**
  * Handle click from the hidden button via <label> click.
- * Opens the correct panel directly, then routes focus to the input.
+ * Opens the correct panel directly.
  */
 const handleLabelClick = () => {
   if (props.disabled) return;
 
-  console.warn('handleLabelClick() called');
-
   if (props.mode === 'time') {
-    // For mode 'time', open clock panel and focus time input.
+    // For mode 'time', open clock panel.
     timePickerRef.value?.showPanel();
-    const timeInput = document.getElementById(`timepicker_${timeId}`);
-    timeInput?.focus();
   } else {
-    // For mode 'date' and 'datetime', open calendar panel and focus date input.
+    // For mode 'date' and 'datetime', open calendar panel.
     datePickerRef.value?.showPanel();
-    const dateInput = document.getElementById(`datepicker_${dateId}`);
-    dateInput?.focus();
   }
 };
 </script>

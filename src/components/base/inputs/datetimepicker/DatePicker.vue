@@ -595,7 +595,18 @@ const keyPressSelectDate = () => {
 
 // UTILITIES.
 
-/** Hide panel. Also removes focus. */
+/** Flip panel. Used by parent (DateTimePicker) for label clicking. */
+const flipPanel = () => {
+  console.warn('DatePicker.flipPanel() called.');
+  toggleDatePickerVisibility(false);
+};
+
+/** Show panel (if not already visible). */
+const showPanel = () => {
+  if (!isCalendarVisible.value) toggleDatePickerVisibility(false);
+};
+
+/** Hide panel. Also removes inner focus on date. */
 const hidePanel = () => {
   isCalendarVisible.value = false;
   focusedDate.value = null;
@@ -619,13 +630,8 @@ const hidePanelAndFocusNext = () => {
   });
 };
 
-/** Show panel (if not already visible). Used by parent (DateTimePicker) for label clicking. */
-const showPanel = () => {
-  if (!isCalendarVisible.value) toggleDatePickerVisibility(false);
-};
-
-/** Expose hidePanel so parent (DateTimePicker) can close this panel. */
-defineExpose({ hidePanel, showPanel });
+/** Expose panel handling so parent (DateTimePicker) can manage panels for subcomponents. */
+defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
