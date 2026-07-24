@@ -170,7 +170,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is visible.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Focus the time input (simulates Tab from date picker).
       const timeInput = dateTimePicker.find('#timepicker_ttestDt');
@@ -178,7 +178,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is now closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('closes time panel when date input receives focus', async () => {
@@ -197,7 +197,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Clock panel is visible.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Act: Focus the date input (simulates Tab from time picker).
       const dateInput = dateTimePicker.find('#datepicker_testDt');
@@ -205,7 +205,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Clock panel is now closed.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('closes date panel when tabbing out in date mode', async () => {
@@ -225,7 +225,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is visible.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Simulate Tab out of the picker by dispatching focusout on the picker wrapper
       // with relatedTarget pointing outside the DatePicker.
@@ -238,7 +238,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is now closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
   });
 
@@ -274,7 +274,7 @@ describe('DateTimePicker', () => {
       const dateInput = wrapper.find('#datepicker_testDt');
 
       // Assert: Panel is initially closed.
-      expect(wrapper.find('.calendar-container').exists()).toBe(false);
+      expect(wrapper.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the previous field.
       await wrapper.find('input').trigger('focus');
@@ -285,7 +285,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is now open.
-      expect(wrapper.find('.calendar-container').exists()).toBe(true);
+      expect(wrapper.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('opens clock panel when tabbing to time input in datetime mode', async () => {
@@ -315,7 +315,7 @@ describe('DateTimePicker', () => {
       const timeInput = wrapper.find('#timepicker_ttestDt');
 
       // Assert: Panel is initially closed.
-      expect(wrapper.find('.clock-container').exists()).toBe(false);
+      expect(wrapper.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the previous field.
       await wrapper.find('input').trigger('focus');
@@ -326,7 +326,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Clock panel is now open.
-      expect(wrapper.find('.clock-container').exists()).toBe(true);
+      expect(wrapper.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('opens calendar panel when tabbing to date input in date mode', async () => {
@@ -357,7 +357,7 @@ describe('DateTimePicker', () => {
       const dateInput = wrapper.find('#datepicker_testDt');
 
       // Assert: Panel is initially closed.
-      expect(wrapper.find('.calendar-container').exists()).toBe(false);
+      expect(wrapper.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the previous field.
       await wrapper.find('input').trigger('focus');
@@ -368,7 +368,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is now open.
-      expect(wrapper.find('.calendar-container').exists()).toBe(true);
+      expect(wrapper.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('opens clock panel when tabbing to time input in time mode', async () => {
@@ -399,7 +399,7 @@ describe('DateTimePicker', () => {
       const timeInput = wrapper.find('#timepicker_testDt');
 
       // Assert: Panel is initially closed.
-      expect(wrapper.find('.clock-container').exists()).toBe(false);
+      expect(wrapper.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the previous field.
       await wrapper.find('input').trigger('focus');
@@ -410,7 +410,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Clock panel is now open.
-      expect(wrapper.find('.clock-container').exists()).toBe(true);
+      expect(wrapper.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('click on date input still toggles panel', async () => {
@@ -427,21 +427,21 @@ describe('DateTimePicker', () => {
       const dateInput = dateTimePicker.find('#datepicker_testDt');
 
       // Assert: Panel is initially closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Act: Click on date input (should open).
       await dateInput.trigger('click');
       await nextTick();
 
       // Assert: Calendar panel is now open.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Click on date input again (should close).
       await dateInput.trigger('click');
       await nextTick();
 
       // Assert: Calendar panel is now closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('click on time input still toggles panel', async () => {
@@ -458,21 +458,21 @@ describe('DateTimePicker', () => {
       const timeInput = dateTimePicker.find('#timepicker_ttestDt');
 
       // Assert: Panel is initially closed.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Act: Click on time input (should open).
       await timeInput.trigger('click');
       await nextTick();
 
       // Assert: Clock panel is now open.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Act: Click on time input again (should close).
       await timeInput.trigger('click');
       await nextTick();
 
       // Assert: Clock panel is now closed.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
   });
 
@@ -480,6 +480,50 @@ describe('DateTimePicker', () => {
   // Label clicking tests
 
   describe('label clicking', () => {
+    it('opens calendar panel when paired <label> is clicked', async () => {
+      // Verifies that clicking a <label for="id"> opens the calendar panel.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testDtp">Test Label</label>
+            <DateTimePicker
+              id="testDtp"
+              mode="datetime"
+              v-model="value"
+            />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
+      await nextTick();
+
+      const dateTimePicker = wrapper.findComponent(DateTimePicker);
+
+      // Assert: Panels are initially closed.
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
+
+      // Act: Click the <label>. The browser focuses the hidden <button> (labelable),
+      // which triggers handleLabelFocus → opens the panel.
+      await wrapper.find('label').trigger('click');
+      await nextTick();
+
+      // Assert: Correct panel is now visible.
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
+    });
+
     it('opens calendar panel via hidden button focus in date mode', async () => {
       // Ensures that when the hidden button receives focus (as the browser does on <label> click),
       // it opens the calendar panel. Uses createComponent (not wrapper template) for simplicity.
@@ -492,7 +536,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Panel is initially closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
       const hiddenButton = dateTimePicker.find('#testDt');
@@ -501,7 +545,7 @@ describe('DateTimePicker', () => {
       await nextTick();
 
       // Assert: Calendar panel is now open.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('opens clock panel via hidden button focus in time mode', async () => {
@@ -521,14 +565,14 @@ describe('DateTimePicker', () => {
       expect(hiddenButton.element.tagName).toBe('BUTTON');
 
       // Assert: Panel is initially closed.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
       await hiddenButton.trigger('focus');
       await nextTick();
 
       // Assert: Clock panel is now open.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('opens calendar panel via hidden button focus in datetime mode', async () => {
@@ -548,17 +592,17 @@ describe('DateTimePicker', () => {
       expect(hiddenButton.element.tagName).toBe('BUTTON');
 
       // Assert: Panels are initially closed.
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(false);
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
       await hiddenButton.trigger('focus');
       await nextTick();
 
       // Assert: Calendar panel is now open (date is the primary panel in datetime mode).
-      expect(dateTimePicker.find('.calendar-container').exists()).toBe(true);
+      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
       // Assert: Clock panel remains closed.
-      expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
+      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
   });
 });

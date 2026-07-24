@@ -3,9 +3,9 @@
 import { reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
@@ -16,7 +16,6 @@ import type { UserEmailChangeLinkForm, UserEmailChangeLinkReq } from '@/code/dat
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
-const log = useLogger();
 const router = useRouter();
 const { t } = useI18n();
 
@@ -88,7 +87,7 @@ const showMessage = () => {
     'user.emailChangeStart.msg.success.content',
     defDuration * 2,
   );
-  log.debug('Successfully sent email change request.');
+  logger.debug('Successfully sent email change request.');
 };
 
 /** Clear entire form. */

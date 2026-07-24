@@ -3,9 +3,9 @@
 import { onMounted, reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
@@ -17,7 +17,6 @@ import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/fe
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
-const log = useLogger();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -104,7 +103,7 @@ const showMessage = () => {
     'user.passwordReset.msg.success.content',
     defDuration * 2,
   );
-  log.debug('Successfully set new password.');
+  logger.debug('Successfully set new password.');
 };
 
 /** Clear entire form. */

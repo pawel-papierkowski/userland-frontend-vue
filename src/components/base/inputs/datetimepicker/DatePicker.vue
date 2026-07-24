@@ -656,7 +656,7 @@ defineExpose({ hidePanel, showPanel });
 
     <!-- Date picker: calendar panel. -->
     <div
-      v-if="isCalendarVisible"
+      v-show="isCalendarVisible"
       :id="`datepicker_${id}_panel`"
       class="calendar-container"
       ref="calendarContainerRef"

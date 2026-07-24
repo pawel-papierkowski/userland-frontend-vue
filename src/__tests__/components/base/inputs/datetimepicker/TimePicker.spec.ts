@@ -128,7 +128,7 @@ describe('TimePicker', () => {
       expect(timePicker.find('.picker-input-time').attributes('value')).toBeUndefined();
 
       // Assert: Ensure panel is not present.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Assert: Model has correct value.
       const model = timePicker.props('modelValue') as Date | null;
@@ -152,7 +152,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Assert: TimePicker has correct data-testid attribute.
       expect(timePicker.find('input').attributes('data-testid')).toBe('timepicker_someTimePicker');
@@ -178,7 +178,7 @@ describe('TimePicker', () => {
       expect(timePicker.find('.picker-input-time').attributes('value')).toContain('🕜 17:50');
 
       // Assert: Ensure panel is not present.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
       // Assert: Model has correct value.
       const model = timePicker.props('modelValue') as Date | null;
@@ -206,7 +206,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Assert: Panel shows scrollers with hours and minutes. Both current and selected time is marked.
       // Focus ring is on hour column (the active column on open).
@@ -343,7 +343,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is NOT present, as component is disabled.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('closes panel when disabled while open', async () => {
@@ -360,14 +360,14 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is opened.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Act: Set disabled to true.
       await timePicker.setProps({ disabled: true });
       await nextTick();
 
       // Assert: Panel is now closed.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('is invalid', async () => {
@@ -679,7 +679,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('Space on input opens the panel', async () => {
@@ -695,7 +695,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('ArrowDown on input opens the panel', async () => {
@@ -711,7 +711,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
     });
 
     it('Escape on input closes the panel', async () => {
@@ -725,14 +725,14 @@ describe('TimePicker', () => {
       // Arrange: Open the panel first.
       await input.trigger('click');
       await nextTick();
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Act: Press Escape on the input.
       await input.trigger('keydown', { key: 'Escape' });
       await nextTick();
 
       // Assert: Panel is now closed.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('initial focused class reflects the selected time', async () => {
@@ -1048,7 +1048,7 @@ describe('TimePicker', () => {
       expect(result).toBeNull();
 
       // Assert: Panel is closed after deselection.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Enter on same minute with allowNull closes panel', async () => {
@@ -1084,7 +1084,7 @@ describe('TimePicker', () => {
       expect(result.getUTCMinutes()).toBe(30);
 
       // Assert: Panel is closed.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Space on minute selects time and closes panel', async () => {
@@ -1113,7 +1113,7 @@ describe('TimePicker', () => {
       expect(emitted).toHaveLength(1);
       const result = emitted?.at(-1)![0] as Date;
       expect(result.getUTCMinutes()).toBe(45);
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Enter on minute selects time and closes panel', async () => {
@@ -1155,7 +1155,7 @@ describe('TimePicker', () => {
       const result = emitted?.at(-1)![0] as Date;
       expect(result.getUTCHours()).toBe(8);
       expect(result.getUTCMinutes()).toBe(33);
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Escape in hour column closes panel', async () => {
@@ -1166,7 +1166,7 @@ describe('TimePicker', () => {
       const timePicker = createComponent(null, 'test', false, false, false);
       await timePicker.find('.picker-input-time').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
-      expect(timePicker.find('.clock-container').exists()).toBe(true);
+      expect(timePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
 
       // Act: Press Escape in the hour column.
       const hourColumn = timePicker.findAll('.clock-column').at(0)!;
@@ -1174,7 +1174,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is closed.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Escape in minute column closes panel', async () => {
@@ -1192,7 +1192,7 @@ describe('TimePicker', () => {
       await nextTick();
 
       // Assert: Panel is closed.
-      expect(timePicker.find('.clock-container').exists()).toBe(false);
+      expect(timePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
     it('Home and End on hour column jump to first and last hour', async () => {

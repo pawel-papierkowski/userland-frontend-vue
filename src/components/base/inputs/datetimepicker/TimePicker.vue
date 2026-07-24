@@ -538,7 +538,7 @@ defineExpose({ hidePanel, showPanel });
 
     <!-- Time picker: clock panel. -->
     <div
-      v-if="isClockVisible"
+      v-show="isClockVisible"
       :id="`timepicker_${id}_panel`"
       class="clock-container"
       ref="clockContainerRef"

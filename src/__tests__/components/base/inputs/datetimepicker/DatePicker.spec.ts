@@ -164,7 +164,7 @@ describe('DatePicker', () => {
       expect(datePicker.find('.picker-input-date').attributes('value')).toBeUndefined();
 
       // Assert: Ensure panel is not present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Assert: Model has correct value.
       const model = datePicker.props('modelValue') as Date | null;
@@ -188,7 +188,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Arrange: Data for next assert.
       const calendarState: { day: string; class: string[] }[] = [
@@ -256,7 +256,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Arrange: Data for next assert. Note last week of December (simultaneously first week of January) is 53 here.
       const weekNums1: string[] = ['49', '50', '51', '52', '53', '2'];
@@ -289,7 +289,7 @@ describe('DatePicker', () => {
       expect(datePicker.find('.picker-input-date').attributes('value')).toBe('📅 2026-05-22');
 
       // Assert: Ensure panel is not present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
 
       // Assert: Model has correct value.
       const model = datePicker.props('modelValue') as Date | null;
@@ -317,7 +317,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Arrange: Data for next assert.
       const calendarState: { day: string; class: string[] }[] = [
@@ -585,7 +585,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is NOT present, as component is disabled.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('closes panel when disabled while open', async () => {
@@ -602,14 +602,14 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Set disabled to true.
       await datePicker.setProps({ disabled: true });
       await nextTick();
 
       // Assert: Panel is now closed.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('is invalid', async () => {
@@ -630,7 +630,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Ensure panel is present.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Change year. Now it is 2027-05.
       await datePicker.find('[data-testid="datepicker__yearPlus"]').trigger('click');
@@ -873,7 +873,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('Space on input opens the panel', async () => {
@@ -889,7 +889,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('ArrowDown on input opens the panel', async () => {
@@ -905,7 +905,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Panel is now visible.
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('Escape on input closes the panel', async () => {
@@ -919,14 +919,14 @@ describe('DatePicker', () => {
       // Arrange: Open the panel first.
       await input.trigger('click');
       await nextTick();
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Press Escape on the input.
       await input.trigger('keydown', { key: 'Escape' });
       await nextTick();
 
       // Assert: Panel is now closed.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('initial focused class reflects the selected date on keyboard open', async () => {
@@ -1167,7 +1167,7 @@ describe('DatePicker', () => {
       expect(result.getUTCFullYear()).toBe(2026);
       expect(result.getUTCMonth()).toBe(5); // reminder: zero-indexed
       expect(result.getUTCDate()).toBe(5);
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('Space selects focused date and closes panel', async () => {
@@ -1197,7 +1197,7 @@ describe('DatePicker', () => {
       expect(result.getUTCFullYear()).toBe(2026);
       expect(result.getUTCMonth()).toBe(5); // reminder: zero-indexed
       expect(result.getUTCDate()).toBe(8);
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('Enter on already-selected date with allowNull deselects and closes', async () => {
@@ -1227,7 +1227,7 @@ describe('DatePicker', () => {
       expect(result).toBeNull();
 
       // Assert: Panel is closed after deselection.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('Enter on already-selected date with allowNull=false does nothing', async () => {
@@ -1253,7 +1253,7 @@ describe('DatePicker', () => {
       // Assert: No new emissions generated and panel stays open.
       const emitted = datePicker.emitted('update:modelValue');
       expect(emitted).toBeUndefined();
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
     it('Escape in grid closes panel', async () => {
@@ -1264,7 +1264,7 @@ describe('DatePicker', () => {
       const datePicker = createComponent(null, 'test', false, false, false, false);
       await datePicker.find('.picker-input-date').trigger('keydown', { key: 'ArrowDown' });
       await nextTick();
-      expect(datePicker.find('.calendar-container').exists()).toBe(true);
+      expect(datePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
 
       // Act: Press Escape in the grid.
       const grid = datePicker.find('.calendar-grid');
@@ -1272,7 +1272,7 @@ describe('DatePicker', () => {
       await nextTick();
 
       // Assert: Panel is closed.
-      expect(datePicker.find('.calendar-container').exists()).toBe(false);
+      expect(datePicker.find('.calendar-container').attributes('style')).toContain('display: none');
     });
 
     it('click-open panel has no focus until first key press', async () => {

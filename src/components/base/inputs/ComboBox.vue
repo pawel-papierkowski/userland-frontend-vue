@@ -41,6 +41,8 @@
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
+
 const { t } = useI18n();
 
 /** Currently selected option. Null means nothing is selected. */
@@ -114,6 +116,9 @@ const resetInteractionState = () => {
 /** Forward focus from the hidden button (label target) to the visible combobox root. */
 const handleLabelFocus = () => {
   if (props.disabled) return;
+
+  logger.debug('handleLabelFocus()'); // temporary for debug
+
   openList();
   focusOpened = true;
   comboboxRef.value?.focus();
@@ -143,6 +148,7 @@ const handleBlur = () => {
 /** Handle click: toggle unless focus already opened (suppress synthetic click from label). */
 const handleClick = () => {
   if (props.disabled) return;
+  logger.debug('handleClick()'); // temporary for debug
 
   if (focusOpened) {
     // Focus already opened the list (label or Tab). Suppress any synthetic click.
@@ -270,11 +276,12 @@ const showOption = (option: number | string | null): number | string | null => {
     <!-- Hidden button: labelable target for <label for="...">. -->
     <button
       :id="id"
-      class="combobox-label-target"
+      class="hidden-label-button"
       tabindex="-1"
       aria-hidden="true"
       @focus="handleLabelFocus()"
     ></button>
+
     <div class="combobox-selected">
       <span class="combobox-selected-text">{{ showOption(selOption) }}</span>
       <span class="combobox-arrow" :class="arrowClass"></span>
@@ -396,18 +403,6 @@ const showOption = (option: number | string | null): number | string | null => {
 }
 .combobox.err .combobox-options {
   background: var(--combobox-option-err-background);
-}
-
-/** Hidden button: label target (labelable element for <label for="...">). */
-.combobox-label-target {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
 }
 
 .combobox-option {

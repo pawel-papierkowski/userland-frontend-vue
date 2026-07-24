@@ -3,7 +3,7 @@
 import { reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
+import { logger } from '@/code/utils/logger.ts';
 import { useI18n } from 'vue-i18n';
 
 import apiLogging from '@/services/api-logging.ts';
@@ -16,7 +16,6 @@ import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
-const log = useLogger();
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
@@ -102,17 +101,17 @@ const showMessage = (success: boolean) => {
   if (success) {
     if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
       AppMessager.infoT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
-      log.debug('Successfully logged in as admin user "', form.email, '".');
+      logger.debug('Successfully logged in as admin user "', form.email, '".');
       return;
     }
 
     AppMessager.infoT('user.login.msg.success.title', 'user.login.msg.success.content');
-    log.debug('Successfully logged in as user "', form.email, '".');
+    logger.debug('Successfully logged in as user "', form.email, '".');
     return;
   }
 
   AppMessager.failureT('user.login.msg.error.title', 'user.login.msg.error.content');
-  log.error('Login failed!');
+  logger.error('Login failed!');
 };
 
 /** Clear entire form. */

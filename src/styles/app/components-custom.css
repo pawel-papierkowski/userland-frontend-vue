@@ -1,5 +1,17 @@
 /*** Styles specific to this application: custom components. ***/
 
+/** Hidden button target for <label> clicking. */
+.hidden-label-button {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 /* Note: most custom components has classes in their scoped style section. */
 
 /* Spinner. */

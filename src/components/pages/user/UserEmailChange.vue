@@ -5,9 +5,9 @@
  */
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
@@ -18,7 +18,6 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
-const log = useLogger();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -58,7 +57,7 @@ const callEmailChangeApi = async () => {
     const payload: UserEmailChangeReq = { token: tokenStr };
     await backendApiUser.emailChangeConfirm(payload);
 
-    log.debug('Changed email address using token:', tokenStr);
+    logger.debug('Changed email address using token:', tokenStr);
     AppMessager.successT('user.emailChange.msg.success.title', 'user.emailChange.msg.success.content', defDuration * 2);
 
     // Force user to log in again. Why? Previous token stopped working, since email serves as username in both JWT and

@@ -72,7 +72,7 @@ const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null);
  * Handle focus moving between the two pickers.
  * When one input receives focus, the other picker's panel is closed.
  */
-const handleGeneralFocusin = (e: FocusEvent) => {
+const handleGeneralFocusIn = (e: FocusEvent) => {
   const target = e.target as HTMLElement;
 
   // If time input received focus, close date panel.
@@ -89,16 +89,18 @@ const handleGeneralFocusin = (e: FocusEvent) => {
  * Handle focus arriving on the hidden button via <label> click.
  * Opens the correct panel directly, then routes focus to the input.
  */
-const handleHiddenButtonFocus = () => {
+const handleLabelFocus = () => {
   if (props.disabled) return;
 
+  console.warn('handleLabelFocus() called');
+  
   if (props.mode === 'time') {
-    // For 'time', open clock panel and focus time input.
+    // For mode 'time', open clock panel and focus time input.
     timePickerRef.value?.showPanel();
     const timeInput = document.getElementById(`timepicker_${timeId}`);
     timeInput?.focus();
   } else {
-    // For 'date' and 'datetime', open calendar panel and focus date input.
+    // For mode 'date' and 'datetime', open calendar panel and focus date input.
     datePickerRef.value?.showPanel();
     const dateInput = document.getElementById(`datepicker_${dateId}`);
     dateInput?.focus();
@@ -107,13 +109,16 @@ const handleHiddenButtonFocus = () => {
 </script>
 
 <template>
-  <div class="picker-general" @focusin="handleGeneralFocusin">
+  <div class="picker-general" @focusin="handleGeneralFocusIn">
+    <!-- Hidden button: labelable target for <label for="...">. -->
     <button
       :id="id"
-      class="hidden-button"
+      class="hidden-label-button"
       tabindex="-1"
-      @focus="handleHiddenButtonFocus"
+      aria-hidden="true"
+      @focus="handleLabelFocus()"
     ></button>
+
     <DatePicker
       v-if="mode === 'datetime' || mode === 'date'"
       ref="datePickerRef"
@@ -145,18 +150,5 @@ const handleHiddenButtonFocus = () => {
   flex-direction: row;
   gap: 0.2em;
   user-select: none;
-}
-
-/** Hidden button target for <label> clicking. */
-.hidden-button {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  padding: 0;
-  border: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
 }
 </style>

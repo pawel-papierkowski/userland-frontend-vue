@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { useLogger } from 'vue-logger-plugin';
+import { logger } from '@/code/utils/logger.ts';
 
 import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -12,7 +12,6 @@ import type { TestAreaMessageForm } from '@/code/data/other/test-area.ts';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
-const log = useLogger();
 const { t } = useI18n();
 
 const form: Ref<TestAreaMessageForm> = ref({
@@ -91,13 +90,13 @@ const logBrowser = (level: EnMessageLevel) => {
 const logVue = (level: EnMessageLevel) => {
   switch (level) {
     case EnMessageLevel.Info:
-      log.info('Log info data via browser console.');
+      logger.info('Log info data via browser console.');
       break;
     case EnMessageLevel.Warning:
-      log.warn('Log warn data via browser console.');
+      logger.warn('Log warn data via browser console.');
       break;
     case EnMessageLevel.Error:
-      log.error('Log error data via browser console.');
+      logger.error('Log error data via browser console.');
       break;
   }
 };

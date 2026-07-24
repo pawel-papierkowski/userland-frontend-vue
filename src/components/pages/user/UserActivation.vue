@@ -2,9 +2,9 @@
 /** Standalone page for activating account. Accessed via link from email. */
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { TokenActivationReq } from '@/code/data/features/user/user-type';
@@ -13,7 +13,6 @@ import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
-const log = useLogger();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -35,7 +34,7 @@ const callActivationApi = async () => {
     const payload: TokenActivationReq = { token: tokenStr, frontend: 'VUE' };
     await backendApiUser.activate(payload);
 
-    log.debug('Activated user using token:', tokenStr);
+    logger.debug('Activated user using token:', tokenStr);
     AppMessager.successT('user.activation.msg.success.title', 'user.activation.msg.success.content');
 
     router.push({ name: 'login' }); // go straight to login page

@@ -3,9 +3,9 @@
 import { reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
@@ -17,7 +17,6 @@ import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/use
 import TextBox from '@/components/base/inputs/TextBox.vue';
 import CheckBox from '@/components/base/inputs/CheckBox.vue';
 
-const log = useLogger();
 const router = useRouter();
 const { t, locale } = useI18n();
 
@@ -96,7 +95,7 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
 /** Show success message. */
 const showMessage = () => {
   AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', defDuration * 2);
-  log.debug('Registered user using form data:', { ...form });
+  logger.debug('Registered user using form data:', { ...form });
 };
 
 /** Go to login page. */

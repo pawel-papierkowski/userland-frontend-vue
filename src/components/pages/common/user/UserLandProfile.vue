@@ -3,11 +3,11 @@
 import { onMounted, reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
 import { useLoginStore } from '@/stores/login.ts';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
@@ -19,7 +19,6 @@ import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
 
-const log = useLogger();
 const router = useRouter();
 const route = useRoute();
 const { t, locale } = useI18n();
@@ -105,12 +104,12 @@ const updateLocalState = async (editReq: UserEditReq) => {
   const loginStore = useLoginStore();
   if (loginStore.loginState.username !== editReq.username) {
     try {
-      log.debug(
+      logger.debug(
         `Profile update: prolong for local state update. Name in form: ${editReq.username}, name in store: ${loginStore.loginState.username}.`,
       );
       await AppLoginer.prolongSilently();
     } catch (error) {
-      log.error(error, 'Failed to prolong.');
+      logger.error(error, 'Failed to prolong.');
     }
   }
 };
@@ -158,7 +157,7 @@ const handleAccountDelete = async () => {
 /** Show success message. */
 const showMessage = () => {
   AppMessager.successT('user.profile.msg.success.title', 'user.profile.msg.success.content');
-  log.debug('Successfully updated user data.');
+  logger.debug('Successfully updated user data.');
 };
 
 /** Clear entire form. */

@@ -4,7 +4,6 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
-import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -32,7 +31,7 @@ vi.mock('vue-router', () => ({
 function createComponent() {
   return mount(UserLandLogin, {
     global: {
-      plugins: [logger, pinia, i18n],
+      plugins: [pinia, i18n],
     },
   });
 }

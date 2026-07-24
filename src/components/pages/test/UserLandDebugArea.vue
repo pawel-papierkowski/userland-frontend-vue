@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /** Page that provides various debug information. */
 import { ref } from 'vue';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
 import { useLoginStore } from '@/stores/login.ts';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiCheck from '@/services/features/api-checks.ts';
 
@@ -13,7 +13,6 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 
 const loginStore = useLoginStore();
-const log = useLogger();
 const { t } = useI18n();
 
 /** True if option call is in progress, otherwise false. Used to disable option buttons. */
@@ -28,7 +27,7 @@ const callCheckAlive = async () => {
     await backendApiCheck.alive(); // API CALL
 
     AppMessager.successT('debugArea.checks.alive.msg.success.title', 'debugArea.checks.alive.msg.success.content');
-    log.debug('Called /api/checks/alive successfully.');
+    logger.debug('Called /api/checks/alive successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.alive.msg.error.title', 'debugArea.checks.alive.msg.error.content');
     apiLogging.logError(error, 'Failed to call /api/checks/alive!');
@@ -44,7 +43,7 @@ const callCheckLogged = async () => {
     await backendApiCheck.mustBeLogged(); // API CALL
 
     AppMessager.successT('debugArea.checks.logged.msg.success.title', 'debugArea.checks.logged.msg.success.content');
-    log.debug('Called /api/checks/must-be-logged successfully.');
+    logger.debug('Called /api/checks/must-be-logged successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.logged.msg.error.title', 'debugArea.checks.logged.msg.error.content');
     apiLogging.logError(error, 'Failed to call /api/checks/must-be-logged!');
@@ -60,7 +59,7 @@ const callCheckAdmin = async () => {
     await backendApiCheck.mustBeAdmin(); // API CALL
 
     AppMessager.successT('debugArea.checks.admin.msg.success.title', 'debugArea.checks.admin.msg.success.content');
-    log.debug('Called /api/checks/must-be-admin successfully.');
+    logger.debug('Called /api/checks/must-be-admin successfully.');
   } catch (error) {
     AppMessager.errorT(error, 'debugArea.checks.admin.msg.error.title', 'debugArea.checks.admin.msg.error.content');
     apiLogging.logError(error, 'Failed to call /api/checks/must-be-admin!');
@@ -79,7 +78,7 @@ const callCheckException = async () => {
       'debugArea.checks.exception.msg.success.title',
       'debugArea.checks.exception.msg.success.content',
     );
-    log.debug('Called /api/checks/exception successfully.');
+    logger.debug('Called /api/checks/exception successfully.');
   } catch (error) {
     AppMessager.errorT(
       error,
@@ -103,13 +102,13 @@ const callProlong = async () => {
         'debugArea.options.prolong.msg.success.title',
         'debugArea.options.prolong.msg.success.content',
       );
-      log.debug('Prolonged user session successfully. New token: ' + jwt);
+      logger.debug('Prolonged user session successfully. New token: ' + jwt);
     } else {
       AppMessager.failureT(
         'debugArea.options.prolong.msg.failure.title',
         'debugArea.options.prolong.msg.failure.content',
       );
-      log.error('Prolong failed! Used token: ' + jwt);
+      logger.error('Prolong failed! Used token: ' + jwt);
     }
   } catch (error) {
     AppMessager.errorT(

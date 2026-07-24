@@ -5,9 +5,9 @@
  */
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useLogger } from 'vue-logger-plugin';
 import { useI18n } from 'vue-i18n';
 
+import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { defDuration } from '@/stores/messages.ts';
@@ -17,7 +17,6 @@ import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 
-const log = useLogger();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
@@ -54,7 +53,7 @@ const handleAccountDeletion = async () => {
     const payload: UserAccountDeleteReq = { token: tokenStr };
     await backendApiUser.accountDeleteConfirm(payload);
 
-    log.debug('Deleted user account using token:', tokenStr);
+    logger.debug('Deleted user account using token:', tokenStr);
     AppMessager.successT(
       'user.accountDelete.msg.success.title',
       'user.accountDelete.msg.success.content',
