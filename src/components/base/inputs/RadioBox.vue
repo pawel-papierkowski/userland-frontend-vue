@@ -5,7 +5,7 @@
  * - Accept number (so also enums), string or null (not set) value.
  * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
- * - Keyboard navigation via arrows (automatically selects option). Enter/space moves to next component.
+ * - Keyboard navigation supported via arrows (automatically selects option). Enter/space moves to next component.
  * - Supports WAI-ARIA.
  *
  * Models:

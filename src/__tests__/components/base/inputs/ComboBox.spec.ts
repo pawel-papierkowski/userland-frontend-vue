@@ -219,8 +219,8 @@ describe('ComboBox', () => {
       // Assert: Options are initially hidden.
       expect(comboBox.find('.combobox-options').attributes('style')).toContain('display: none');
 
-      // Act: Click the <label>. The browser focuses the hidden <button> (labelable),
-      // which triggers handleLabelFocus → opens the list.
+      // Act: Click the <label>. The browser clicks on the hidden <button> (labelable),
+      // which triggers handleClick → opens the list.
       await wrapper.find('label').trigger('click');
       await nextTick();
 

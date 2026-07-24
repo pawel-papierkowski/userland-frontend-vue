@@ -7,7 +7,7 @@
  * - Can disable or mark as invalid. You also can constraint selectable dates to specified min/max range.
  * - Accept null (not set) value.
  * - Input field is not editable. You set value via calendar panel.
- * - Keyboard navigation via arrows (open panel or change day/month), enter/space (pick date) and esc (close panel).
+ * - Keyboard navigation supported via arrows (open panel or change day/month), enter/space (pick date) and esc (close panel).
  * - Supports WAI-ARIA.
  *
  * Models:

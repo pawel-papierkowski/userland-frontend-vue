@@ -7,7 +7,8 @@
  * - Can disable or mark as invalid.
  * - Accept null (not set) value.
  * - Input fields are not editable. You set value via picker panels.
- * - Keyboard navigation supported.
+ * - Keyboard navigation supported (moving between subcomponents).
+ * - Supports <label>.
  * - Supports WAI-ARIA.
  *
  * Models:
@@ -24,6 +25,7 @@
  * - dateTimeMax - If not null, defines latest allowed date. Optional, default is null.
  */
 import { ref } from 'vue';
+
 import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
@@ -63,7 +65,6 @@ const props = withDefaults(
 const dateId = `${props.id}`;
 const timeId = props.mode === 'datetime' ? `t${props.id}` : `${props.id}`;
 
-//
 // References to child components, used for cross-panel close coordination.
 const datePickerRef = ref<InstanceType<typeof DatePicker> | null>(null);
 const timePickerRef = ref<InstanceType<typeof TimePicker> | null>(null);
@@ -86,14 +87,14 @@ const handleGeneralFocusIn = (e: FocusEvent) => {
 };
 
 /**
- * Handle focus arriving on the hidden button via <label> click.
+ * Handle click from the hidden button via <label> click.
  * Opens the correct panel directly, then routes focus to the input.
  */
-const handleLabelFocus = () => {
+const handleLabelClick = () => {
   if (props.disabled) return;
 
-  console.warn('handleLabelFocus() called');
-  
+  console.warn('handleLabelClick() called');
+
   if (props.mode === 'time') {
     // For mode 'time', open clock panel and focus time input.
     timePickerRef.value?.showPanel();
@@ -109,14 +110,17 @@ const handleLabelFocus = () => {
 </script>
 
 <template>
-  <div class="picker-general" @focusin="handleGeneralFocusIn">
+  <div
+    class="picker-general"
+    @focusin="handleGeneralFocusIn"
+  >
     <!-- Hidden button: labelable target for <label for="...">. -->
     <button
       :id="id"
       class="hidden-label-button"
       tabindex="-1"
       aria-hidden="true"
-      @focus="handleLabelFocus()"
+      @click="handleLabelClick()"
     ></button>
 
     <DatePicker

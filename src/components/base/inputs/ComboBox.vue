@@ -20,7 +20,7 @@
  * - You provide list of options. Can use null value as option.
  * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
- * - Keyboard navigation via arrows. Enter/space selects option and closes list.
+ * - Keyboard navigation supported via arrows. Enter/space selects option and closes list.
  * - Supports <label>.
  * - Supports WAI-ARIA.
  *
@@ -40,8 +40,6 @@
  */
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-
-import { logger } from '@/code/utils/logger.ts';
 
 const { t } = useI18n();
 
@@ -113,17 +111,6 @@ const resetInteractionState = () => {
   focusOpened = false;
 };
 
-/** Forward focus from the hidden button (label target) to the visible combobox root. */
-const handleLabelFocus = () => {
-  if (props.disabled) return;
-
-  logger.debug('handleLabelFocus()'); // temporary for debug
-
-  openList();
-  focusOpened = true;
-  comboboxRef.value?.focus();
-};
-
 /** Track new pointer interaction: cancel any pending focus-open so click can toggle. */
 const handleMousedown = () => {
   focusOpened = false;
@@ -145,10 +132,9 @@ const handleBlur = () => {
   resetInteractionState();
 };
 
-/** Handle click: toggle unless focus already opened (suppress synthetic click from label). */
+/** Handle click: both from normal mouse click and label click. */
 const handleClick = () => {
   if (props.disabled) return;
-  logger.debug('handleClick()'); // temporary for debug
 
   if (focusOpened) {
     // Focus already opened the list (label or Tab). Suppress any synthetic click.
@@ -161,7 +147,6 @@ const handleClick = () => {
   isOpen.value = !isOpen.value;
   if (isOpen.value) openList();
   else highlightedIndex.value = -1;
-
 };
 
 // KEYBOARD HANDLERS
@@ -274,12 +259,12 @@ const showOption = (option: number | string | null): number | string | null => {
     @keydown="handleKeydown"
   >
     <!-- Hidden button: labelable target for <label for="...">. -->
+    <!-- We do not need @click here, as it will bubble up to div's @click above. -->
     <button
       :id="id"
       class="hidden-label-button"
       tabindex="-1"
       aria-hidden="true"
-      @focus="handleLabelFocus()"
     ></button>
 
     <div class="combobox-selected">

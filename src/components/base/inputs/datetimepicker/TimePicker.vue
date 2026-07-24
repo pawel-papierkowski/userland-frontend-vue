@@ -7,7 +7,7 @@
  * - Can disable or mark as invalid.
  * - Accept null (not set) value.
  * - Input field is not editable. You set value via clock panel.
- * - Keyboard navigation via arrows (open panel or change hour/minute), enter/space (pick hour/minute) and esc (close panel).
+ * - Keyboard navigation supported via arrows (open panel or change hour/minute), enter/space (pick hour/minute) and esc (close panel).
  * - Supports WAI-ARIA.
  *
  * Models:
@@ -93,6 +93,14 @@ onClickOutside(pickerRef, () => {
   // note we use pickerRef, not clockContainerRef, as it would cause issues
   hidePanel();
 });
+
+/** Handle focus leaving the picker entirely (e.g. Tab out of grid). */
+const handleFocusOut = (e: FocusEvent) => {
+  const relatedTarget = e.relatedTarget as HTMLElement | null;
+  if (isClockVisible.value && relatedTarget && !pickerRef.value?.contains(relatedTarget)) {
+    hidePanel();
+  }
+};
 
 // COMPUTED
 
@@ -305,7 +313,6 @@ const onHourKeydown = (e: KeyboardEvent) => {
       scrollHourIntoView(focusedHour.value);
       break;
     case 'ArrowRight':
-    case 'Tab':
       e.preventDefault();
       keyPressSwitchColumn();
       break;
@@ -357,7 +364,6 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
       scrollMinuteIntoView(focusedMinute.value);
       break;
     case 'ArrowLeft':
-    case 'Tab':
       e.preventDefault();
       keyPressSwitchColumn();
       break;
@@ -511,7 +517,7 @@ defineExpose({ hidePanel, showPanel });
 </script>
 
 <template>
-  <div class="picker-time" ref="pickerRef">
+  <div class="picker-time" ref="pickerRef" @focusout="handleFocusOut">
     <input
       :id="`timepicker_${id}`"
       type="text"

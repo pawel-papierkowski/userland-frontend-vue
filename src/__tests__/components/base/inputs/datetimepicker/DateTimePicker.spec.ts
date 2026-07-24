@@ -480,7 +480,7 @@ describe('DateTimePicker', () => {
   // Label clicking tests
 
   describe('label clicking', () => {
-    it('opens calendar panel when paired <label> is clicked', async () => {
+    it('opens correct panel in "datetime" mode when paired <label> is clicked', async () => {
       // Verifies that clicking a <label for="id"> opens the calendar panel.
 
       // Arrange: Set up date/time.
@@ -514,8 +514,8 @@ describe('DateTimePicker', () => {
       expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
       expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
-      // Act: Click the <label>. The browser focuses the hidden <button> (labelable),
-      // which triggers handleLabelFocus → opens the panel.
+      // Act: Click the <label>. The browser clicks on the hidden <button> (labelable),
+      // which triggers handleLabelClick → opens the panel.
       await wrapper.find('label').trigger('click');
       await nextTick();
 
@@ -524,85 +524,86 @@ describe('DateTimePicker', () => {
       expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
 
-    it('opens calendar panel via hidden button focus in date mode', async () => {
-      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
-      // it opens the calendar panel. Uses createComponent (not wrapper template) for simplicity.
+    it('opens correct panel in "date" mode when paired <label> is clicked', async () => {
+      // Verifies that clicking a <label for="id"> opens the calendar panel.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
-      // Act: Mount the component.
-      const dateTimePicker = createComponent(null, 'testDt', 'date', false, false, false, false);
+      // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testDtp">Test Label</label>
+            <DateTimePicker
+              id="testDtp"
+              mode="date"
+              v-model="value"
+            />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
       await nextTick();
+
+      const dateTimePicker = wrapper.findComponent(DateTimePicker);
 
       // Assert: Panel is initially closed.
       expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
 
-      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
-      const hiddenButton = dateTimePicker.find('#testDt');
-      expect(hiddenButton.exists()).toBe(true);
-      await hiddenButton.trigger('focus');
+      // Act: Click the <label>.
+      await wrapper.find('label').trigger('click');
       await nextTick();
 
-      // Assert: Calendar panel is now open.
+      // Assert: Panel is now visible.
       expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
     });
 
-    it('opens clock panel via hidden button focus in time mode', async () => {
-      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
-      // it opens the clock panel.
+    it('opens correct panel in "time" mode when paired <label> is clicked', async () => {
+      // Verifies that clicking a <label for="id"> opens the calendar panel.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
-      // Act: Mount the component.
-      const dateTimePicker = createComponent(null, 'testDt', 'time', false, false, false, false);
+      // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testDtp">Test Label</label>
+            <DateTimePicker
+              id="testDtp"
+              mode="time"
+              v-model="value"
+            />
+          </div>
+        `,
+        components: { DateTimePicker },
+        setup() {
+          const value = ref<Date | null>(null);
+          return { value };
+        },
+      }, {
+        global: { plugins: [i18n] },
+      });
       await nextTick();
 
-      // Verify the hidden button exists.
-      const hiddenButton = dateTimePicker.find('#testDt');
-      expect(hiddenButton.exists()).toBe(true);
-      expect(hiddenButton.element.tagName).toBe('BUTTON');
+      const dateTimePicker = wrapper.findComponent(DateTimePicker);
 
       // Assert: Panel is initially closed.
       expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
 
-      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
-      await hiddenButton.trigger('focus');
+      // Act: Click the <label>.
+      await wrapper.find('label').trigger('click');
       await nextTick();
 
-      // Assert: Clock panel is now open.
+      // Assert: Panel is now visible.
       expect(dateTimePicker.find('.clock-container').attributes('style')).not.toContain('display: none');
-    });
-
-    it('opens calendar panel via hidden button focus in datetime mode', async () => {
-      // Ensures that when the hidden button receives focus (as the browser does on <label> click),
-      // it opens the calendar panel (primary panel in datetime mode).
-
-      // Arrange: Set up date/time.
-      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
-
-      // Act: Mount the component.
-      const dateTimePicker = createComponent(null, 'testDt', 'datetime', false, false, false, false);
-      await nextTick();
-
-      // Verify the hidden button exists.
-      const hiddenButton = dateTimePicker.find('#testDt');
-      expect(hiddenButton.exists()).toBe(true);
-      expect(hiddenButton.element.tagName).toBe('BUTTON');
-
-      // Assert: Panels are initially closed.
-      expect(dateTimePicker.find('.calendar-container').attributes('style')).toContain('display: none');
-      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
-
-      // Act: Focus the hidden button (simulating browser behavior when <label> is clicked).
-      await hiddenButton.trigger('focus');
-      await nextTick();
-
-      // Assert: Calendar panel is now open (date is the primary panel in datetime mode).
-      expect(dateTimePicker.find('.calendar-container').attributes('style')).not.toContain('display: none');
-      // Assert: Clock panel remains closed.
-      expect(dateTimePicker.find('.clock-container').attributes('style')).toContain('display: none');
     });
   });
 });
