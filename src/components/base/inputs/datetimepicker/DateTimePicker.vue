@@ -15,7 +15,7 @@
  *
  * Properties:
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
- * - mode - Mode of operation. Optional, default is 'datetime'.
+ * - mode - Mode of operation (both date and time, only date, only time). Optional, default is 'datetime'.
  * - allowNull - If true, allow deselecting date. Optional, default is false.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
@@ -33,8 +33,8 @@ const props = withDefaults(
   defineProps<{
     /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
     id?: string;
-    /** Mode of operation. Optional, default is datetime. */
-    mode?: 'date' | 'time' | 'datetime';
+    /** Mode of operation (both date and time, only date, only time). Optional, default is datetime. */
+    mode?: 'datetime' | 'date' | 'time';
     /** If true, allow deselecting date. Optional, default is false. */
     allowNull?: boolean;
     /** If true, acts as disabled component (panels do not show). Optional, default is false. */
@@ -84,10 +84,34 @@ const handleGeneralFocusin = (e: FocusEvent) => {
     timePickerRef.value?.hidePanel();
   }
 };
+
+/**
+ * Handle focus arriving on the hidden button via <label> click.
+ * Routes focus to the correct input depending on mode, which triggers
+ * auto-open of the corresponding panel.
+ */
+const handleHiddenButtonFocus = () => {
+  if (props.disabled) return;
+
+  if (props.mode === 'time') {
+    const timeInput = document.getElementById(`timepicker_${timeId}`);
+    timeInput?.focus();
+  } else {
+    // For 'date' and 'datetime', focus the date input.
+    const dateInput = document.getElementById(`datepicker_${dateId}`);
+    dateInput?.focus();
+  }
+};
 </script>
 
 <template>
   <div class="picker-general" @focusin="handleGeneralFocusin">
+    <button
+      :id="id"
+      class="hidden-button"
+      tabindex="-1"
+      @focus="handleHiddenButtonFocus"
+    ></button>
     <DatePicker
       v-if="mode === 'datetime' || mode === 'date'"
       ref="datePickerRef"
@@ -119,5 +143,18 @@ const handleGeneralFocusin = (e: FocusEvent) => {
   flex-direction: row;
   gap: 0.2em;
   user-select: none;
+}
+
+/** Hidden button target for <label> clicking. */
+.hidden-button {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 </style>

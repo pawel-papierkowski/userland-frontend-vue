@@ -483,4 +483,73 @@ describe('DateTimePicker', () => {
       expect(dateTimePicker.find('.clock-container').exists()).toBe(false);
     });
   });
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Label clicking tests
+
+  describe('label clicking', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      // mock scrollIntoView() - jsdom does not implement it.
+      Element.prototype.scrollIntoView = vi.fn<() => void>();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('has a hidden label-target button in date mode', async () => {
+      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount the component.
+      const dateTimePicker = createComponent(null, 'testDt', 'date', false, false, false, false);
+      await nextTick();
+
+      // Assert: Hidden button exists with correct id, class, and tabindex.
+      const hiddenButton = dateTimePicker.find('#testDt');
+      expect(hiddenButton.exists()).toBe(true);
+      expect(hiddenButton.element.tagName).toBe('BUTTON');
+      expect(hiddenButton.attributes('tabindex')).toBe('-1');
+      expect(hiddenButton.classes()).toContain('hidden-button');
+    });
+
+    it('has a hidden label-target button in time mode', async () => {
+      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount the component.
+      const dateTimePicker = createComponent(null, 'testDt', 'time', false, false, false, false);
+      await nextTick();
+
+      // Assert: Hidden button exists with correct id, class, and tabindex.
+      const hiddenButton = dateTimePicker.find('#testDt');
+      expect(hiddenButton.exists()).toBe(true);
+      expect(hiddenButton.element.tagName).toBe('BUTTON');
+      expect(hiddenButton.attributes('tabindex')).toBe('-1');
+      expect(hiddenButton.classes()).toContain('hidden-button');
+    });
+
+    it('has a hidden label-target button in datetime mode', async () => {
+      // Ensures the hidden button (for <label for="..."> clicking) exists with correct attributes.
+
+      // Arrange: Set up date/time.
+      vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
+
+      // Act: Mount the component.
+      const dateTimePicker = createComponent(null, 'testDt', 'datetime', false, false, false, false);
+      await nextTick();
+
+      // Assert: Hidden button exists with correct id, class, and tabindex.
+      const hiddenButton = dateTimePicker.find('#testDt');
+      expect(hiddenButton.exists()).toBe(true);
+      expect(hiddenButton.element.tagName).toBe('BUTTON');
+      expect(hiddenButton.attributes('tabindex')).toBe('-1');
+      expect(hiddenButton.classes()).toContain('hidden-button');
+    });
+  });
 });
