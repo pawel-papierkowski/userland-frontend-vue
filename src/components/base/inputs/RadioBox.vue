@@ -144,14 +144,23 @@ const focusNext = () => {
 </script>
 
 <template>
-  <div class="radiobox-wrapper" :data-testid="`radiobox_${id}`">
-    <div
+  <div
+    class="radiobox-wrapper"
+    :data-testid="`radiobox_${id}`"
+    @keydown="handleKeydown"
+  >
+    <!-- Hidden button: labelable target for <label for="...">. -->
+    <button
       :id="id"
+      class="hidden-label-button"
+      tabindex="-1"
+      aria-hidden="true"
+    ></button>
+    <div
       class="radiobox"
       :class="{ disabled: disabled, err: invalid }"
       role="radiogroup"
       tabindex="-1"
-      @keydown="handleKeydown"
       @focus="onGroupFocus"
     >
       <div
@@ -177,6 +186,7 @@ const focusNext = () => {
 <style scoped>
 .radiobox-wrapper {
   user-select: none;
+  position: relative;
 }
 
 .radiobox-option {
