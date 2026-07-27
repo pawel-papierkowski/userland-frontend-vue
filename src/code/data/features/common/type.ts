@@ -1,17 +1,6 @@
 // Common types.
 
-import type { Component } from 'vue';
-
 import type { EnColumnKind } from '@/code/data/features/common/const.ts';
-
-// //////
-// EDITOR
-
-export type TabData = {
-  id: string;
-  label: string;
-  component: Component;
-};
 
 // /////
 // TABLE

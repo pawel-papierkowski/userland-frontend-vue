@@ -75,20 +75,13 @@ describe('AdminUserEditor', () => {
   // Rendering
 
   describe('rendering', () => {
-    it('renders all 6 tab headers', () => {
-      const wrapper = createComponent();
-
-      // Assert: Six tab entries rendered.
-      const tabEntries = wrapper.findAll('.tab-entry');
-      expect(tabEntries).toHaveLength(6);
-    });
-
     it('renders tab headers with correct translations', () => {
       const wrapper = createComponent();
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
+      expect(tabEntries).toHaveLength(6);
 
       // Assert: Each tab shows its translated label.
-      expect(tabEntries[0]!.text()).toBe('👤 User');
+      expect(tabEntries[0]!.text()).toBe('👤 User'); // main
       expect(tabEntries[1]!.text()).toBe('📅 History');
       expect(tabEntries[2]!.text()).toBe('🔐 Permissions');
       expect(tabEntries[3]!.text()).toBe('⚙️ Configuration');
@@ -110,7 +103,7 @@ describe('AdminUserEditor', () => {
       const wrapper = createComponent();
 
       // Act: Click the second tab (History).
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
       await tabEntries[1]!.trigger('click');
 
       // Assert: History content is shown.
@@ -120,7 +113,7 @@ describe('AdminUserEditor', () => {
     it('switches to permissions tab on click', async () => {
       const wrapper = createComponent();
 
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
       await tabEntries[2]!.trigger('click');
 
       expect(wrapper.html()).toContain('permissions');
@@ -129,7 +122,7 @@ describe('AdminUserEditor', () => {
     it('switches to config tab on click', async () => {
       const wrapper = createComponent();
 
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
       await tabEntries[3]!.trigger('click');
 
       expect(wrapper.html()).toContain('config');
@@ -138,7 +131,7 @@ describe('AdminUserEditor', () => {
     it('switches to tokens tab on click', async () => {
       const wrapper = createComponent();
 
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
       await tabEntries[4]!.trigger('click');
 
       expect(wrapper.html()).toContain('tokens');
@@ -147,7 +140,7 @@ describe('AdminUserEditor', () => {
     it('switches to jwt tab on click', async () => {
       const wrapper = createComponent();
 
-      const tabEntries = wrapper.findAll('.tab-entry');
+      const tabEntries = wrapper.findAll('.tabgroup-header-name');
       await tabEntries[5]!.trigger('click');
 
       expect(wrapper.html()).toContain('jwt');
@@ -157,7 +150,7 @@ describe('AdminUserEditor', () => {
       const wrapper = createComponent();
 
       // First tab (User) is active by default.
-      let tabEntries = wrapper.findAll('.tab-entry');
+      let tabEntries = wrapper.findAll('.tabgroup-header-name');
       expect(tabEntries[0]!.classes()).toContain('active');
       expect(tabEntries[1]!.classes()).not.toContain('active');
 
@@ -165,7 +158,7 @@ describe('AdminUserEditor', () => {
       await tabEntries[1]!.trigger('click');
 
       // Assert: History is now active, User is not.
-      tabEntries = wrapper.findAll('.tab-entry');
+      tabEntries = wrapper.findAll('.tabgroup-header-name');
       expect(tabEntries[0]!.classes()).not.toContain('active');
       expect(tabEntries[1]!.classes()).toContain('active');
     });

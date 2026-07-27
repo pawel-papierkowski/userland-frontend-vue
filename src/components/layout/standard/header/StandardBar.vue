@@ -8,12 +8,12 @@ const { t } = useI18n();
 </script>
 
 <template>
-  <router-link class="nav-major" :to="{ name: 'home' }">{{ t('header.general.home') }}</router-link>
+  <router-link class="nav-major" :to="{ name: 'home' }">{{ t('general.header.home') }}</router-link>
   <router-link class="nav-major" v-if="AppLoginer.isLogged()" :to="{ name: 'memberArea' }">{{
-    t('header.general.member')
+    t('general.header.member')
   }}</router-link>
-  <router-link class="nav-major" :to="{ name: 'testArea' }">{{ t('header.general.test') }}</router-link>
-  <router-link class="nav-major" :to="{ name: 'debugArea' }">{{ t('header.general.debug') }}</router-link>
+  <router-link class="nav-major" :to="{ name: 'testArea' }">{{ t('general.header.test') }}</router-link>
+  <router-link class="nav-major" :to="{ name: 'debugArea' }">{{ t('general.header.debug') }}</router-link>
 </template>
 
 <style scoped></style>

@@ -6,14 +6,12 @@
  * - v-model - Holds selected user.
  */
 import { ref, reactive, shallowRef, watch } from 'vue';
-import { storeToRefs } from 'pinia';
 
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
-import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type { EntryMeta, EntryOption, RowMeta } from '@/code/data/features/common/type.ts';
 import type {
   UserTableEntry,
@@ -32,9 +30,6 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserPermissionsFilter from '@/components/pages/admin/user/permissions/AdminUserPermissionsFilter.vue';
-
-const userEventStore = useUserEventStore();
-const { userSelectedTrigger } = storeToRefs(userEventStore);
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
@@ -58,6 +53,14 @@ const tabRef = ref<AdminUserTabExpose | null>(null);
 const addNewEntry = ref(false);
 /** True if busy executing options. */
 const isBusyOptions = ref(false);
+
+// WATCHES
+
+/** React on user being (de)selected. */
+watch(selUserRecord, async () => {
+  // Deselect anything in subtable.
+  await tabRef.value?.selectEntry(null, true);
+});
 
 //
 
@@ -309,14 +312,6 @@ const metaForEntry = (entry: UserPermissionTableEntry | null): EntryMeta | null 
   }
   return entry.meta;
 };
-
-//
-
-/** React on user being (de)selected. */
-watch(userSelectedTrigger, async () => {
-  // Deselect anything in subtable.
-  await tabRef.value?.selectEntry(null, true);
-});
 
 //
 

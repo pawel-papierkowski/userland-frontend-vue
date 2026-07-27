@@ -13,7 +13,6 @@ import apiLogging from '@/services/api-logging.ts';
 
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { useUserEventStore } from '@/stores/events/user-events.ts';
 
 import AdminUserConfig from '@/components/pages/admin/user/config/AdminUserConfig.vue';
 
@@ -644,9 +643,9 @@ describe('AdminUserConfig', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
-  // User selection events
+  // User selection
 
-  describe('userSelectedTrigger', () => {
+  describe('user selection', () => {
     it('deselects entry when user selection changes', async () => {
       // Arrange: Mount with user.
       const { promise, resolve } = createDeferredPromise<any>();
@@ -668,17 +667,16 @@ describe('AdminUserConfig', () => {
       await editBtns[0]?.trigger('click');
       await nextTick();
 
-      // Verify we have save/cancel for the selected entry.
-      let saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '💾');
-      expect(saveBtns.length).toBeGreaterThanOrEqual(1);
+      // Assert: Verify we have add entry button and save/cancel for the selected entry.
+      let saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
+      expect(saveBtns.length).toBeGreaterThanOrEqual(2);
 
-      // Act: Notify user selection change.
-      const userEventStore = useUserEventStore();
-      userEventStore.notifyUserSelected();
+      // Act: Deselect user.
+      await wrapper.setProps({ modelValue: null });
       await nextTick();
 
-      // Assert: Entry deselected — save/cancel buttons gone.
-      saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '💾');
+      // Assert: Add entry and save/cancel buttons are gone.
+      saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
       expect(saveBtns.length).toBe(0);
     });
   });

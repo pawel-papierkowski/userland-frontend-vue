@@ -4,15 +4,13 @@
  * Properties:
  * - v-model - Holds selected user.
  */
-import { shallowRef, watch } from 'vue';
-import type { Component } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { watch } from 'vue';
 
-import type { TabData } from '@/code/data/features/common/type.ts';
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 
 import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 
+import TabGroup from '@/components/base/layout/TabGroup.vue';
 import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';
 import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
 import AdminUserPermissions from '@/components/pages/admin/user/permissions/AdminUserPermissions.vue';
@@ -20,84 +18,38 @@ import AdminUserConfig from '@/components/pages/admin/user/config/AdminUserConfi
 import AdminUserTokens from '@/components/pages/admin/user/tokens/AdminUserTokens.vue';
 import AdminUserJwt from '@/components/pages/admin/user/jwt/AdminUserJwt.vue';
 
-const { t } = useI18n();
-
-const selRecord = defineModel<UserTableEntry | null>();
-
-const activeTab: Component = shallowRef(AdminUserMain);
-const tabs: TabData[] = [
-  { id: 'main', label: 'admin.user.main.tab', component: AdminUserMain },
-  { id: 'history', label: 'admin.user.history.tab', component: AdminUserHistory },
-  { id: 'permissions', label: 'admin.user.permissions.tab', component: AdminUserPermissions },
-  { id: 'config', label: 'admin.user.config.tab', component: AdminUserConfig },
-  { id: 'tokens', label: 'admin.user.tokens.tab', component: AdminUserTokens },
-  { id: 'jwt', label: 'admin.user.jwt.tab', component: AdminUserJwt },
-];
+const selUserRecord = defineModel<UserTableEntry | null>();
 
 //
 
 /** Change in selection. */
-watch(selRecord, () => {
+watch(selUserRecord, () => {
   AppUserEventer.notifyUserSelected();
 });
 
-//
-
-/**
- * Select given tab, making it active.
- * @param tab Tab to use.
- */
-const selectTab = (tab: TabData) => {
-  activeTab.value = tab.component;
-};
-
-/**
- * Determine CSS classes that this tab header should have.
- * @param tab Tab to use.
- */
-const resolveClass = (tab: TabData) => {
-  return {
-    active: activeTab.value === tab.component,
-  };
-};
 </script>
 
 <template>
-  <div class="tab-wrapper">
-    <div class="tab-header">
-      <div v-for="tab in tabs" :key="tab.id" class="tab-entry" :class="resolveClass(tab)" @click="selectTab(tab)">
-        {{ t(tab.label) }}
-      </div>
-    </div>
-
-    <!-- Dynamic Tab Content -->
-    <div class="tab-content">
-      <KeepAlive>
-        <component :is="activeTab" v-model="selRecord" />
-      </KeepAlive>
-    </div>
-  </div>
+  <TabGroup langPrefix="admin.user.tabs">
+    <template #main>
+      <AdminUserMain v-model="selUserRecord" />
+    </template>
+    <template #history>
+      <AdminUserHistory v-model="selUserRecord" />
+    </template>
+    <template #permissions>
+      <AdminUserPermissions v-model="selUserRecord" />
+    </template>
+    <template #config>
+      <AdminUserConfig v-model="selUserRecord" />
+    </template>
+    <template #tokens>
+      <AdminUserTokens v-model="selUserRecord" />
+    </template>
+    <template #jwt>
+      <AdminUserJwt v-model="selUserRecord" />
+    </template>
+  </TabGroup>
 </template>
 
-<style scoped>
-.tab-wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.tab-header {
-  display: flex;
-
-  margin-bottom: var(--spacing-sm);
-}
-
-.tab-entry {
-  margin: 0px var(--spacing-xs);
-  cursor: pointer;
-}
-
-.tab-entry.active {
-  border-bottom: 2px solid var(--color-text-primary);
-  font-weight: bold;
-}
-</style>
+<style scoped></style>

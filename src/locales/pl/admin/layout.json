@@ -1,9 +1,19 @@
 {
-  "header": {
-    "admin": {
+  "admin": {
+    "header": {
       "login": "🚪 Strona logowania",
       "main": "🏁 Strona główna",
       "user": "👥 Użytkownicy"
+    },
+    "user": {
+      "tabs": {
+        "main": "👤 Użytkownik",
+        "history": "📅 Historia",
+        "permissions": "🔐 Uprawnienia",
+        "config": "⚙️ Konfiguracja",
+        "tokens": "🔗 Tokeny",
+        "jwt": "🎫 JWT"
+      }
     }
   }
 }

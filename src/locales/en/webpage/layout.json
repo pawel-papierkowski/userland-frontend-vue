@@ -3,19 +3,19 @@
     "title": "UserLand"
   },
 
-  "header": {
-    "general": {
+  "general": {
+    "header": {
       "home": "🏠 Homepage",
       "test": "🧪 Test zone",
       "debug": "🐛 Debug zone",
-      "member": "⭐ Member zone"
-    },
-    "user": {
-      "options": "⚙️ Options",
+      "member": "⭐ Member zone",
       "registration": "📝 Registration",
       "login": "🔑 Login",
-      "profile": "👤 Profile",
-      "logout": "🚪 Logout"
+      "user": {
+        "options": "⚙️ Options",
+        "profile": "👤 Profile",
+        "logout": "🚪 Logout"
+      }
     }
   },
 

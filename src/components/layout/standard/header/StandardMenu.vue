@@ -28,21 +28,21 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <template v-if="!AppLoginer.isLogged()">
-    <router-link class="nav-major" :to="{ name: 'login' }">{{ t('header.user.login') }}</router-link>
-    <router-link class="nav-major" :to="{ name: 'registration' }">{{ t('header.user.registration') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'login' }">{{ t('general.header.login') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'registration' }">{{ t('general.header.registration') }}</router-link>
   </template>
 
   <DropdownMenu v-if="AppLoginer.isLogged()">
     <template #trigger>
-      {{ t('header.user.options') }}
+      {{ t('general.header.user.options') }}
     </template>
 
     <template #content>
       <div tabindex="-1" class="dropdown-content">
-        <router-link class="nav-major" :to="{ name: 'user-profile' }">{{ t('header.user.profile') }}</router-link>
+        <router-link class="nav-major" :to="{ name: 'user-profile' }">{{ t('general.header.user.profile') }}</router-link>
         <hr />
         <div class="nav-major" tabindex="0" @click="handleLogout()" @keydown="onKeydown">
-          {{ t('header.user.logout') }}
+          {{ t('general.header.user.logout') }}
         </div>
       </div>
     </template>

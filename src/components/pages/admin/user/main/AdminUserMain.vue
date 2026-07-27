@@ -1,7 +1,6 @@
 <script setup lang="ts">
 /**
  * View/edit of single, selected user.
- * For now we are only viewing user.
  *
  * Properties:
  * - v-model - Holds selected user.

@@ -13,9 +13,9 @@ const canShowUser = () => {
 
 <template>
   <template v-if="AppLoginer.isLogged()">
-    <router-link class="nav-major" :to="{ name: 'admin-main' }">{{ t('header.admin.main') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'admin-main' }">{{ t('admin.header.main') }}</router-link>
     <router-link class="nav-major" :to="{ name: 'admin-user' }" v-if="canShowUser()">{{
-      t('header.admin.user')
+      t('admin.header.user')
     }}</router-link>
   </template>
 </template>

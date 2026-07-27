@@ -37,19 +37,19 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <div v-if="canShowLoginRedirect">
-    <router-link class="nav-major" :to="{ name: 'admin-login' }">{{ t('header.admin.login') }}</router-link>
+    <router-link class="nav-major" :to="{ name: 'admin-login' }">{{ t('admin.header.login') }}</router-link>
   </div>
   <DropdownMenu v-if="AppLoginer.isLogged()">
     <template #trigger>
-      {{ t('header.user.options') }}
+      {{ t('general.header.user.options') }}
     </template>
 
     <template #content>
       <div tabindex="-1" class="dropdown-content">
-        <router-link class="nav-major" :to="{ name: 'admin-profile' }">{{ t('header.user.profile') }}</router-link>
+        <router-link class="nav-major" :to="{ name: 'admin-profile' }">{{ t('general.header.user.profile') }}</router-link>
         <hr />
         <div class="nav-major" tabindex="0" @click="handleLogout()" @keydown="onKeydown">
-          {{ t('header.user.logout') }}
+          {{ t('general.header.user.logout') }}
         </div>
       </div>
     </template>
