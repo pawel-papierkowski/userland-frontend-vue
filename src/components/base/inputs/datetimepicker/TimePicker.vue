@@ -523,7 +523,12 @@ defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
-  <div class="picker-time" ref="pickerRef" @focusout="handleFocusOut">
+  <div
+    class="picker-time"
+    :class="{ err: invalid }"
+    ref="pickerRef"
+    @focusout="handleFocusOut">
+
     <input
       :id="`timepicker_${id}`"
       type="text"
@@ -649,12 +654,6 @@ defineExpose({ showPanel, hidePanel, flipPanel });
   cursor: default;
 }
 
-.picker.err .picker-input-time {
-  color: var(--input-err-color);
-  background: var(--input-err-background);
-  border: var(--input-err-border);
-}
-
 /** Clock panel to pick time. **/
 
 .clock-container {
@@ -674,7 +673,7 @@ defineExpose({ showPanel, hidePanel, flipPanel });
   z-index: 1000;
 }
 
-.picker.err .clock-container {
+.picker-time.err .clock-container {
   background: var(--datetimepicker-clock-err-background);
 }
 

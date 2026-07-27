@@ -635,7 +635,12 @@ defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
-  <div class="picker-date" ref="pickerRef" @focusout="handleFocusOut">
+  <div
+    class="picker-date"
+    :class="{ err: invalid }"
+    ref="pickerRef"
+    @focusout="handleFocusOut">
+
     <input
       :id="`datepicker_${id}`"
       type="text"
@@ -783,12 +788,6 @@ defineExpose({ showPanel, hidePanel, flipPanel });
   cursor: default;
 }
 
-.picker.err .picker-input-date {
-  color: var(--input-err-color);
-  background: var(--input-err-background);
-  border: var(--input-err-border);
-}
-
 /** Calendar panel to pick date. **/
 
 .calendar-container {
@@ -808,7 +807,7 @@ defineExpose({ showPanel, hidePanel, flipPanel });
   z-index: 1000;
 }
 
-.picker.err .calendar-container {
+.picker-date.err .calendar-container {
   background: var(--datetimepicker-calendar-err-background);
 }
 
