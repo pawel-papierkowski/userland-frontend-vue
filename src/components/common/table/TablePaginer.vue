@@ -55,26 +55,81 @@ const applyPage = () => {
   localPage.value = page + 1; // Ensure input shows 1-indexed value.
 };
 
+//
+
+/** Can go to previous page of results? */
+const canGoPrevPage = (): boolean => {
+  if (props.isDisabled || currPage.value === 0) return false;
+  return true;
+};
+
 /** Go to first page of results. */
 const goFirstPage = () => {
-  if (props.isDisabled || currPage.value === 0) return;
+  if (!canGoPrevPage()) return;
   currPage.value = 0;
 };
+/** Handle keyboard on the first page button. */
+const onKeydownFirstPage = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      goFirstPage();
+      break;
+  }
+};
+
 /** Go to previous page of results. */
 const goPrevPage = () => {
-  if (props.isDisabled || currPage.value === 0) return;
+  if (!canGoPrevPage()) return;
   currPage.value--;
 };
+/** Handle keyboard on the previous page button. */
+const onKeydownPrevPage = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      goPrevPage();
+      break;
+  }
+};
+
+/** Can go to next page of results? */
+const canGoNextPage = (): boolean => {
+  if (props.isDisabled || currPage.value === props.meta.pageCount - 1) return false;
+  return true;
+};
+
 /** Go to next page of results. */
 const goNextPage = () => {
-  if (props.isDisabled || currPage.value === props.meta.pageCount - 1) return;
+  if (!canGoNextPage()) return;
   currPage.value++;
 };
+/** Handle keyboard on the next page button. */
+const onKeydownNextPage = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      goNextPage();
+      break;
+  }
+};
+
 /** Go to last page of results. */
 const goLastPage = () => {
-  if (props.isDisabled || currPage.value === props.meta.pageCount - 1) return;
+  if (!canGoNextPage()) return;
   currPage.value = props.meta.pageCount - 1;
 };
+/** Handle keyboard on the last page button. */
+const onKeydownLastPage = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      goLastPage();
+      break;
+  }
+};
+
+//
 
 /** Style of first/previous page button. */
 const stylePrevPage = () => {
@@ -99,8 +154,10 @@ const pageInputDisabled = () => {
   <div class="table-paginer" :data-testid="`paginer_${props.tableId}`">
     <div class="table-paginer-grid">
       <div class="table-paginer-side"></div>
-      <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goFirstPage()">⏮️</div>
-      <div class="table-paginer-navbtn" :class="stylePrevPage()" @click="goPrevPage()">◀️</div>
+      <div class="table-paginer-navbtn" :class="stylePrevPage()" :tabindex="canGoPrevPage() ? 0 : -1"
+        @keydown="onKeydownFirstPage" @click="goFirstPage()">⏮️</div>
+      <div class="table-paginer-navbtn" :class="stylePrevPage()" :tabindex="canGoPrevPage() ? 0 : -1"
+        @keydown="onKeydownPrevPage" @click="goPrevPage()">◀️</div>
       <div class="table-paginer-entry">
         <input
           v-model="localPage"
@@ -116,8 +173,10 @@ const pageInputDisabled = () => {
           meta.pageCount
         }}</span>
       </div>
-      <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goNextPage()">▶️</div>
-      <div class="table-paginer-navbtn" :class="styleNextPage()" @click="goLastPage()">⏭️</div>
+      <div class="table-paginer-navbtn" :class="styleNextPage()" :tabindex="canGoNextPage() ? 0 : -1"
+        @keydown="onKeydownNextPage" @click="goNextPage()">▶️</div>
+      <div class="table-paginer-navbtn" :class="styleNextPage()" :tabindex="canGoNextPage() ? 0 : -1"
+        @keydown="onKeydownLastPage" @click="goLastPage()">⏭️</div>
       <div class="table-paginer-side"></div>
     </div>
     <div class="table-paginer-options">

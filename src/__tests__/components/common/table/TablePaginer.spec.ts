@@ -331,6 +331,131 @@ describe('TablePaginer', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation
+
+  describe('keyboard navigation', () => {
+    it('Enter on first-page button goes to first page', async () => {
+      // Arrange: On last page so prev buttons are enabled.
+      const wrapper = createComponent(2, createTableMetaLarge(2), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Assert: First-page button has tabindex 0 (focusable).
+      expect(navButtons[0]?.attributes('tabindex')).toBe('0');
+
+      // Act: Press Enter.
+      await navButtons[0]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Emitted page 0.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(0);
+    });
+
+    it('Enter on prev-page button goes to previous page', async () => {
+      // Arrange: On last page so prev buttons are enabled.
+      const wrapper = createComponent(2, createTableMetaLarge(2), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Assert: Prev-page button has tabindex 0.
+      expect(navButtons[1]?.attributes('tabindex')).toBe('0');
+
+      // Act: Press Enter.
+      await navButtons[1]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Emitted page 1.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+    });
+
+    it('Enter on next-page button goes to next page', async () => {
+      // Arrange: On first page so next buttons are enabled.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Assert: Next-page button has tabindex 0.
+      expect(navButtons[2]?.attributes('tabindex')).toBe('0');
+
+      // Act: Press Enter.
+      await navButtons[2]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Emitted page 1.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+    });
+
+    it('Enter on last-page button goes to last page', async () => {
+      // Arrange: On first page so next buttons are enabled.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Assert: Last-page button has tabindex 0.
+      expect(navButtons[3]?.attributes('tabindex')).toBe('0');
+
+      // Act: Press Enter.
+      await navButtons[3]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Emitted page 2.
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(2);
+    });
+
+    it('Space on next-page button also navigates forward', async () => {
+      // Arrange: On first page so next buttons are enabled.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Act: Press Space instead of Enter.
+      await navButtons[2]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: Emitted page 1 (same as Enter).
+      expect(wrapper.emitted('update:currPage')).toHaveLength(1);
+      expect(wrapper.emitted('update:currPage')?.[0]?.[0]).toBe(1);
+    });
+
+    it('disabled buttons have tabindex -1 and ignore keyboard', async () => {
+      // Arrange: On first page so prev buttons are disabled.
+      const wrapper = createComponent(0, createTableMetaLarge(0), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Assert: Prev buttons have tabindex -1 (not focusable).
+      expect(navButtons[0]?.attributes('tabindex')).toBe('-1');
+      expect(navButtons[1]?.attributes('tabindex')).toBe('-1');
+
+      // Act: Try to use keyboard on disabled prev buttons.
+      await navButtons[0]?.trigger('keydown', { key: 'Enter' });
+      await navButtons[0]?.trigger('keydown', { key: ' ' });
+      await navButtons[1]?.trigger('keydown', { key: 'Enter' });
+      await navButtons[1]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: No page change emitted.
+      expect(wrapper.emitted('update:currPage')).toBeUndefined();
+    });
+
+    it('irrelevant keys do nothing', async () => {
+      // Arrange: On middle page, all buttons enabled.
+      const wrapper = createComponent(1, createTableMetaLarge(1), false);
+      const navButtons = wrapper.findAll('.table-paginer-navbtn');
+
+      // Act: Press irrelevant keys on all buttons.
+      for (const btn of navButtons) {
+        await btn.trigger('keydown', { key: 'a' });
+        await btn.trigger('keydown', { key: 'ArrowDown' });
+        await btn.trigger('keydown', { key: 'Escape' });
+        await btn.trigger('keydown', { key: 'Tab' });
+      }
+      await nextTick();
+
+      // Assert: No page change emitted.
+      expect(wrapper.emitted('update:currPage')).toBeUndefined();
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
   // Input field
 
   describe('input field', () => {
