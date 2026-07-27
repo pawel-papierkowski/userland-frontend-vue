@@ -229,6 +229,33 @@ const selectEntry = (entry: E | null, force: boolean) => {
   else selRecord.value = entry;
 };
 
+/**
+ * Check if given entry is selected.
+ * @param entry Entry to check.
+ * @returns True if given entry is selected, otherwise false.
+ */
+const isSelected = (entry: E | null): boolean => {
+  if (entry === null) return false;
+  return selRecord.value === entry;
+};
+
+/**
+ * What to do when you press key while focused on selected entry.
+ * @param e Keyboard event.
+ * @param entry Entry.
+ */
+const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
+  if (entry === null) return;
+  switch (e.key) {
+    case 'ArrowUp':
+      // TODO select entry above selected entry, if none above, select last entry
+      break;
+    case 'ArrowDown':
+      // TODO select entry below selected entry, if none below, select first entry
+      break;
+  }
+};
+
 //
 
 /** Allow calling selectEntry from outside. */
@@ -313,6 +340,8 @@ defineExpose({
           class="table-row"
           :class="rowClass(entry, rowIndex)"
           role="row"
+          :tabindex="isSelected(entry) ? 0 : -1"
+          @keydown="onKeydownEntry($event, entry)"
           @click="selectEntry(entry, false)"
         >
           <TableRow
