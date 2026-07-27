@@ -83,17 +83,26 @@ const showSymbol = (): string => {
 </script>
 
 <template>
-  <div class="checkbox-wrapper" :data-testid="`checkbox_${id}`">
-    <div
+  <div
+    class="checkbox-wrapper"
+    :data-testid="`checkbox_${id}`"
+    @click="cycle()"
+    @keydown="handleKeydown"
+  >
+    <!-- Hidden button: labelable target for <label for="...">. -->
+    <button
       :id="id"
+      class="hidden-label-button"
+      tabindex="-1"
+      aria-hidden="true"
+    ></button>
+    <div
       class="checkbox"
       :class="{ disabled: disabled, err: invalid }"
       role="checkbox"
       :aria-checked="currValue === null ? 'mixed' : currValue"
       :aria-disabled="disabled || undefined"
       :tabindex="disabled ? -1 : 0"
-      @click="cycle()"
-      @keydown="handleKeydown"
     >
       <div class="checkbox-inside">
         {{ showSymbol() }}
@@ -107,6 +116,7 @@ const showSymbol = (): string => {
   display: inline-flex;
   align-items: left;
   justify-content: left;
+  position: relative;
 }
 
 .checkbox {

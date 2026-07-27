@@ -132,6 +132,54 @@ describe('CheckBox', () => {
 
     //
 
+    it('cycles when paired <label> is clicked', async () => {
+      // Verifies that clicking a <label for="id"> cycles the checkbox value,
+      // and that pressing Space after the label click cycles it again.
+
+      // Arrange: Mount CheckBox inside a wrapper with a paired <label>.
+      const wrapper = mount({
+        template: `
+          <div>
+            <label for="testCb">Test Label</label>
+            <CheckBox id="testCb" v-model="value" />
+          </div>
+        `,
+        components: { CheckBox },
+        setup() {
+          const value = ref<boolean | null>(null);
+          return { value };
+        },
+      });
+      await nextTick();
+
+      const checkBox = wrapper.findComponent(CheckBox);
+
+      // Assert: Checkbox is initialized to null (no symbol visible).
+      expect(checkBox.find('.checkbox-inside').text()).toBe('◼');
+
+      // Act: Click the <label>. The browser clicks on the hidden <button> (labelable),
+      // which bubbles up to the wrapper and triggers cycle().
+      await wrapper.find('label').trigger('click');
+      await nextTick();
+
+      // Assert: Value changed to true.
+      expect(checkBox.emitted('update:modelValue')).toHaveLength(1);
+      expect(checkBox.emitted('update:modelValue')?.[0]?.[0]).toBe(true);
+      expect(checkBox.find('.checkbox-inside').text()).toBe('✔');
+
+      // Act: Press Space on the hidden button (which has focus after label click).
+      // The keydown bubbles to the wrapper's @keydown handler and triggers cycle again.
+      await wrapper.find('#testCb').trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: Value changed to false.
+      expect(checkBox.emitted('update:modelValue')).toHaveLength(2);
+      expect(checkBox.emitted('update:modelValue')?.[1]?.[0]).toBe(false);
+      expect(checkBox.find('.checkbox-inside').text()).toBe('');
+    });
+
+    //
+
     it('is disabled', async () => {
       // Ensure nothing happens when we click on disabled checkbox and disabled checkbox is visually distinct.
 
