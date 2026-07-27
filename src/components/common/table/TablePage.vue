@@ -187,6 +187,16 @@ const changeSort = (column: ColumnData) => {
   currSortOrder.value = column.defSort;
 };
 
+/** Handle keyboard on the column header cell. */
+const onKeydownSort = (e: KeyboardEvent, column: ColumnData) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      changeSort(column);
+      break;
+  }
+};
+
 // Table row.
 
 /**
@@ -243,6 +253,8 @@ defineExpose({
             class="table-header-cell"
             :class="columHeaderClass(column)"
             role="columnheader"
+            :tabindex="canSortColumn(column) ? 0 : -1"
+            @keydown="onKeydownSort($event, column)"
             @click="changeSort(column)"
           >
             {{ t(column.translation) }}

@@ -184,11 +184,11 @@ describe('i18n instance', () => {
     expect(i18n.global.t('app.title')).toBe('UserLand');
   });
 
-  it('loads all translations from en locale directory', () => {
+  it('loads translations from en locale directory', () => {
     // Translations from the en locale directory should be available.
 
     // Arrange: Known keys from the en locale files.
-    const knownKeys = ['app.title', 'header.general.home', 'header.user.login', 'footer.frontendRepository'];
+    const knownKeys = ['app.title', 'general.header.home', 'general.header.login', 'footer.frontendRepository'];
 
     // Act: Translate each key.
     for (const key of knownKeys) {
@@ -206,13 +206,13 @@ describe('i18n instance', () => {
     // Assert: Polish translation differs from English.
     expect(i18n.global.t('app.title')).toBe('UserLand'); // en
     expect(i18n.global.t('app.title', {}, { locale: 'pl' })).toBe('UserLand'); // pl (same for this key)
-    expect(i18n.global.t('header.general.home', {}, { locale: 'pl' })).toBe('🏠 Strona główna');
+    expect(i18n.global.t('general.header.home', {}, { locale: 'pl' })).toBe('🏠 Strona główna');
   });
 
   it('resolves nested keys using dot notation', () => {
     // i18n uses dot notation to traverse nested translation objects.
 
     // Assert: Deeply nested keys are resolved.
-    expect(i18n.global.t('header.user.logout')).toBe('🚪 Logout');
+    expect(i18n.global.t('general.header.user.logout')).toBe('🚪 Logout');
   });
 });

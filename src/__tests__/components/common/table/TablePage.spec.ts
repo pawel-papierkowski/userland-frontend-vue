@@ -781,4 +781,259 @@ describe('TablePage', () => {
       expect(columnHeaders[3]?.find('span').exists()).toBe(false);
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation
+
+  describe('keyboard navigation', () => {
+    it('sortable column headers have tabindex 0, non-sortable have -1', () => {
+      // Arrange: Filled table.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'DESC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'DESC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Assert: Sortable columns are focusable.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      // Index 0: createdAt (sortable, defSort='DESC').
+      expect(columnHeaders[0]?.attributes('tabindex')).toBe('0');
+      // Index 1: name (sortable, defSort='DESC').
+      expect(columnHeaders[1]?.attributes('tabindex')).toBe('0');
+      // Index 2: value (sortable, defSort='ASC').
+      expect(columnHeaders[2]?.attributes('tabindex')).toBe('0');
+      // Index 3: options (not sortable, defSort='').
+      expect(columnHeaders[3]?.attributes('tabindex')).toBe('-1');
+    });
+
+    it('Enter on current sort column toggles sort order', async () => {
+      // Arrange: Sorted by createdAt ASC.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'ASC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Press Enter on the current sort column header.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Sort order toggled to DESC.
+      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+
+      // Assert: Sort marker updated.
+      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc']);
+    });
+
+    it('Space on current sort column also toggles sort order', async () => {
+      // Arrange: Sorted by createdAt ASC.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'ASC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Press Space on the current sort column header.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      await columnHeaders[0]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: Sort order toggled to DESC.
+      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+    });
+
+    it('Enter/Space on a different column changes sort column', async () => {
+      // Arrange: Sorted by name DESC.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'name',
+        'DESC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Press Enter on 'value' column header.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      await columnHeaders[2]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: Sort column changed to 'value' with its default sort (ASC).
+      expect(wrapper.emitted('update:currSortBy')).toHaveLength(1);
+      expect(wrapper.emitted('update:currSortBy')?.[0]?.[0]).toBe('value');
+      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('ASC');
+
+      // Assert: Sort marker updated.
+      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc']);
+    });
+
+    it('non-sortable column ignores keyboard', async () => {
+      // Arrange: Sorted by createdAt ASC.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'ASC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Press Enter and Space on non-sortable 'options' header.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      await columnHeaders[3]?.trigger('keydown', { key: 'Enter' });
+      await columnHeaders[3]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: No sort change emitted.
+      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+    });
+
+    it('irrelevant keys do nothing on sortable headers', async () => {
+      // Arrange: Sorted by createdAt ASC.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+      const wrapper = createComponent(
+        null,
+        null,
+        0,
+        'createdAt',
+        'ASC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Press irrelevant keys on a sortable header.
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      await columnHeaders[0]?.trigger('keydown', { key: 'a' });
+      await columnHeaders[0]?.trigger('keydown', { key: 'Tab' });
+      await columnHeaders[0]?.trigger('keydown', { key: 'ArrowDown' });
+      await columnHeaders[0]?.trigger('keydown', { key: 'Escape' });
+      await nextTick();
+
+      // Assert: No sort change emitted.
+      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+    });
+
+    it('keyboard sorting is disabled during inline edit with selection', async () => {
+      // Arrange: Table with inline edit enabled, row pre-selected.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      const wrapper = createComponent(
+        data[0]!,
+        null,
+        0,
+        'name',
+        'DESC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        true,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Assert: Column headers have tabindex -1 (not focusable).
+      const columnHeaders = wrapper.findAll('.table-header-cell');
+      expect(columnHeaders[0]?.attributes('tabindex')).toBe('-1');
+
+      // Act: Press Enter on a sortable header.
+      await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: No sort change emitted.
+      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+    });
+  });
 });
