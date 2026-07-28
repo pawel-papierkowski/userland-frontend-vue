@@ -5,6 +5,8 @@
  * - Selecting/deselecting record.
  * - Pagination.
  * - Sorting of any column (ASC or DESC).
+ * - Supports keyboard navigation.
+ * - Supports WAI-ARIA.
  *
  * Generics:
  * - E: Type of table entry.
@@ -230,16 +232,6 @@ const selectEntry = (entry: E | null, force: boolean) => {
 };
 
 /**
- * Check if given entry is selected.
- * @param entry Entry to check.
- * @returns True if given entry is selected, otherwise false.
- */
-const isSelected = (entry: E | null): boolean => {
-  if (entry === null) return false;
-  return selRecord.value === entry;
-};
-
-/**
  * What to do when you press key while focused on selected entry.
  * @param e Keyboard event.
  * @param entry Entry.
@@ -248,10 +240,16 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
   if (entry === null) return;
   switch (e.key) {
     case 'ArrowUp':
-      // TODO select entry above selected entry, if none above, select last entry
+      // TODO Move focus to entry above focused entry, if none above or no entry selected, focus on last entry.
+      // Essentially same as Shift+Tab, except with Tab you can exit rows, but with arrows you cannot.
       break;
     case 'ArrowDown':
-      // TODO select entry below selected entry, if none below, select first entry
+      // TODO Move focus to entry below focused entry, if none below or no entry selected, focus on first entry.
+      // Essentially same as Tab, except with Tab you can exit rows, but with arrows you cannot.
+      break;
+    case 'Enter':
+    case ' ':
+      selectEntry(entry, false);
       break;
   }
 };
@@ -340,7 +338,7 @@ defineExpose({
           class="table-row"
           :class="rowClass(entry, rowIndex)"
           role="row"
-          :tabindex="isSelected(entry) ? 0 : -1"
+          :tabindex="canSelect ? 0 : -1"
           @keydown="onKeydownEntry($event, entry)"
           @click="selectEntry(entry, false)"
         >

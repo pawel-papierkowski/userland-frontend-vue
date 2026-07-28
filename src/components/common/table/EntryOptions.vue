@@ -74,7 +74,8 @@ const optionTooltip = (option: EntryOption, key: string): string => {
 
 /**
  * Execute option.
- * @param option Option.
+ * @param option Entry option.
+ * @param key Key.
  */
 const optionExecute = async (option: EntryOption, key: string) => {
   if (!optionCanUse(option)) return;
@@ -86,16 +87,33 @@ const optionExecute = async (option: EntryOption, key: string) => {
     console.warn(`Action '${key}' not implemented in parent.`);
   }
 };
+
+/**
+ * React on key press while we are focused on given option.
+ * @param e Keyboard event.
+ * @param option Entry option.
+ * @param key Key.
+ */
+const onKeyDown = async (e: KeyboardEvent, option: EntryOption, key: string) => {
+  switch (e.key) {
+    case 'Enter':
+    case ' ':
+      await optionExecute(option, key);
+      break;
+  }
+};
 </script>
 
 <template>
   <div class="entry-content">
     <template v-for="(option, key) in meta?.options" :key="key">
       <div
+        v-if="optionCanSee(option)"
         class="entry-btn"
         :class="optionClass(option)"
         :title="t(optionTooltip(option, key))"
-        v-if="optionCanSee(option)"
+        tabindex="0"
+        @keydown="onKeyDown($event, option, key)"
         @click="optionExecute(option, key)"
       >
         {{ t(langPrefix + '.' + key + '.button') }}
