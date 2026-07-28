@@ -52,7 +52,7 @@ const resolveFieldMeta = (column: ColumnData): FieldMeta | null => {
 </script>
 
 <template>
-  <div :data-testid="`row_${props.tableId}_${rowIndex}`" style="display: contents">
+  <div :data-testid="`row_${props.tableId}_${rowIndex}`" class="table-row-inner">
     <!-- CELLS FOR SINGLE TABLE ROW -->
     <template v-for="(column, colIndex) in columns" :key="colIndex">
       <TableCell

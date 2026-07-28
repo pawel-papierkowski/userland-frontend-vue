@@ -161,6 +161,10 @@
     1px 0 0 0 #ffedd5;
 }
 
+.table-row-inner {
+  display: contents;
+}
+
 /* Table cell classes. */
 
 .table-cell {
