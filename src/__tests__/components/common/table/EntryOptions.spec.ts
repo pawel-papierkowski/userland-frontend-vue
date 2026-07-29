@@ -267,4 +267,146 @@ describe('EntryOptions', () => {
       });
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Keyboard navigation
+
+  describe('keyboard navigation', () => {
+    it('enabled option has tabindex 0, disabled option has tabindex -1', () => {
+      // Arrange: Standard meta with ENABLED and DISABLED options.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Assert: ENABLED option is focusable via Tab.
+      expect(options[0]?.attributes('tabindex')).toBe('0');
+
+      // Assert: DISABLED option is not focusable via Tab.
+      expect(options[1]?.attributes('tabindex')).toBe('-1');
+    });
+
+    it('Enter on enabled option calls the matching action', async () => {
+      // Arrange: Standard data.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Enter on the 'add' (ENABLED) button.
+      await options[0]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: 'add' action was called with the entry.
+      expect(actions.add).toHaveBeenCalledTimes(1);
+      expect(actions.add).toHaveBeenCalledWith(entry);
+    });
+
+    it('Space on enabled option calls the matching action', async () => {
+      // Arrange: Standard data.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Space on the 'add' (ENABLED) button.
+      await options[0]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: 'add' action was called with the entry.
+      expect(actions.add).toHaveBeenCalledTimes(1);
+      expect(actions.add).toHaveBeenCalledWith(entry);
+    });
+
+    it('Enter on disabled option does not call action', async () => {
+      // Arrange: Standard data.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Enter on the 'del' (DISABLED) button.
+      await options[1]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: No action was called.
+      expect(actions.del).not.toHaveBeenCalled();
+    });
+
+    it('Space on disabled option does not call action', async () => {
+      // Arrange: Standard data.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, false);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Space on the 'del' (DISABLED) button.
+      await options[1]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: No action was called.
+      expect(actions.del).not.toHaveBeenCalled();
+    });
+
+    it('Enter on option when busy does not call action', async () => {
+      // Arrange: Busy state.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Enter on the 'add' button.
+      await options[0]?.trigger('keydown', { key: 'Enter' });
+      await nextTick();
+
+      // Assert: No action was called.
+      expect(actions.add).not.toHaveBeenCalled();
+    });
+
+    it('Space on option when busy does not call action', async () => {
+      // Arrange: Busy state.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Act: Press Space on the 'add' button.
+      await options[0]?.trigger('keydown', { key: ' ' });
+      await nextTick();
+
+      // Assert: No action was called.
+      expect(actions.add).not.toHaveBeenCalled();
+    });
+
+    it('all options have tabindex -1 when busy', () => {
+      // Arrange: Busy state.
+      const meta = createMeta();
+      const entry = createEntry();
+      const actions = createActions();
+
+      // Act: Create component with isBusy=true.
+      const wrapper = createComponent(meta, entry, 'test.table.entryOptions', actions, true);
+      const options = wrapper.findAll('.entry-btn');
+
+      // Assert: All visible options have tabindex -1.
+      options.forEach((opt) => {
+        expect(opt.attributes('tabindex')).toBe('-1');
+      });
+    });
+  });
 });
