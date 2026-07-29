@@ -287,8 +287,8 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
         focusedRowIndex.value = props.data.length - 1;
         rowRefs.value.get(props.data.length - 1)?.focus();
       } else {
-        // Already tracking focus: move to entry above, wrapping to last entry.
-        let targetIndex = focusedRowIndex.value - 1;
+        // Already tracking focus: move to entry above the row that actually has focus, wrapping to last entry.
+        let targetIndex = entryIndex - 1;
         if (targetIndex < 0) targetIndex = props.data.length - 1;
         focusedRowIndex.value = targetIndex;
         rowRefs.value.get(targetIndex)?.focus();
@@ -309,8 +309,8 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
         focusedRowIndex.value = 0;
         rowRefs.value.get(0)?.focus();
       } else {
-        // Already tracking focus: move to entry below, wrapping to first entry.
-        let targetIndex = focusedRowIndex.value + 1;
+        // Already tracking focus: move to entry below the row that actually has focus, wrapping to first entry.
+        let targetIndex = entryIndex + 1;
         if (targetIndex >= props.data.length) targetIndex = 0;
         focusedRowIndex.value = targetIndex;
         rowRefs.value.get(targetIndex)?.focus();

@@ -786,254 +786,577 @@ describe('TablePage', () => {
   // Keyboard navigation
 
   describe('keyboard navigation', () => {
-    it('sortable column headers have tabindex 0, non-sortable have -1', () => {
-      // Arrange: Filled table.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'DESC');
+    describe('column headers', () => {
+      it('sortable column headers have tabindex 0, non-sortable have -1', () => {
+        // Arrange: Filled table.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'DESC');
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'createdAt',
-        'DESC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'createdAt',
+          'DESC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
 
-      // Assert: Sortable columns are focusable.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      // Index 0: createdAt (sortable, defSort='DESC').
-      expect(columnHeaders[0]?.attributes('tabindex')).toBe('0');
-      // Index 1: name (sortable, defSort='DESC').
-      expect(columnHeaders[1]?.attributes('tabindex')).toBe('0');
-      // Index 2: value (sortable, defSort='ASC').
-      expect(columnHeaders[2]?.attributes('tabindex')).toBe('0');
-      // Index 3: options (not sortable, defSort='').
-      expect(columnHeaders[3]?.attributes('tabindex')).toBe('-1');
+        // Assert: Sortable columns are focusable.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        // Index 0: createdAt (sortable, defSort='DESC').
+        expect(columnHeaders[0]?.attributes('tabindex')).toBe('0');
+        // Index 1: name (sortable, defSort='DESC').
+        expect(columnHeaders[1]?.attributes('tabindex')).toBe('0');
+        // Index 2: value (sortable, defSort='ASC').
+        expect(columnHeaders[2]?.attributes('tabindex')).toBe('0');
+        // Index 3: options (not sortable, defSort='').
+        expect(columnHeaders[3]?.attributes('tabindex')).toBe('-1');
+      });
+
+      it('Enter on current sort column toggles sort order', async () => {
+        // Arrange: Sorted by createdAt ASC.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'createdAt',
+          'ASC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Act: Press Enter on the current sort column header.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
+        await nextTick();
+
+        // Assert: Sort order toggled to DESC.
+        expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+        expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+        expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+
+        // Assert: Sort marker updated.
+        expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc']);
+      });
+
+      it('Space on current sort column also toggles sort order', async () => {
+        // Arrange: Sorted by createdAt ASC.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'createdAt',
+          'ASC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Act: Press Space on the current sort column header.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        await columnHeaders[0]?.trigger('keydown', { key: ' ' });
+        await nextTick();
+
+        // Assert: Sort order toggled to DESC.
+        expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+        expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+        expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+      });
+
+      it('Enter/Space on a different column changes sort column', async () => {
+        // Arrange: Sorted by name DESC.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Act: Press Enter on 'value' column header.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        await columnHeaders[2]?.trigger('keydown', { key: 'Enter' });
+        await nextTick();
+
+        // Assert: Sort column changed to 'value' with its default sort (ASC).
+        expect(wrapper.emitted('update:currSortBy')).toHaveLength(1);
+        expect(wrapper.emitted('update:currSortBy')?.[0]?.[0]).toBe('value');
+        expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
+        expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('ASC');
+
+        // Assert: Sort marker updated.
+        expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc']);
+      });
+
+      it('non-sortable column ignores keyboard', async () => {
+        // Arrange: Sorted by createdAt ASC.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'createdAt',
+          'ASC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Act: Press Enter and Space on non-sortable 'options' header.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        await columnHeaders[3]?.trigger('keydown', { key: 'Enter' });
+        await columnHeaders[3]?.trigger('keydown', { key: ' ' });
+        await nextTick();
+
+        // Assert: No sort change emitted.
+        expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+        expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+      });
+
+      it('irrelevant keys do nothing on sortable headers', async () => {
+        // Arrange: Sorted by createdAt ASC.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+
+        const wrapper = createComponent(
+          null,
+          null,
+          0,
+          'createdAt',
+          'ASC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Act: Press irrelevant keys on a sortable header.
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        await columnHeaders[0]?.trigger('keydown', { key: 'a' });
+        await columnHeaders[0]?.trigger('keydown', { key: 'Tab' });
+        await columnHeaders[0]?.trigger('keydown', { key: 'ArrowDown' });
+        await columnHeaders[0]?.trigger('keydown', { key: 'Escape' });
+        await nextTick();
+
+        // Assert: No sort change emitted.
+        expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+        expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+      });
+
+      it('keyboard sorting is disabled during inline edit with selection', async () => {
+        // Arrange: Table with inline edit enabled, row pre-selected.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+        const wrapper = createComponent(
+          data[0]!,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          true,
+          false,
+          'test.table.page.empty',
+        );
+
+        // Assert: Column headers have tabindex -1 (not focusable).
+        const columnHeaders = wrapper.findAll('.table-header-cell');
+        expect(columnHeaders[0]?.attributes('tabindex')).toBe('-1');
+
+        // Act: Press Enter on a sortable header.
+        await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
+        await nextTick();
+
+        // Assert: No sort change emitted.
+        expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
+        expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+      });
     });
 
-    it('Enter on current sort column toggles sort order', async () => {
-      // Arrange: Sorted by createdAt ASC.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+    describe('table rows', () => {
+      it('ArrowDown on any row with no selection focuses first row', async () => {
+        // Arrange: Filled table with no selection and 3 rows.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'createdAt',
-        'ASC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
 
-      // Act: Press Enter on the current sort column header.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
-      await nextTick();
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
 
-      // Assert: Sort order toggled to DESC.
-      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
-      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
-      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
+        // Spy on each row's focus method.
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-      // Assert: Sort marker updated.
-      expect(columnHeaders[0]?.find('span').classes()).toEqual(['arrow-desc']);
-    });
+        // Act: Press ArrowDown on the third row.
+        await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
 
-    it('Space on current sort column also toggles sort order', async () => {
-      // Arrange: Sorted by createdAt ASC.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+        // Assert: Focus called on the first row (first-time initialization with no selection).
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+      });
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'createdAt',
-        'ASC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+      it('ArrowUp on any row with no selection focuses last row', async () => {
+        // Arrange: Filled table with no selection and 3 rows.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
 
-      // Act: Press Space on the current sort column header.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      await columnHeaders[0]?.trigger('keydown', { key: ' ' });
-      await nextTick();
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
 
-      // Assert: Sort order toggled to DESC.
-      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
-      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
-      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('DESC');
-    });
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
 
-    it('Enter/Space on a different column changes sort column', async () => {
-      // Arrange: Sorted by name DESC.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'name',
-        'DESC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+        // Act: Press ArrowUp on the first row.
+        await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
 
-      // Act: Press Enter on 'value' column header.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      await columnHeaders[2]?.trigger('keydown', { key: 'Enter' });
-      await nextTick();
+        // Assert: Focus called on the last row (first-time initialization with no selection).
+        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
+      });
 
-      // Assert: Sort column changed to 'value' with its default sort (ASC).
-      expect(wrapper.emitted('update:currSortBy')).toHaveLength(1);
-      expect(wrapper.emitted('update:currSortBy')?.[0]?.[0]).toBe('value');
-      expect(wrapper.emitted('update:currSortOrder')).toHaveLength(1);
-      expect(wrapper.emitted('update:currSortOrder')?.[0]?.[0]).toBe('ASC');
+      it('ArrowDown with selection focuses selected row on first use', async () => {
+        // Arrange: Table with row 1 pre-selected.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
 
-      // Assert: Sort marker updated.
-      expect(columnHeaders[2]?.find('span').classes()).toEqual(['arrow-asc']);
-    });
+        const wrapper = createComponent(
+          data3[1]!, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
 
-    it('non-sortable column ignores keyboard', async () => {
-      // Arrange: Sorted by createdAt ASC.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'createdAt',
-        'ASC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-      // Act: Press Enter and Space on non-sortable 'options' header.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      await columnHeaders[3]?.trigger('keydown', { key: 'Enter' });
-      await columnHeaders[3]?.trigger('keydown', { key: ' ' });
-      await nextTick();
+        // Act: Press ArrowDown on any row.
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
 
-      // Assert: No sort change emitted.
-      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
-      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
-    });
+        // Assert: Focus jumps to the selected row, not to the first row.
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+      });
 
-    it('irrelevant keys do nothing on sortable headers', async () => {
-      // Arrange: Sorted by createdAt ASC.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'createdAt', 'ASC');
+      it('ArrowUp with selection focuses selected row on first use', async () => {
+        // Arrange: Table with row 1 pre-selected.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
 
-      const wrapper = createComponent(
-        null,
-        null,
-        0,
-        'createdAt',
-        'ASC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        false,
-        false,
-        'test.table.page.empty',
-      );
+        const wrapper = createComponent(
+          data3[1]!, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
 
-      // Act: Press irrelevant keys on a sortable header.
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      await columnHeaders[0]?.trigger('keydown', { key: 'a' });
-      await columnHeaders[0]?.trigger('keydown', { key: 'Tab' });
-      await columnHeaders[0]?.trigger('keydown', { key: 'ArrowDown' });
-      await columnHeaders[0]?.trigger('keydown', { key: 'Escape' });
-      await nextTick();
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
 
-      // Assert: No sort change emitted.
-      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
-      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
-    });
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-    it('keyboard sorting is disabled during inline edit with selection', async () => {
-      // Arrange: Table with inline edit enabled, row pre-selected.
-      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        // Act: Press ArrowUp on any row.
+        await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
 
-      const wrapper = createComponent(
-        data[0]!,
-        null,
-        0,
-        'name',
-        'DESC',
-        tableId,
-        columns,
-        data,
-        metadata,
-        resolveRowMeta,
-        false,
-        true,
-        true,
-        true,
-        false,
-        'test.table.page.empty',
-      );
+        // Assert: Focus jumps to the selected row, not to the last row.
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+      });
 
-      // Assert: Column headers have tabindex -1 (not focusable).
-      const columnHeaders = wrapper.findAll('.table-header-cell');
-      expect(columnHeaders[0]?.attributes('tabindex')).toBe('-1');
+      it('consecutive ArrowDown moves to next row and wraps at last', async () => {
+        // Arrange: 3 rows, no selection.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
 
-      // Act: Press Enter on a sortable header.
-      await columnHeaders[0]?.trigger('keydown', { key: 'Enter' });
-      await nextTick();
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
 
-      // Assert: No sort change emitted.
-      expect(wrapper.emitted('update:currSortBy')).toBeUndefined();
-      expect(wrapper.emitted('update:currSortOrder')).toBeUndefined();
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Act: Initialize via ArrowDown (focuses first row as first-time no-selection).
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowDown again → move to row 1.
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowDown again → move to row 2.
+        await rows[1]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowDown on last row → wraps to row 0.
+        await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[0]).toHaveBeenCalledTimes(2);
+      });
+
+      it('consecutive ArrowUp moves to previous row and wraps at first', async () => {
+        // Arrange: 3 rows, no selection.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Act: Initialize via ArrowUp (focuses last row as first-time no-selection).
+        await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowUp again → move to row 1.
+        await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowUp again → move to row 0.
+        await rows[1]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowUp on first row → wraps to last row.
+        await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+        expect(rowFocus[2]).toHaveBeenCalledTimes(2);
+      });
+
+      it('Enter on a row toggles selection', async () => {
+        // Arrange: 2 rows, no selection.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(2);
+
+        // Act: Press Enter on second row.
+        await rows[1]!.trigger('keydown', { key: 'Enter' });
+        await nextTick();
+
+        // Assert: Selected row emitted.
+        expect(wrapper.emitted('update:modelValue')).toHaveLength(1);
+        expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(data[1]);
+
+        // Act: Press Enter on same row again.
+        await rows[1]!.trigger('keydown', { key: 'Enter' });
+        await nextTick();
+
+        // Assert: Deselected (emitted null).
+        expect(wrapper.emitted('update:modelValue')).toHaveLength(2);
+        expect(wrapper.emitted('update:modelValue')?.[1]?.[0]).toBeNull();
+      });
+
+      it('Space on a row toggles selection', async () => {
+        // Arrange: 2 rows, no selection.
+        const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(2);
+
+        // Act: Press Space on first row.
+        await rows[0]!.trigger('keydown', { key: ' ' });
+        await nextTick();
+
+        // Assert: Selected row emitted.
+        expect(wrapper.emitted('update:modelValue')).toHaveLength(1);
+        expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(data[0]);
+      });
+
+      it('ArrowDown after Tab moves from the row that has focus, not from tracked index', async () => {
+        // Arrange: 3 rows, no selection.
+        // This test verifies the fix for the bug where Tab changes focus but
+        // focusedRowIndex tracks the old position, causing arrows to jump incorrectly.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Initialize focusedRowIndex via arrow navigation: ArrowDown on row 0 → focus row 0 (first time, no sel).
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+
+        // Simulate Tab: user tabs to row 2. focusedRowIndex is still 0 from previous arrow use.
+        // Trigger ArrowDown on row 2.
+        await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+
+        // With the bug (focusedRowIndex-based): target = 0 + 1 = 1 → focus row 1 → WRONG.
+        // With the fix (entryIndex-based): target = 2 + 1 = 3 → wraps to 0 → focus row 0 → CORRECT (row below row 2).
+        expect(rowFocus[0]).toHaveBeenCalledTimes(2);
+      });
+
+      it('ArrowUp after Tab moves from the row that has focus, not from tracked index', async () => {
+        // Arrange: 3 rows, no selection.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Initialize focusedRowIndex via arrow navigation: ArrowDown on row 0 → focus row 0 (first time, no sel).
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+
+        // Simulate Tab: user tabs to row 2. focusedRowIndex is still 0 from previous arrow use.
+        // Trigger ArrowUp on row 2.
+        await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+
+        // With the bug (focusedRowIndex-based): target = 0 - 1 = -1 → wraps to last row → STAYS on row 2 → WRONG.
+        // With the fix (entryIndex-based): target = 2 - 1 = 1 → focus row 1 → CORRECT (row above row 2).
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });
