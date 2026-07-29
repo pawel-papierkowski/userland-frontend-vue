@@ -9,22 +9,8 @@ UserLand is portfolio project for frontend in Vue.
 - **Routing:** Use Vue Router 4. Always use Named Routes when navigating programmatically or using `<router-link>`.
 
 ## Development Guidelines
-- **Modifications:**
-  - Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
-  - Do NOT install npm modules, unless explicitly asked. If you think installing new module is necessary, explain what module is needed and why.
-- **Language files:**
-  - This project uses multiple languages.
-  - Languages are in `/src/locales`. Each language has its own subdirectory (name is code of language, for example `/en` subdirectory for English).
-  - File structure (directories, file names and language keys in files) must be identical for all languages. Only difference is translation strings.
-  - Emojis are not allowed to be inserted by AI unless explicitly asked. Existing emojis are ok.
-  - If new language keys and translations are needed, always add them for all available languages (even for texts that are used only in tests) for consistency.
-- **Comments:**
-  - Preserve comments or update them whenever possible. New code must be properly commented.
-  - Provide `@param` and `@returns` where appropriate.
-- **Naming:** Use PascalCase for component filenames and classes (e.g., `UserProfile.vue`) and when importing them.
-- **Imports:** Use `@` when importing classes, types etc. Typescript files must end in `.ts`.
-- **Styling:** Use `<style scoped>` for component-specific CSS.
-- **Types:** We use TypeScript. Use semicolons.
+
+### General
 - **Placement:**
   - Pure code is in `src/code`.
   - Components are in `src/components`.
@@ -33,6 +19,26 @@ UserLand is portfolio project for frontend in Vue.
   - API calls via Axios are in `src/services`.
   - Pinia state management is in `src/stores`.
   - Global styles are in `src/styles`.
+- **Modifications:**
+  - Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
+  - Do NOT install npm modules, unless explicitly asked. If you think installing new module is necessary, explain what module is needed and why.
+- **Comments:**
+  - Preserve comments or update them whenever possible. New code must be properly commented.
+  - Provide `@param` and `@returns` where appropriate.
+- **Naming:** Use PascalCase for component filenames and classes (e.g., `UserProfile.vue`) and when importing them.
+- **Imports:** Use `@` when importing classes, types etc. Typescript files must end in `.ts`.
+- **Styling:** Use `<style scoped>` for component-specific CSS.
+- **Types:** We use TypeScript. Use semicolons.
+
+### Specific issues
+- **Data:**
+  - When dealing with local storage, add/use constants from `/code/data/app/storage.ts`.
+- **Language files:**
+  - This project uses multiple languages.
+  - Languages are in `/src/locales`. Each language has its own subdirectory (name is code of language, for example `/en` subdirectory for English).
+  - File structure (directories, file names and language keys in files) must be identical for all languages. Only difference is translation strings.
+  - Emojis are not allowed to be inserted by AI unless explicitly asked. Existing emojis are ok.
+  - If new language keys and translations are needed, always add them for all available languages (even for texts that are used only in tests) for consistency.
 - **Custom components:**:
   - Must support ARIA where applicable.
   - Must support keyboard navigation inside component where applicable.

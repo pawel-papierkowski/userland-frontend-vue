@@ -114,7 +114,7 @@ const isInvalid = (msgError: string | null): boolean => {
   <div class="form-alone">
     <h2>{{ t('user.registration.form.title') }}</h2>
 
-    <form @submit.prevent="handleRegister" novalidate>
+    <form @submit.prevent="handleRegister" novalidate autocomplete="off">
       <div class="form-group">
         <div class="onpage-msg warning" v-html="t('user.registration.form.warning')" />
         <div class="form-entry">
@@ -122,7 +122,7 @@ const isInvalid = (msgError: string | null): boolean => {
           <TextBox
             id="username"
             v-model="form.username"
-            autocomplete="off"
+            autocomplete="username"
             :required="true"
             :disabled="isBusy"
             :invalid="isInvalid(usernameError)"

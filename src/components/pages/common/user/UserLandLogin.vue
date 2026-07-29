@@ -180,7 +180,7 @@ const isInvalid = (msgError: string | null): boolean => {
             id="password"
             type="password"
             v-model="form.password"
-            autocomplete="new-password"
+            autocomplete="current-password"
             :required="true"
             :disabled="isBusy"
             :invalid="isInvalid(passwordError)"

@@ -190,14 +190,14 @@ onMounted(async () => {
       <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
 
-    <form @submit.prevent="saveUserData" novalidate v-if="!isLoading" data-testid="form">
+    <form @submit.prevent="saveUserData" novalidate v-if="!isLoading" data-testid="form" autocomplete="off">
       <div class="form-group">
         <div class="form-entry">
           <label for="username">{{ t('user.profile.form.username') }}:</label>
           <TextBox
             id="username"
             v-model="form.username"
-            autocomplete="off"
+            autocomplete="username"
             :required="true"
             :disabled="isBusy"
             :invalid="isInvalid(usernameError)"
@@ -212,7 +212,7 @@ onMounted(async () => {
             id="email"
             type="email"
             v-model="form.email"
-            autocomplete="off"
+            autocomplete="email"
             :disabled="true"
           />
         </div>
@@ -222,7 +222,7 @@ onMounted(async () => {
           <TextBox
             id="name"
             v-model="form.name"
-            autocomplete="off"
+            autocomplete="given-name"
             :required="true"
             :disabled="isBusy"
           />
@@ -233,7 +233,7 @@ onMounted(async () => {
           <TextBox
             id="surname"
             v-model="form.surname"
-            autocomplete="off"
+            autocomplete="family-name"
             :required="true"
             :disabled="isBusy"
           />

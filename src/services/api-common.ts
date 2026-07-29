@@ -7,7 +7,8 @@ import axios from 'axios';
 import { isAxiosError } from 'axios';
 
 import { logger } from '@/code/utils/logger.ts';
-import { apiAddress, locstLastApiCall } from '@/code/data/app/const.ts';
+import { apiAddress } from '@/code/data/app/const.ts';
+import { locstLastApiCall } from '@/code/data/app/storage.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 

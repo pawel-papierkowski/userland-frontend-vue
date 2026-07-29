@@ -3,7 +3,8 @@ import { nextTick } from 'vue';
 import { mount } from '@vue/test-utils';
 
 import i18n from '@/code/lang/i18n.ts';
-import { locstLang, fallbackLang, languages } from '@/code/data/app/const.ts';
+import { fallbackLang, languages } from '@/code/data/app/const.ts';
+import { locstLang } from '@/code/data/app/storage.ts';
 
 import UserLandLang from '@/components/common/other/UserLandLang.vue';
 

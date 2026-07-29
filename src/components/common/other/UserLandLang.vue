@@ -3,7 +3,8 @@
 
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { languages, fallbackLang, locstLang } from '@/code/data/app/const.ts';
+import { languages, fallbackLang } from '@/code/data/app/const.ts';
+import { locstLang } from '@/code/data/app/storage.ts';
 
 const currentLanguage = ref(fallbackLang);
 const systemLanguage = navigator.language.split('-')[0] || fallbackLang;

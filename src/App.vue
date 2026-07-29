@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 
-import { languages, fallbackLang, locstLang, locstJwt } from '@/code/data/app/const.ts';
+import { languages, fallbackLang } from '@/code/data/app/const.ts';
+import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';

@@ -3,7 +3,8 @@ import { logger } from '@/code/utils/logger.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { useLoginStore } from '@/stores/login.ts';
-import { locstJwt, prolongExpiration, locstLastApiCall, prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { prolongExpiration, prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { locstJwt, locstLastApiCall } from '@/code/data/app/storage.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 
 import apiLogging from '@/services/api-logging.ts';

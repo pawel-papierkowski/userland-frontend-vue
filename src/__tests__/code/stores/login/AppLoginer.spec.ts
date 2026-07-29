@@ -9,7 +9,7 @@ import { useLoginStore } from '@/stores/login.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-import { locstJwt } from '@/code/data/app/const.ts';
+import { locstJwt } from '@/code/data/app/storage.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 
 vi.mock('@/services/features/api-users.ts', () => ({

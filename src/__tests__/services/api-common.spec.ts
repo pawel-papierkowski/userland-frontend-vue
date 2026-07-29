@@ -6,7 +6,8 @@ import apiCommon from '@/services/api-common.ts';
 import apiLogging from '@/services/api-logging.ts';
 
 import { logger } from '@/code/utils/logger.ts';
-import { locstLastApiCall, prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { locstLastApiCall } from '@/code/data/app/storage.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
