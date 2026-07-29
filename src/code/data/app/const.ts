@@ -15,6 +15,11 @@ const apiAddressProd = 'https://userland-backend-java-299988087135.europe-centra
 /* Determines appropriate API base address depending on the current build environment. */
 export const apiAddress = projectProp.build === 'PROD' ? apiAddressProd : apiAddressDev;
 
+// ////////////////////////////////////////////////////////////////////////////
+
+/** Cookie consent value. */
+export const cookieConsent = 'ok';
+
 /** Fallback language. */
 export const fallbackLang = 'en';
 

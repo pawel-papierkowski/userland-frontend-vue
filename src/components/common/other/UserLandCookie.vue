@@ -6,6 +6,8 @@
  */
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+import { cookieConsent } from '@/code/data/app/const.ts';
 import { locstCookieConsent } from '@/code/data/app/storage.ts';
 
 const { t } = useI18n();
@@ -18,7 +20,7 @@ const isLeaving = ref(false);
 
 onMounted(() => {
   const consent = localStorage.getItem(locstCookieConsent);
-  if (consent !== 'ok') {
+  if (consent !== cookieConsent) {
     isVisible.value = true;
   }
 });
@@ -30,7 +32,7 @@ const dismiss = () => {
   setTimeout(() => {
     isVisible.value = false;
     isLeaving.value = false;
-    localStorage.setItem(locstCookieConsent, 'ok');
+    localStorage.setItem(locstCookieConsent, cookieConsent);
   }, 350);
 };
 </script>
