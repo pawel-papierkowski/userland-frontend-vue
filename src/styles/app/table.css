@@ -111,6 +111,9 @@
 .table-header-cell.sortable {
   cursor: pointer;
 }
+.table-header-cell:focus-visible {
+  outline-offset: -3px;
+}
 
 /* Table row classes. */
 
@@ -124,6 +127,10 @@
   grid-template-columns: subgrid;
   gap: 1px;
   background-color: #f1f1f1;
+}
+
+.table-row:focus-visible {
+  outline-offset: -3px;
 }
 
 .table-row.unselectable .table-cell {
