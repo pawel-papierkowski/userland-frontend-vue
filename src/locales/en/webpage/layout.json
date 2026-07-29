@@ -16,6 +16,10 @@
         "profile": "👤 Profile",
         "logout": "🚪 Logout"
       }
+    },
+    "cookie": {
+      "message": "This website uses cookies to improve your experience. By using this site you agree to the use of cookies.",
+      "button": "OK"
     }
   },
 

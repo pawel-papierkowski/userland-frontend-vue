@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 
 import StandardLayout from '@/components/layout/standard/StandardLayout.vue';
 import AdminLayout from '@/components/layout/admin/AdminLayout.vue';
+import UserLandCookie from '@/components/common/other/UserLandCookie.vue';
 
 const route = useRoute();
 </script>
@@ -15,6 +16,8 @@ const route = useRoute();
   <template v-if="route.meta.layout === 'ADMIN'">
     <AdminLayout />
   </template>
+
+  <UserLandCookie />
 </template>
 
 <style scoped></style>
