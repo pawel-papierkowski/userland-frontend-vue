@@ -112,7 +112,7 @@ const onKeyDown = async (e: KeyboardEvent, option: EntryOption, key: string) => 
         class="entry-btn"
         :class="optionClass(option)"
         :title="t(optionTooltip(option, key))"
-        tabindex="0"
+        :tabindex="optionCanUse(option) ? 0 : -1"
         @keydown="onKeyDown($event, option, key)"
         @click="optionExecute(option, key)"
       >

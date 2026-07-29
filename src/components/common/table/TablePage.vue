@@ -84,7 +84,7 @@ const props = withDefaults(
 /** Template refs for each row, keyed by their index in props.data. */
 const rowRefs = ref(new Map<number, HTMLElement>());
 
-/** Index of the row currently tracked as focused by arrow-key navigation. Null when not initialized. */
+/** Index of the row currently tracked as focused by arrow-key navigation. Null when no focus is present. */
 const focusedRowIndex = ref<number | null>(null);
 
 /**
@@ -248,6 +248,15 @@ const rowClass = (entry: E | null, rowIndex: number) => {
 };
 
 /**
+ * Determine tab index.
+ * @param entry Entry for given row.
+ * @returns Tab index attribute value.
+ */
+const getTabIndex = (): number => {
+  return props.canSelect ? 0 : -1;
+}
+
+/**
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select or null if you want to deselect.
  * @param force If true, ignore props.canSelect.
@@ -255,13 +264,14 @@ const rowClass = (entry: E | null, rowIndex: number) => {
 const selectEntry = (entry: E | null, force: boolean) => {
   if (!force && !props.canSelect) return;
   // This automatically emits 'update:modelValue' to the parent.
-  if (entry === null) selRecord.value = null;
-  else if (selRecord.value === entry) selRecord.value = null;
-  else selRecord.value = entry;
+  if (entry === null || selRecord.value === entry) {
+    selRecord.value = null;
+    focusedRowIndex.value = null;
+  } else selRecord.value = entry;
 };
 
 /**
- * What to do when you press key while focused on selected entry.
+ * What to do when you press key while focused on given row.
  * @param e Keyboard event.
  * @param entry Entry.
  */
@@ -274,20 +284,8 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
   switch (e.key) {
     case 'ArrowUp':
       e.preventDefault();
-      if (focusedRowIndex.value === null) {
-        // Not focused on any row yet: focus on selected entry, or last entry if none selected.
-        if (selRecord.value != null) {
-          const selIdx = props.data.indexOf(selRecord.value);
-          if (selIdx !== -1) {
-            focusedRowIndex.value = selIdx;
-            rowRefs.value.get(selIdx)?.focus();
-            return;
-          }
-        }
-        focusedRowIndex.value = props.data.length - 1;
-        rowRefs.value.get(props.data.length - 1)?.focus();
-      } else {
-        // Already tracking focus: move to entry above the row that actually has focus, wrapping to last entry.
+      // Move from the row that actually has focus, wrapping to last entry.
+      {
         let targetIndex = entryIndex - 1;
         if (targetIndex < 0) targetIndex = props.data.length - 1;
         focusedRowIndex.value = targetIndex;
@@ -296,20 +294,8 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
       break;
     case 'ArrowDown':
       e.preventDefault();
-      if (focusedRowIndex.value === null) {
-        // Not focused on any row yet: focus on selected entry, or first entry if none selected.
-        if (selRecord.value != null) {
-          const selIdx = props.data.indexOf(selRecord.value);
-          if (selIdx !== -1) {
-            focusedRowIndex.value = selIdx;
-            rowRefs.value.get(selIdx)?.focus();
-            return;
-          }
-        }
-        focusedRowIndex.value = 0;
-        rowRefs.value.get(0)?.focus();
-      } else {
-        // Already tracking focus: move to entry below the row that actually has focus, wrapping to first entry.
+      // Move from the row that actually has focus, wrapping to first entry.
+      {
         let targetIndex = entryIndex + 1;
         if (targetIndex >= props.data.length) targetIndex = 0;
         focusedRowIndex.value = targetIndex;
@@ -407,7 +393,7 @@ defineExpose({
           class="table-row"
           :class="rowClass(entry, rowIndex)"
           role="row"
-          :tabindex="canSelect ? 0 : -1"
+          :tabindex="getTabIndex()"
           :ref="(el) => setRowRef(rowIndex, el as HTMLElement | null)"
           @keydown="onKeydownEntry($event, entry)"
           @click="selectEntry(entry, false)"

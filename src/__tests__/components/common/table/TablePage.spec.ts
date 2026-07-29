@@ -25,6 +25,10 @@ interface TestForm {
   [key: string]: any;
 }
 
+const tableId = 'customTableId';
+
+//
+
 /** Convenience function to create component. */
 function createComponent(
   modelValue: TestEntry | null,
@@ -73,6 +77,10 @@ function createComponent(
 
 //
 
+/**
+ * Generate columns. Contains visible and not visible columns, also data and custom columns.
+ * @returns Columns.
+ */
 function genColumns(): ColumnData[] {
   return [
     {
@@ -118,7 +126,12 @@ function genColumns(): ColumnData[] {
   ];
 }
 
-function genData(page: number): TestEntry[] {
+/**
+ * Generate paged data. 2 records per page, 5 records in total.
+ * @param page Page number.
+ * @returns Generated records for given page.
+ */
+function genDataPaged(page: number): TestEntry[] {
   if (page === 0)
     return [
       { id: 40, name: 'AA', value: 'BB' },
@@ -160,13 +173,39 @@ function generateAll(
   resolveRowMeta: (entry: Record<string, any> | null) => RowMeta | null;
 } {
   const columns = genColumns();
-  const data = genData(isEmpty ? -1 : page);
+  const data = genDataPaged(isEmpty ? -1 : page);
   const metadata = genMetaData(isEmpty ? 0 : page, sortBy, sortOrder);
   const resolveRowMeta = genResolveRowMeta();
   return { columns, data, metadata, resolveRowMeta };
 }
 
-const tableId = 'customTableId';
+//
+
+/**
+ * Generate data. 3 records in total.
+ * @returns Generated records.
+ */
+function genData3(): TestEntry[] {
+  return [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+        ];
+}
+
+/**
+ * Generate data. 5 records in total.
+ * @returns Generated records.
+ */
+function genData5(): TestEntry[] {
+  return [
+          { id: 40, name: 'AA', value: 'BB' },
+          { id: 41, name: 'config', value: 'true' },
+          { id: 42, name: 'ZZ', value: '0' },
+          { id: 43, name: 'yy', value: '666' },
+          { id: 44, name: 'jj', value: '13' },
+        ];
+}
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -1038,15 +1077,57 @@ describe('TablePage', () => {
       });
     });
 
+    //
+
     describe('table rows', () => {
+      it('rows can be tabbed through when rows are selectable', async () => {
+        // Arrange: Filled table with no selection and 3 rows.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = genData3();
+
+        // Act: Create component.
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        // Assert: tabindex attribute has correct value.
+        for (const row of rows) {
+          expect(row.attributes('tabindex')).toBe('0');
+        }
+      });
+
+      it('rows cannot be tabbed through when rows are not selectable', async () => {
+        // Arrange: Filled table with no selection and 3 rows.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = genData3();
+
+        // Act: Create component.
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, false, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        // Assert: tabindex attribute has correct value.
+        for (const row of rows) {
+          expect(row.attributes('tabindex')).toBe('-1');
+        }
+      });
+
+      //
+
       it('ArrowDown on any row with no selection focuses first row', async () => {
         // Arrange: Filled table with no selection and 3 rows.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1064,18 +1145,14 @@ describe('TablePage', () => {
         await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
 
-        // Assert: Focus called on the first row (first-time initialization with no selection).
+        // Assert: ArrowDown on the last row wraps around to the first row.
         expect(rowFocus[0]).toHaveBeenCalledTimes(1);
       });
 
       it('ArrowUp on any row with no selection focuses last row', async () => {
         // Arrange: Filled table with no selection and 3 rows.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1092,74 +1169,62 @@ describe('TablePage', () => {
         await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
 
-        // Assert: Focus called on the last row (first-time initialization with no selection).
+        // Assert: ArrowUp on the first row wraps around to the last row.
         expect(rowFocus[2]).toHaveBeenCalledTimes(1);
       });
 
-      it('ArrowDown with selection focuses selected row on first use', async () => {
-        // Arrange: Table with row 1 pre-selected.
+      it('ArrowDown on any row with selection focuses on next row', async () => {
+        // Arrange: Table with pre-selected row.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data5: TestEntry[] = genData5(); // middle row selected
 
         const wrapper = createComponent(
-          data3[1]!, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
+          data5[2]!, null, 0, 'name', 'DESC', tableId,
+          columns, data5, metadata, resolveRowMeta,
           false, true, true, false, false, 'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
-        expect(rows).toHaveLength(3);
+        expect(rows).toHaveLength(5);
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Act: Press ArrowDown on any row.
+        // Act: Press ArrowDown on first row.
         await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
 
-        // Assert: Focus jumps to the selected row, not to the first row.
+        // Assert: Focus jumps to the second row.
         expect(rowFocus[1]).toHaveBeenCalledTimes(1);
       });
 
-      it('ArrowUp with selection focuses selected row on first use', async () => {
-        // Arrange: Table with row 1 pre-selected.
+      it('ArrowUp on any row with selection focuses last row', async () => {
+        // Arrange: Table with pre-selected row.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data5: TestEntry[] = genData5(); // middle row selected
 
         const wrapper = createComponent(
-          data3[1]!, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
+          data5[2]!, null, 0, 'name', 'DESC', tableId,
+          columns, data5, metadata, resolveRowMeta,
           false, true, true, false, false, 'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
-        expect(rows).toHaveLength(3);
+        expect(rows).toHaveLength(5);
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Act: Press ArrowUp on any row.
+        // Act: Press ArrowUp on first row.
         await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
 
-        // Assert: Focus jumps to the selected row, not to the last row.
-        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+        // Assert: Focus jumps to the last row.
+        expect(rowFocus[4]).toHaveBeenCalledTimes(1);
       });
 
       it('consecutive ArrowDown moves to next row and wraps at last', async () => {
         // Arrange: 3 rows, no selection.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1172,35 +1237,31 @@ describe('TablePage', () => {
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Act: Initialize via ArrowDown (focuses first row as first-time no-selection).
-        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
-        await nextTick();
-        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
-
-        // Act: ArrowDown again → move to row 1.
+        // Act: ArrowDown on row 0 → move to row 1.
         await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
         expect(rowFocus[1]).toHaveBeenCalledTimes(1);
 
-        // Act: ArrowDown again → move to row 2.
+        // Act: ArrowDown on row 1 → move to row 2.
         await rows[1]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
         expect(rowFocus[2]).toHaveBeenCalledTimes(1);
 
-        // Act: ArrowDown on last row → wraps to row 0.
+        // Act: ArrowDown on row 2 → wraps to row 0.
         await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
-        expect(rowFocus[0]).toHaveBeenCalledTimes(2);
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowDown on row 0 → move to row 1 again.
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+        expect(rowFocus[1]).toHaveBeenCalledTimes(2);
       });
 
       it('consecutive ArrowUp moves to previous row and wraps at first', async () => {
         // Arrange: 3 rows, no selection.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1213,25 +1274,25 @@ describe('TablePage', () => {
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Act: Initialize via ArrowUp (focuses last row as first-time no-selection).
-        await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
-        await nextTick();
-        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
-
-        // Act: ArrowUp again → move to row 1.
+        // Act: ArrowUp on row 2 → move to row 1.
         await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
         expect(rowFocus[1]).toHaveBeenCalledTimes(1);
 
-        // Act: ArrowUp again → move to row 0.
+        // Act: ArrowUp on row 1 → move to row 0.
         await rows[1]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
         expect(rowFocus[0]).toHaveBeenCalledTimes(1);
 
-        // Act: ArrowUp on first row → wraps to last row.
+        // Act: ArrowUp on row 0 → wraps to row 2.
         await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
-        expect(rowFocus[2]).toHaveBeenCalledTimes(2);
+        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
+
+        // Act: ArrowUp on row 2 → move to row 1 again.
+        await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+        expect(rowFocus[1]).toHaveBeenCalledTimes(2);
       });
 
       it('Enter on a row toggles selection', async () => {
@@ -1288,14 +1349,10 @@ describe('TablePage', () => {
 
       it('ArrowDown after Tab moves from the row that has focus, not from tracked index', async () => {
         // Arrange: 3 rows, no selection.
-        // This test verifies the fix for the bug where Tab changes focus but
-        // focusedRowIndex tracks the old position, causing arrows to jump incorrectly.
+        // This test verifies that when Tab changes focus, the next arrow press
+        // moves from the row that actually has focus, not from a stale tracked index.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1308,29 +1365,25 @@ describe('TablePage', () => {
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Initialize focusedRowIndex via arrow navigation: ArrowDown on row 0 → focus row 0 (first time, no sel).
+        // Establish a focusedRowIndex: ArrowDown on row 0 → moves to row 1.
         await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
-        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
 
-        // Simulate Tab: user tabs to row 2. focusedRowIndex is still 0 from previous arrow use.
-        // Trigger ArrowDown on row 2.
+        // Now focusedRowIndex = 1. Simulate Tab: user tabs to row 2.
+        // Press ArrowDown on row 2.
         await rows[2]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
 
-        // With the bug (focusedRowIndex-based): target = 0 + 1 = 1 → focus row 1 → WRONG.
-        // With the fix (entryIndex-based): target = 2 + 1 = 3 → wraps to 0 → focus row 0 → CORRECT (row below row 2).
-        expect(rowFocus[0]).toHaveBeenCalledTimes(2);
+        // entryIndex is 2 (the row with actual focus), not 1 (the stale tracked index).
+        // target = 2 + 1 = 3 → wraps to 0 → focus row 0.
+        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
       });
 
       it('ArrowUp after Tab moves from the row that has focus, not from tracked index', async () => {
         // Arrange: 3 rows, no selection.
         const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
-        const data3: TestEntry[] = [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+        const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
           null, null, 0, 'name', 'DESC', tableId,
@@ -1343,19 +1396,69 @@ describe('TablePage', () => {
 
         const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
 
-        // Initialize focusedRowIndex via arrow navigation: ArrowDown on row 0 → focus row 0 (first time, no sel).
+        // Establish a focusedRowIndex: ArrowDown on row 0 → moves to row 1.
         await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
         await nextTick();
-        expect(rowFocus[0]).toHaveBeenCalledTimes(1);
+        expect(rowFocus[1]).toHaveBeenCalledTimes(1);
 
-        // Simulate Tab: user tabs to row 2. focusedRowIndex is still 0 from previous arrow use.
-        // Trigger ArrowUp on row 2.
+        // Now focusedRowIndex = 1. Simulate Tab: user tabs to row 2.
+        // Press ArrowUp on row 2.
         await rows[2]!.trigger('keydown', { key: 'ArrowUp' });
         await nextTick();
 
-        // With the bug (focusedRowIndex-based): target = 0 - 1 = -1 → wraps to last row → STAYS on row 2 → WRONG.
-        // With the fix (entryIndex-based): target = 2 - 1 = 1 → focus row 1 → CORRECT (row above row 2).
+        // entryIndex is 2 (the row with actual focus), not 1 (the stale tracked index).
+        // target = 2 - 1 = 1 → focus row 1 → CORRECT (row above row 2).
+        expect(rowFocus[1]).toHaveBeenCalledTimes(2);
+      });
+
+      it('ArrowDown on first row (tabbed from paginer) moves to second row', async () => {
+        // Arrange: 3 rows, no selection.
+        // This test covers the bug where tabbing from paginer to the first row
+        // and pressing ArrowDown would stay on the first row instead of moving down.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = genData3();
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Act: User is on first row (tabbed from paginer). Press ArrowDown.
+        await rows[0]!.trigger('keydown', { key: 'ArrowDown' });
+        await nextTick();
+
+        // Assert: Focus moves to second row, not stuck on first.
         expect(rowFocus[1]).toHaveBeenCalledTimes(1);
+      });
+
+      it('ArrowUp on first row (tabbed from paginer) wraps to last row', async () => {
+        // Arrange: 3 rows, no selection.
+        const { columns, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+        const data3: TestEntry[] = genData3();
+
+        const wrapper = createComponent(
+          null, null, 0, 'name', 'DESC', tableId,
+          columns, data3, metadata, resolveRowMeta,
+          false, true, true, false, false, 'test.table.page.empty',
+        );
+
+        const rows = wrapper.findAll('.table-row');
+        expect(rows).toHaveLength(3);
+
+        const rowFocus = rows.map((r) => vi.spyOn(r.element as HTMLElement, 'focus'));
+
+        // Act: User is on first row (tabbed from paginer). Press ArrowUp.
+        await rows[0]!.trigger('keydown', { key: 'ArrowUp' });
+        await nextTick();
+
+        // Assert: Focus wraps to last row.
+        expect(rowFocus[2]).toHaveBeenCalledTimes(1);
       });
     });
   });
