@@ -36,7 +36,7 @@
  * Slots:
  * - custom slots defined for colums, with name 'column_[column name]'.
  */
-import { useSlots, computed, watch } from 'vue';
+import { useSlots, computed, watch, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { ColumnData, RowMeta, TableMetaResp } from '@/code/data/features/common/type.ts';
@@ -76,6 +76,35 @@ const props = withDefaults(
     inlineEdit: false,
     addNewEntry: false,
     empty: '',
+  },
+);
+
+// ROW REFS FOR KEYBOARD NAVIGATION
+
+/** Template refs for each row, keyed by their index in props.data. */
+const rowRefs = ref(new Map<number, HTMLElement>());
+
+/** Index of the row currently tracked as focused by arrow-key navigation. Null when not initialized. */
+const focusedRowIndex = ref<number | null>(null);
+
+/**
+ * Callback for `:ref` binding on each row div. Stores/removes the element in rowRefs.
+ * @param index Row index in data array.
+ * @param el The element or null (on unmount).
+ */
+const setRowRef = (index: number, el: HTMLElement | null) => {
+  if (el) {
+    rowRefs.value.set(index, el);
+  } else {
+    rowRefs.value.delete(index);
+  }
+};
+
+/** Reset focused row index when data changes (e.g. after pagination). */
+watch(
+  () => props.data,
+  () => {
+    focusedRowIndex.value = null;
   },
 );
 
@@ -238,14 +267,54 @@ const selectEntry = (entry: E | null, force: boolean) => {
  */
 const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
   if (entry === null) return;
+
+  const entryIndex = props.data.indexOf(entry);
+  if (entryIndex === -1) return;
+
   switch (e.key) {
     case 'ArrowUp':
-      // TODO Move focus to entry above focused entry, if none above or no entry selected, focus on last entry.
-      // Essentially same as Shift+Tab, except with Tab you can exit rows, but with arrows you cannot.
+      e.preventDefault();
+      if (focusedRowIndex.value === null) {
+        // Not focused on any row yet: focus on selected entry, or last entry if none selected.
+        if (selRecord.value != null) {
+          const selIdx = props.data.indexOf(selRecord.value);
+          if (selIdx !== -1) {
+            focusedRowIndex.value = selIdx;
+            rowRefs.value.get(selIdx)?.focus();
+            return;
+          }
+        }
+        focusedRowIndex.value = props.data.length - 1;
+        rowRefs.value.get(props.data.length - 1)?.focus();
+      } else {
+        // Already tracking focus: move to entry above, wrapping to last entry.
+        let targetIndex = focusedRowIndex.value - 1;
+        if (targetIndex < 0) targetIndex = props.data.length - 1;
+        focusedRowIndex.value = targetIndex;
+        rowRefs.value.get(targetIndex)?.focus();
+      }
       break;
     case 'ArrowDown':
-      // TODO Move focus to entry below focused entry, if none below or no entry selected, focus on first entry.
-      // Essentially same as Tab, except with Tab you can exit rows, but with arrows you cannot.
+      e.preventDefault();
+      if (focusedRowIndex.value === null) {
+        // Not focused on any row yet: focus on selected entry, or first entry if none selected.
+        if (selRecord.value != null) {
+          const selIdx = props.data.indexOf(selRecord.value);
+          if (selIdx !== -1) {
+            focusedRowIndex.value = selIdx;
+            rowRefs.value.get(selIdx)?.focus();
+            return;
+          }
+        }
+        focusedRowIndex.value = 0;
+        rowRefs.value.get(0)?.focus();
+      } else {
+        // Already tracking focus: move to entry below, wrapping to first entry.
+        let targetIndex = focusedRowIndex.value + 1;
+        if (targetIndex >= props.data.length) targetIndex = 0;
+        focusedRowIndex.value = targetIndex;
+        rowRefs.value.get(targetIndex)?.focus();
+      }
       break;
     case 'Enter':
     case ' ':
@@ -339,6 +408,7 @@ defineExpose({
           :class="rowClass(entry, rowIndex)"
           role="row"
           :tabindex="canSelect ? 0 : -1"
+          :ref="(el) => setRowRef(rowIndex, el as HTMLElement | null)"
           @keydown="onKeydownEntry($event, entry)"
           @click="selectEntry(entry, false)"
         >
