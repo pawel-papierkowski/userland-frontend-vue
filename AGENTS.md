@@ -79,11 +79,17 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
   - Tests must be independent (runnable in any order).
   - Use `beforeEach()` for common setup (visit page, intercept API calls).
   - Use `cy.intercept()` to stub API calls instead of relying on a live backend.
-  - Use Page Object Model (POM). POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.
+- Page Object Model (POM)
+  - Use Page Object Model.
+  - POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.
+  - Separate `General`, `Get elements` and `Execute actions` sections. See `LoginPage.ts` for example.
 - Conventions
   - Use `cy.ts` suffix and kebab-case convention for test file naming. Example: `file-name.cy.ts`.
   - Directory structure inside `cypress/e2e` should follow route groups (by page/feature).
   - Use `data-testid` selector. Use `cy.getByTestId()` custom command to select elements (shorthand for `[data-testid]` attribute).
+- Other
+  - Do not chain `cy` commands.
+  - Add new `data-testid` attributes if missing and needed. Separate testid sections with `_`. Example: `login_btn_submit`.
 
 ### Style of test code
 

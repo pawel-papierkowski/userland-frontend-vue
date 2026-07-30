@@ -191,14 +191,15 @@ const isInvalid = (msgError: string | null): boolean => {
         <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
 
-      <button type="submit" :disabled="isBusy">
+      <button type="submit" :disabled="isBusy" data-testid="login_btn_submit">
         {{ isBusy ? t('user.login.form.buttonBusy') : t('user.login.form.button') }}
       </button>
     </form>
 
     <div class="form-under-2" v-if="!isAdminPanel">
-      <div class="nav-minor form-under-left" @click="goRegistration()">{{ t('user.login.form.noAccount') }}</div>
-      <div class="nav-minor form-under-right" @click="goPasswordReset()">
+      <div class="nav-minor form-under-left" @click="goRegistration()" data-testid="login_btn_noAccount">
+        {{ t('user.login.form.noAccount') }}</div>
+      <div class="nav-minor form-under-right" @click="goPasswordReset()" data-testid="login_btn_passwordReset">
         {{ t('user.login.form.passwordReset') }}
       </div>
     </div>
