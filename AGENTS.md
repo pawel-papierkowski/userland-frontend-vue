@@ -11,6 +11,7 @@ UserLand is portfolio project for frontend in Vue.
 ## Development Guidelines
 
 ### General
+- **Types:** We use TypeScript. Use semicolons.
 - **Placement:**
   - Pure code is in `src/code`.
   - Components are in `src/components`.
@@ -28,7 +29,6 @@ UserLand is portfolio project for frontend in Vue.
 - **Naming:** Use PascalCase for component filenames and classes (e.g., `UserProfile.vue`) and when importing them.
 - **Imports:** Use `@` when importing classes, types etc. Typescript files must end in `.ts`.
 - **Styling:** Use `<style scoped>` for component-specific CSS.
-- **Types:** We use TypeScript. Use semicolons.
 
 ### Specific issues
 - **Data:**
@@ -49,7 +49,9 @@ UserLand is portfolio project for frontend in Vue.
 - **Build for production:** `npm run build`
 - **Linting:** `npm run lint`
 - **Formatting:** `npm run format` (using Prettier)
-- **Run all tests:** `npm run test:ci`
+- **Run all CI tests:** `npm run test:ci`
+- **Run E2E tests (headless/CI):** `npm run test:e2e`
+- **Run E2E tests (interactive):** `npm run test:e2e:dev`
 
 ## Reviewing code
 When I ask for review, in order of importance:
@@ -62,13 +64,26 @@ When I ask for review, in order of importance:
   - If previously reported issues still exist, inform about them again unless they were explained or rejected.
 
 ## Testing
-- We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
+We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
+
+### Vitest
 - Tests are NOT co-located. We have mirror directory structure in separate `src/__tests__/` directory. Test files have `.spec.ts` at end of their names.
 - Use test suites.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
 - When you add `vi.fn()`, you need to add appropriate type parameter, for example `vi.fn<() => void>()`.
 - When testing changes/fixes to code/components, run only relevant tests (`.spec.ts` file or even only single relevant test).
 - Run all tests using `npm run test:ci` when you need to verify everything works after you finish work.
+
+### Cypress E2E
+- General
+  - Tests must be independent (runnable in any order).
+  - Use `beforeEach()` for common setup (visit page, intercept API calls).
+  - Use `cy.intercept()` to stub API calls instead of relying on a live backend.
+  - Use Page Object Model (POM). POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.
+- Conventions
+  - Use `cy.ts` suffix and kebab-case convention for test file naming. Example: `file-name.cy.ts`.
+  - Directory structure inside `cypress/e2e` should follow route groups (by page/feature).
+  - Use `data-testid` selector. Use `cy.getByTestId()` custom command to select elements (shorthand for `[data-testid]` attribute).
 
 ### Style of test code
 

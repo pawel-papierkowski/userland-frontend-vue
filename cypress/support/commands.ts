@@ -36,4 +36,15 @@
 //   }
 // }
 
-export {}
+Cypress.Commands.add('getByTestId', (id: string) => {
+  return cy.get(`[data-testid="${id}"]`);
+});
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Cypress {
+    interface Chainable<Subject> {
+      getByTestId(id: string): Chainable<JQuery<HTMLElement>>;
+    }
+  }
+}
