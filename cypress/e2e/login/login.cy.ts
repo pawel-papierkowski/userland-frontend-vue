@@ -1,7 +1,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // Login Page E2E Tests
 
-import LoginPage from '../../support/pages/LoginPage';
+import LoginPage from '../../support/pages/standard/LoginPage.ts';
 
 /**
  * Generate a valid JWT token for testing that passes the expiration check.
