@@ -187,10 +187,10 @@ function generateAll(
  */
 function genData3(): TestEntry[] {
   return [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-        ];
+    { id: 40, name: 'AA', value: 'BB' },
+    { id: 41, name: 'config', value: 'true' },
+    { id: 42, name: 'ZZ', value: '0' },
+  ];
 }
 
 /**
@@ -199,12 +199,12 @@ function genData3(): TestEntry[] {
  */
 function genData5(): TestEntry[] {
   return [
-          { id: 40, name: 'AA', value: 'BB' },
-          { id: 41, name: 'config', value: 'true' },
-          { id: 42, name: 'ZZ', value: '0' },
-          { id: 43, name: 'yy', value: '666' },
-          { id: 44, name: 'jj', value: '13' },
-        ];
+    { id: 40, name: 'AA', value: 'BB' },
+    { id: 41, name: 'config', value: 'true' },
+    { id: 42, name: 'ZZ', value: '0' },
+    { id: 43, name: 'yy', value: '666' },
+    { id: 44, name: 'jj', value: '13' },
+  ];
 }
 
 // ////////////////////////////////////////////////////////////////////////////
@@ -1087,15 +1087,28 @@ describe('TablePage', () => {
 
         // Act: Create component.
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
         expect(rows).toHaveLength(3);
 
-        // Assert: tabindex attribute has correct value.
+        // Assert: Tabindex attribute has correct value.
         for (const row of rows) {
           expect(row.attributes('tabindex')).toBe('0');
         }
@@ -1108,15 +1121,28 @@ describe('TablePage', () => {
 
         // Act: Create component.
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, false, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          false,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
         expect(rows).toHaveLength(3);
 
-        // Assert: tabindex attribute has correct value.
+        // Assert: Tabindex attribute has correct value.
         for (const row of rows) {
           expect(row.attributes('tabindex')).toBe('-1');
         }
@@ -1130,9 +1156,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1155,9 +1194,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1179,9 +1231,22 @@ describe('TablePage', () => {
         const data5: TestEntry[] = genData5(); // middle row selected
 
         const wrapper = createComponent(
-          data5[2]!, null, 0, 'name', 'DESC', tableId,
-          columns, data5, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          data5[2]!,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data5,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1203,9 +1268,22 @@ describe('TablePage', () => {
         const data5: TestEntry[] = genData5(); // middle row selected
 
         const wrapper = createComponent(
-          data5[2]!, null, 0, 'name', 'DESC', tableId,
-          columns, data5, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          data5[2]!,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data5,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1227,9 +1305,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1264,9 +1355,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1300,9 +1404,22 @@ describe('TablePage', () => {
         const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1330,9 +1447,22 @@ describe('TablePage', () => {
         const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1355,9 +1485,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1386,9 +1529,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1419,9 +1575,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');
@@ -1443,9 +1612,22 @@ describe('TablePage', () => {
         const data3: TestEntry[] = genData3();
 
         const wrapper = createComponent(
-          null, null, 0, 'name', 'DESC', tableId,
-          columns, data3, metadata, resolveRowMeta,
-          false, true, true, false, false, 'test.table.page.empty',
+          null,
+          null,
+          0,
+          'name',
+          'DESC',
+          tableId,
+          columns,
+          data3,
+          metadata,
+          resolveRowMeta,
+          false,
+          true,
+          true,
+          false,
+          false,
+          'test.table.page.empty',
         );
 
         const rows = wrapper.findAll('.table-row');

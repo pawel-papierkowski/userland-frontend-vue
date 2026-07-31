@@ -64,7 +64,7 @@ describe('RadioBox', () => {
     it('shows correctly translated options with langPrefix', async () => {
       // Check if radiobox is constructed correctly.
 
-      // Arrange&Act: set up radiobox.
+      // Arrange&Act: Set up radiobox.
       const radioBox = createComponent(null, 'someRadioBox', createOptions(), false, false, 'test.radioBox');
 
       // Assert: Radiobox has correct data-testid attribute.
@@ -201,12 +201,13 @@ describe('RadioBox', () => {
     });
   });
 
-    it('navigates with keyboard after paired <label> is clicked', async () => {
-      // Verifies that clicking a <label for="id"> focuses the radiobox
-      // (via hidden button), and then arrow keys navigate between options.
+  it('navigates with keyboard after paired <label> is clicked', async () => {
+    // Verifies that clicking a <label for="id"> focuses the radiobox
+    // (via hidden button), and then arrow keys navigate between options.
 
-      // Arrange: Mount RadioBox inside a wrapper with a paired <label>.
-      const wrapper = mount({
+    // Arrange: Mount RadioBox inside a wrapper with a paired <label>.
+    const wrapper = mount(
+      {
         template: `
           <div>
             <label for="testRb">Test Label</label>
@@ -223,47 +224,49 @@ describe('RadioBox', () => {
           const value = ref<string | number | null>('one');
           return { value, options: createOptions() };
         },
-      }, {
+      },
+      {
         global: { plugins: [i18n] },
-      });
-      await nextTick();
+      },
+    );
+    await nextTick();
 
-      const radioBox = wrapper.findComponent(RadioBox);
-      const options = radioBox.findAll('.radiobox-option');
+    const radioBox = wrapper.findComponent(RadioBox);
+    const options = radioBox.findAll('.radiobox-option');
 
-      // Assert: Initial selection is 'one' (index 1).
-      expect(options[1]?.attributes('aria-checked')).toBe('true');
+    // Assert: Initial selection is 'one' (index 1).
+    expect(options[1]?.attributes('aria-checked')).toBe('true');
 
-      // Act: Click the <label>. The browser clicks on the hidden <button> (labelable),
-      // focusing it. Arrow key events on the button bubble to the wrapper's @keydown.
-      await wrapper.find('label').trigger('click');
-      await nextTick();
+    // Act: Click the <label>. The browser clicks on the hidden <button> (labelable),
+    // focusing it. Arrow key events on the button bubble to the wrapper's @keydown.
+    await wrapper.find('label').trigger('click');
+    await nextTick();
 
-      // Act: Press ArrowDown to navigate to next option.
-      // Keydown on the hidden button bubbles to .radiobox-wrapper.
-      await wrapper.find('#testRb').trigger('keydown', { key: 'ArrowDown' });
-      await nextTick();
+    // Act: Press ArrowDown to navigate to next option.
+    // Keydown on the hidden button bubbles to .radiobox-wrapper.
+    await wrapper.find('#testRb').trigger('keydown', { key: 'ArrowDown' });
+    await nextTick();
 
-      // Assert: Selection moved to 'two' (index 2).
-      expect(options[1]?.attributes('aria-checked')).toBe('false');
-      expect(options[2]?.attributes('aria-checked')).toBe('true');
-      expect(options[2]?.attributes('tabindex')).toBe('0');
-      expect(radioBox.emitted('update:modelValue')).toHaveLength(1);
-      expect(radioBox.emitted('update:modelValue')?.[0]?.[0]).toBe('two');
+    // Assert: Selection moved to 'two' (index 2).
+    expect(options[1]?.attributes('aria-checked')).toBe('false');
+    expect(options[2]?.attributes('aria-checked')).toBe('true');
+    expect(options[2]?.attributes('tabindex')).toBe('0');
+    expect(radioBox.emitted('update:modelValue')).toHaveLength(1);
+    expect(radioBox.emitted('update:modelValue')?.[0]?.[0]).toBe('two');
 
-      // Act: Press ArrowDown again.
-      await wrapper.find('#testRb').trigger('keydown', { key: 'ArrowDown' });
-      await nextTick();
+    // Act: Press ArrowDown again.
+    await wrapper.find('#testRb').trigger('keydown', { key: 'ArrowDown' });
+    await nextTick();
 
-      // Assert: Selection moved to 'three' (index 3).
-      expect(options[2]?.attributes('aria-checked')).toBe('false');
-      expect(options[3]?.attributes('aria-checked')).toBe('true');
-      expect(options[3]?.attributes('tabindex')).toBe('0');
-      expect(radioBox.emitted('update:modelValue')).toHaveLength(2);
-      expect(radioBox.emitted('update:modelValue')?.[1]?.[0]).toBe('three');
-    });
+    // Assert: Selection moved to 'three' (index 3).
+    expect(options[2]?.attributes('aria-checked')).toBe('false');
+    expect(options[3]?.attributes('aria-checked')).toBe('true');
+    expect(options[3]?.attributes('tabindex')).toBe('0');
+    expect(radioBox.emitted('update:modelValue')).toHaveLength(2);
+    expect(radioBox.emitted('update:modelValue')?.[1]?.[0]).toBe('three');
+  });
 
-    //
+  //
 
   // ////////////////////////////////////////////////////////////////////////////
   // Accessibility tests
@@ -290,7 +293,7 @@ describe('RadioBox', () => {
       expect(options[2]?.attributes('aria-checked')).toBe('true');
       expect(options[3]?.attributes('aria-checked')).toBe('false');
 
-      // Assert: tabindex follows roving pattern — only selected option (index 2) has tabindex 0.
+      // Assert: Tabindex follows roving pattern — only selected option (index 2) has tabindex 0.
       expect(options[0]?.attributes('tabindex')).toBe('-1');
       expect(options[1]?.attributes('tabindex')).toBe('-1');
       expect(options[2]?.attributes('tabindex')).toBe('0');
@@ -441,8 +444,9 @@ describe('RadioBox', () => {
       // Uses an <input> as the previous field.
 
       // Arrange: Mount a wrapper with an <input> followed by a <RadioBox>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <RadioBox
@@ -453,14 +457,16 @@ describe('RadioBox', () => {
             />
           </div>
         `,
-        components: { RadioBox },
-        setup() {
-          const value = ref<string | number | null>('one');
-          return { value, options: createOptions() };
+          components: { RadioBox },
+          setup() {
+            const value = ref<string | number | null>('one');
+            return { value, options: createOptions() };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const radioBox = wrapper.findComponent(RadioBox);

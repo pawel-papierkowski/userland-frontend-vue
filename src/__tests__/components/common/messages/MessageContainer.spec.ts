@@ -112,7 +112,7 @@ describe('MessageContainer', () => {
       // Arrange&Act: Create component.
       const messageContainer = createComponent();
 
-      // Assert: wrapper has needed aria attributes.
+      // Assert: Wrapper has needed aria attributes.
       expect(messageContainer.find('.message-wrapper').attributes('aria-label')).toBe('Notifications');
     });
   });

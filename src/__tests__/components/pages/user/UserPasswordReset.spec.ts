@@ -241,7 +241,7 @@ describe('UserPasswordReset', () => {
 
       const wrapper = createComponent();
 
-      // Act: trigger a submit on an empty form to set usedButton = true.
+      // Act: Trigger a submit on an empty form to set usedButton = true.
       await wrapper.find('button[type="submit"]').trigger('submit');
       await flushPromises();
 

@@ -468,7 +468,7 @@ describe('AppLoginer', () => {
       // Assert: JWT was removed from localStorage.
       expect(localStorage.getItem(locstJwt)).toBeNull();
 
-      // Assert: warning message is present in store.
+      // Assert: Warning message is present in store.
       expect(messageStore.messages).toHaveLength(1);
       expect(messageStore.messages[0]?.level).toBe(EnMessageLevel.Warning);
       expect(messageStore.messages[0]?.title).toBe('Session expired');

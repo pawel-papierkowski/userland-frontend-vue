@@ -123,7 +123,7 @@ describe('DropdownMenu', () => {
       await dropdownMenu.find('[role="button"]').trigger('click');
       await nextTick();
 
-      // Assert: tabindex is -1.
+      // Assert: Tabindex is -1.
       expect(dropdownMenu.find('.dropdown-slot').attributes('tabindex')).toBe('-1');
     });
   });

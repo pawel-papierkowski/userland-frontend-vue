@@ -3,8 +3,12 @@ class LoginPage {
   // //////////////////////////////////////////////////////////////////////////
   // General.
 
-  /** Visit the login page. */
-  visit(): Cypress.Chainable<Cypress.AUTWindow> {
+  /**
+   * Visit the login page. This project has two version of login page: standard and for admin panel.
+   * @param isAdmin If true, we are on login panel belonging to administration panel. False means standard login page.
+   */
+  visit(isAdmin: boolean): Cypress.Chainable<Cypress.AUTWindow> {
+    if (isAdmin) return cy.visit('/admin');
     return cy.visit('/login');
   }
 

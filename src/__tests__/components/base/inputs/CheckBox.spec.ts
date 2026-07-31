@@ -240,7 +240,7 @@ describe('CheckBox', () => {
       expect(checkBox.find('.checkbox').attributes('aria-checked')).toBe('mixed');
       // Assert: Aria-disabled is not present when enabled.
       expect(checkBox.find('.checkbox').attributes('aria-disabled')).toBeUndefined();
-      // Assert: tabindex is 0 when enabled.
+      // Assert: Tabindex is 0 when enabled.
       expect(checkBox.find('.checkbox').attributes('tabindex')).toBe('0');
 
       // Act: Click to set true.

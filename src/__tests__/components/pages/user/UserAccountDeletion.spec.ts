@@ -83,7 +83,7 @@ describe('UserAccountDeletion', () => {
         token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
       });
 
-      // Assert: we were logged out.
+      // Assert: We were logged out.
       expect(AppLoginer.isLogged()).toBe(false);
 
       // Assert: Verify success and logout messages.

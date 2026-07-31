@@ -233,7 +233,7 @@ describe('api-common', () => {
       // Act: Call interceptor.
       await interceptor(config);
 
-      // Assert: timestamp was saved.
+      // Assert: Timestamp was saved.
       const saved = localStorage.getItem(locstLastApiCall);
       expect(saved).not.toBeNull();
       // Should be a recent timestamp (within the last second).
