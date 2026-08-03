@@ -37,7 +37,12 @@ const applyLanguage = (langKey: string) => {
 
 <template>
   <template v-for="language in languages" :key="language">
-    <div class="lang-container" @click="setLanguage(language)" :title="t('languages.' + language + '.name')">
+    <div
+      class="lang-container"
+      :data-testid="'lang_' + language"
+      @click="setLanguage(language)"
+      :title="t('languages.' + language + '.name')"
+    >
       {{ t('languages.' + language + '.flag') }}
     </div>
   </template>
