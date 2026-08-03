@@ -180,13 +180,15 @@ const isInvalid = (msgError: string | null): boolean => {
         <div class="onpage-msg info" v-html="t('test.notify')" />
       </div>
 
-      <button type="submit" :disabled="isBusy">
+      <button type="submit" :disabled="isBusy" data-testid="registration_btn_submit">
         {{ isBusy ? t('user.registration.form.buttonBusy') : t('user.registration.form.button') }}
       </button>
     </form>
 
     <div class="form-under-1">
-      <div class="nav-minor form-under-center" @click="goLogin()">{{ t('user.registration.form.hasAccount') }}</div>
+      <div class="nav-minor form-under-center" @click="goLogin()" data-testid="registration_btn_login">
+        {{ t('user.registration.form.hasAccount') }}
+      </div>
     </div>
   </div>
 </template>

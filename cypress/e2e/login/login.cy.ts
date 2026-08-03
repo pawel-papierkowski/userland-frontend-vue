@@ -1,9 +1,11 @@
-import { createTestJwt } from '@/../cypress/support/helpers.ts';
-import LoginPage from '@/../cypress/support/pages/standard/LoginPage.ts';
-
 // ////////////////////////////////////////////////////////////////////////////
 // Login Page E2E Tests
 
+import { locstJwt } from '@/code/data/app/storage.ts';
+import { createTestJwt } from '@/../cypress/support/helpers.ts';
+import LoginPage from '@/../cypress/support/pages/standard/LoginPage.ts';
+
+/** Stub API call to return token on successful login. */
 function stubLoginCall200(jwtToken: string = TEST_JWT) {
   cy.intercept('POST', '**/api/users/login', {
     statusCode: 200,
@@ -11,6 +13,7 @@ function stubLoginCall200(jwtToken: string = TEST_JWT) {
   }).as('loginRequest');
 }
 
+/** Stub API call to return failed login. */
 function stubLoginCall409() {
   cy.intercept('POST', '**/api/users/login', {
     statusCode: 409,
@@ -28,7 +31,7 @@ const TEST_JWT = createTestJwt();
 
 describe('Login Page', () => {
   beforeEach(() => {
-    cy.clearLocalStorage('app-jwt');
+    cy.clearLocalStorage(locstJwt);
   });
 
   describe('general', () => {
@@ -47,6 +50,9 @@ describe('Login Page', () => {
       // Assert: Wait for API call and verify redirect to home.
       cy.wait('@loginRequest');
       cy.url().should('eq', Cypress.config().baseUrl);
+
+      // Assert: Success message is shown.
+      cy.getByTestId('msgContainer').find('.message-info').should('contain.text', 'User logged in successfully');
     });
 
     it('shows error and stays on page when login fails', () => {
@@ -65,21 +71,9 @@ describe('Login Page', () => {
       cy.wait('@loginRequest');
       cy.url().should('include', '/login');
       loginPage.getSubmitButton().should('be.enabled');
-    });
 
-    it('shows validation errors on empty form submission', () => {
-      const loginPage = new LoginPage();
-
-      // Act: Submit without filling any fields.
-      loginPage.visit(false);
-      loginPage.submit();
-
-      // Assert: Two inline error messages appear (email + password).
-      loginPage.getErrorMessages().should('have.length', 2);
-      loginPage.getErrorMessages().each(($el) => {
-        cy.wrap($el).should('not.be.empty');
-      });
-      cy.url().should('include', '/login');
+      // Assert: Error message is shown.
+      cy.getByTestId('msgContainer').find('.message-error').should('contain.text', 'A request conflicts with the current state of the server.');
     });
 
     it('navigates to registration page', () => {
@@ -110,6 +104,29 @@ describe('Login Page', () => {
 
       // Assert: Route guard redirects to home.
       cy.url().should('eq', Cypress.config().baseUrl);
+    });
+  });
+
+  describe('client-side validation', () => {
+    it('shows validation errors on empty form submission', () => {
+      // Arrange: Stub API call to detect if it is called.
+      stubLoginCall200();
+
+      const loginPage = new LoginPage();
+
+      // Act: Submit without filling any fields.
+      loginPage.visit(false);
+      loginPage.submit();
+
+      // Assert: Two inline error messages appear (email + password).
+      loginPage.getErrorMessages().should('have.length', 2);
+      loginPage.getErrorMessages().each(($el) => {
+        cy.wrap($el).should('not.be.empty');
+      });
+
+      // Assert: API was not called and user stays on page.
+      cy.get('@loginRequest.all').should('have.length', 0);
+      cy.url().should('include', '/login');
     });
   });
 

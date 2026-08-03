@@ -86,6 +86,7 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
   - POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.
   - Separate `General`, `Get elements` and `Execute actions` sections. See `LoginPage.ts` for example.
 - Conventions
+  - In imports use `@`. Example: `import RegistrationPage from '@/../cypress/support/pages/standard/RegistrationPage.ts'`;
   - Use `cy.ts` suffix and kebab-case convention for test file naming. Example: `file-name.cy.ts`.
   - Directory structure inside `cypress/e2e` should follow route groups (by page/feature).
   - Use `data-testid` selector. Use `cy.getByTestId()` custom command to select elements (shorthand for `[data-testid]` attribute).

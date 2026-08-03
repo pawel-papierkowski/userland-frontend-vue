@@ -8,8 +8,8 @@ class LoginPage {
    * @param isAdmin If true, we are on login panel belonging to administration panel. False means standard login page.
    */
   visit(isAdmin: boolean): Cypress.Chainable<Cypress.AUTWindow> {
-    if (isAdmin) return cy.visit('/admin');
-    return cy.visit('/login');
+    const path = isAdmin ? '/admin' : '/login' ;
+    return cy.visitUserLand(path);
   }
 
   // //////////////////////////////////////////////////////////////////////////
@@ -35,6 +35,16 @@ class LoginPage {
     return cy.get('.form-text-error');
   }
 
+  /** Get the "I already have an account" navigation link. */
+  getNoAccountLink(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.getByTestId('login_btn_noAccount');
+  }
+
+  /** Get the "I already have an account" navigation link. */
+  getPasswordResetLink(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.getByTestId('login_btn_passwordReset');
+  }
+
   // //////////////////////////////////////////////////////////////////////////
   // Execute actions.
 
@@ -57,12 +67,12 @@ class LoginPage {
 
   /** Click the "I don't have an account" navigation link. */
   clickRegistrationLink(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('login_btn_noAccount').click();
+    return this.getNoAccountLink().click();
   }
 
   /** Click the "I forgot my password" navigation link. */
   clickPasswordResetLink(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('login_btn_passwordReset').click();
+    return this.getPasswordResetLink().click();
   }
 }
 
