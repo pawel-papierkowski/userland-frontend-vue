@@ -1,36 +1,8 @@
-// ////////////////////////////////////////////////////////////////////////////
-// Login Page E2E Tests
-
+import { createTestJwt } from '../../support/helpers.ts';
 import LoginPage from '../../support/pages/standard/LoginPage.ts';
 
-/**
- * Generate a valid JWT token for testing that passes the expiration check.
- * Uses base64url encoding and a far-future expiration timestamp.
- * @param permissions Optional list of permissions to encode in token. Entry prefix and suffix are joined with
- * underscore, e.g. `{ prefix: 'role', suffix: 'admin' }` encodes permission 'role_admin'. Multiple suffixes
- * of the same prefix are comma-separated in a single claim.
- * @returns JWT token as string.
- */
-function createTestJwt(permissions: { prefix: string; suffix: string }[] = []): string {
-  const encode = (obj: object): string =>
-    btoa(JSON.stringify(obj)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
-
-  const now = Math.floor(Date.now() / 1000);
-  const claims: Record<string, string | number> = {
-    sub: 'test@example.com',
-    name: 'Test User',
-    iat: now - 60,
-    exp: now + 86_400 * 365, // 1 year from now
-  };
-
-  // Encode permissions as custom claims (example: 'role' claim with value 'admin' -> 'role_admin').
-  for (const perm of permissions) {
-    const existing = claims[perm.prefix];
-    claims[perm.prefix] = typeof existing === 'string' ? `${existing},${perm.suffix}` : perm.suffix;
-  }
-
-  return [encode({ alg: 'HS256', typ: 'JWT' }), encode(claims), 'fake-signature'].join('.');
-}
+// ////////////////////////////////////////////////////////////////////////////
+// Login Page E2E Tests
 
 function stubLoginCall200(jwtToken: string = TEST_JWT) {
   cy.intercept('POST', '**/api/users/login', {
@@ -133,12 +105,8 @@ describe('Login Page', () => {
     });
 
     it('redirects to home when already logged in', () => {
-      // Arrange: Inject a valid JWT into localStorage before app initialises.
-      cy.visit('/login', {
-        onBeforeLoad(win: Cypress.AUTWindow): void {
-          win.localStorage.setItem('app-jwt', TEST_JWT);
-        },
-      });
+      // Arrange: Log in programmatically on the login page.
+      cy.login('/login', []);
 
       // Assert: Route guard redirects to home.
       cy.url().should('eq', Cypress.config().baseUrl);

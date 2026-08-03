@@ -76,9 +76,11 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
 
 ### Cypress E2E
 - General
+  - Everything related to Cypress is in `cypress` directory.
   - Tests must be independent (runnable in any order).
-  - Use `beforeEach()` for common setup (visit page, intercept API calls).
+  - Use `beforeEach()` for common setup (visit page, intercept API calls, login etc).
   - Use `cy.intercept()` to stub API calls instead of relying on a live backend.
+  - Use custom commands like `getByTestId()`.
 - Page Object Model (POM)
   - Use Page Object Model.
   - POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.

@@ -36,8 +36,32 @@
 //   }
 // }
 
+import { createTestJwt, type LoginPerm } from './helpers.ts';
+
+// ////////////////////////////////////////////////////////////////////////////
+// Commands
+
 Cypress.Commands.add('getByTestId', (id: string) => {
   return cy.get(`[data-testid="${id}"]`);
+});
+
+/**
+ * Log in programmatically without going through the login form. Injects a simulated JWT into local storage
+ * (key 'app-jwt', same one the app reads on startup) before the page loads, so the app considers the user logged in.
+ * Usage:
+ * - cy.login() — logged-in standard user (no permissions).
+ * - cy.login('/user/profile') — visit given page as standard user.
+ * - cy.login('/admin/main', [{ prefix: 'role', suffix: 'admin' }]) — visit an admin page as user with additional permissions.
+ * @param path Path to visit after logging in. Defaults to home page ('/').
+ * @param permissions Optional permissions the logged in user should have in the simulated JWT.
+ * Example: [{ prefix: 'role', suffix: 'operator' }] makes user an admin panel operator.
+ */
+Cypress.Commands.add('login', (path: string = '/', permissions: LoginPerm[] = []) => {
+  cy.visit(path, {
+    onBeforeLoad(win: Cypress.AUTWindow): void {
+      win.localStorage.setItem('app-jwt', createTestJwt(permissions));
+    },
+  });
 });
 
 declare global {
@@ -45,6 +69,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       getByTestId(id: string): Chainable<JQuery<HTMLElement>>;
+      login(path?: string, permissions?: LoginPerm[]): Chainable<AUTWindow>;
     }
   }
 }
