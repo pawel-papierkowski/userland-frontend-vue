@@ -1,5 +1,5 @@
-import { createTestJwt } from '../../support/helpers.ts';
-import LoginPage from '../../support/pages/standard/LoginPage.ts';
+import { createTestJwt } from '@/../cypress/support/helpers.ts';
+import LoginPage from '@/../cypress/support/pages/standard/LoginPage.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Login Page E2E Tests

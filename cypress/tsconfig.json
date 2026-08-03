@@ -4,6 +4,11 @@
   "exclude": ["./support/component.*"],
   "compilerOptions": {
     "isolatedModules": false,
-    "types": ["cypress"]
+    "types": ["cypress"],
+
+    // Path mapping for cleaner imports. Mirrors tsconfig.app.json so '@' also works in Cypress.
+    "paths": {
+      "@/*": ["../src/*"]
+    }
   }
 }

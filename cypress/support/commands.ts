@@ -36,7 +36,8 @@
 //   }
 // }
 
-import { createTestJwt, type LoginPerm } from './helpers.ts';
+import { locstJwt } from '@/code/data/app/storage.ts';
+import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Commands
@@ -59,10 +60,12 @@ Cypress.Commands.add('getByTestId', (id: string) => {
 Cypress.Commands.add('login', (path: string = '/', permissions: LoginPerm[] = []) => {
   cy.visit(path, {
     onBeforeLoad(win: Cypress.AUTWindow): void {
-      win.localStorage.setItem('app-jwt', createTestJwt(permissions));
+      win.localStorage.setItem(locstJwt, createTestJwt(permissions));
     },
   });
 });
+
+// ////////////////////////////////////////////////////////////////////////////
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

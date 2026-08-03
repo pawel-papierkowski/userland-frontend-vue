@@ -30,6 +30,7 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
     "@tsconfig/node24": "^24.0.4",
     "@types/jsdom": "^28.0.1",
     "@types/node": "^24.12.2",
@@ -39,6 +40,7 @@
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.9.1",
     "cypress": "^15.14.0",
+    "esbuild": "^0.28.1",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-cypress": "^6.3.1",
