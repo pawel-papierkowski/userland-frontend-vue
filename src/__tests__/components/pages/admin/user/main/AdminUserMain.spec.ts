@@ -179,7 +179,7 @@ describe('AdminUserMain', () => {
 
       // Assert: Spinner is visible, form is hidden.
       expect(wrapper.find('[data-testid="spinner"]').exists()).toBe(true);
-      expect(wrapper.find('[data-testid="form-user-main"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="user-form-main"]').exists()).toBe(false);
 
       // Act: Complete loading.
       resolve({ data: testUserData });
@@ -188,7 +188,7 @@ describe('AdminUserMain', () => {
 
       // Assert: Form is visible, spinner is hidden.
       expect(wrapper.find('[data-testid="spinner"]').exists()).toBe(false);
-      expect(wrapper.find('[data-testid="form-user-main"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="user-form-main"]').exists()).toBe(true);
     });
 
     it('fills form fields from response data', async () => {
@@ -204,15 +204,15 @@ describe('AdminUserMain', () => {
       await nextTick();
 
       // Assert: Divs and inputs contain the loaded data.
-      const createdAtDiv = wrapper.find('[data-testid="createdAt"]');
-      const modifiedAtDiv = wrapper.find('[data-testid="modifiedAt"]');
-      const usernameInput = wrapper.find('[data-testid="username"]') as any;
-      const emailInput = wrapper.find('[data-testid="email"]') as any;
-      const statusDiv = wrapper.find('[data-testid="status"]');
-      const lockedDiv = wrapper.find('[data-testid="locked"]');
-      const langDiv = wrapper.find('[data-testid="lang"]');
-      const nameInput = wrapper.find('[data-testid="name"]') as any;
-      const surnameInput = wrapper.find('[data-testid="surname"]') as any;
+      const createdAtDiv = wrapper.find('[data-testid="user-form-createdAt"]');
+      const modifiedAtDiv = wrapper.find('[data-testid="user-form-modifiedAt"]');
+      const usernameInput = wrapper.find('[data-testid="user-form-username"]') as any;
+      const emailInput = wrapper.find('[data-testid="user-form-email"]') as any;
+      const statusDiv = wrapper.find('[data-testid="user-form-status"]');
+      const lockedDiv = wrapper.find('[data-testid="user-form-locked"]');
+      const langDiv = wrapper.find('[data-testid="user-form-lang"]');
+      const nameInput = wrapper.find('[data-testid="user-form-name"]') as any;
+      const surnameInput = wrapper.find('[data-testid="user-form-surname"]') as any;
 
       expect(createdAtDiv.element.textContent).toBe('2024-01-15 11:00:00');
       expect(modifiedAtDiv.element.textContent).toBe('2024-06-01 10:00:00');
@@ -252,7 +252,7 @@ describe('AdminUserMain', () => {
       expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'Loading user data failed!');
       // Spinner should be stopped (canSpin false) but still visible since isLoading stays true.
       // Because form never loads - user stays in loading state with stopped spinner.
-      expect(wrapper.find('[data-testid="form-user-main"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="user-form-main"]').exists()).toBe(false);
     });
   });
 
@@ -274,7 +274,7 @@ describe('AdminUserMain', () => {
 
       // Act: Click update button.
       mockEditUserData.mockResolvedValue({ data: testUserData });
-      await wrapper.find('[data-testid="btn-update"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-update"]').trigger('click');
       await nextTick();
 
       // Assert: EditUserData was called with correct payload.
@@ -304,7 +304,7 @@ describe('AdminUserMain', () => {
       // to simulate a real backend change (otherwise diff detects no change).
       const updatedData = { ...testUserData, modifiedAt: '2024-07-01T10:00:00Z' };
       mockEditUserData.mockResolvedValue({ data: updatedData });
-      await wrapper.find('[data-testid="btn-update"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-update"]').trigger('click');
       await nextTick();
 
       // Assert: NotifyUserUpdated was called.
@@ -326,7 +326,7 @@ describe('AdminUserMain', () => {
       // Act: Click update, API fails.
       const testError = new Error('Update failed');
       mockEditUserData.mockRejectedValue(testError);
-      await wrapper.find('[data-testid="btn-update"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-update"]').trigger('click');
       await flushPromises();
       await nextTick();
 
@@ -369,7 +369,7 @@ describe('AdminUserMain', () => {
       // Act: Click lock button.
       const lockedResponse = { ...testUserData, locked: true };
       mockEditUserData.mockResolvedValue({ data: lockedResponse });
-      await wrapper.find('[data-testid="btn-lock"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-lock"]').trigger('click');
       await nextTick();
 
       // Assert: EditUserData called with locked: true.
@@ -398,7 +398,7 @@ describe('AdminUserMain', () => {
       // Act: Click lock button (which now shows "Unlock").
       const unlockedResponse = { ...testUserDataLocked, locked: false };
       mockEditUserData.mockResolvedValue({ data: unlockedResponse });
-      await wrapper.find('[data-testid="btn-lock"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-lock"]').trigger('click');
       await nextTick();
 
       // Assert: EditUserData called with locked: false.
@@ -421,7 +421,7 @@ describe('AdminUserMain', () => {
       // Act: Click lock, API fails.
       const testError = new Error('Lock failed');
       mockEditUserData.mockRejectedValue(testError);
-      await wrapper.find('[data-testid="btn-lock"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-lock"]').trigger('click');
       await flushPromises();
       await nextTick();
 
@@ -456,8 +456,8 @@ describe('AdminUserMain', () => {
         expect(isDisabled(input)).toBe(true);
       });
       // Assert: Buttons are disabled.
-      expect(isDisabled(wrapper.find('[data-testid="btn-update"]'))).toBe(true);
-      expect(isDisabled(wrapper.find('[data-testid="btn-lock"]'))).toBe(true);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-update"]'))).toBe(true);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-lock"]'))).toBe(true);
     });
 
     it('disables all inputs when lacking permissions', async () => {
@@ -484,7 +484,7 @@ describe('AdminUserMain', () => {
       const wrapper = createComponent(null);
 
       // Assert: Form is rendered (isLoading is false) but all inputs are disabled.
-      expect(wrapper.find('[data-testid="form-user-main"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="user-form-main"]').exists()).toBe(true);
       wrapper.findAll('input').forEach((input) => {
         expect(isDisabled(input)).toBe(true);
       });
@@ -507,8 +507,8 @@ describe('AdminUserMain', () => {
         expect(isDisabled(input)).toBe(false);
       });
       // Assert: Buttons are enabled.
-      expect(isDisabled(wrapper.find('[data-testid="btn-update"]'))).toBe(false);
-      expect(isDisabled(wrapper.find('[data-testid="btn-lock"]'))).toBe(false);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-update"]'))).toBe(false);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-lock"]'))).toBe(false);
     });
   });
 
@@ -572,12 +572,12 @@ describe('AdminUserMain', () => {
       // Act: Click update, but keep the promise pending.
       const { promise: updatePromise } = createDeferredPromise<any>();
       mockEditUserData.mockReturnValue(updatePromise);
-      await wrapper.find('[data-testid="btn-update"]').trigger('click');
+      await wrapper.find('[data-testid="user-form-btn-update"]').trigger('click');
       await nextTick();
 
       // Assert: Buttons are disabled while busy.
-      expect(isDisabled(wrapper.find('[data-testid="btn-update"]'))).toBe(true);
-      expect(isDisabled(wrapper.find('[data-testid="btn-lock"]'))).toBe(true);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-update"]'))).toBe(true);
+      expect(isDisabled(wrapper.find('[data-testid="user-form-btn-lock"]'))).toBe(true);
     });
   });
 });

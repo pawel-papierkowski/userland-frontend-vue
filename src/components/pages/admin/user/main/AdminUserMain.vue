@@ -266,28 +266,28 @@ const isFormDisabled = (): boolean => {
       <SpinnerTorus data-testid="spinner" display="block" size="100px" :canSpin="canSpin" />
     </div>
 
-    <form @submit.prevent="" novalidate v-if="!isLoading" data-testid="form-user-main">
+    <form @submit.prevent="" novalidate v-if="!isLoading" data-testid="user-form-main">
       <div class="form-group">
         <h4>{{ t('admin.user.main.form.general') }}</h4>
         <div class="form-subform">
           <div>{{ t('admin.user.main.form.createdAt') }}:</div>
-          <div data-testid="createdAt">{{ form.createdAt }}</div>
+          <div data-testid="user-form-createdAt">{{ form.createdAt }}</div>
 
           <div>{{ t('admin.user.main.form.modifiedAt') }}:</div>
-          <div data-testid="modifiedAt">{{ form.modifiedAt }}</div>
+          <div data-testid="user-form-modifiedAt">{{ form.modifiedAt }}</div>
 
-          <label for="username">{{ t('admin.user.main.form.username') }}:</label>
+          <label for="user-form-username">{{ t('admin.user.main.form.username') }}:</label>
           <TextBox
-            id="username"
+            id="user-form-username"
             v-model="form.username"
             autocomplete="off"
             :required="true"
             :disabled="isFormDisabled()"
           />
 
-          <label for="email">{{ t('admin.user.main.form.email') }}:</label>
+          <label for="user-form-email">{{ t('admin.user.main.form.email') }}:</label>
           <TextBox
-            id="email"
+            id="user-form-email"
             v-model="form.email"
             autocomplete="off"
             :required="true"
@@ -295,29 +295,29 @@ const isFormDisabled = (): boolean => {
           />
 
           <div>{{ t('admin.user.main.form.status') }}:</div>
-          <div data-testid="status">{{ form.status === '' ? '' : t(`tech.user.status.${form.status}`) }}</div>
+          <div data-testid="user-form-status">{{ form.status === '' ? '' : t(`tech.user.status.${form.status}`) }}</div>
 
           <div>{{ t('admin.user.main.form.locked') }}:</div>
-          <div data-testid="locked">{{ form.locked === null ? '' : t('state.' + form.locked) }}</div>
+          <div data-testid="user-form-locked">{{ form.locked === null ? '' : t('state.' + form.locked) }}</div>
 
           <div>{{ t('admin.user.main.form.lang') }}:</div>
-          <div data-testid="lang">{{ form.lang === null ? '' : t(`languages.${form.lang}.name`)}} {{ form.lang === null ? '' : t(`languages.${form.lang}.flag`) }}</div>
+          <div data-testid="user-form-lang">{{ form.lang === null ? '' : t(`languages.${form.lang}.name`)}} {{ form.lang === null ? '' : t(`languages.${form.lang}.flag`) }}</div>
         </div>
 
         <h4>{{ t('admin.user.main.form.profile') }}</h4>
         <div class="form-subform">
-          <label for="name">{{ t('admin.user.main.form.name') }}:</label>
+          <label for="user-form-name">{{ t('admin.user.main.form.name') }}:</label>
           <TextBox
-            id="name"
+            id="user-form-name"
             v-model="form.name"
             autocomplete="off"
             :required="true"
             :disabled="isFormDisabled()"
           />
 
-          <label for="surname">{{ t('admin.user.main.form.surname') }}:</label>
+          <label for="user-form-surname">{{ t('admin.user.main.form.surname') }}:</label>
           <TextBox
-            id="surname"
+            id="user-form-surname"
             v-model="form.surname"
             autocomplete="off"
             :required="true"
@@ -333,10 +333,10 @@ const isFormDisabled = (): boolean => {
       />
 
       <div class="items-horizontal" v-if="canEditUsers()">
-        <button data-testid="btn-update" :disabled="isFormDisabled()" @click="handleUserUpdate()">
+        <button data-testid="user-form-btn-update" :disabled="isFormDisabled()" @click="handleUserUpdate()">
           {{ isBusy ? t('admin.user.main.button.busy') : t('admin.user.main.button.update') }}
         </button>
-        <button data-testid="btn-lock" class="danger" :disabled="isFormDisabled()" @click="handleUserLock()">
+        <button data-testid="user-form-btn-lock" class="danger" :disabled="isFormDisabled()" @click="handleUserLock()">
           {{
             isBusy
               ? t('admin.user.main.button.busy')
