@@ -51,29 +51,29 @@ const isBtnDisabled = () => {
 
     <form @submit.prevent="emit('reload')" novalidate data-testid="form-user-filter">
       <div class="form-subform">
-        <label for="createdFromAt">{{ t('admin.user.history.filter.createdFromAt') }}:</label>
+        <label for="userhistory-filter-createdFromAt">{{ t('admin.user.history.filter.createdFromAt') }}:</label>
         <DateTimePicker
           v-model="form.createdFromAt"
-          id="createdFromAt"
+          id="userhistory-filter-createdFromAt"
           mode="date"
           :dateTimeMax="form.createdToAt"
           :allowNull="true"
           :disabled="disabled"
         />
 
-        <label for="createdToAt">{{ t('admin.user.history.filter.createdToAt') }}:</label>
+        <label for="userhistory-filter-createdToAt">{{ t('admin.user.history.filter.createdToAt') }}:</label>
         <DateTimePicker
           v-model="form.createdToAt"
-          id="createdToAt"
+          id="userhistory-filter-createdToAt"
           mode="date"
           :dateTimeMin="form.createdFromAt"
           :allowNull="true"
           :disabled="disabled"
         />
 
-        <label for="who">{{ t('admin.user.history.filter.who') }}:</label>
+        <label for="userhistory-filter-who">{{ t('admin.user.history.filter.who') }}:</label>
         <ComboBox
-          id="who"
+          id="userhistory-filter-who"
           data-testid="who"
           v-model="form.who"
           :options="enUserHistoryWho"
@@ -82,9 +82,9 @@ const isBtnDisabled = () => {
           placeholder="tech.user.who.null"
         />
 
-        <label for="what">{{ t('admin.user.history.filter.what') }}:</label>
+        <label for="userhistory-filter-what">{{ t('admin.user.history.filter.what') }}:</label>
         <ComboBox
-          id="what"
+          id="userhistory-filter-what"
           data-testid="what"
           v-model="form.what"
           :options="enUserHistoryWhat"
@@ -94,7 +94,7 @@ const isBtnDisabled = () => {
         />
       </div>
 
-      <button type="submit" :disabled="isBtnDisabled()">
+      <button type="submit" :disabled="isBtnDisabled()" data-testid="userhistory-filter-submit">
         {{ isBusy ? t('admin.user.history.filter.buttonBusy') : t('admin.user.history.filter.button') }}
       </button>
     </form>

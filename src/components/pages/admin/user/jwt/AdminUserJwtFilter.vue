@@ -49,20 +49,20 @@ const isBtnDisabled = () => {
 
     <form @submit.prevent="emit('reload')" novalidate data-testid="form-user-filter">
       <div class="form-subform">
-        <label for="createdFromAt">{{ t('admin.user.jwt.filter.createdFromAt') }}:</label>
+        <label for="userjwt-filter-createdFromAt">{{ t('admin.user.jwt.filter.createdFromAt') }}:</label>
         <DateTimePicker
           v-model="form.createdFromAt"
-          id="createdFromAt"
+          id="userjwt-filter-createdFromAt"
           mode="date"
           :dateTimeMax="form.createdToAt"
           :allowNull="true"
           :disabled="disabled"
         />
 
-        <label for="createdToAt">{{ t('admin.user.jwt.filter.createdToAt') }}:</label>
+        <label for="userjwt-filter-createdToAt">{{ t('admin.user.jwt.filter.createdToAt') }}:</label>
         <DateTimePicker
           v-model="form.createdToAt"
-          id="createdToAt"
+          id="userjwt-filter-createdToAt"
           mode="date"
           :dateTimeMin="form.createdFromAt"
           :allowNull="true"
@@ -70,7 +70,7 @@ const isBtnDisabled = () => {
         />
       </div>
 
-      <button type="submit" :disabled="isBtnDisabled()">
+      <button type="submit" :disabled="isBtnDisabled()" data-testid="userjwt-filter-submit">
         {{ isBusy ? t('admin.user.jwt.filter.buttonBusy') : t('admin.user.jwt.filter.button') }}
       </button>
     </form>
