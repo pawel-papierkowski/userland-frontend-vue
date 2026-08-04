@@ -177,27 +177,9 @@ watch(currPage, (_, oldVal) => {
   handleReload();
 });
 
-/** Update filter with current sort by field. */
-watch(currSortBy, (_, oldVal) => {
-  if (oldVal === null) return;
-
-  if (!formFilter.value.tableMeta)
-    formFilter.value.tableMeta = {
-      pageSize: null,
-      page: null,
-      sortBy: currSortBy.value,
-      sortOrder: currSortOrder.value,
-    };
-  else {
-    formFilter.value.tableMeta.sortBy = currSortBy.value;
-    formFilter.value.tableMeta.sortOrder = currSortOrder.value;
-  }
-  handleReload();
-});
-
-/** Update filter with current sort order. */
-watch(currSortOrder, (_, oldVal) => {
-  if (oldVal === null) return;
+/** Update filter with current sort by and sort order field. */
+watch([currSortBy, currSortOrder], (_, [oldSortBy, oldSortOrder]) => {
+  if (oldSortBy === null && oldSortOrder === null) return;
 
   if (!formFilter.value.tableMeta)
     formFilter.value.tableMeta = {

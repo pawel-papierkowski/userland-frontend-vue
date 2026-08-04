@@ -380,6 +380,49 @@ describe('AdminUserTab', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
+  // Sorting
+
+  describe('sorting', () => {
+    it('loads data exactly once when sort column and order change together', async () => {
+      // Arrange: Mount with user and let the initial load complete. The
+      // response echoes a non-null DESC sort, so the watcher guards (oldVal
+      // === null) do not suppress a subsequent user-triggered sort change.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p1);
+
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
+      r1({ data: { entries: testEntries, tableMeta: { ...testMetaResp, sortOrder: 'DESC' } } });
+      await flushPromises();
+      await nextTick();
+      await nextTick();
+
+      mockFetchData.mockClear();
+
+      // Act: Click a fresh sortable column (Value, defSort ASC). TablePage
+      // emits both sort column and sort order in the same flush.
+      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p2);
+
+      const valueHeader = wrapper.findAll('.table-header-cell').find((el) => el.text() === 'Value');
+      expect(valueHeader).toBeDefined();
+      await valueHeader!.trigger('click');
+      await nextTick();
+
+      // Assert: FetchData was called exactly once for the combined sort change.
+      expect(mockFetchData).toHaveBeenCalledTimes(1);
+
+      // Cleanup: Echo the requested sort so the response does not change
+      // currSortBy/currSortOrder again and re-trigger a reload loop.
+      r2({ data: { entries: testEntries, tableMeta: { ...testMetaResp, sortBy: 'value', sortOrder: 'ASC' } } });
+      await flushPromises();
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
   // Error handling
 
   describe('error handling', () => {

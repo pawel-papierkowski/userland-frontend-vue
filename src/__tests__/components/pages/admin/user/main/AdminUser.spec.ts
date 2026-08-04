@@ -527,6 +527,45 @@ describe('AdminUser', () => {
       r2({ data: { entries: [], tableMeta: { ...emptyMeta } } });
       await flushPromises();
     });
+
+    it('loads data exactly once when sort column and order change together', async () => {
+      // Arrange: Mount and let initial load complete. The response carries a
+      // non-null sort, so the watcher guards (oldVal === null) do not suppress
+      // a subsequent user-triggered sort change.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockLoadPage.mockReturnValue(p1);
+
+      const wrapper = createComponent();
+      r1({ data: { entries: testEntries, tableMeta: { ...metaResp } } });
+      await flushPromises();
+      await nextTick();
+      await nextTick();
+
+      mockLoadPage.mockClear();
+
+      // Act: Emit sort column AND sort order from the TablePage stub in the
+      // same flush, mimicking a click on a fresh column header.
+      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      mockLoadPage.mockReturnValue(p2);
+
+      const tablePageComp = findStubComp(wrapper, 'TablePage');
+      tablePageComp.vm.$emit('update:currSortBy', 'value');
+      tablePageComp.vm.$emit('update:currSortOrder', 'DESC');
+      await nextTick();
+
+      // Assert: LoadPage was called exactly once for the combined sort change.
+      expect(mockLoadPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup: Echo the requested sort so the response does not change
+      // currSortBy/currSortOrder again and re-trigger a reload loop.
+      r2({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 20, page: 0, sortBy: 'value', sortOrder: 'DESC' },
+        },
+      });
+      await flushPromises();
+    });
   });
 
   // //////////////////////////////////////////////////////////////////////////
