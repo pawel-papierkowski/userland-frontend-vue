@@ -1,5 +1,6 @@
 // ////////////////////////////////////////////////////////////////////////////
 // Admin User Table E2E Tests
+// Tests main user table (AdminUser) and user's main filter panel (AdminUserFilter).
 
 import { locstJwt } from '@/code/data/app/storage.ts';
 import AdminUserTablePage from '@/../cypress/support/pages/admin/AdminUserTablePage.ts';

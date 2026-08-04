@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "createdAt": "2024-01-15T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "alice",
+      "email": "alice@test.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Alice", "surname": "Smith" }
+    },
+    {
+      "id": 2,
+      "createdAt": "2024-02-20T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "bob",
+      "email": "bob@test.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Bob", "surname": "Johnson" }
+    },
+    {
+      "id": 3,
+      "createdAt": "2024-03-05T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "charlie",
+      "email": "charlie@example.com",
+      "status": "PENDING",
+      "locked": false,
+      "lang": "pl",
+      "profile": { "name": "Charlie", "surname": "Brown" }
+    },
+    {
+      "id": 4,
+      "createdAt": "2024-04-11T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "dana",
+      "email": "dana@example.com",
+      "status": "DEMO",
+      "locked": true,
+      "lang": "en",
+      "profile": { "name": "Dana", "surname": "White" }
+    },
+    {
+      "id": 5,
+      "createdAt": "2024-05-22T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "erin",
+      "email": "erin@test.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Erin", "surname": "Davis" }
+    },
+    {
+      "id": 6,
+      "createdAt": "2024-06-30T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "frank",
+      "email": "frank@example.com",
+      "status": "PENDING",
+      "locked": false,
+      "lang": "pl",
+      "profile": { "name": "Frank", "surname": "Miller" }
+    },
+    {
+      "id": 7,
+      "createdAt": "2024-07-15T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "grace",
+      "email": "grace@test.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Grace", "surname": "Wilson" }
+    },
+    {
+      "id": 8,
+      "createdAt": "2024-08-01T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "henry",
+      "email": "henry@example.com",
+      "status": "DEMO",
+      "locked": true,
+      "lang": "en",
+      "profile": { "name": "Henry", "surname": "Moore" }
+    },
+    {
+      "id": 9,
+      "createdAt": "2024-09-10T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "ivy",
+      "email": "ivy@test.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Ivy", "surname": "Taylor" }
+    },
+    {
+      "id": 10,
+      "createdAt": "2024-09-11T12:00:00Z",
+      "modifiedAt": "2024-10-01T12:00:00Z",
+      "username": "testuser",
+      "email": "test@example.com",
+      "status": "ACTIVE",
+      "locked": false,
+      "lang": "en",
+      "profile": { "name": "Test", "surname": "User" }
+    }
+  ]
+}
