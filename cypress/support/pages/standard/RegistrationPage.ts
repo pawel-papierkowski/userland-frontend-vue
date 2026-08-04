@@ -33,7 +33,7 @@ class RegistrationPage {
 
   /** Get the "I want to be admin" checkbox wrapper element. */
   getIsAdminCheckbox(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('checkbox_isAdmin');
+    return cy.getByTestId('isAdmin');
   }
 
   /** Get the submit button. */

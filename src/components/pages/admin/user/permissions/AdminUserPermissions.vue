@@ -379,7 +379,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
       <template v-if="isEditMode && formEntry">
         <!-- Name of permission requires combobox instead of default input. -->
         <ComboBox
-          data-testid="permission-name"
+          id="permission-name"
           :class="fieldMeta?.css"
           v-model="formEntry.name"
           :options="enUserPermissionName"

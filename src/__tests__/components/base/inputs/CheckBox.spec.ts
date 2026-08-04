@@ -42,7 +42,7 @@ describe('CheckBox', () => {
       expect(checkBox.find('.checkbox').classes()).toStrictEqual(['checkbox']);
 
       // Assert: Checkbox has correct data-testid attribute.
-      expect(checkBox.attributes('data-testid')).toBe('checkbox_someCheckbox');
+      expect(checkBox.attributes('data-testid')).toBe('someCheckbox');
     });
 
     it('cycle true/false', async () => {

@@ -71,7 +71,7 @@ describe('ComboBox', () => {
       const comboBox = createComponent('b', 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');
 
       // Assert: Combobox has correct data-testid attribute.
-      expect(comboBox.attributes('data-testid')).toBe('combobox_someCombobox');
+      expect(comboBox.attributes('data-testid')).toBe('someCombobox');
       // Assert: Combobox main field is present and shows selected option (in this case 'b')
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option B');
       // Assert: Options are hidden, as user did not click on combobox yet.
@@ -88,17 +88,17 @@ describe('ComboBox', () => {
       const options = comboBox.findAll('.combobox-option');
       expect(options).toHaveLength(4);
       verifyHighlight(options, 1); // highlight is already present on list
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox_someCombobox_option_1');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_1');
 
       // Assert: All options are shown correctly.
       expect(options[0]?.text()).toBe('Option A');
-      expect(options[0]?.attributes('data-testid')).toBe('combobox_someCombobox_0');
+      expect(options[0]?.attributes('data-testid')).toBe('someCombobox_0');
       expect(options[1]?.text()).toBe('Option B'); // selected and highlighted option
-      expect(options[1]?.attributes('data-testid')).toBe('combobox_someCombobox_1');
+      expect(options[1]?.attributes('data-testid')).toBe('someCombobox_1');
       expect(options[2]?.text()).toBe('Option C');
-      expect(options[2]?.attributes('data-testid')).toBe('combobox_someCombobox_2');
+      expect(options[2]?.attributes('data-testid')).toBe('someCombobox_2');
       expect(options[3]?.text()).toBe('Option D');
-      expect(options[3]?.attributes('data-testid')).toBe('combobox_someCombobox_3');
+      expect(options[3]?.attributes('data-testid')).toBe('someCombobox_3');
     });
 
     it('has correct presentation with null', async () => {
@@ -109,7 +109,7 @@ describe('ComboBox', () => {
       const comboBox = createComponent(null, 'someCombobox', createOptions(), false, false, 'test.comboBox');
 
       // Assert: Combobox has correct data-testid attribute.
-      expect(comboBox.attributes('data-testid')).toBe('combobox_someCombobox');
+      expect(comboBox.attributes('data-testid')).toBe('someCombobox');
       // Assert: Combobox main field is present and shows selected option (in this case '-' for null)
       expect(comboBox.find('.combobox-selected-text').text()).toBe('-');
       // Assert: Options are hidden, as user did not click on combobox yet.
@@ -126,24 +126,24 @@ describe('ComboBox', () => {
       const options = comboBox.findAll('.combobox-option');
       expect(options).toHaveLength(4);
       verifyHighlight(options, 0); // highlight is already present on list, as null case is included
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox_someCombobox_option_0');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_0');
 
       // Assert: All options are shown correctly.
       expect(options[0]?.text()).toBe('-'); // selected and highlighted option
-      expect(options[0]?.attributes('data-testid')).toBe('combobox_someCombobox_0');
+      expect(options[0]?.attributes('data-testid')).toBe('someCombobox_0');
       expect(options[1]?.text()).toBe('Option A');
-      expect(options[1]?.attributes('data-testid')).toBe('combobox_someCombobox_1');
+      expect(options[1]?.attributes('data-testid')).toBe('someCombobox_1');
       expect(options[2]?.text()).toBe('Option B');
-      expect(options[2]?.attributes('data-testid')).toBe('combobox_someCombobox_2');
+      expect(options[2]?.attributes('data-testid')).toBe('someCombobox_2');
       expect(options[3]?.text()).toBe('Option C');
-      expect(options[3]?.attributes('data-testid')).toBe('combobox_someCombobox_3');
+      expect(options[3]?.attributes('data-testid')).toBe('someCombobox_3');
     });
 
     it('is correctly selected via mouse', async () => {
       // Check if combobox correctly selects option via mouse.
 
       // Arrange&Act: Set up combobox.
-      const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox', 'test.comboBox.null');
+      const comboBox = createComponent(null, 'someCombobox', createOptions(), false, false, 'test.comboBox', 'test.comboBox.null');
 
       // Assert: Combobox main field is present and shows selected option (in this case null, that's it, unselected).
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option UNSELECTED (null)');
@@ -153,7 +153,7 @@ describe('ComboBox', () => {
       await nextTick();
 
       // Act: Click on one of options.
-      await comboBox.find('[data-testid="combobox__1"]').trigger('click');
+      await comboBox.find('[data-testid="someCombobox_1"]').trigger('click');
       await nextTick();
 
       // Assert: Model emitted correct value.
@@ -171,7 +171,7 @@ describe('ComboBox', () => {
       // Ensure hovering over an option updates the highlighted index.
 
       // Arrange: Create combobox.
-      const comboBox = createComponent(null, '', createOptions(), false, false, 'test.comboBox');
+      const comboBox = createComponent(null, 'someCombobox', createOptions(), false, false, 'test.comboBox');
 
       // Act: Open combobox.
       await comboBox.find('.combobox-selected').trigger('click');
@@ -185,7 +185,7 @@ describe('ComboBox', () => {
       const options = comboBox.findAll('.combobox-option');
       verifyHighlight(options, 2);
       // Assert: Aria-activedescendant updated.
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_2');
     });
 
     it('opens when paired <label> is clicked', async () => {
@@ -254,7 +254,7 @@ describe('ComboBox', () => {
       // Ensure combobox marked as invalid is visually distinct and fully functional.
 
       // Arrange&Act: Set up combobox marked as invalid.
-      const comboBox = createComponent(null, '', createOptions(), false, true, 'test.comboBox', 'test.comboBox.null');
+      const comboBox = createComponent(null, 'someCombobox', createOptions(), false, true, 'test.comboBox', 'test.comboBox.null');
 
       // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
       expect(comboBox.find('.combobox').classes()).toStrictEqual(['combobox', 'err']);
@@ -270,7 +270,7 @@ describe('ComboBox', () => {
       expect(comboBox.find('.combobox-options').attributes('style')).not.toContain('display: none');
 
       // Act: Click on one of options.
-      await comboBox.find('[data-testid="combobox__3"]').trigger('click');
+      await comboBox.find('[data-testid="someCombobox_3"]').trigger('click');
       await nextTick();
 
       // Assert: Model emitted correct value.
@@ -302,7 +302,7 @@ describe('ComboBox', () => {
       // Assert: Aria-haspopup is listbox.
       expect(comboBox.attributes('aria-haspopup')).toBe('listbox');
       // Assert: Aria-controls is set.
-      expect(comboBox.attributes('aria-controls')).toBe('combobox-listbox_someCombobox');
+      expect(comboBox.attributes('aria-controls')).toBe('listbox_someCombobox');
       // Assert: Aria-activedescendant is not set when no option is highlighted.
       expect(comboBox.attributes('aria-activedescendant')).toBeUndefined();
       // Assert: Aria-disabled is not present when enabled.
@@ -351,7 +351,7 @@ describe('ComboBox', () => {
       // Subsequent presses moves highlight down.
 
       // Arrange&Act: Set up combobox. Note we have null selected and NO null option.
-      const comboBox = createComponent(null, '', createOptionsNoNull(), false, false, 'test.comboBox');
+      const comboBox = createComponent(null, 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');
 
       // Act: Press ArrowDown on root combobox.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
@@ -362,7 +362,7 @@ describe('ComboBox', () => {
       // Assert: First option is highlighted.
       const options = comboBox.findAll('.combobox-option');
       verifyHighlight(options, 0);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_0');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_0');
 
       // Act: Press ArrowDown again to move to next option.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
@@ -370,7 +370,7 @@ describe('ComboBox', () => {
 
       // Assert: Second option is now highlighted.
       verifyHighlight(options, 1);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_1');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_1');
 
       // Act: Navigate to last option.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
@@ -379,7 +379,7 @@ describe('ComboBox', () => {
 
       // Assert: Last option is highlighted.
       verifyHighlight(options, 3);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_3');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_3');
 
       // Act: Try to navigate past last option.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
@@ -387,14 +387,14 @@ describe('ComboBox', () => {
 
       // Assert: Wraps around to first option.
       verifyHighlight(options, 0);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_0');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_0');
     });
 
     it('ArrowDown opens and highlights selected option', async () => {
       // Ensure ArrowUp opens combobox and highlights selected option.
 
       // Arrange&Act: Set up combobox.
-      const comboBox = createComponent('c', '', createOptionsNoNull(), false, false, 'test.comboBox');
+      const comboBox = createComponent('c', 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');
 
       // Act: Press ArrowDown on root combobox.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowDown' });
@@ -405,7 +405,7 @@ describe('ComboBox', () => {
       // Assert: Selected option is highlighted.
       const options = comboBox.findAll('.combobox-option');
       verifyHighlight(options, 2);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_2');
     });
 
     it('ArrowUp opens and navigates up no selection', async () => {
@@ -413,7 +413,7 @@ describe('ComboBox', () => {
       // Subsequent presses moves highlight up.
 
       // Arrange&Act: Set up combobox. Note we have null selected and NO null option.
-      const comboBox = createComponent(null, '', createOptionsNoNull(), false, false, 'test.comboBox');
+      const comboBox = createComponent(null, 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');
 
       // Act: Press ArrowUp on root combobox.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
@@ -424,7 +424,7 @@ describe('ComboBox', () => {
       // Assert: Last option is highlighted.
       const options = comboBox.findAll('.combobox-option');
       verifyHighlight(options, 3);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_3');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_3');
 
       // Act: Press ArrowUp to move up.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
@@ -432,14 +432,14 @@ describe('ComboBox', () => {
 
       // Assert: Third option is now highlighted.
       verifyHighlight(options, 2);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_2');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_2');
 
       // Act: Try to navigate to first option.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
       await nextTick();
       verifyHighlight(options, 0);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_0');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_0');
 
       // Act: Try to navigate past first option.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
@@ -447,14 +447,14 @@ describe('ComboBox', () => {
 
       // Assert: Wraps around to last option.
       verifyHighlight(options, 3);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_3');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_3');
     });
 
     it('ArrowUp opens and highlights selected option', async () => {
       // Ensure ArrowUp opens combobox and highlights selected option.
 
       // Arrange&Act: Set up combobox.
-      const comboBox = createComponent('b', '', createOptionsNoNull(), false, false, 'test.comboBox');
+      const comboBox = createComponent('b', 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');
 
       // Act: Press ArrowUp on root combobox.
       await comboBox.find('.combobox').trigger('keydown', { key: 'ArrowUp' });
@@ -465,7 +465,7 @@ describe('ComboBox', () => {
       // Assert: Selected option is highlighted.
       const options = comboBox.findAll('.combobox-option');
       verifyHighlight(options, 1);
-      expect(comboBox.attributes('aria-activedescendant')).toBe('combobox__option_1');
+      expect(comboBox.attributes('aria-activedescendant')).toBe('someCombobox_option_1');
     });
 
     it('Enter selects highlighted option', async () => {

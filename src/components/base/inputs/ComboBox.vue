@@ -80,7 +80,7 @@ const isOpen = ref(false);
 const highlightedIndex = ref(-1);
 
 /** Get option element ID for aria-activedescendant. */
-const optionId = (index: number): string => `combobox_${props.id}_option_${index}`;
+const optionId = (index: number): string => `${props.id}_option_${index}`;
 
 /** Tracks if focus handler just opened the list (to suppress synthetic follow-up click). */
 let focusOpened = false;
@@ -94,7 +94,7 @@ onClickOutside(comboboxRef, () => {
 /** Class of decorative arrow on right. */
 const arrowClass = computed(() => ({ open: isOpen.value }));
 /** ID for the listbox used by aria-controls and aria-activedescendant. */
-const listboxId = computed(() => `combobox-listbox_${props.id || 'default'}`);
+const listboxId = computed(() => `listbox_${props.id || 'default'}`);
 
 // WATCHES
 
@@ -247,7 +247,7 @@ const hidePanel = () => {
 
 <template>
   <div
-    :data-testid="`combobox_${id}`"
+    :data-testid="`${id}`"
     class="combobox"
     :class="{ disabled: disabled, err: invalid }"
     ref="comboboxRef"
@@ -285,7 +285,7 @@ const hidePanel = () => {
         :id="optionId(index)"
         class="combobox-option"
         :class="{ highlighted: highlightedIndex === index }"
-        :data-testid="`combobox_${id}_${index}`"
+        :data-testid="`${id}_${index}`"
         role="option"
         :aria-selected="option === selOption"
         @click.stop="selectOption(option)"

@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "createdAt": "2024-01-15T10:00:00Z",
+      "username": "alice",
+      "email": "alice@test.com",
+      "status": "ACTIVE"
+    },
+    { "id": 2, "createdAt": "2024-02-20T12:00:00Z", "username": "bob", "email": "bob@test.com", "status": "ACTIVE" },
+    {
+      "id": 3,
+      "createdAt": "2024-03-05T09:30:00Z",
+      "username": "charlie",
+      "email": "charlie@example.com",
+      "status": "PENDING"
+    },
+    { "id": 4, "createdAt": "2024-04-11T15:45:00Z", "username": "dana", "email": "dana@example.com", "status": "DEMO" },
+    { "id": 5, "createdAt": "2024-05-22T08:10:00Z", "username": "erin", "email": "erin@test.com", "status": "ACTIVE" },
+    {
+      "id": 6,
+      "createdAt": "2024-06-30T11:20:00Z",
+      "username": "frank",
+      "email": "frank@example.com",
+      "status": "PENDING"
+    },
+    {
+      "id": 7,
+      "createdAt": "2024-07-15T14:05:00Z",
+      "username": "grace",
+      "email": "grace@test.com",
+      "status": "ACTIVE"
+    },
+    {
+      "id": 8,
+      "createdAt": "2024-08-01T16:40:00Z",
+      "username": "henry",
+      "email": "henry@example.com",
+      "status": "DEMO"
+    },
+    { "id": 9, "createdAt": "2024-09-10T13:35:00Z", "username": "ivy", "email": "ivy@test.com", "status": "ACTIVE" }
+  ]
+}

@@ -353,7 +353,7 @@ describe('AdminUserPermissions', () => {
       await combobox.trigger('click');
       await nextTick();
       // Select the first option: 'role'.
-      const firstOption = wrapper.find('[data-testid="combobox__0"]');
+      const firstOption = wrapper.find('[data-testid="permission-name_0"]');
       expect(firstOption.exists()).toBe(true);
       await firstOption.trigger('click');
       await nextTick();
@@ -398,7 +398,7 @@ describe('AdminUserPermissions', () => {
       expect(combobox.exists()).toBe(true);
       await combobox.trigger('click');
       await nextTick();
-      const firstOption = wrapper.find('[data-testid="combobox__0"]');
+      const firstOption = wrapper.find('[data-testid="permission-name_0"]');
       expect(firstOption.exists()).toBe(true);
       await firstOption.trigger('click');
       await nextTick();
@@ -598,7 +598,7 @@ describe('AdminUserPermissions', () => {
       expect(combobox.exists()).toBe(true);
       await combobox.trigger('click');
       await nextTick();
-      const firstOption = wrapper.find('[data-testid="combobox__0"]');
+      const firstOption = wrapper.find('[data-testid="permission-name_0"]');
       expect(firstOption.exists()).toBe(true);
       await firstOption.trigger('click');
       await nextTick();

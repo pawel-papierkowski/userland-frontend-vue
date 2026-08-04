@@ -85,7 +85,7 @@ const showSymbol = (): string => {
 <template>
   <div
     class="checkbox-wrapper"
-    :data-testid="`checkbox_${id}`"
+    :data-testid="id"
     @click="cycle()"
     @keydown="handleKeydown"
   >
