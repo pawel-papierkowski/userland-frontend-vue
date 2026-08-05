@@ -247,9 +247,13 @@ describe('Admin User Form', () => {
       stubUserData([ivyFull]);
       stubEditUser(ivyFull);
       stubUserSubTables();
+
+      // Act: Visit admin panel page about users.
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
+
+      // Act: Select the user row.
       page.selectUserRow(0);
       cy.wait('@userDataRequest');
 
@@ -472,7 +476,10 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
+      stubEditUser(ivyFull);
       stubUserSubTables();
+      
+      // Act: Visit admin panel page about users.
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');

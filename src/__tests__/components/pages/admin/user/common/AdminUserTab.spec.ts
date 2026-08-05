@@ -464,6 +464,35 @@ describe('AdminUserTab', () => {
       r2({ data: { entries: [], tableMeta: testMetaResp } });
     });
 
+    it('clears previously shown data when user is deselected', async () => {
+      // Arrange: Mount with a user and let the initial load complete with rows.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p1);
+
+      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
+      await flushPromises();
+      await nextTick();
+      await nextTick();
+
+      // Sanity check: rows are rendered while a user is selected.
+      expect(wrapper.findAll('.table-row')).toHaveLength(2);
+      mockFetchData.mockClear();
+
+      // Act: Deselect the user.
+      await wrapper.setProps({ modelValue: null });
+      await nextTick();
+
+      // Assert: Stale rows for the previous user are gone and the no-user empty state shows.
+      expect(wrapper.findAll('.table-row')).toHaveLength(0);
+      const tableEmpty = wrapper.find('.table-empty');
+      expect(tableEmpty.exists()).toBe(true);
+      expect(tableEmpty.text()).toBe('Select user to show data.');
+
+      // Assert: No fetch is triggered when simply clearing the selection.
+      expect(mockFetchData).not.toHaveBeenCalled();
+    });
+
     it('refetches when same user is re-selected after being deselected', async () => {
       // Arrange: Mount active with user, let the initial load complete.
       const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
