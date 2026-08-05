@@ -180,6 +180,7 @@ const maybeReload = () => {
   if (!selUserRecord.value) {
     // User is not selected, so nothing to load. Reset so re-selection triggers a reload.
     loadedUserId.value = null;
+    handleReload(); // Clear any previously shown data for the old user.
     return;
   }
   if (!props.isActive) return;

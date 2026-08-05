@@ -495,7 +495,7 @@ describe('Admin User Form', () => {
 
       // Act: Switch back to the history tab.
       cy.getByTestId('usertab_history').click();
-      cy.waitIfHappens('@subtab_history', { timeout: 250 });
+      cy.wait('@subtab_history');
       // Assert: History tab will be reloaded due to update of user data.
       expectSubTabCalls({ history: 2, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
