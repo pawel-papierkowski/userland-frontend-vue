@@ -1,0 +1,67 @@
+{
+  "userHistory": [
+    {
+      "id": 1,
+      "createdAt": "2024-01-15T10:00:00Z",
+      "who": "USER",
+      "what": "CREATE",
+      "params": "{\"username\":\"ivy\"}"
+    },
+    {
+      "id": 2,
+      "createdAt": "2024-02-20T12:00:00Z",
+      "who": "USER",
+      "what": "LOGIN",
+      "params": "{}"
+    },
+    {
+      "id": 3,
+      "createdAt": "2024-03-05T09:30:00Z",
+      "who": "OPERATOR",
+      "what": "EDIT",
+      "params": "{\"field\":\"email\"}"
+    },
+    {
+      "id": 4,
+      "createdAt": "2024-04-11T15:45:00Z",
+      "who": "USER",
+      "what": "LOGOUT",
+      "params": "{}"
+    },
+    {
+      "id": 5,
+      "createdAt": "2024-05-22T08:10:00Z",
+      "who": "SYSTEM",
+      "what": "PROLONG",
+      "params": "{}"
+    },
+    {
+      "id": 6,
+      "createdAt": "2024-06-30T11:20:00Z",
+      "who": "OPERATOR",
+      "what": "ACTIVATE",
+      "params": "{}"
+    },
+    {
+      "id": 7,
+      "createdAt": "2024-07-15T14:05:00Z",
+      "who": "USER",
+      "what": "LOGIN",
+      "params": "{}"
+    },
+    {
+      "id": 8,
+      "createdAt": "2024-08-01T16:40:00Z",
+      "who": "OPERATOR",
+      "what": "EDIT",
+      "params": "{\"field\":\"name\"}"
+    },
+    {
+      "id": 9,
+      "createdAt": "2024-09-10T13:35:00Z",
+      "who": "SYSTEM",
+      "what": "PASS_RESET",
+      "params": "{}"
+    }
+  ]
+}
