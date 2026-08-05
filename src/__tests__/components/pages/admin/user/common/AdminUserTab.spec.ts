@@ -144,6 +144,8 @@ function createComponent(
     resolveRowMeta?: any;
     inlineEdit?: boolean;
     addNewEntry?: boolean;
+    isActive?: boolean;
+    reloadTrigger?: number;
   } = {},
 ) {
   return mount(AdminUserTab, {
@@ -159,6 +161,8 @@ function createComponent(
       resolveRowMeta: options.resolveRowMeta,
       inlineEdit: options.inlineEdit ?? false,
       addNewEntry: options.addNewEntry ?? false,
+      isActive: options.isActive ?? true,
+      reloadTrigger: options.reloadTrigger ?? 0,
       emptyText: 'test.table.page.empty',
       emptyNoUserText: 'test.table.page.emptyNoUser',
       modelValue: options.modelValue ?? null,
@@ -376,6 +380,114 @@ describe('AdminUserTab', () => {
       expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser2.id);
       expect(mockFetchData).toHaveBeenCalledTimes(1);
       expect(mockFetchData).toHaveBeenCalledWith({ ...defaultFormFilter, userId: testUser2.id });
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Tab activation (lazy loading)
+
+  describe('tab activation (lazy loading)', () => {
+    it('does not fetch on mount when user is selected but tab is inactive', async () => {
+      // Arrange: Mount with a user selected while the tab is not the active one.
+      createComponent({ modelValue: testUser1, isActive: false, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      await nextTick();
+
+      // Assert: No fetch is made for an inactive tab.
+      expect(mockFetchData).not.toHaveBeenCalled();
+    });
+
+    it('fetches when the tab becomes active and data was not loaded yet', async () => {
+      // Arrange: Mount with user on an inactive tab, then activate it.
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(promise);
+
+      const wrapper = createComponent({ modelValue: testUser1, isActive: false, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      expect(mockFetchData).not.toHaveBeenCalled();
+
+      // Act: Switch to this tab.
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is fetched now that the tab is active.
+      expect(mockFetchData).toHaveBeenCalledTimes(1);
+      expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser1.id);
+
+      // Cleanup.
+      resolve({ data: { entries: [], tableMeta: testMetaResp } });
+    });
+
+    it('does not refetch when tab is reactivated for an already-loaded user', async () => {
+      // Arrange: Mount active with user and let the initial load complete.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p1);
+
+      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
+      await flushPromises();
+      await nextTick();
+      expect(mockFetchData).toHaveBeenCalledTimes(1);
+      mockFetchData.mockClear();
+
+      // Act: Deactivate and reactivate the tab for the same user.
+      await wrapper.setProps({ isActive: false });
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: No new fetch, data was already loaded for this user.
+      expect(mockFetchData).not.toHaveBeenCalled();
+    });
+
+    it('refetches on reactivation when reloadTrigger was bumped', async () => {
+      // Arrange: Mount active with user and let the initial load complete.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p1);
+
+      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
+      await flushPromises();
+      await nextTick();
+      mockFetchData.mockClear();
+
+      // Act: User data was updated (reloadTrigger bumped), then tab is reactivated.
+      await wrapper.setProps({ reloadTrigger: 1 });
+      await wrapper.setProps({ isActive: false });
+      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is refetched despite being already loaded for this user.
+      expect(mockFetchData).toHaveBeenCalledTimes(1);
+      expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser1.id);
+
+      // Cleanup.
+      r2({ data: { entries: [], tableMeta: testMetaResp } });
+    });
+
+    it('refetches when same user is re-selected after being deselected', async () => {
+      // Arrange: Mount active with user, let the initial load complete.
+      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p1);
+
+      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
+      await flushPromises();
+      await nextTick();
+      mockFetchData.mockClear();
+
+      // Act: Deselect user, then select the same user again.
+      await wrapper.setProps({ modelValue: null });
+      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      mockFetchData.mockReturnValue(p2);
+      await wrapper.setProps({ modelValue: testUser1 });
+      await nextTick();
+
+      // Assert: Data is fetched again for the re-selected user.
+      expect(mockFetchData).toHaveBeenCalledTimes(1);
+      expect(mockConvertToReq).toHaveBeenCalledWith(defaultFormFilter, testUser1.id);
+
+      // Cleanup.
+      r2({ data: { entries: [], tableMeta: testMetaResp } });
     });
   });
 

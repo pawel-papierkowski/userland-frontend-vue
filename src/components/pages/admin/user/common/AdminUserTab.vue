@@ -34,6 +34,10 @@
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - emptyText - Text to show when table is empty.
  * - emptyNoUserText - Text to show when table is empty because no user was selected.
+ * - isActive - If true, this tab is the currently active tab in the tab group. Data is loaded lazily,
+ *   only when this tab is active. Optional, default true.
+ * - reloadTrigger - Number that is bumped when user data was updated. Causes data reload on next activation
+ *   of this tab, even if it was already loaded for the selected user. Optional, default 0.
  */
 import { useSlots, ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
@@ -71,10 +75,14 @@ const props = withDefaults(
     addNewEntry?: boolean;
     emptyText: string;
     emptyNoUserText: string;
+    isActive?: boolean;
+    reloadTrigger?: number;
   }>(),
   {
     inlineEdit: false,
     addNewEntry: false,
+    isActive: true,
+    reloadTrigger: 0,
   },
 );
 
@@ -99,6 +107,11 @@ const isBusy = ref(false);
 const isLoading = ref(false);
 /** Can spinner spin? */
 const canSpin = ref(true);
+
+/** ID of user whose data is currently loaded. Null means no data loaded yet. */
+const loadedUserId: Ref<number | null> = ref(null);
+/** True if data must be reloaded on next activation, even if already loaded for the user. */
+let forceReload = false;
 
 // COMPUTATIONS
 
@@ -133,6 +146,7 @@ const handleReload = async () => {
       resp.entries = resp.entries.map((entry: E) => props.processEntry!(entry));
     }
     data.value = resp;
+    loadedUserId.value = selUserRecord.value?.id ?? null;
 
     selEntryRecord.value = null; // always deselect subtable entry
 
@@ -158,13 +172,32 @@ const resolveEmptyText = () => {
 
 // WATCHERS
 
-/** Change in user selection requires reload of form. */
+/**
+ * Reload table only if this tab is active and the selected user's data was not loaded yet.
+ * Deactivated tabs load nothing; they reload once when they become active (unless data is already loaded).
+ */
+const maybeReload = () => {
+  if (!selUserRecord.value) {
+    // User is not selected, so nothing to load. Reset so re-selection triggers a reload.
+    loadedUserId.value = null;
+    return;
+  }
+  if (!props.isActive) return;
+  // Do not reload data that is already loaded for this user, unless a reload was forced.
+  if (!forceReload && loadedUserId.value === selUserRecord.value.id) return;
+  forceReload = false;
+  handleReload();
+};
+
+/** Change in user selection or tab activation requires reload of form (only when tab is active). */
+watch([selUserRecord, () => props.isActive], maybeReload, { immediate: true });
+
+/** React on user data being updated - force reload on next activation of this tab. */
 watch(
-  selUserRecord,
+  () => props.reloadTrigger,
   () => {
-    handleReload();
+    forceReload = true;
   },
-  { immediate: true },
 );
 
 /** Update filter with current page number. */

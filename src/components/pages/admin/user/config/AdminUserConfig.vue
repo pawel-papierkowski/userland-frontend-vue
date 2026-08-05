@@ -31,6 +31,15 @@ import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue'
 import AdminUserConfigFilter from '@/components/pages/admin/user/config/AdminUserConfigFilter.vue';
 
 const selUserRecord = defineModel<UserTableEntry | null>();
+
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
+
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
 const selEntryRecord = shallowRef<UserConfigTableEntry | null>(null);
 
@@ -335,6 +344,7 @@ const resolveRowMeta = (entry: UserConfigTableEntry | null): RowMeta | null => {
     v-model:entry="selEntryRecord"
     v-model:formFilter="formFilter"
     v-model:formEntry="formEntry"
+    :isActive="props.isActive"
     tableId="userConfig"
     :columns="userConfigTableColumns"
     :fetchData="backendApiAdminUser.loadConfigPage"

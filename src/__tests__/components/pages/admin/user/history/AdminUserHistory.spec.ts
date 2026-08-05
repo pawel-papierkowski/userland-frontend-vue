@@ -101,13 +101,14 @@ beforeEach(() => {
 });
 
 /** Create mounted component. */
-function createComponent(modelValue?: TestUserEntry | null) {
+function createComponent(modelValue?: TestUserEntry | null, isActive = true) {
   return mount(AdminUserHistory, {
     global: {
       plugins: [i18n, pinia],
     },
     props: {
       modelValue: modelValue ?? null,
+      isActive,
     },
   });
 }
@@ -264,15 +265,15 @@ describe('AdminUserHistory', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
-  // Deferred reload (onActivated / userUpdatedTrigger)
+  // Deferred reload (user update / activation)
 
   describe('deferred reload', () => {
-    it('sets shouldReload flag when user data is updated', async () => {
+    it('does not reload immediately when user data is updated', async () => {
       // Arrange: Mount with user, initial load completes.
       const { promise, resolve } = createDeferredPromise<any>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
-      createComponent(testUser1);
+      const wrapper = createComponent(testUser1);
 
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
       await flushPromises();
@@ -296,28 +297,42 @@ describe('AdminUserHistory', () => {
       });
       await nextTick();
 
-      // Assert: LoadHistoryPage was NOT called yet (deferred).
+      // Assert: LoadHistoryPage was NOT called yet (deferred until tab activation).
+      expect(mockLoadHistoryPage).not.toHaveBeenCalled();
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      mockLoadHistoryPage.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is reloaded on reactivation after a user update.
+      expect(mockLoadHistoryPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: { entries: [], tableMeta: emptyMeta } });
+    });
+
+    it('does not load data when user is selected but tab is inactive', async () => {
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      createComponent(testUser1, false);
+
+      // Assert: No fetch is made for an inactive tab.
       expect(mockLoadHistoryPage).not.toHaveBeenCalled();
     });
 
-    it('onActivated defers reload until tab is activated', async () => {
-      // The deferred reload pattern is: userUpdatedTrigger sets shouldReload,
-      // then onActivated calls handleReload when the user switches to this tab.
-      // The shouldReload flag test above confirms the flag is set.
-      // The mechanism it triggers (tabRef.value?.handleReload()) is already
-      // validated by the user-change test. This completes the coverage:
-      // the component registers onActivated (verified by no errors at mount).
-
-      // Arrange: Mount with user, let initial load complete.
+    it('loads data for the selected user when the tab is active', async () => {
+      // Arrange & Act: Mount with a user selected on the active tab.
       const { promise, resolve } = createDeferredPromise<any>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
-      createComponent(testUser1);
+      createComponent(testUser1, true);
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
       await flushPromises();
       await nextTick();
 
-      // Assert: Component mounted without errors.
+      // Assert: Data was loaded.
       expect(mockLoadHistoryPage).toHaveBeenCalledTimes(1);
     });
   });

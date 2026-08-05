@@ -32,6 +32,15 @@ import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue'
 import AdminUserPermissionsFilter from '@/components/pages/admin/user/permissions/AdminUserPermissionsFilter.vue';
 
 const selUserRecord = defineModel<UserTableEntry | null>();
+
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
+
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
 const selEntryRecord = shallowRef<UserPermissionTableEntry | null>(null);
 
@@ -340,6 +349,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
     v-model:entry="selEntryRecord"
     v-model:formFilter="formFilter"
     v-model:formEntry="formEntry"
+    :isActive="props.isActive"
     tableId="userPermissions"
     :columns="userPermissionsTableColumns"
     :fetchData="backendApiAdminUser.loadPermissionsPage"

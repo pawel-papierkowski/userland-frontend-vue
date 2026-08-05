@@ -86,6 +86,48 @@ describe('TabGroup', () => {
       const visiblePanel = tabGroup.findAll('[role="tabpanel"]').find((p) => p.isVisible());
       expect(visiblePanel?.text()).toBe('CONTENT C');
     });
+
+    it('passes isActive slot prop reflecting the selected tab', async () => {
+      // Scoped slot props allow tab consumers to know whether their panel is active.
+
+      // Arrange: Provide scoped slots that record the isActive prop they receive.
+      const received: string[] = [];
+      const scopedSlotA = (props: { isActive: boolean }) => {
+        received.push('a:' + props.isActive);
+        return 'CONTENT A';
+      };
+      const scopedSlotB = (props: { isActive: boolean }) => {
+        received.push('b:' + props.isActive);
+        return 'CONTENT B';
+      };
+
+      const tabGroup = mount(TabGroup, {
+        global: {
+          plugins: [i18n],
+        },
+        props: {
+          id: 'myTabs',
+          langPrefix: 'test.tabGroup',
+        },
+        slots: {
+          a: scopedSlotA,
+          b: scopedSlotB,
+        },
+      });
+
+      // Assert: Initially the first tab (a) is active.
+      expect(received).toContain('a:true');
+      expect(received).toContain('b:false');
+      received.length = 0;
+
+      // Act: Click on tab b.
+      await tabGroup.find(`[data-testid="tabgroup_myTabs_b"]`).trigger('click');
+      await nextTick();
+
+      // Assert: Now the second tab (b) is active.
+      expect(received).toContain('a:false');
+      expect(received).toContain('b:true');
+    });
   });
 
   // //////////////////////////////////////////////////////////////////////////

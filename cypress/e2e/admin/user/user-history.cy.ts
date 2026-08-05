@@ -167,7 +167,9 @@ function stubEmptySubTables() {
 
 /**
  * Set up the common stubs needed to select a user and open its editor, then visit
- * the page and select the given user row.
+ * the page and select the given user row. Note: after this returns, the user is
+ * selected on the main tab. History (and other sub-tab) data loads lazily only when
+ * the corresponding tab is activated, so callers open the History tab themselves.
  * @param user User table entry to show.
  * @returns Nothing.
  */
@@ -181,7 +183,6 @@ function setupSelectedUser(user: UserTableEntry) {
   page.visit();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
-  cy.wait('@userHistoryRequest');
   return page;
 }
 
@@ -255,7 +256,10 @@ describe('Admin User History', () => {
       // Arrange: Stub history and select a user.
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial (unfiltered) load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Act: Select USER as 'who' and submit.
       page.selectWho(1);
@@ -275,7 +279,10 @@ describe('Admin User History', () => {
       // Arrange
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Act: Select 'LOGIN' as 'what' and submit.
       page.selectWhat(9);
@@ -293,7 +300,10 @@ describe('Admin User History', () => {
       // Arrange
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Act: Select a combination that has no matching entries and submit.
       page.selectWho(1); // USER
@@ -309,7 +319,10 @@ describe('Admin User History', () => {
       // Arrange
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Act: Pick July 15th 2024 as the "created from" date and submit.
       page.selectDate(2024, 6, 14);
@@ -339,7 +352,10 @@ describe('Admin User History', () => {
       // Arrange
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Assert: First page is shown, there are two pages total.
       page.getPageNumber().should('contain.text', '2');
@@ -361,7 +377,10 @@ describe('Admin User History', () => {
       // Arrange
       stubUserHistory();
       const page = setupSelectedUser(ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
 
       // Act: Click the Who header to sort ascending.
       page.clickSortHeader('Who');

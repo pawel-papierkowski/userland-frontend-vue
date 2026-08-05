@@ -5,7 +5,7 @@
  * Properties:
  * - v-model - Holds selected user.
  */
-import { onActivated, ref, reactive, watch } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -17,12 +17,19 @@ import type {
   UserHistoryTableFilterForm,
   UserHistoryTableReq,
   UserHistoryTableEntry,
-  AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminUserHistoryFilter.vue';
+
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
 
 const userEventStore = useUserEventStore();
 const { userUpdatedTrigger } = storeToRefs(userEventStore);
@@ -38,10 +45,8 @@ const formFilter: UserHistoryTableFilterForm = reactive({
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** Reference to tab component. */
-const tabRef = ref<AdminUserTabExpose | null>(null);
-/** True if table should be reloaded. */
-const shouldReload = ref(false);
+/** Number of reload requests caused by user data updates. */
+const reloadTrigger = ref(0);
 
 //
 
@@ -73,26 +78,18 @@ const processEntry = (entry: UserHistoryTableEntry): UserHistoryTableEntry => {
 
 //
 
-/** When user switches to this tab. */
-onActivated(async () => {
-  if (shouldReload.value) {
-    shouldReload.value = false;
-    await tabRef.value?.handleReload();
-  }
-});
-
-/** React on user data being updated. */
-watch(userUpdatedTrigger, async () => {
-  // We do not want to reload history right away, but when user goes to this tab.
-  shouldReload.value = true;
+/** React on user data being updated - force reload when this tab becomes active again. */
+watch(userUpdatedTrigger, () => {
+  reloadTrigger.value++;
 });
 </script>
 
 <template>
   <AdminUserTab
-    ref="tabRef"
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    :isActive="props.isActive"
+    :reloadTrigger="reloadTrigger"
     tableId="userHistory"
     :columns="userHistoryTableColumns"
     :fetchData="backendApiAdminUser.loadHistoryPage"

@@ -131,7 +131,7 @@ function onKeydown(event: KeyboardEvent) {
         role="tabpanel"
         :aria-labelledby="`tabgroup-${id}-tab-${slotName}`"
       >
-        <slot :name="slotName" />
+        <slot :name="slotName" :isActive="selectedSlot === slotName" />
       </div>
     </div>
   </div>

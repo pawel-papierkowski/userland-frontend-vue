@@ -23,6 +23,14 @@ import AdminUserTokensFilter from '@/components/pages/admin/user/tokens/AdminUse
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
+
 const formFilter: UserTokenTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
@@ -61,6 +69,7 @@ const processEntry = (entry: UserTokenTableEntry): UserTokenTableEntry => {
   <AdminUserTab
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    :isActive="props.isActive"
     tableId="userTokens"
     :columns="userTokensTableColumns"
     :fetchData="backendApiAdminUser.loadTokensPage"

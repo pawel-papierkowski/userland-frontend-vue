@@ -34,20 +34,20 @@ watch(selUserRecord, () => {
     <template #main>
       <AdminUserMain v-model="selUserRecord" />
     </template>
-    <template #history>
-      <AdminUserHistory v-model="selUserRecord" />
+    <template #history="{ isActive }">
+      <AdminUserHistory v-model="selUserRecord" :isActive="isActive" />
     </template>
-    <template #permissions>
-      <AdminUserPermissions v-model="selUserRecord" />
+    <template #permissions="{ isActive }">
+      <AdminUserPermissions v-model="selUserRecord" :isActive="isActive" />
     </template>
-    <template #config>
-      <AdminUserConfig v-model="selUserRecord" />
+    <template #config="{ isActive }">
+      <AdminUserConfig v-model="selUserRecord" :isActive="isActive" />
     </template>
-    <template #tokens>
-      <AdminUserTokens v-model="selUserRecord" />
+    <template #tokens="{ isActive }">
+      <AdminUserTokens v-model="selUserRecord" :isActive="isActive" />
     </template>
-    <template #jwt>
-      <AdminUserJwt v-model="selUserRecord" />
+    <template #jwt="{ isActive }">
+      <AdminUserJwt v-model="selUserRecord" :isActive="isActive" />
     </template>
   </TabGroup>
 </template>

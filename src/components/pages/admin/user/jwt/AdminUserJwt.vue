@@ -23,6 +23,14 @@ import AdminUserJwtFilter from '@/components/pages/admin/user/jwt/AdminUserJwtFi
 
 const selUserRecord = defineModel<UserTableEntry | null>();
 
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
+
 const formFilter: UserJwtTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
@@ -61,6 +69,7 @@ const processEntry = (entry: UserJwtTableEntry): UserJwtTableEntry => {
   <AdminUserTab
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
+    :isActive="props.isActive"
     tableId="userJwt"
     :columns="userJwtTableColumns"
     :fetchData="backendApiAdminUser.loadJwtPage"
