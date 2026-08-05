@@ -130,14 +130,30 @@ function stubEditUserError() {
   }).as('userEditRequest');
 }
 
-/** Stub all secondary user sub-tab tables to return empty data. */
+/** All user sub-tab table endpoints. */
+const subTableEndpoints = ['history', 'permissions', 'configs', 'tokens', 'jwt'] as const;
+
+/**
+ * Stub all secondary user sub-tab tables to return empty data.
+ * Each endpoint is also aliased (as `subtab_<endpoint>`) so tests can assert how
+ * many times (if any) those APIs are called.
+ */
 function stubUserSubTables() {
-  const endpoints = ['history', 'permissions', 'configs', 'tokens', 'jwt'];
-  endpoints.forEach((endpoint) => {
+  subTableEndpoints.forEach((endpoint) => {
     cy.intercept('POST', `**/api/admin/user/${endpoint}`, {
       statusCode: 200,
       body: { entries: [], tableMeta: emptyTableMeta },
-    });
+    }).as(`subtab_${endpoint}`);
+  });
+}
+
+/**
+ * Assert how many times each user sub-tab API was called.
+ * @param counts Map of sub-tab endpoint to expected number of calls.
+ */
+function expectSubTabCalls(counts: Record<(typeof subTableEndpoints)[number], number>) {
+  subTableEndpoints.forEach((endpoint) => {
+    cy.get(`@subtab_${endpoint}.all`).should('have.length', counts[endpoint]);
   });
 }
 
@@ -167,6 +183,52 @@ describe('Admin User Form', () => {
       page.getSurnameInput().should('be.disabled');
       page.getUpdateButton().should('be.disabled');
       page.getLockButton().should('be.disabled');
+    });
+
+    it('does not load any sub-tab data when a user is selected while on the main tab', () => {
+      // Note: This documents the desired behavior. It currently fails because selecting a user
+      // loads all sub-tab tables eagerly, even though only the active (main) tab is shown.
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Select the user row, staying on the main tab.
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Assert: No sub-tab API was called.
+      expectSubTabCalls({ history: 0, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Sub-tab lazy loading
+
+  describe('sub-tab lazy loading', () => {
+    it('loads only the history sub-tab when a user is selected while on the history tab', () => {
+      // Note: This documents the desired behavior. It currently fails because selecting a user
+      // loads all sub-tab tables eagerly, regardless of which tab is active.
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Switch to the history tab first, then select the user.
+      cy.getByTestId('tabgroup__history').click();
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Assert: Only the active (history) sub-tab is loaded, the rest are untouched.
+      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
   });
 
