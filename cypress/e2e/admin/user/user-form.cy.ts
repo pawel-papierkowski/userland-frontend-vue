@@ -184,52 +184,6 @@ describe('Admin User Form', () => {
       page.getUpdateButton().should('be.disabled');
       page.getLockButton().should('be.disabled');
     });
-
-    it('does not load any sub-tab data when a user is selected while on the main tab', () => {
-      // Note: This documents the desired behavior. It currently fails because selecting a user
-      // loads all sub-tab tables eagerly, even though only the active (main) tab is shown.
-      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
-      stubUserTable([ivyTableEntry]);
-      const ivyFull = fullUsers.find((u) => u.id === 9)!;
-      stubUserData([ivyFull]);
-      stubUserSubTables();
-      const page = new AdminUserFormPage();
-      page.visit();
-      cy.wait('@userTableRequest');
-
-      // Act: Select the user row, staying on the main tab.
-      page.selectUserRow(0);
-      cy.wait('@userDataRequest');
-
-      // Assert: No sub-tab API was called.
-      expectSubTabCalls({ history: 0, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
-    });
-  });
-
-  // //////////////////////////////////////////////////////////////////////////
-  // Sub-tab lazy loading
-
-  describe('sub-tab lazy loading', () => {
-    it('loads only the history sub-tab when a user is selected while on the history tab', () => {
-      // Note: This documents the desired behavior. It currently fails because selecting a user
-      // loads all sub-tab tables eagerly, regardless of which tab is active.
-      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
-      stubUserTable([ivyTableEntry]);
-      const ivyFull = fullUsers.find((u) => u.id === 9)!;
-      stubUserData([ivyFull]);
-      stubUserSubTables();
-      const page = new AdminUserFormPage();
-      page.visit();
-      cy.wait('@userTableRequest');
-
-      // Act: Switch to the history tab first, then select the user.
-      cy.getByTestId('tabgroup__history').click();
-      page.selectUserRow(0);
-      cy.wait('@userDataRequest');
-
-      // Assert: Only the active (history) sub-tab is loaded, the rest are untouched.
-      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
-    });
   });
 
   // //////////////////////////////////////////////////////////////////////////
@@ -418,6 +372,132 @@ describe('Admin User Form', () => {
       page.getSurnameInput().should('be.disabled');
       page.getUpdateButton().should('be.disabled');
       page.getLockButton().should('be.disabled');
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Sub-tab lazy loading
+
+  describe('sub-tab lazy loading', () => {
+    it('does not load any sub-tab data when a user is selected while on the main tab', () => {
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Select the user row, staying on the main tab.
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Assert: No sub-tab API was called.
+      expectSubTabCalls({ history: 0, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+    });
+
+    it('loads only the history sub-tab when a user is selected while on the history tab', () => {
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Switch to the history tab first, then select the user.
+      cy.getByTestId('usertab_history').click();
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
+      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+    });
+
+    it('switching tabs loads data for given tab if not yet loaded', () => {
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Select the user row.
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Act: Switch to the history tab.
+      cy.getByTestId('usertab_history').click();
+      cy.wait('@subtab_history');
+      // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
+      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Switch to the permissions tab.
+      cy.getByTestId('usertab_permissions').click();
+      cy.wait('@subtab_permissions');
+      // Assert: Only the active (permissions) sub-tab is loaded, the rest is unchanged.
+      expectSubTabCalls({ history: 1, permissions: 1, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Switch to the configs tab.
+      cy.getByTestId('usertab_config').click();
+      cy.wait('@subtab_configs');
+      // Assert: Only the active (configs) sub-tab is loaded, the rest is unchanged.
+      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 0, jwt: 0 });
+
+      // Act: Switch to the tokens tab.
+      cy.getByTestId('usertab_tokens').click();
+      cy.wait('@subtab_tokens');
+      // Assert: Only the active (tokens) sub-tab is loaded, the rest is unchanged.
+      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 0 });
+
+      // Act: Switch to the jwt tab.
+      cy.getByTestId('usertab_jwt').click();
+      cy.wait('@subtab_jwt');
+      // Assert: Only the active (jwt) sub-tab is loaded, the rest is unchanged.
+      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
+
+      // Act: Switch back to the history tab. Will do nothing because it is still same user and its data is unchanged.
+      cy.getByTestId('usertab_history').click();
+      cy.waitIfHappens('@subtab_history', { timeout: 250 });
+      // Assert: All sub-tabs are unchanged.
+      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
+    });
+
+    it('history tab will be reloaded if user data was updated', () => {
+      // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
+      stubUserTable([ivyTableEntry]);
+      const ivyFull = fullUsers.find((u) => u.id === 9)!;
+      stubUserData([ivyFull]);
+      stubUserSubTables();
+      const page = new AdminUserFormPage();
+      page.visit();
+      cy.wait('@userTableRequest');
+
+      // Act: Select the user row.
+      page.selectUserRow(0);
+      cy.wait('@userDataRequest');
+
+      // Act: Switch to the history tab.
+      cy.getByTestId('usertab_history').click();
+      cy.wait('@subtab_history');
+      // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
+      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Switch back to main tab and edit user data.
+      cy.getByTestId('usertab_main').click();
+      page.fillUsername('ivy_new');
+      page.clickUpdate();
+      cy.wait('@userEditRequest');
+
+      // Act: Switch back to the history tab.
+      cy.getByTestId('usertab_history').click();
+      cy.waitIfHappens('@subtab_history', { timeout: 250 });
+      // Assert: History tab will be reloaded due to update of user data.
+      expectSubTabCalls({ history: 2, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
   });
 });

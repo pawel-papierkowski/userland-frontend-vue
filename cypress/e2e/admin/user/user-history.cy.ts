@@ -154,16 +154,33 @@ function stubUserHistory(entries: UserHistoryEntry[] = historyEntries, pageSize:
   }).as('userHistoryRequest');
 }
 
-/** Stub all secondary user sub-tab tables (except history) to return empty data. */
-function stubEmptySubTables() {
-  const endpoints = ['permissions', 'configs', 'tokens', 'jwt'];
-  endpoints.forEach((endpoint) => {
+/** All user sub-tab table endpoints except history. */
+const subTableEndpoints = ['permissions', 'configs', 'tokens', 'jwt'] as const;
+
+/** Stub all secondary user sub-tab tables (except history) to return empty data.
+ * Each endpoint is also aliased (as `subtab_<endpoint>`) so tests can assert how
+ * many times (if any) those APIs are called.
+ */
+function stubUserSubTables() {
+  subTableEndpoints.forEach((endpoint) => {
     cy.intercept('POST', `**/api/admin/user/${endpoint}`, {
       statusCode: 200,
       body: { entries: [], tableMeta: emptyTableMeta },
-    });
+    }).as(`subtab_${endpoint}`);
   });
 }
+
+/**
+ * Assert how many times each user sub-tab API was called.
+ * @param counts Map of sub-tab endpoint to expected number of calls.
+ */
+function expectSubTabCalls(counts: Record<(typeof subTableEndpoints)[number], number>) {
+  subTableEndpoints.forEach((endpoint) => {
+    cy.get(`@subtab_${endpoint}.all`).should('have.length', counts[endpoint]);
+  });
+}
+
+//
 
 /**
  * Set up the common stubs needed to select a user and open its editor, then visit
@@ -177,7 +194,7 @@ function setupSelectedUser(user: UserTableEntry) {
   stubUserTable([user]);
   const ivyFull = fullUsers.find((u) => u.id === user.id)!;
   stubUserData([ivyFull]);
-  stubEmptySubTables();
+  stubUserSubTables();
 
   const page = new AdminUserHistoryPage();
   page.visit();
@@ -194,9 +211,9 @@ describe('Admin User History', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
-  // Initial state
+  // Table rendering
 
-  describe('initial state', () => {
+  describe('table rendering', () => {
     it('shows empty message and disabled filter when no user is selected', () => {
       // Arrange: Stub the user table API and log in on the page.
       stubUserTable([ivyTableEntry]);
@@ -218,12 +235,31 @@ describe('Admin User History', () => {
       page.getCreatedFromInput().should('be.disabled');
       page.getCreatedToInput().should('be.disabled');
     });
-  });
 
-  // //////////////////////////////////////////////////////////////////////////
-  // Table rendering
+    it('shows empty message and disabled filter when user was deselected', () => {
+      // Arrange: Stub all APIs, log in, select a user and stub history data.
+      stubUserHistory();
+      const page = setupSelectedUser(ivyTableEntry);
 
-  describe('table rendering', () => {
+      // Act: Open the History tab.
+      page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
+
+      // Act: Deselect user.
+      page.selectUserRow(0);
+
+      // Assert: Empty message for "no user selected" is shown.
+      page.getTable().should('be.visible');
+      page.getEmptyMessage().should('contain.text', 'No history to show.');
+
+      // Assert: The whole filter is disabled (no user selected).
+      page.getFilterSubmitButton().should('be.disabled');
+      page.getWhoComboBox().should('have.class', 'disabled');
+      page.getWhatComboBox().should('have.class', 'disabled');
+      page.getCreatedFromInput().should('be.disabled');
+      page.getCreatedToInput().should('be.disabled');
+    });
+
     it('shows history data for the selected user', () => {
       // Arrange: Stub all APIs, log in, select a user and stub history data.
       stubUserHistory();
@@ -231,6 +267,11 @@ describe('Admin User History', () => {
 
       // Act: Open the History tab.
       page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
+
+      // Assert: correct data was loaded only once.
+      cy.get(`@userHistoryRequest.all`).should('have.length', 1);
+      expectSubTabCalls({ permissions: 0, configs: 0, tokens: 0, jwt: 0 });
 
       // Assert: Table is visible with all four header columns.
       page.getTable().should('be.visible');
@@ -245,6 +286,15 @@ describe('Admin User History', () => {
       page.getCell(0, 'what').should('contain.text', 'PASS_RESET');
       page.getCell(4, 'who').should('contain.text', 'SYSTEM');
       page.getCell(4, 'what').should('contain.text', 'PROLONG');
+
+      // Act: Go to the Main tab and then return to the History tab.
+      page.openMainTab();
+      page.openHistoryTab();
+      cy.waitIfHappens('@userHistoryRequest', { timeout: 500 });
+
+      // Assert: correct data was loaded only once (no new reload).
+      cy.get(`@userHistoryRequest.all`).should('have.length', 1);
+      expectSubTabCalls({ permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
   });
 

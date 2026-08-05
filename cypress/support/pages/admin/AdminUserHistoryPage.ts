@@ -23,8 +23,13 @@ class AdminUserHistoryPage {
   }
 
   /** Switch to the History tab of the selected user. */
+  openMainTab(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.getByTestId('usertab_main').click();
+  }
+
+  /** Switch to the History tab of the selected user. */
   openHistoryTab(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('tabgroup__history').click();
+    return cy.getByTestId('usertab_history').click();
   }
 
   // /////////////////////////////////////////////////////////////////////

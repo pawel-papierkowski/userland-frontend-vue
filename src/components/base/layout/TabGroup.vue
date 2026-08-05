@@ -31,6 +31,7 @@ const props = withDefaults(
   },
 );
 
+/** Slots. */
 const slots = useSlots();
 /** Extracted names (keys) of the slots that were actually provided. */
 const activeSlots = computed(() => Object.keys(slots));
@@ -101,19 +102,19 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="tabgroup-wrapper" :data-testid="`tabgroup_${id}`">
+  <div class="tabgroup-wrapper" :data-testid="`${id}`">
     <div ref="tablistRef" class="tabgroup-header" role="tablist" @keydown="onKeydown">
       <!-- Loop through all slot names passed to this component. -->
       <div
         v-for="slotName in activeSlots"
         :key="slotName"
-        :id="`tabgroup-${id}-tab-${slotName}`"
-        :data-testid="`tabgroup_${id}_${slotName}`"
+        :id="`${id}-tab-${slotName}`"
+        :data-testid="`${id}_${slotName}`"
         class="tabgroup-header-name"
         :class="getNameClass(slotName)"
         role="tab"
         :aria-selected="selectedSlot === slotName"
-        :aria-controls="`tabgroup-${id}-panel-${slotName}`"
+        :aria-controls="`${id}-panel-${slotName}`"
         :tabindex="selectedSlot === slotName ? 0 : -1"
         @click="selectSlot(slotName)"
       >
@@ -121,15 +122,15 @@ function onKeydown(event: KeyboardEvent) {
       </div>
     </div>
 
-    <!-- Dynamic Tab Content -->
+    <!-- Tab Content (note: all tabs are loaded, but just one is shown at once) -->
     <div class="tabgroup-slot-content">
       <div
         v-for="slotName in activeSlots"
         v-show="selectedSlot === slotName"
         :key="slotName"
-        :id="`tabgroup-${id}-panel-${slotName}`"
+        :id="`${id}-panel-${slotName}`"
         role="tabpanel"
-        :aria-labelledby="`tabgroup-${id}-tab-${slotName}`"
+        :aria-labelledby="`${id}-tab-${slotName}`"
       >
         <slot :name="slotName" :isActive="selectedSlot === slotName" />
       </div>

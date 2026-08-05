@@ -72,7 +72,7 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
 - Always comment tests well, marking arrange, act and assert sections and summarizing what they do.
 - When you add `vi.fn()`, you need to add appropriate type parameter, for example `vi.fn<() => void>()`.
 - When testing changes/fixes to code/components, run only relevant tests (`.spec.ts` file or even only single relevant test).
-- Run all tests using `npm run test:ci` when you need to verify everything works after you finish work.
+- Run all tests using `npm run test:ci` when you need to verify everything works after you finish your task.
 
 ### Cypress E2E
 - General
@@ -80,7 +80,7 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
   - Tests must be independent (runnable in any order).
   - Use `beforeEach()` for common setup (visit page, intercept API calls, login etc).
   - Use `cy.intercept()` to stub API calls instead of relying on a live backend.
-  - Use custom commands like `getByTestId()`.
+  - Use custom commands like `cy.getByTestId()`.
 - Page Object Model (POM)
   - Use Page Object Model.
   - POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.

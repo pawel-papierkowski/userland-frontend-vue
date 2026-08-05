@@ -30,7 +30,7 @@ watch(selUserRecord, () => {
 </script>
 
 <template>
-  <TabGroup langPrefix="admin.user.tabs">
+  <TabGroup langPrefix="admin.user.tabs" id="usertab">
     <template #main>
       <AdminUserMain v-model="selUserRecord" />
     </template>

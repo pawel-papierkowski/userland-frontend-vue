@@ -70,7 +70,7 @@ describe('TabGroup', () => {
       const { tabGroup } = createGeneralWrapper();
 
       // Act: Click on tab.
-      await tabGroup.find(`[data-testid="tabgroup_myTabs_c"]`).trigger('click');
+      await tabGroup.find(`[data-testid="myTabs_c"]`).trigger('click');
       await nextTick();
 
       // Assert: TabGroup has correct state.
@@ -121,7 +121,7 @@ describe('TabGroup', () => {
       received.length = 0;
 
       // Act: Click on tab b.
-      await tabGroup.find(`[data-testid="tabgroup_myTabs_b"]`).trigger('click');
+      await tabGroup.find(`[data-testid="myTabs_b"]`).trigger('click');
       await nextTick();
 
       // Assert: Now the second tab (b) is active.
@@ -158,14 +158,14 @@ describe('TabGroup', () => {
       // First tab (active by default).
       expect(tabs[0]?.attributes('role')).toBe('tab');
       expect(tabs[0]?.attributes('aria-selected')).toBe('true');
-      expect(tabs[0]?.attributes('aria-controls')).toBe('tabgroup-myTabs-panel-a');
-      expect(tabs[0]?.attributes('id')).toBe('tabgroup-myTabs-tab-a');
+      expect(tabs[0]?.attributes('aria-controls')).toBe('myTabs-panel-a');
+      expect(tabs[0]?.attributes('id')).toBe('myTabs-tab-a');
 
       // Second tab (inactive).
       expect(tabs[1]?.attributes('role')).toBe('tab');
       expect(tabs[1]?.attributes('aria-selected')).toBe('false');
-      expect(tabs[1]?.attributes('aria-controls')).toBe('tabgroup-myTabs-panel-b');
-      expect(tabs[1]?.attributes('id')).toBe('tabgroup-myTabs-tab-b');
+      expect(tabs[1]?.attributes('aria-controls')).toBe('myTabs-panel-b');
+      expect(tabs[1]?.attributes('id')).toBe('myTabs-tab-b');
     });
 
     it('active tab has tabindex 0, inactive tabs have -1', () => {
@@ -190,8 +190,8 @@ describe('TabGroup', () => {
 
       // Assert: Tabpanel attributes are set correctly.
       expect(panel.attributes('role')).toBe('tabpanel');
-      expect(panel.attributes('aria-labelledby')).toBe('tabgroup-myTabs-tab-a');
-      expect(panel.attributes('id')).toBe('tabgroup-myTabs-panel-a');
+      expect(panel.attributes('aria-labelledby')).toBe('myTabs-tab-a');
+      expect(panel.attributes('id')).toBe('myTabs-panel-a');
       expect(panel.text()).toBe('CONTENT A');
     });
   });

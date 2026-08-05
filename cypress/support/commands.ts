@@ -36,6 +36,8 @@
 //   }
 // }
 
+import type { Interception } from 'cypress/types/net-stubbing';
+
 import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
 import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers.ts';
 
@@ -80,7 +82,29 @@ Cypress.Commands.add('login', (path: string = '/', permissions: LoginPerm[] = []
   });
 });
 
-// Helpers
+// General helpers
+
+/**
+ * Version of `wait()` that do not fail test when request timeouts.
+ */
+Cypress.Commands.add('waitIfHappens', (alias: string, options?: { timeout?: number }) => {
+  const timeout = options?.timeout ?? 5000;
+  const start = Date.now();
+
+  const poll = (): Cypress.Chainable<Interception | null> => {
+    if (Date.now() - start >= timeout) return cy.wrap<Interception | null>(null);
+    // cy.get() types a generic string as a DOM query; the alias is actually a
+    // route interception, so cast the yielded value to that shape.
+    return cy.get(alias, { log: false }).then((interception) => {
+      const req = interception as unknown as Interception | undefined;
+      if (req?.response) return cy.wrap<Interception | null>(req);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      return cy.wait(50).then(poll); // yes, we wait arbitrary amount of time
+    });
+  };
+
+  return poll();
+});
 
 /**
  * Find element with given `data-testid`.
@@ -96,6 +120,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable<Subject> {
+      waitIfHappens(alias: string, options?: { timeout?: number }): Chainable<Interception | null>;
       visitUserLand(path: string): Chainable<AUTWindow>;
       login(path?: string, permissions?: LoginPerm[]): Chainable<AUTWindow>;
       getByTestId(id: string): Chainable<JQuery<HTMLElement>>;

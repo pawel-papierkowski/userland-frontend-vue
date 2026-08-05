@@ -45,7 +45,8 @@ const formFilter: UserHistoryTableFilterForm = reactive({
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** Number of reload requests caused by user data updates. */
+/** We need fancier update mechanism for this tab as some stuff panel operator do will change history of user,
+ * so we need to reload table even though same user is still selected when we revisit history tab. */
 const reloadTrigger = ref(0);
 
 //
