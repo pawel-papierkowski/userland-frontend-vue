@@ -65,7 +65,7 @@ class AdminUserHistoryPage {
 
   /** Get the history table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
   getPaginer(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_userHistory').first();
+    return cy.getByTestId('userHistory_paginer').first();
   }
 
   /** Get the history table paginer page-number input. */
@@ -75,7 +75,7 @@ class AdminUserHistoryPage {
 
   /** Get the history table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
   getPageNumber(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_userHistory_pageNumber').first();
+    return cy.getByTestId('userHistory_paginer_pageNumber').first();
   }
 
   /** Get the filter 'who' combobox element. */

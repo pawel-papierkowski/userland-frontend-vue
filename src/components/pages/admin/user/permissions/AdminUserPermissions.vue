@@ -368,6 +368,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
     <!-- Paginer options. -->
     <template #paginer_options>
       <EntryOptions
+        tableId="userPermissions"
         :meta="metaGeneral()"
         :entry="null"
         :actions="actions"
@@ -378,6 +379,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
     <!-- Custom slots: name and options. -->
     <template #column_options="{ entry }">
       <EntryOptions
+        tableId="userPermissions"
         :meta="metaForEntry(entry)"
         :entry="entry"
         :actions="actions"

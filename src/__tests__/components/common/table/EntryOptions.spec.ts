@@ -30,6 +30,7 @@ function createComponent(
       plugins: [i18n],
     },
     props: {
+      tableId: 'TestEntryOption',
       meta,
       entry,
       langPrefix,

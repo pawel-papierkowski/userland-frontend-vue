@@ -151,7 +151,7 @@ const pageInputDisabled = () => {
 </script>
 
 <template>
-  <div class="table-paginer" :data-testid="`paginer_${props.tableId}`">
+  <div class="table-paginer" :data-testid="`${props.tableId}_paginer`">
     <div class="table-paginer-grid">
       <div class="table-paginer-side"></div>
       <div class="table-paginer-navbtn" :class="stylePrevPage()" :tabindex="canGoPrevPage() ? 0 : -1"
@@ -169,7 +169,7 @@ const pageInputDisabled = () => {
           @keyup.enter="applyPage"
         />
         /
-        <span class="table-paginer-number" :data-testid="`paginer_${props.tableId}_pageNumber`">{{
+        <span class="table-paginer-number" :data-testid="`${props.tableId}_paginer_pageNumber`">{{
           meta.pageCount
         }}</span>
       </div>

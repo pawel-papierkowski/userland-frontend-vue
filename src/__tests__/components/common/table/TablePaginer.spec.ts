@@ -81,7 +81,7 @@ describe('TablePaginer', () => {
       const wrapper = createComponent(0, createTableMetaLarge(0), false);
 
       // Assert: Root has correct data-testid.
-      const root = wrapper.find('[data-testid="paginer_T"]');
+      const root = wrapper.find('[data-testid="T_paginer"]');
       expect(root.exists()).toBe(true);
     });
 
@@ -103,7 +103,7 @@ describe('TablePaginer', () => {
       expect(input.element.value).toBe('1');
 
       // Assert: Page count shows 1.
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('1');
     });
 
@@ -121,7 +121,7 @@ describe('TablePaginer', () => {
       const input = wrapper.find('input');
       expect(input.element.value).toBe('1');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('2');
     });
 
@@ -139,7 +139,7 @@ describe('TablePaginer', () => {
       const input = wrapper.find('input');
       expect(input.element.value).toBe('2');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('2');
     });
 
@@ -156,7 +156,7 @@ describe('TablePaginer', () => {
       const input = wrapper.find('input');
       expect(input.element.value).toBe('1');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('3');
     });
 
@@ -172,7 +172,7 @@ describe('TablePaginer', () => {
       const input = wrapper.find('input');
       expect(input.element.value).toBe('2');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('3');
     });
 
@@ -189,7 +189,7 @@ describe('TablePaginer', () => {
       const input = wrapper.find('input');
       expect(input.element.value).toBe('3');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('3');
     });
 
@@ -206,7 +206,7 @@ describe('TablePaginer', () => {
       expect(input.element.disabled).toBe(true);
       expect(input.element.value).toBe('1');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('0');
     });
 
@@ -223,7 +223,7 @@ describe('TablePaginer', () => {
       expect(input.element.disabled).toBe(true);
       expect(input.element.value).toBe('2');
 
-      const pageNumber = wrapper.find('[data-testid="paginer_T_pageNumber"]');
+      const pageNumber = wrapper.find('[data-testid="T_paginer_pageNumber"]');
       expect(pageNumber.text()).toBe('3');
     });
 

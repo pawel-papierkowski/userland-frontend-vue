@@ -1,9 +1,14 @@
 /**
- * Page Object for the Admin User page (`/admin/user`) — user tokens tab
- * (AdminUserTokens + AdminUserTokensFilter). Selection of the user to show tokens
- * for is done via the table (see AdminUserTablePage).
+ * Page Object for the Admin User page (`/admin/user`) — user configuration tab
+ * (AdminUserConfig + AdminUserConfigFilter). Selection of the user to show
+ * configuration for is done via the table (see AdminUserTablePage).
+ *
+ * Note: config entries are edited in-place (inline edit). Entry option buttons
+ * (add/save/cancel/edit/delete) are rendered by EntryOptions and have no
+ * data-testid, so they are located by their emoji text scoped to the add
+ * button in the paginer or to the 'options' cell of a given row.
  */
-class AdminUserTokensPage {
+class AdminUserConfigPage {
   // //////////////////////////////////////////////////////////////////////////
   // General.
 
@@ -27,70 +32,88 @@ class AdminUserTokensPage {
     return cy.getByTestId('usertab_main').click();
   }
 
-  /** Switch to the Tokens tab of the selected user. */
-  openTokensTab(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('usertab_tokens').click();
+  /** Switch to the Config tab of the selected user. */
+  openConfigTab(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.getByTestId('usertab_config').click();
   }
 
   // /////////////////////////////////////////////////////////////////////
   // Get elements.
 
-  /** Get the whole user tokens table element. */
+  /** Get the whole user config table element. */
   getTable(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('table_userTokens');
+    return cy.getByTestId('table_userConfig');
   }
 
-  /** Get a single token table row by its index (zero-based). */
+  /** Get a single config table row by its index (zero-based). Index -1 is the add-new-entry row. */
   getRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_userTokens_${rowIndex}`);
+    return cy.getByTestId(`row_userConfig_${rowIndex}`);
   }
 
-  /** Get a single token cell by row index and column name. */
+  /** Get a single config cell by row index and column name. */
   getCell(rowIndex: number, columnName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`cell_userTokens_${rowIndex}_${columnName}`);
+    return cy.getByTestId(`cell_userConfig_${rowIndex}_${columnName}`);
   }
 
   /**
-   * Get a token column header cell by its visible text (e.g. 'Token').
-   * Scoped to the tokens table because all sub-tab tables share the DOM (hidden by tabs).
+   * Get a config column header cell by its visible text (e.g. 'Name').
+   * Scoped to the config table because all sub-tab tables share the DOM (hidden by tabs).
    */
   getHeaderCell(headerText: string): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getTable().find('.table-header-cell').contains(headerText);
   }
 
-  /** Get the empty-state message of the tokens table. */
+  /** Get the empty-state message of the config table. */
   getEmptyMessage(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getTable().find('.table-empty');
   }
 
-  /** Get the tokens table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
+  /** Get the config table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
   getPaginer(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userTokens_paginer').first();
+    return cy.getByTestId('userConfig_paginer').first();
   }
 
-  /** Get the tokens table paginer page-number input. */
+  /** Get the config table paginer page-number input. */
   getPaginerInput(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getPaginer().find('.input-paginer');
   }
 
-  /** Get the tokens table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
+  /** Get the config table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
   getPageNumber(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userTokens_paginer_pageNumber').first();
+    return cy.getByTestId('userConfig_paginer_pageNumber').first();
   }
 
   /** Get the filter 'created from' date picker input. */
   getCreatedFromInput(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('datepicker_usertokens-filter-createdFromAt');
+    return cy.getByTestId('datepicker_userconfig-filter-createdFromAt');
   }
 
   /** Get the filter 'created to' date picker input. */
   getCreatedToInput(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('datepicker_usertokens-filter-createdToAt');
+    return cy.getByTestId('datepicker_userconfig-filter-createdToAt');
   }
 
   /** Get the filter submit (refresh) button. */
   getFilterSubmitButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('usertokens-filter-submit');
+    return cy.getByTestId('userconfig-filter-submit');
+  }
+
+  /**
+   * Get a single entry-option button (add/save/cancel/edit/delete) inside the given row's
+   * 'options' cell by its visible text (e.g. '✏️' for edit).
+   * @param rowIndex Row index. Use -1 for the add-new-entry row.
+   * @param optionText Visible text of the option button.
+   */
+  getEntryOption(rowIndex: number, optionText: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getCell(rowIndex, 'options').find('.entry-btn').contains(optionText);
+  }
+
+  /**
+   * Get the 'add' entry-option button located in the paginer (top one) by its visible text.
+   * The paginer renders the same options in both top and bottom paginers, so we scope to the first one.
+   */
+  getAddButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getPaginer().find('.entry-btn').contains('➕');
   }
 
   // /////////////////////////////////////////////////////////////////////
@@ -106,7 +129,7 @@ class AdminUserTokensPage {
    * @param dayIndex Index of the day cell in the calendar grid (0 = first date cell).
    */
   selectDateFrom(year: number, month: number, dayIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.selectDate('datepicker_usertokens-filter-createdFromAt', year, month, dayIndex);
+    return this.selectDate('datepicker_userconfig-filter-createdFromAt', year, month, dayIndex);
   }
 
   /**
@@ -116,7 +139,7 @@ class AdminUserTokensPage {
    * @param dayIndex Index of the day cell in the calendar grid (0 = first date cell).
    */
   selectDateTo(year: number, month: number, dayIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.selectDate('datepicker_usertokens-filter-createdToAt', year, month, dayIndex);
+    return this.selectDate('datepicker_userconfig-filter-createdToAt', year, month, dayIndex);
   }
 
   /**
@@ -157,6 +180,40 @@ class AdminUserTokensPage {
   clickSortHeader(headerText: string): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getHeaderCell(headerText).click();
   }
+
+  /** Start adding a new config entry by clicking the 'add' button in the paginer. */
+  clickAdd(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getAddButton().click();
+  }
+
+  /**
+   * Click an entry-option button (edit/delete/save/cancel) in the given row by its visible text.
+   * @param rowIndex Row index. Use -1 for the add-new-entry row.
+   * @param optionText Visible text of the option button (e.g. '✏️' for edit, '💾' for save).
+   */
+  clickEntryOption(rowIndex: number, optionText: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getEntryOption(rowIndex, optionText).click();
+  }
+
+  /**
+   * Fill the 'name' input of the row that is currently in inline-edit mode.
+   * @param rowIndex Row index. Use -1 for the add-new-entry row.
+   * @param name Value to type.
+   */
+  fillName(rowIndex: number, name: string): Cypress.Chainable<JQuery<HTMLInputElement>> {
+    this.getCell(rowIndex, 'name').find('input').clear();
+    return this.getCell(rowIndex, 'name').find('input').type(name);
+  }
+
+  /**
+   * Fill the 'value' input of the row that is currently in inline-edit mode.
+   * @param rowIndex Row index. Use -1 for the add-new-entry row.
+   * @param value Value to type.
+   */
+  fillValue(rowIndex: number, value: string): Cypress.Chainable<JQuery<HTMLInputElement>> {
+    this.getCell(rowIndex, 'value').find('input').clear();
+    return this.getCell(rowIndex, 'value').find('input').type(value);
+  }
 }
 
-export default AdminUserTokensPage;
+export default AdminUserConfigPage;

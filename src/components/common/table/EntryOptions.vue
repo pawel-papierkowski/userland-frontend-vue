@@ -6,6 +6,7 @@
  * - E: Type of table entry.
  *
  * Properties:
+ * - tableId - Identificator of table.
  * - meta - Metadata for this entry.
  * - entry - Entry itself.
  * - langPrefix - Prefix for language key.
@@ -19,6 +20,7 @@ import type { EntryMeta, EntryOption } from '@/code/data/features/common/type.ts
 const { t } = useI18n();
 
 const props = defineProps<{
+  tableId: string;
   meta: EntryMeta | null;
   entry: E | null;
   langPrefix: string;
@@ -109,6 +111,7 @@ const onKeyDown = async (e: KeyboardEvent, option: EntryOption, key: string) => 
     <template v-for="(option, key) in meta?.options" :key="key">
       <div
         v-if="optionCanSee(option)"
+        :data-testid="`${tableId}_opt_${key}`"
         class="entry-btn"
         :class="optionClass(option)"
         :title="t(optionTooltip(option, key))"

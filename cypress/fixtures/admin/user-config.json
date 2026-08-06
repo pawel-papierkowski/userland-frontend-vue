@@ -1,0 +1,134 @@
+{
+  "userConfig": [
+    {
+      "id": 1,
+      "createdAt": "2024-01-15T10:00:00Z",
+      "name": "config-01",
+      "value": "value-01",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 2,
+      "createdAt": "2024-02-20T12:00:00Z",
+      "name": "config-02",
+      "value": "value-02",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 3,
+      "createdAt": "2024-03-05T09:30:00Z",
+      "name": "config-03",
+      "value": "value-03",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 4,
+      "createdAt": "2024-04-11T15:45:00Z",
+      "name": "config-04",
+      "value": "value-04",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 5,
+      "createdAt": "2024-05-22T08:10:00Z",
+      "name": "config-05",
+      "value": "value-05",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 6,
+      "createdAt": "2024-06-30T11:20:00Z",
+      "name": "config-06",
+      "value": "value-06",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 7,
+      "createdAt": "2024-07-15T14:05:00Z",
+      "name": "config-07",
+      "value": "value-07",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 8,
+      "createdAt": "2024-08-01T16:40:00Z",
+      "name": "config-08",
+      "value": "value-08",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 9,
+      "createdAt": "2024-09-10T13:35:00Z",
+      "name": "config-09",
+      "value": "value-09",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    },
+    {
+      "id": 10,
+      "createdAt": "2024-09-11T09:25:00Z",
+      "name": "config-10",
+      "value": "value-10",
+      "meta": {
+        "options": {
+          "edit": { "access": "ENABLED", "reason": null },
+          "delete": { "access": "ENABLED", "reason": null }
+        },
+        "data": null
+      }
+    }
+  ]
+}

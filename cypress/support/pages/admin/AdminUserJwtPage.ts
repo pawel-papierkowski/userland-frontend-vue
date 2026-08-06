@@ -65,7 +65,7 @@ class AdminUserJwtPage {
 
   /** Get the JWT table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
   getPaginer(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_userJwt').first();
+    return cy.getByTestId('userJwt_paginer').first();
   }
 
   /** Get the JWT table paginer page-number input. */
@@ -75,7 +75,7 @@ class AdminUserJwtPage {
 
   /** Get the JWT table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
   getPageNumber(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_userJwt_pageNumber').first();
+    return cy.getByTestId('userJwt_paginer_pageNumber').first();
   }
 
   /** Get the filter 'created from' date picker input. */

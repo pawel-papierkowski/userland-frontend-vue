@@ -33,7 +33,7 @@ class AdminUserTablePage {
 
   /** Get the paginer element of the user table. Note: there are two paginers (top and bottom), we use the first one. */
   getPaginer(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_users').first();
+    return cy.getByTestId('users_paginer').first();
   }
 
   /** Get the paginer page-number input. */
@@ -43,7 +43,7 @@ class AdminUserTablePage {
 
   /** Get the paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
   getPageNumber(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('paginer_users_pageNumber').first();
+    return cy.getByTestId('users_paginer_pageNumber').first();
   }
 
   /** Get the empty-state message of the user table. */
