@@ -14,12 +14,12 @@ class AdminUserHistoryPage {
 
   /**
    * Select a user in the user table by its row index (zero-based) to open its editor.
-   * Note: the element with `data-testid="row_users_..."` is the row's inner element that
+   * Note: the element with `data-testid="users_..."` is the row's inner element that
    * has `display: contents` (so it has a 0x0 box). The actual clickable element holding
    * the click handler is its parent row element.
    */
   selectUserRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_users_${rowIndex}`).parent('[role="row"]').click();
+    return cy.getByTestId(`users_${rowIndex}`).parent('[role="row"]').click();
   }
 
   /** Switch to the Main tab of the selected user. */
@@ -37,17 +37,17 @@ class AdminUserHistoryPage {
 
   /** Get the whole user history table element. */
   getTable(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('table_userHistory');
+    return cy.getByTestId('userHistory');
   }
 
   /** Get a single history table row by its index (zero-based). */
   getRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_userHistory_${rowIndex}`);
+    return cy.getByTestId(`userHistory_${rowIndex}`);
   }
 
   /** Get a single history cell by row index and column name. */
   getCell(rowIndex: number, columnName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`cell_userHistory_${rowIndex}_${columnName}`);
+    return cy.getByTestId(`userHistory_${rowIndex}_${columnName}`);
   }
 
   /**

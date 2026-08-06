@@ -349,7 +349,7 @@ describe('AdminUserConfig', () => {
       await nextTick();
 
       // Set name via the new-entry row input.
-      const nameCell = wrapper.find('[data-testid="cell_userConfig_-1_name"]');
+      const nameCell = wrapper.find('[data-testid="userConfig_-1_name"]');
       const nameInput = nameCell.find('input');
       await nameInput.setValue('someKey');
       await nextTick();
@@ -390,8 +390,8 @@ describe('AdminUserConfig', () => {
       await nextTick();
 
       // Fill in the form fields via the new-entry row inputs.
-      const nameInput = wrapper.find('[data-testid="cell_userConfig_-1_name"] input');
-      const valueInput = wrapper.find('[data-testid="cell_userConfig_-1_value"] input');
+      const nameInput = wrapper.find('[data-testid="userConfig_-1_name"] input');
+      const valueInput = wrapper.find('[data-testid="userConfig_-1_value"] input');
       await nameInput.setValue('newKey');
       await valueInput.setValue('newValue');
       await nextTick();
@@ -583,8 +583,8 @@ describe('AdminUserConfig', () => {
       await nextTick();
 
       // Fill name and value via the new-entry row inputs.
-      const nameInput = wrapper.find('[data-testid="cell_userConfig_-1_name"] input');
-      const valueInput = wrapper.find('[data-testid="cell_userConfig_-1_value"] input');
+      const nameInput = wrapper.find('[data-testid="userConfig_-1_name"] input');
+      const valueInput = wrapper.find('[data-testid="userConfig_-1_value"] input');
       await nameInput.setValue('key');
       await valueInput.setValue('val');
       await nextTick();

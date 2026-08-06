@@ -240,7 +240,7 @@ describe('TablePage', () => {
       );
 
       // Assert: Root has data-testid.
-      const root = wrapper.find('[data-testid="table_customTableId"]');
+      const root = wrapper.find('[data-testid="customTableId"]');
       expect(root.exists()).toBe(true);
 
       // Assert: Column headers.

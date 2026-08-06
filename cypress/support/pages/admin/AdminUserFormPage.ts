@@ -13,12 +13,12 @@ class AdminUserFormPage {
 
   /**
    * Select a user in the user table by its row index (zero-based) to open its form.
-   * Note: the element with `data-testid="row_users_..."` is the row's inner element that
+   * Note: the element with `data-testid="users_..."` is the row's inner element that
    * has `display: contents` (so it has a 0x0 box). The actual clickable element holding
    * the click handler is its parent row element.
    */
   selectUserRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_users_${rowIndex}`).parent('[role="row"]').click();
+    return cy.getByTestId(`users_${rowIndex}`).parent('[role="row"]').click();
   }
 
   // //////////////////////////////////////////////////////////////////////////

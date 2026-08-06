@@ -360,10 +360,11 @@ const resolveRowMeta = (entry: UserConfigTableEntry | null): RowMeta | null => {
     <template #filter="{ isBusy, isDisabled, handleReload }">
       <AdminUserConfigFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
-    <!-- Paginer options. -->
+    <!-- Paginer options for whole table. -->
     <template #paginer_options>
       <EntryOptions
         tableId="userConfig"
+        :rowIndex="-2"
         :meta="metaGeneral()"
         :entry="null"
         :actions="actions"
@@ -372,9 +373,10 @@ const resolveRowMeta = (entry: UserConfigTableEntry | null): RowMeta | null => {
       />
     </template>
     <!-- Custom slots: options. -->
-    <template #column_options="{ entry }">
+    <template #column_options="{ entry, rowIndex }">
       <EntryOptions
         tableId="userConfig"
+        :rowIndex="rowIndex"
         :meta="metaForEntry(entry)"
         :entry="entry"
         :actions="actions"

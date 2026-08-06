@@ -7,8 +7,8 @@
  *
  * Properties:
  * - tableId - Identificator of table.
+ * - rowIndex - Index of row in table. -1 means special row.
  * - columns - Data about columns. First column must be unique key.
- * - rowIndex - Index of row in table.
  * - entry - Current entry of table for this row. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - rowMeta - Row metadata. Contains field metadata keyed by column name. Optional.
@@ -27,8 +27,8 @@ const formEntry = defineModel<FE | null>('formEntry', { required: false });
 const props = withDefaults(
   defineProps<{
     tableId: string;
-    columns: ColumnData[];
     rowIndex: number;
+    columns: ColumnData[];
     entry: E | null;
     inlineEdit?: boolean;
     rowMeta?: RowMeta | null;
@@ -52,7 +52,7 @@ const resolveFieldMeta = (column: ColumnData): FieldMeta | null => {
 </script>
 
 <template>
-  <div :data-testid="`row_${props.tableId}_${rowIndex}`" class="table-row-inner">
+  <div :data-testid="`${props.tableId}_${rowIndex}`" class="table-row-inner">
     <!-- CELLS FOR SINGLE TABLE ROW -->
     <template v-for="(column, colIndex) in columns" :key="colIndex">
       <TableCell

@@ -365,10 +365,11 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
     <template #filter="{ isBusy, isDisabled, handleReload }">
       <AdminUserPermissionsFilter v-model="formFilter" :isBusy="isBusy" :disabled="isDisabled" @reload="handleReload" />
     </template>
-    <!-- Paginer options. -->
+    <!-- Paginer options for whole table. -->
     <template #paginer_options>
       <EntryOptions
         tableId="userPermissions"
+        :rowIndex="-2"
         :meta="metaGeneral()"
         :entry="null"
         :actions="actions"
@@ -377,9 +378,10 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
       />
     </template>
     <!-- Custom slots: name and options. -->
-    <template #column_options="{ entry }">
+    <template #column_options="{ entry, rowIndex }">
       <EntryOptions
         tableId="userPermissions"
+        :rowIndex="rowIndex"
         :meta="metaForEntry(entry)"
         :entry="entry"
         :actions="actions"

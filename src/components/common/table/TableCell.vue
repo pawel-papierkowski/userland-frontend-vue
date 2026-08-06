@@ -11,8 +11,8 @@
  *
  * Properties:
  * - tableId - Identificator of table.
+ * - rowIndex - Index of row in table. -1 means special row.
  * - column - Data about column.
- * - rowIndex - Index of row in table.
  * - entry - Current entry of table for row with this cell. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - fieldMeta - If present, defines additional metadata about cell like custom css applied to inside.
@@ -29,8 +29,8 @@ const formEntry = defineModel<FE | null>('formEntry', { required: false });
 const props = withDefaults(
   defineProps<{
     tableId: string;
-    column: ColumnData;
     rowIndex: number;
+    column: ColumnData;
     entry: E | null;
     inlineEdit?: boolean;
     fieldMeta?: FieldMeta | null;
@@ -44,6 +44,8 @@ const props = withDefaults(
 defineSlots<{
   [key: string]: (props: {
     entry: E | null;
+    tableId: string;
+    rowIndex: number;
     isEditMode?: boolean;
     formEntry?: FE | null;
     fieldMeta?: FieldMeta | null;
@@ -61,7 +63,7 @@ const isEditMode = computed(() => {
 });
 
 const dataTestId = computed(() => {
-  return `cell_${props.tableId}_${props.rowIndex}_${props.column.name}`;
+  return `${props.tableId}_${props.rowIndex}_${props.column.name}`;
 });
 
 const cellClass = computed(() => {
@@ -78,6 +80,8 @@ const cellClass = computed(() => {
         text/input/whatever depending on isEditMode and fieldMeta. -->
         <slot
           :name="`column_${column.name}`"
+          :tableId="tableId"
+          :rowIndex="rowIndex"
           :entry="entry"
           :isEditMode="isEditMode"
           :formEntry="formEntry"
@@ -99,6 +103,8 @@ const cellClass = computed(() => {
       <!-- Custom columns always use slot. -->
       <slot
         :name="`column_${column.name}`"
+        :tableId="tableId"
+        :rowIndex="rowIndex"
         :entry="entry"
         :isEditMode="isEditMode"
         :formEntry="formEntry"

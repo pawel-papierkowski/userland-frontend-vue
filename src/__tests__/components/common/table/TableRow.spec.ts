@@ -116,7 +116,7 @@ describe('TableRow', () => {
       });
 
       // Assert: Root has correct data-testid.
-      const root = wrapper.find('[data-testid="row_testTable_0"]');
+      const root = wrapper.find('[data-testid="testTable_0"]');
       expect(root.exists()).toBe(true);
 
       // Assert: Only visible columns are rendered (id is hidden).

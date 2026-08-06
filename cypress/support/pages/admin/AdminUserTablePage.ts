@@ -13,17 +13,17 @@ class AdminUserTablePage {
 
   /** Get the whole user table element. */
   getTable(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('table_users');
+    return cy.getByTestId('users');
   }
 
   /** Get a single table row by its index (zero-based). */
   getRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_users_${rowIndex}`);
+    return cy.getByTestId(`users_${rowIndex}`);
   }
 
   /** Get a single table cell by row index and column name. */
   getCell(rowIndex: number, columnName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`cell_users_${rowIndex}_${columnName}`);
+    return cy.getByTestId(`users_${rowIndex}_${columnName}`);
   }
 
   /** Get a column header cell by its visible text (e.g. 'Username'). */

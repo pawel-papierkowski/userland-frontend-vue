@@ -31,6 +31,7 @@ function createComponent(
     },
     props: {
       tableId: 'TestEntryOption',
+      rowIndex: 0,
       meta,
       entry,
       langPrefix,

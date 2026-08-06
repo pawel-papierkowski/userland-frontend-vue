@@ -4,9 +4,9 @@
  * configuration for is done via the table (see AdminUserTablePage).
  *
  * Note: config entries are edited in-place (inline edit). Entry option buttons
- * (add/save/cancel/edit/delete) are rendered by EntryOptions and have no
- * data-testid, so they are located by their emoji text scoped to the add
- * button in the paginer or to the 'options' cell of a given row.
+ * (add/save/cancel/edit/delete) are rendered by EntryOptions with data-testids
+ * in the form `userConfig_opt_<option>`. Row options are scoped to the 'options'
+ * cell of a given row; the add button is scoped to the first paginer.
  */
 class AdminUserConfigPage {
   // //////////////////////////////////////////////////////////////////////////
@@ -19,12 +19,12 @@ class AdminUserConfigPage {
 
   /**
    * Select a user in the user table by its row index (zero-based) to open its editor.
-   * Note: the element with `data-testid="row_users_..."` is the row's inner element that
+   * Note: the element with `data-testid="users_..."` is the row's inner element that
    * has `display: contents` (so it has a 0x0 box). The actual clickable element holding
    * the click handler is its parent row element.
    */
   selectUserRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_users_${rowIndex}`).parent('[role="row"]').click();
+    return cy.getByTestId(`users_${rowIndex}`).parent('[role="row"]').click();
   }
 
   /** Switch to the Main tab of the selected user. */
@@ -42,17 +42,17 @@ class AdminUserConfigPage {
 
   /** Get the whole user config table element. */
   getTable(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('table_userConfig');
+    return cy.getByTestId('userConfig');
   }
 
   /** Get a single config table row by its index (zero-based). Index -1 is the add-new-entry row. */
   getRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`row_userConfig_${rowIndex}`);
+    return cy.getByTestId(`userConfig_${rowIndex}`);
   }
 
   /** Get a single config cell by row index and column name. */
   getCell(rowIndex: number, columnName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`cell_userConfig_${rowIndex}_${columnName}`);
+    return cy.getByTestId(`userConfig_${rowIndex}_${columnName}`);
   }
 
   /**
@@ -100,20 +100,20 @@ class AdminUserConfigPage {
 
   /**
    * Get a single entry-option button (add/save/cancel/edit/delete) inside the given row's
-   * 'options' cell by its visible text (e.g. '✏️' for edit).
+   * 'options' cell by its option name.
    * @param rowIndex Row index. Use -1 for the add-new-entry row.
-   * @param optionText Visible text of the option button.
+   * @param optionName Name of the option (e.g. 'edit', 'delete').
    */
-  getEntryOption(rowIndex: number, optionText: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.getCell(rowIndex, 'options').find('.entry-btn').contains(optionText);
+  getEntryOption(rowIndex: number, optionName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getCell(rowIndex, 'options').find(`[data-testid="userConfig_${rowIndex}_opt_${optionName}"]`);
   }
 
   /**
-   * Get the 'add' entry-option button located in the paginer (top one) by its visible text.
+   * Get the 'add' entry-option button located in the paginer (top one).
    * The paginer renders the same options in both top and bottom paginers, so we scope to the first one.
    */
   getAddButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.getPaginer().find('.entry-btn').contains('➕');
+    return cy.getByTestId('userConfig_-2_opt_add').first();
   }
 
   // /////////////////////////////////////////////////////////////////////
@@ -187,12 +187,12 @@ class AdminUserConfigPage {
   }
 
   /**
-   * Click an entry-option button (edit/delete/save/cancel) in the given row by its visible text.
+   * Click an entry-option button (edit/delete/save/cancel) in the given row by its option name.
    * @param rowIndex Row index. Use -1 for the add-new-entry row.
-   * @param optionText Visible text of the option button (e.g. '✏️' for edit, '💾' for save).
+   * @param optionName Name of the option (e.g. 'edit', 'save').
    */
-  clickEntryOption(rowIndex: number, optionText: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.getEntryOption(rowIndex, optionText).click();
+  clickEntryOption(rowIndex: number, optionName: string): Cypress.Chainable<JQuery<HTMLElement>> {
+    return this.getEntryOption(rowIndex, optionName).click();
   }
 
   /**

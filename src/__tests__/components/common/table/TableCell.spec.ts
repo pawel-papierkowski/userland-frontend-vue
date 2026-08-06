@@ -155,7 +155,7 @@ describe('TableCell', () => {
       // Assert: ARIA role and data-testid are set.
       const cell = wrapper.find('[role="cell"]');
       expect(cell.exists()).toBe(true);
-      expect(cell.attributes('data-testid')).toBe('cell_testTable_0_name');
+      expect(cell.attributes('data-testid')).toBe('testTable_0_name');
     });
 
     it('shows slot content when slot is provided', () => {

@@ -7,6 +7,7 @@
  *
  * Properties:
  * - tableId - Identificator of table.
+ * - rowIndex - Index of row in table. -1 means options are assigned to special row, -2 means options are for whole table (like adding entry).
  * - meta - Metadata for this entry.
  * - entry - Entry itself.
  * - langPrefix - Prefix for language key.
@@ -21,6 +22,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
   tableId: string;
+  rowIndex: number;
   meta: EntryMeta | null;
   entry: E | null;
   langPrefix: string;
@@ -111,7 +113,7 @@ const onKeyDown = async (e: KeyboardEvent, option: EntryOption, key: string) => 
     <template v-for="(option, key) in meta?.options" :key="key">
       <div
         v-if="optionCanSee(option)"
-        :data-testid="`${tableId}_opt_${key}`"
+        :data-testid="`${tableId}_${rowIndex}_opt_${key}`"
         class="entry-btn"
         :class="optionClass(option)"
         :title="t(optionTooltip(option, key))"

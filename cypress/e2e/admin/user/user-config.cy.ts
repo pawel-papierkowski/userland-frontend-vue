@@ -400,7 +400,7 @@ describe('Admin User Config', () => {
       page.fillValue(-1, 'value-new');
 
       // Act: Save the new entry.
-      page.clickEntryOption(-1, '💾');
+      page.clickEntryOption(-1, 'save');
 
       // Assert: Request carries the new entry data (id null = new entry, correct user).
       cy.wait('@userConfigEditRequest').then((interception) => {
@@ -435,7 +435,7 @@ describe('Admin User Config', () => {
       // Act: Click add, fill the new-entry row, then cancel.
       page.clickAdd();
       page.fillName(-1, 'config-new');
-      page.clickEntryOption(-1, '❌');
+      page.clickEntryOption(-1, 'cancel');
 
       // Assert: No save request was sent.
       cy.get('@userConfigEditRequest.all').should('have.length', 0);
@@ -455,12 +455,12 @@ describe('Admin User Config', () => {
       cy.wait('@userConfigsRequest');
 
       // Act: Click the edit button of the first row and change name and value.
-      page.clickEntryOption(0, '✏️');
+      page.clickEntryOption(0, 'edit');
       page.fillName(0, 'config-edited');
       page.fillValue(0, 'value-edited');
 
       // Act: Save the edited entry.
-      page.clickEntryOption(0, '💾');
+      page.clickEntryOption(0, 'save');
 
       // Assert: Request carries the edited entry data (id of edited entry, correct user).
       cy.wait('@userConfigEditRequest').then((interception) => {
@@ -490,9 +490,9 @@ describe('Admin User Config', () => {
       cy.wait('@userConfigsRequest');
 
       // Act: Click the edit button of the first row, change the name, then cancel.
-      page.clickEntryOption(0, '✏️');
+      page.clickEntryOption(0, 'edit');
       page.fillName(0, 'config-edited');
-      page.clickEntryOption(0, '❌');
+      page.clickEntryOption(0, 'cancel');
 
       // Assert: No save request was sent.
       cy.get('@userConfigEditRequest.all').should('have.length', 0);
@@ -512,7 +512,7 @@ describe('Admin User Config', () => {
       cy.wait('@userConfigsRequest');
 
       // Act: Click the delete button of the first row.
-      page.clickEntryOption(0, '🗑️');
+      page.clickEntryOption(0, 'delete');
 
       // Assert: Delete request targets the deleted entry id.
       cy.wait('@userConfigDeleteRequest').then((interception) => {
@@ -540,7 +540,7 @@ describe('Admin User Config', () => {
 
       // Act: Click add and try to save with an empty name.
       page.clickAdd();
-      page.clickEntryOption(-1, '💾');
+      page.clickEntryOption(-1, 'save');
 
       // Assert: Failure message about invalid name is shown and no request is sent.
       cy.getByTestId('msgContainer').find('.message-failure').should('contain.text', 'Invalid config name.');
@@ -548,7 +548,7 @@ describe('Admin User Config', () => {
 
       // Act: Fill only the name and try to save again.
       page.fillName(-1, 'config-new');
-      page.clickEntryOption(-1, '💾');
+      page.clickEntryOption(-1, 'save');
 
       // Assert: Failure message about invalid value is shown and still no request is sent.
       cy.getByTestId('msgContainer').find('.message-failure').should('contain.text', 'Invalid config value.');

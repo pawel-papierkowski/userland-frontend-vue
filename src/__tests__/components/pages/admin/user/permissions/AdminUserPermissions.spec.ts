@@ -404,7 +404,7 @@ describe('AdminUserPermissions', () => {
       await nextTick();
 
       // Set value via the input in the value cell.
-      const valueInput = wrapper.find('[data-testid="cell_userPermissions_-1_value"] input');
+      const valueInput = wrapper.find('[data-testid="userPermissions_-1_value"] input');
       await valueInput.setValue('true');
       await nextTick();
 
@@ -604,7 +604,7 @@ describe('AdminUserPermissions', () => {
       await nextTick();
 
       // Set value via the input in the value cell.
-      const valueInput = wrapper.find('[data-testid="cell_userPermissions_-1_value"] input');
+      const valueInput = wrapper.find('[data-testid="userPermissions_-1_value"] input');
       await valueInput.setValue('true');
       await nextTick();
 

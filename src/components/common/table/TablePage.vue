@@ -321,7 +321,7 @@ defineExpose({
   <div
     class="table-container"
     role="table"
-    :data-testid="`table_${props.tableId}`"
+    :data-testid="tableId"
     :style="{ '--col-count': visibleColumnsCount }"
   >
     <!-- TABLE HEADER -->
