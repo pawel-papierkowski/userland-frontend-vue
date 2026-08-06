@@ -3,16 +3,9 @@
 // Tests main user table (AdminUser) and user's main filter panel (AdminUserFilter).
 
 import { locstJwt } from '@/code/data/app/storage.ts';
-import AdminUserTablePage from '@/../cypress/support/pages/admin/AdminUserTablePage.ts';
 
-/** Shape of a single user table entry in the fixture. */
-interface UserTableEntry {
-  id: number;
-  createdAt: string;
-  username: string;
-  email: string;
-  status: string;
-}
+import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserTablePage from '@/../cypress/support/pages/admin/AdminUserTablePage.ts';
 
 /** Users loaded from the fixture. Populated in `before()`. */
 let fixtureUsers: UserTableEntry[] = [];

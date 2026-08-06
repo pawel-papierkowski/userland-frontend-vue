@@ -2,7 +2,7 @@
 // Login Page E2E Tests
 
 import { locstJwt } from '@/code/data/app/storage.ts';
-import { createTestJwt } from '@/../cypress/support/helpers.ts';
+import { createTestJwt } from '@/../cypress/support/helpers/general.ts';
 import LoginPage from '@/../cypress/support/pages/standard/LoginPage.ts';
 
 /** Stub API call to return token on successful login. */
@@ -73,7 +73,9 @@ describe('Login Page', () => {
       loginPage.getSubmitButton().should('be.enabled');
 
       // Assert: Error message is shown.
-      cy.getByTestId('msgContainer').find('.message-error').should('contain.text', 'A request conflicts with the current state of the server.');
+      cy.getByTestId('msgContainer')
+        .find('.message-error')
+        .should('contain.text', 'A request conflicts with the current state of the server.');
     });
 
     it('navigates to registration page', () => {

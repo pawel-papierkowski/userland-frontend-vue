@@ -22,7 +22,7 @@ class AdminUserHistoryPage {
     return cy.getByTestId(`row_users_${rowIndex}`).parent('[role="row"]').click();
   }
 
-  /** Switch to the History tab of the selected user. */
+  /** Switch to the Main tab of the selected user. */
   openMainTab(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.getByTestId('usertab_main').click();
   }

@@ -39,7 +39,7 @@
 import type { Interception } from 'cypress/types/net-stubbing';
 
 import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
-import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers.ts';
+import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers/general.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Commands
@@ -54,10 +54,10 @@ import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers.ts';
  */
 Cypress.Commands.add('visitUserLand', (path: string = '/') => {
   return cy.visit(path, {
-        onBeforeLoad(win: Cypress.AUTWindow): void {
-          win.localStorage.setItem(locstLang, 'en');
-        },
-      });
+    onBeforeLoad(win: Cypress.AUTWindow): void {
+      win.localStorage.setItem(locstLang, 'en');
+    },
+  });
 });
 
 /**

@@ -2,47 +2,17 @@
 // Admin User History E2E Tests
 // Tests the user history tab (AdminUserHistory) and its filter (AdminUserHistoryFilter).
 
+import type { UserFullDataResp, UserHistoryTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
+
+import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
+import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
 import AdminUserHistoryPage from '@/../cypress/support/pages/admin/AdminUserHistoryPage.ts';
 
-/** Shape of a single user table entry. */
-interface UserTableEntry {
-  id: number;
-  createdAt: string;
-  username: string;
-  email: string;
-  status: string;
-}
-
-/** Shape of full user data used by the main user form. */
-interface UserFullData {
-  id: number;
-  createdAt: string;
-  modifiedAt: string;
-  username: string;
-  email: string;
-  status: string;
-  locked: boolean;
-  lang: string;
-  profile: { name: string; surname: string };
-}
-
-/** Shape of a single user history entry in the fixture. */
-interface UserHistoryEntry {
-  id: number;
-  createdAt: string;
-  who: string;
-  what: string;
-  params: string;
-}
-
 /** Full users loaded from the fixture. Populated in `before()`. */
-let fullUsers: UserFullData[] = [];
+let fullUsers: UserFullDataResp[] = [];
 /** History entries loaded from the fixture. Populated in `before()`. */
-let historyEntries: UserHistoryEntry[] = [];
-
-/** An empty table metadata (used for empty secondary sub-tab tables). */
-const emptyTableMeta = { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' };
+let historyEntries: UserHistoryTableEntry[] = [];
 
 /** Editable user (ivy, id 9) used across all history tests. */
 const ivyTableEntry: UserTableEntry = {
@@ -55,10 +25,10 @@ const ivyTableEntry: UserTableEntry = {
 
 /** Load the fixtures once before all tests. */
 before(() => {
-  cy.fixture('admin/user-full.json').then((data: { users: UserFullData[] }) => {
+  cy.fixture('admin/user-full.json').then((data: { users: UserFullDataResp[] }) => {
     fullUsers = data.users;
   });
-  cy.fixture('admin/user-history.json').then((data: { userHistory: UserHistoryEntry[] }) => {
+  cy.fixture('admin/user-history.json').then((data: { userHistory: UserHistoryTableEntry[] }) => {
     historyEntries = data.userHistory;
   });
 });
@@ -67,47 +37,12 @@ before(() => {
 // Stubs
 
 /**
- * Stub the user table API so a single page holds the given dataset.
- * @param users User table dataset.
- */
-function stubUserTable(users: UserTableEntry[]) {
-  cy.intercept('POST', '**/api/admin/users', (req) => {
-    req.reply({
-      statusCode: 200,
-      body: {
-        entries: users,
-        tableMeta: {
-          pageCount: Math.max(1, Math.ceil(users.length / 10)),
-          entryCount: users.length,
-          pageSize: 10,
-          page: 0,
-          sortBy: 'createdAt',
-          sortOrder: 'DESC',
-        },
-      },
-    });
-  }).as('userTableRequest');
-}
-
-/**
- * Stub the load-user-data API so GET /user/{id} returns the matching full user.
- * @param users Full user dataset to match against.
- */
-function stubUserData(users: UserFullData[]) {
-  cy.intercept('GET', '**/api/admin/user/*', (req) => {
-    const id = Number(req.url.split('/').pop());
-    const found = users.find((u) => u.id === id) ?? users[0];
-    req.reply({ statusCode: 200, body: { ...found } });
-  }).as('userDataRequest');
-}
-
-/**
  * Stub the user history API with a fake backend that filters, sorts and paginates
  * the given entries based on the request body.
  * @param entries History dataset. Defaults to the fixture data.
  * @param pageSize Default page size used when request does not specify one.
  */
-function stubUserHistory(entries: UserHistoryEntry[] = historyEntries, pageSize: number = 5) {
+function stubUserHistory(entries: UserHistoryTableEntry[] = historyEntries, pageSize: number = 5) {
   cy.intercept('POST', '**/api/admin/user/history', (req) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filter = req.body as any;
@@ -132,8 +67,8 @@ function stubUserHistory(entries: UserHistoryEntry[] = historyEntries, pageSize:
     const sortBy = filter.tableMeta?.sortBy || 'createdAt';
     const sortOrder = filter.tableMeta?.sortOrder || 'DESC';
     const sorted = [...result].sort((a, b) => {
-      const valueA = String(a[sortBy as keyof UserHistoryEntry]);
-      const valueB = String(b[sortBy as keyof UserHistoryEntry]);
+      const valueA = String(a[sortBy as keyof UserHistoryTableEntry]);
+      const valueB = String(b[sortBy as keyof UserHistoryTableEntry]);
       const cmp = valueA.localeCompare(valueB);
       return sortOrder === 'DESC' ? -cmp : cmp;
     });
@@ -154,47 +89,25 @@ function stubUserHistory(entries: UserHistoryEntry[] = historyEntries, pageSize:
   }).as('userHistoryRequest');
 }
 
-/** All user sub-tab table endpoints except history. */
-const subTableEndpoints = ['permissions', 'configs', 'tokens', 'jwt'] as const;
-
-/** Stub all secondary user sub-tab tables (except history) to return empty data.
- * Each endpoint is also aliased (as `subtab_<endpoint>`) so tests can assert how
- * many times (if any) those APIs are called.
- */
-function stubUserSubTables() {
-  subTableEndpoints.forEach((endpoint) => {
-    cy.intercept('POST', `**/api/admin/user/${endpoint}`, {
-      statusCode: 200,
-      body: { entries: [], tableMeta: emptyTableMeta },
-    }).as(`subtab_${endpoint}`);
-  });
-}
-
-/**
- * Assert how many times each user sub-tab API was called.
- * @param counts Map of sub-tab endpoint to expected number of calls.
- */
-function expectSubTabCalls(counts: Record<(typeof subTableEndpoints)[number], number>) {
-  subTableEndpoints.forEach((endpoint) => {
-    cy.get(`@subtab_${endpoint}.all`).should('have.length', counts[endpoint]);
-  });
-}
+/** All user sub-tab table endpoints that we do not care about (except history). */
+const subTableEndpoints: string[] = ['permissions', 'configs', 'tokens', 'jwt'] as const;
 
 //
 
 /**
- * Set up the common stubs needed to select a user and open its editor, then visit
- * the page and select the given user row. Note: after this returns, the user is
- * selected on the main tab. History (and other sub-tab) data loads lazily only when
- * the corresponding tab is activated, so callers open the History tab themselves.
+ * Set up the common stubs needed to select a user and open its editor, then visit the page and select
+ * the given user row.
+ * Note: after this returns, the user is selected on the main tab. Sub-tab data loads lazily only when
+ * the corresponding tab is activated, so callers open the desired tab themselves.
+ * @param allUsers All users in table.
  * @param user User table entry to show.
  * @returns Nothing.
  */
-function setupSelectedUser(user: UserTableEntry) {
+function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserHistoryPage {
   stubUserTable([user]);
-  const ivyFull = fullUsers.find((u) => u.id === user.id)!;
+  const ivyFull = allUsers.find((u) => u.id === user.id)!;
   stubUserData([ivyFull]);
-  stubUserSubTables();
+  stubUserSubTables(subTableEndpoints);
 
   const page = new AdminUserHistoryPage();
   page.visit();
@@ -239,7 +152,7 @@ describe('Admin User History', () => {
     it('shows empty message and disabled filter when user was deselected', () => {
       // Arrange: Stub all APIs, log in, select a user and stub history data.
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the History tab.
       page.openHistoryTab();
@@ -263,7 +176,7 @@ describe('Admin User History', () => {
     it('shows history data for the selected user', () => {
       // Arrange: Stub all APIs, log in, select a user and stub history data.
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the History tab.
       page.openHistoryTab();
@@ -271,7 +184,7 @@ describe('Admin User History', () => {
 
       // Assert: correct data was loaded only once.
       cy.get(`@userHistoryRequest.all`).should('have.length', 1);
-      expectSubTabCalls({ permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { permissions: 0, configs: 0, tokens: 0, jwt: 0 });
 
       // Assert: Table is visible with all four header columns.
       page.getTable().should('be.visible');
@@ -294,7 +207,7 @@ describe('Admin User History', () => {
 
       // Assert: correct data was loaded only once (no new reload).
       cy.get(`@userHistoryRequest.all`).should('have.length', 1);
-      expectSubTabCalls({ permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
   });
 
@@ -305,7 +218,7 @@ describe('Admin User History', () => {
     it('filters history table by who', () => {
       // Arrange: Stub history and select a user.
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial (unfiltered) load.
       page.openHistoryTab();
@@ -328,7 +241,7 @@ describe('Admin User History', () => {
     it('filters history table by what', () => {
       // Arrange
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
       page.openHistoryTab();
@@ -349,7 +262,7 @@ describe('Admin User History', () => {
     it('shows empty message when filter matches no history', () => {
       // Arrange
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
       page.openHistoryTab();
@@ -368,7 +281,7 @@ describe('Admin User History', () => {
     it('filters history table by created from date', () => {
       // Arrange
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
       page.openHistoryTab();
@@ -401,7 +314,7 @@ describe('Admin User History', () => {
     it('navigates to next page of history table', () => {
       // Arrange
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
       page.openHistoryTab();
@@ -426,7 +339,7 @@ describe('Admin User History', () => {
     it('sorts history table by who column', () => {
       // Arrange
       stubUserHistory();
-      const page = setupSelectedUser(ivyTableEntry);
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
       page.openHistoryTab();

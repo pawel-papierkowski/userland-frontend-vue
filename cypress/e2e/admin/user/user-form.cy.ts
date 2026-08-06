@@ -2,36 +2,15 @@
 // Admin User Form E2E Tests
 // Tests main user form (AdminUserMain) that shows and edits a single selected user.
 
+import type { UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
+
+import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
+import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
 import AdminUserFormPage from '@/../cypress/support/pages/admin/AdminUserFormPage.ts';
 
-/** Shape of a single user table entry. */
-interface UserTableEntry {
-  id: number;
-  createdAt: string;
-  username: string;
-  email: string;
-  status: string;
-}
-
-/** Shape of full user data used by the main user form. */
-interface UserFullData {
-  id: number;
-  createdAt: string;
-  modifiedAt: string;
-  username: string;
-  email: string;
-  status: string;
-  locked: boolean;
-  lang: string;
-  profile: { name: string; surname: string };
-}
-
 /** Full users loaded from the fixture. Populated in `before()`. */
-let fullUsers: UserFullData[] = [];
-
-/** An empty table metadata (used for empty sub-tab tables). */
-const emptyTableMeta = { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' };
+let fullUsers: UserFullDataResp[] = [];
 
 /** Editable user (ivy, id 9) used in the editable-form tests. */
 const ivyTableEntry: UserTableEntry = {
@@ -53,7 +32,7 @@ const selfTableEntry: UserTableEntry = {
 
 /** Load the fixture data once before all tests. */
 before(() => {
-  cy.fixture('admin/user-full.json').then((data: { users: UserFullData[] }) => {
+  cy.fixture('admin/user-full.json').then((data: { users: UserFullDataResp[] }) => {
     fullUsers = data.users;
   });
 });
@@ -61,39 +40,10 @@ before(() => {
 // ////////////////////////////////////////////////////////////////////////////
 // Stubs
 
-/**
- * Stub the user table API so a single page holds the given dataset.
- * @param users User table dataset.
- */
-function stubUserTable(users: UserTableEntry[]) {
-  cy.intercept('POST', '**/api/admin/users', (req) => {
-    req.reply({
-      statusCode: 200,
-      body: {
-        entries: users,
-        tableMeta: {
-          pageCount: Math.max(1, Math.ceil(users.length / 10)),
-          entryCount: users.length,
-          pageSize: 10,
-          page: 0,
-          sortBy: 'createdAt',
-          sortOrder: 'DESC',
-        },
-      },
-    });
-  }).as('userTableRequest');
-}
-
-/**
- * Stub the load-user-data API so GET /user/{id} returns the matching full user.
- * @param users Full user dataset to match against.
- * @param overrides Extra fields merged over the resolved user (e.g. to simulate own account).
- */
-function stubUserData(users: UserFullData[], overrides: Partial<UserFullData> = {}) {
+/** Stub the load-user-data API to fail with a 500 error. */
+function stubUserDataError() {
   cy.intercept('GET', '**/api/admin/user/*', (req) => {
-    const id = Number(req.url.split('/').pop());
-    const found = users.find((u) => u.id === id) ?? users[0];
-    req.reply({ statusCode: 200, body: { ...found, ...overrides } });
+    req.reply({ statusCode: 500, body: { errCode: 500 } });
   }).as('userDataRequest');
 }
 
@@ -102,8 +52,8 @@ function stubUserData(users: UserFullData[], overrides: Partial<UserFullData> = 
  * state and replies with the updated full user (mirrors backend behavior).
  * @param initial Initial full user data.
  */
-function stubEditUser(initial: UserFullData) {
-  const current: UserFullData = { ...initial };
+function stubEditUser(initial: UserFullDataResp) {
+  const current: UserFullDataResp = { ...initial };
   cy.intercept('PATCH', '**/api/admin/user', (req) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const body = req.body as any;
@@ -116,13 +66,6 @@ function stubEditUser(initial: UserFullData) {
   }).as('userEditRequest');
 }
 
-/** Stub the load-user-data API to fail with a 500 error. */
-function stubUserDataError() {
-  cy.intercept('GET', '**/api/admin/user/*', (req) => {
-    req.reply({ statusCode: 500, body: { errCode: 500 } });
-  }).as('userDataRequest');
-}
-
 /** Stub the edit-user-data API to fail with a 500 error. */
 function stubEditUserError() {
   cy.intercept('PATCH', '**/api/admin/user', (req) => {
@@ -130,32 +73,8 @@ function stubEditUserError() {
   }).as('userEditRequest');
 }
 
-/** All user sub-tab table endpoints. */
-const subTableEndpoints = ['history', 'permissions', 'configs', 'tokens', 'jwt'] as const;
-
-/**
- * Stub all secondary user sub-tab tables to return empty data.
- * Each endpoint is also aliased (as `subtab_<endpoint>`) so tests can assert how
- * many times (if any) those APIs are called.
- */
-function stubUserSubTables() {
-  subTableEndpoints.forEach((endpoint) => {
-    cy.intercept('POST', `**/api/admin/user/${endpoint}`, {
-      statusCode: 200,
-      body: { entries: [], tableMeta: emptyTableMeta },
-    }).as(`subtab_${endpoint}`);
-  });
-}
-
-/**
- * Assert how many times each user sub-tab API was called.
- * @param counts Map of sub-tab endpoint to expected number of calls.
- */
-function expectSubTabCalls(counts: Record<(typeof subTableEndpoints)[number], number>) {
-  subTableEndpoints.forEach((endpoint) => {
-    cy.get(`@subtab_${endpoint}.all`).should('have.length', counts[endpoint]);
-  });
-}
+/** All user sub-tab table endpoints that we do not care about. */
+const subTableEndpoints: string[] = ['history', 'permissions', 'configs', 'tokens', 'jwt'] as const;
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -219,7 +138,7 @@ describe('Admin User Form', () => {
       // Arrange: Stub the table API and a failing full-data API, log in.
       stubUserTable([ivyTableEntry]);
       stubUserDataError();
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -246,7 +165,7 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubEditUser(ivyFull);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
 
       // Act: Visit admin panel page about users.
       const page = new AdminUserFormPage();
@@ -287,7 +206,7 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubEditUserError();
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -317,7 +236,7 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubEditUser(ivyFull);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -357,7 +276,7 @@ describe('Admin User Form', () => {
       const selfFull = fullUsers.find((u) => u.id === 10)!;
       stubUserData([selfFull]);
       stubEditUser(selfFull);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -388,7 +307,7 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -398,7 +317,7 @@ describe('Admin User Form', () => {
       cy.wait('@userDataRequest');
 
       // Assert: No sub-tab API was called.
-      expectSubTabCalls({ history: 0, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 0, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
 
     it('loads only the history sub-tab when a user is selected while on the history tab', () => {
@@ -406,7 +325,7 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -417,7 +336,7 @@ describe('Admin User Form', () => {
       cy.wait('@userDataRequest');
 
       // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
-      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
 
     it('switching tabs loads data for given tab if not yet loaded', () => {
@@ -425,7 +344,7 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
-      stubUserSubTables();
+      stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
       cy.wait('@userTableRequest');
@@ -438,37 +357,37 @@ describe('Admin User Form', () => {
       cy.getByTestId('usertab_history').click();
       cy.wait('@subtab_history');
       // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
-      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
 
       // Act: Switch to the permissions tab.
       cy.getByTestId('usertab_permissions').click();
       cy.wait('@subtab_permissions');
       // Assert: Only the active (permissions) sub-tab is loaded, the rest is unchanged.
-      expectSubTabCalls({ history: 1, permissions: 1, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 0, tokens: 0, jwt: 0 });
 
       // Act: Switch to the configs tab.
       cy.getByTestId('usertab_config').click();
       cy.wait('@subtab_configs');
       // Assert: Only the active (configs) sub-tab is loaded, the rest is unchanged.
-      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 1, tokens: 0, jwt: 0 });
 
       // Act: Switch to the tokens tab.
       cy.getByTestId('usertab_tokens').click();
       cy.wait('@subtab_tokens');
       // Assert: Only the active (tokens) sub-tab is loaded, the rest is unchanged.
-      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 0 });
 
       // Act: Switch to the jwt tab.
       cy.getByTestId('usertab_jwt').click();
       cy.wait('@subtab_jwt');
       // Assert: Only the active (jwt) sub-tab is loaded, the rest is unchanged.
-      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
 
       // Act: Switch back to the history tab. Will do nothing because it is still same user and its data is unchanged.
       cy.getByTestId('usertab_history').click();
       cy.waitIfHappens('@subtab_history', { timeout: 250 });
       // Assert: All sub-tabs are unchanged.
-      expectSubTabCalls({ history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
     });
 
     it('history tab will be reloaded if user data was updated', () => {
@@ -477,8 +396,8 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubEditUser(ivyFull);
-      stubUserSubTables();
-      
+      stubUserSubTables(subTableEndpoints);
+
       // Act: Visit admin panel page about users.
       const page = new AdminUserFormPage();
       page.visit();
@@ -492,7 +411,7 @@ describe('Admin User Form', () => {
       cy.getByTestId('usertab_history').click();
       cy.wait('@subtab_history');
       // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
-      expectSubTabCalls({ history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
 
       // Act: Switch back to main tab and edit user data.
       cy.getByTestId('usertab_main').click();
@@ -504,7 +423,7 @@ describe('Admin User Form', () => {
       cy.getByTestId('usertab_history').click();
       cy.wait('@subtab_history');
       // Assert: History tab will be reloaded due to update of user data.
-      expectSubTabCalls({ history: 2, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
+      expectSubTabCalls(subTableEndpoints, { history: 2, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });
   });
 });
