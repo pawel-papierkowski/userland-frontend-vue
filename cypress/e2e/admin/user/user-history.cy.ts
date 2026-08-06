@@ -215,6 +215,34 @@ describe('Admin User History', () => {
   // History filter
 
   describe('history filter', () => {
+    it('filters history table by created from date', () => {
+      // Arrange
+      stubUserHistory();
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
+
+      // Open the History tab and consume the initial load.
+      page.openHistoryTab();
+      cy.wait('@userHistoryRequest');
+
+      // Act: Pick July 15th 2024 as the "created from" date and submit.
+      page.selectDate(2024, 6, 14);
+      page.getCreatedFromInput().should('have.value', '📅 2024-07-15');
+      page.submitFilter();
+
+      // Assert: Request carries the converted date range bound.
+      cy.wait('@userHistoryRequest').then((interception) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const body = interception.request.body as any;
+        cy.wrap(body.createdFromAt).should('equal', '2024-07-15T00:00:00');
+        cy.wrap(body.createdToAt).should('equal', null);
+      });
+
+      // Assert: Only entries created on or after that date are rendered (page 1, createdAt DESC).
+      page.getCell(0, 'what').should('contain.text', 'PASS_RESET');
+      page.getCell(2, 'what').should('contain.text', 'LOGIN');
+      page.getRow(3).should('not.exist');
+    });
+
     it('filters history table by who', () => {
       // Arrange: Stub history and select a user.
       stubUserHistory();
@@ -276,34 +304,6 @@ describe('Admin User History', () => {
       // Assert: Request is sent and empty message is shown.
       cy.wait('@userHistoryRequest');
       page.getEmptyMessage().should('contain.text', 'No history to show');
-    });
-
-    it('filters history table by created from date', () => {
-      // Arrange
-      stubUserHistory();
-      const page = setupSelectedUser(fullUsers, ivyTableEntry);
-
-      // Open the History tab and consume the initial load.
-      page.openHistoryTab();
-      cy.wait('@userHistoryRequest');
-
-      // Act: Pick July 15th 2024 as the "created from" date and submit.
-      page.selectDate(2024, 6, 14);
-      page.getCreatedFromInput().should('have.value', '📅 2024-07-15');
-      page.submitFilter();
-
-      // Assert: Request carries the converted date range bound.
-      cy.wait('@userHistoryRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
-        cy.wrap(body.createdFromAt).should('equal', '2024-07-15T00:00:00');
-        cy.wrap(body.createdToAt).should('equal', null);
-      });
-
-      // Assert: Only entries created on or after that date are rendered (page 1, createdAt DESC).
-      page.getCell(0, 'what').should('contain.text', 'PASS_RESET');
-      page.getCell(2, 'what').should('contain.text', 'LOGIN');
-      page.getRow(3).should('not.exist');
     });
   });
 
