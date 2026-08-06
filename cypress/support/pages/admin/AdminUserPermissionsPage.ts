@@ -1,14 +1,16 @@
 /**
- * Page Object for the Admin User page (`/admin/user`) — user configuration tab
- * (AdminUserConfig + AdminUserConfigFilter). Selection of the user to show
- * configuration for is done via the table (see AdminUserTablePage).
+ * Page Object for the Admin User page (`/admin/user`) — user permission tab
+ * (AdminUserPermissions + AdminUserPermissionsFilter). Selection of the user to
+ * show permissions for is done via the table (see AdminUserTablePage).
  *
- * Note: config entries are edited in-place (inline edit). Entry option buttons
+ * Note: permission entries are edited in-place (inline edit). Entry option buttons
  * (add/save/cancel/edit/delete) are rendered by EntryOptions with data-testids
- * in the form `userConfig_<row>_opt_<option>`. Row options are scoped to the 'options'
- * cell of a given row; the add button is scoped to the first paginer.
+ * in the form `userPermissions_<row>_opt_<option>`. Row options are scoped to the
+ * 'options' cell of a given row; the add button is scoped to the first paginer.
+ * The permission 'name' column uses a ComboBox (options: 'role', 'user'), so it is
+ * set through `selectPermissionName()` instead of a plain text input.
  */
-class AdminUserConfigPage {
+class AdminUserPermissionsPage {
   // //////////////////////////////////////////////////////////////////////////
   // General.
 
@@ -32,70 +34,70 @@ class AdminUserConfigPage {
     return cy.getByTestId('usertab_main').click();
   }
 
-  /** Switch to the Config tab of the selected user. */
-  openConfigTab(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('usertab_config').click();
+  /** Switch to the Permissions tab of the selected user. */
+  openPermissionsTab(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.getByTestId('usertab_permissions').click();
   }
 
   // /////////////////////////////////////////////////////////////////////
   // Get elements.
 
-  /** Get the whole user config table element. */
+  /** Get the whole user permission table element. */
   getTable(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userConfig');
+    return cy.getByTestId('userPermissions');
   }
 
-  /** Get a single config table row by its index (zero-based). Index -1 is the add-new-entry row. */
+  /** Get a single permission table row by its index (zero-based). Index -1 is the add-new-entry row. */
   getRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`userConfig_${rowIndex}`);
+    return cy.getByTestId(`userPermissions_${rowIndex}`);
   }
 
-  /** Get a single config cell by row index and column name. */
+  /** Get a single permission cell by row index and column name. */
   getCell(rowIndex: number, columnName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId(`userConfig_${rowIndex}_${columnName}`);
+    return cy.getByTestId(`userPermissions_${rowIndex}_${columnName}`);
   }
 
   /**
-   * Get a config column header cell by its visible text (e.g. 'Name').
-   * Scoped to the config table because all sub-tab tables share the DOM (hidden by tabs).
+   * Get a permission column header cell by its visible text (e.g. 'Name').
+   * Scoped to the permission table because all sub-tab tables share the DOM (hidden by tabs).
    */
   getHeaderCell(headerText: string): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getTable().find('.table-header-cell').contains(headerText);
   }
 
-  /** Get the empty-state message of the config table. */
+  /** Get the empty-state message of the permission table. */
   getEmptyMessage(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getTable().find('.table-empty');
   }
 
-  /** Get the config table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
+  /** Get the permission table paginer element. Note: there are two paginers (top and bottom), we use the first one. */
   getPaginer(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userConfig_paginer').first();
+    return cy.getByTestId('userPermissions_paginer').first();
   }
 
-  /** Get the config table paginer page-number input. */
+  /** Get the permission table paginer page-number input. */
   getPaginerInput(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getPaginer().find('.input-paginer');
   }
 
-  /** Get the config table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
+  /** Get the permission table paginer total page count number. Note: there are two paginers (top and bottom), we use the first one. */
   getPageNumber(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userConfig_paginer_pageNumber').first();
+    return cy.getByTestId('userPermissions_paginer_pageNumber').first();
   }
 
   /** Get the filter 'created from' date picker input. */
   getCreatedFromInput(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('datepicker_userconfig-filter-createdFromAt');
+    return cy.getByTestId('datepicker_userperm-filter-createdFromAt');
   }
 
   /** Get the filter 'created to' date picker input. */
   getCreatedToInput(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('datepicker_userconfig-filter-createdToAt');
+    return cy.getByTestId('datepicker_userperm-filter-createdToAt');
   }
 
   /** Get the filter submit (refresh) button. */
   getFilterSubmitButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userconfig-filter-submit');
+    return cy.getByTestId('userperm-filter-submit');
   }
 
   /**
@@ -105,7 +107,7 @@ class AdminUserConfigPage {
    * @param optionName Name of the option (e.g. 'edit', 'delete').
    */
   getEntryOption(rowIndex: number, optionName: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.getCell(rowIndex, 'options').find(`[data-testid="userConfig_${rowIndex}_opt_${optionName}"]`);
+    return this.getCell(rowIndex, 'options').find(`[data-testid="userPermissions_${rowIndex}_opt_${optionName}"]`);
   }
 
   /**
@@ -113,7 +115,7 @@ class AdminUserConfigPage {
    * The paginer renders the same options in both top and bottom paginers, so we scope to the first one.
    */
   getAddButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('userConfig_-2_opt_add').first();
+    return cy.getByTestId('userPermissions_-2_opt_add').first();
   }
 
   // /////////////////////////////////////////////////////////////////////
@@ -129,7 +131,7 @@ class AdminUserConfigPage {
    * @param dayIndex Index of the day cell in the calendar grid (0 = first date cell).
    */
   selectDateFrom(year: number, month: number, dayIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.selectDate('datepicker_userconfig-filter-createdFromAt', year, month, dayIndex);
+    return this.selectDate('datepicker_userperm-filter-createdFromAt', year, month, dayIndex);
   }
 
   /**
@@ -139,7 +141,7 @@ class AdminUserConfigPage {
    * @param dayIndex Index of the day cell in the calendar grid (0 = first date cell).
    */
   selectDateTo(year: number, month: number, dayIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
-    return this.selectDate('datepicker_userconfig-filter-createdToAt', year, month, dayIndex);
+    return this.selectDate('datepicker_userperm-filter-createdToAt', year, month, dayIndex);
   }
 
   /**
@@ -181,7 +183,7 @@ class AdminUserConfigPage {
     return this.getHeaderCell(headerText).click();
   }
 
-  /** Start adding a new config entry by clicking the 'add' button in the paginer. */
+  /** Start adding a new permission entry by clicking the 'add' button in the paginer. */
   clickAdd(): Cypress.Chainable<JQuery<HTMLElement>> {
     return this.getAddButton().click();
   }
@@ -196,16 +198,6 @@ class AdminUserConfigPage {
   }
 
   /**
-   * Fill the 'name' input of the row that is currently in inline-edit mode.
-   * @param rowIndex Row index. Use -1 for the add-new-entry row.
-   * @param name Value to type.
-   */
-  fillName(rowIndex: number, name: string): Cypress.Chainable<JQuery<HTMLInputElement>> {
-    this.getCell(rowIndex, 'name').find('input').clear();
-    return this.getCell(rowIndex, 'name').find('input').type(name);
-  }
-
-  /**
    * Fill the 'value' input of the row that is currently in inline-edit mode.
    * @param rowIndex Row index. Use -1 for the add-new-entry row.
    * @param value Value to type.
@@ -214,6 +206,20 @@ class AdminUserConfigPage {
     this.getCell(rowIndex, 'value').find('input').clear();
     return this.getCell(rowIndex, 'value').find('input').type(value);
   }
+
+  /**
+   * Pick a permission 'name' from the ComboBox of the row that is currently in inline-edit mode.
+   * The name column uses a ComboBox (options 'role', 'user') instead of a text input, so the value
+   * can only be one of those options. Only the row being edited has this ComboBox.
+   * @param rowIndex Row index. Use -1 for the add-new-entry row.
+   * @param optionName Name of the option to pick ('role' or 'user').
+   */
+  selectPermissionName(rowIndex: number, optionName: 'role' | 'user'): Cypress.Chainable<JQuery<HTMLElement>> {
+    const optionIndex = optionName === 'role' ? 0 : 1;
+    const combobox = this.getCell(rowIndex, 'name').find('[data-testid="permission-name"]');
+    combobox.click();
+    return combobox.find(`[data-testid="permission-name_${optionIndex}"]`).click();
+  }
 }
 
-export default AdminUserConfigPage;
+export default AdminUserPermissionsPage;
