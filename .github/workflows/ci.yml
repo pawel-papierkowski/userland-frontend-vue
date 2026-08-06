@@ -1,0 +1,62 @@
+# Runs security and unit-test checks on every push/PR to main. Unlike
+# deploy.yml (manual, GitHub Pages), this workflow only gates changes.
+name: CI
+
+on: # When to run this action?
+  push: # run automatically on push to main
+    branches: [ main ]
+  pull_request: # run automatically on every pull request
+    branches: [ main ]
+
+permissions: # Minimal permissions: read-only, never deploys anything.
+  contents: read
+
+concurrency: # Cancel an in-progress run if a new one starts for the same branch.
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security: # Verifies dependency authenticity and lockfile integrity.
+    runs-on: ubuntu-latest # uses a fresh Ubuntu VM
+    steps:
+      - name: Checkout # clone entire repo to the VM
+        uses: actions/checkout@v6
+
+      - name: Setup Node # install Node.js + npm, cache dependencies
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/* # Installs latest LTS Node.js
+          cache: npm          # Caches node_modules for speed
+
+      - name: Install dependencies # Installs exact package-lock.json versions
+        run: npm ci                # (fails if package.json and lockfile disagree).
+
+      - name: Verify lockfile was not modified # Detects lockfile drift/tampering.
+        run: git diff --exit-code package-lock.json
+
+      - name: Verify registry signatures and provenance # Rejects packages not
+        run: npm audit signatures                       # published via the official registry.
+
+      - name: Lint lockfile # Validates URLs, integrity hashes and install scripts.
+        run: npm run check:lockfile
+
+      - name: Audit for known vulnerabilities # Fails on high/critical CVEs.
+        run: npm audit --audit-level=high
+
+  test: # Runs the unit test suite.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:ci
