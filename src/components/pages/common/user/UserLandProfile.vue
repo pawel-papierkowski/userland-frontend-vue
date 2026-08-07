@@ -208,35 +208,17 @@ onMounted(async () => {
         <div class="form-entry">
           <!-- Note it is read-only field, we change email separately. -->
           <label for="email">{{ t('user.profile.form.email') }}:</label>
-          <TextBox
-            id="email"
-            type="email"
-            v-model="form.email"
-            autocomplete="email"
-            :disabled="true"
-          />
+          <TextBox id="email" type="email" v-model="form.email" autocomplete="email" :disabled="true" />
         </div>
 
         <div class="form-entry">
           <label for="name">{{ t('user.profile.form.name') }}:</label>
-          <TextBox
-            id="name"
-            v-model="form.name"
-            autocomplete="given-name"
-            :required="true"
-            :disabled="isBusy"
-          />
+          <TextBox id="name" v-model="form.name" autocomplete="given-name" :required="true" :disabled="isBusy" />
         </div>
 
         <div class="form-entry">
           <label for="surname">{{ t('user.profile.form.surname') }}:</label>
-          <TextBox
-            id="surname"
-            v-model="form.surname"
-            autocomplete="family-name"
-            :required="true"
-            :disabled="isBusy"
-          />
+          <TextBox id="surname" v-model="form.surname" autocomplete="family-name" :required="true" :disabled="isBusy" />
         </div>
       </div>
 

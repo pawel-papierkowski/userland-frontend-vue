@@ -198,7 +198,8 @@ const isInvalid = (msgError: string | null): boolean => {
 
     <div class="form-under-2" v-if="!isAdminPanel">
       <div class="nav-minor form-under-left" @click="goRegistration()" data-testid="login_btn_noAccount">
-        {{ t('user.login.form.noAccount') }}</div>
+        {{ t('user.login.form.noAccount') }}
+      </div>
       <div class="nav-minor form-under-right" @click="goPasswordReset()" data-testid="login_btn_passwordReset">
         {{ t('user.login.form.passwordReset') }}
       </div>

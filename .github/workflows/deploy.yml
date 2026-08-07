@@ -1,3 +1,4 @@
+# Run actual project deployment.
 # Remember to configure repository in GitHub to enable GitHub Actions.
 name: Deploy UserLand frontend project to GitHub Pages
 

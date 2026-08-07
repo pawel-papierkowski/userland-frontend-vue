@@ -635,12 +635,7 @@ defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
-  <div
-    class="picker-date"
-    :class="{ err: invalid }"
-    ref="pickerRef"
-    @focusout="handleFocusOut">
-
+  <div class="picker-date" :class="{ err: invalid }" ref="pickerRef" @focusout="handleFocusOut">
     <input
       :id="`datepicker_${id}`"
       type="text"

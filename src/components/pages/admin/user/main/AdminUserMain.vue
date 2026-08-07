@@ -301,7 +301,10 @@ const isFormDisabled = (): boolean => {
           <div data-testid="user-form-locked">{{ form.locked === null ? '' : t('state.' + form.locked) }}</div>
 
           <div>{{ t('admin.user.main.form.lang') }}:</div>
-          <div data-testid="user-form-lang">{{ form.lang === null ? '' : t(`languages.${form.lang}.name`)}} {{ form.lang === null ? '' : t(`languages.${form.lang}.flag`) }}</div>
+          <div data-testid="user-form-lang">
+            {{ form.lang === null ? '' : t(`languages.${form.lang}.name`) }}
+            {{ form.lang === null ? '' : t(`languages.${form.lang}.flag`) }}
+          </div>
         </div>
 
         <h4>{{ t('admin.user.main.form.profile') }}</h4>

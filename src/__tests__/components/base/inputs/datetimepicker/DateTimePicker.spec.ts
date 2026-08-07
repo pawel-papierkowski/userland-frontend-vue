@@ -286,21 +286,24 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Act: Mount a wrapper with an <input> before the DateTimePicker.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <DateTimePicker id="testDt" mode="datetime" v-model="value" />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const dateInput = wrapper.find('#datepicker_testDt');
@@ -327,21 +330,24 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Act: Mount a wrapper with an <input> before the DateTimePicker.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <DateTimePicker id="testDt" mode="datetime" v-model="value" />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const timeInput = wrapper.find('#timepicker_ttestDt');
@@ -369,21 +375,24 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Act: Mount a wrapper with an <input> before the DateTimePicker.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <DateTimePicker id="testDt" mode="datetime" v-model="value" />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const dateInput = wrapper.find('#datepicker_testDt');
@@ -411,21 +420,24 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Act: Mount a wrapper with an <input> before the DateTimePicker.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <DateTimePicker id="testDt" mode="time" v-model="value" />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const timeInput = wrapper.find('#timepicker_testDt');
@@ -519,8 +531,9 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <label for="testDtp">Test Label</label>
             <DateTimePicker
@@ -530,14 +543,16 @@ describe('DateTimePicker', () => {
             />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const dateTimePicker = wrapper.findComponent(DateTimePicker);
@@ -563,8 +578,9 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <label for="testDtp">Test Label</label>
             <DateTimePicker
@@ -574,14 +590,16 @@ describe('DateTimePicker', () => {
             />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const dateTimePicker = wrapper.findComponent(DateTimePicker);
@@ -604,8 +622,9 @@ describe('DateTimePicker', () => {
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
 
       // Arrange: Mount DateTimePicker inside a wrapper with a paired <label>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <label for="testDtp">Test Label</label>
             <DateTimePicker
@@ -615,14 +634,16 @@ describe('DateTimePicker', () => {
             />
           </div>
         `,
-        components: { DateTimePicker },
-        setup() {
-          const value = ref<Date | null>(null);
-          return { value };
+          components: { DateTimePicker },
+          setup() {
+            const value = ref<Date | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const dateTimePicker = wrapper.findComponent(DateTimePicker);

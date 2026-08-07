@@ -22,16 +22,26 @@ Date: 2026
 
 Used IDE: **Visual Studio Code**
 
-### Functionality
+### Security
+This project has measures to mitigate npm supply chain attacks:
+- `.npmrc` configuration like using exact versions for `npm ci` or not using freshly released package versions.
+- `ci.yml` that runs lockfile integrity verification, `npm audit` and `check-lockfile.mjs` (verifies package hashes, validates lockfile and new install scripts).
+
+## Functionality
 
 This project fully manages user on frontend side.
 
 ### Features
+- Has publicly available user website and admin panel.
+- Support for multiple languages.
+- Nice error messages from backend endpoints leveraging Problem Details.
+
+### Pages
 
 Frontend is split into two parts: **user website** and **admin panel**. Website as a whole is Single Page Application (SPA).
 
 - **User website**: Available to everyone.
-  - **Main page**: This is what you see when you enter website. Looks differently depending on if you are logged in or not.
+  - **Main page**: This is what you see when you enter website.
   - **Registration**: Fields needed for registering user and registration button.
   - **Login**: Two fields where you enter email and password plus login button. Will redirect back to main page.
   - **Password reset**: From link in mail. Shows two fields to enter new password and button to confirm change.
@@ -39,43 +49,49 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
   - **Email change**: From link in mail. Shows info about new email and button to confirm change.
   - **Members-only area**: Available only after logging in, though you do not need any special permissions. If you are unlogged, redirects to main page.
   - **Test area**: Contains various components to show them. Also has buttons that generate messages, spinner etc.
-  - **Debug area**: Contains various debug information. You also can call backend.
+  - **Debug area**: Contains various debug information. You also can call backend manually using `/check` endpoints.
 - **Administration panel**: If unlogged, only page available is Login page. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
   - **Login**: works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
-  - **Main page**.
+  - **Main page**: just a placeholder.
   - **User manager**:
     - Viewing list of users in table.
-    - Viewing details of selected users.
+    - Viewing details of selected user.
     - Viewing related data in separate tabs like history or permissions.
     - Editing data of selected user.
-    - Editing some of related data of selected user.
+    - Editing some related data of selected user (config, permissions).
     - Special options for user like lock/unlock.
-- **Other features**
-  - Multiple languages support
-  - Nice error messages from backend endpoints leveraging Problem Details
 
 ### Custom components
 
 All custom components implement roles, ARIA and keyboard where applicable.
 
 - General purpose components:
+  - **TextBox**: Wrapper for `<input type="text">`.
+  - **CheckBox**: Implements checkbox functionality.
+  - **RadioBox**: Implements radiobox (selection of one option from many) functionality.
   - **ComboBox**: HTML equivalent (`<select>` and `<options>`) is very CSS-unfriendly - very few things can be changed.
   - **DateTimePicker**: Nice picker for date/time selection.
   - **SlideShow**: Shows assigned components in rotation.
+  - **DropdownMenu**: Simple menu.
+  - **TabGroup**: Provides tab panel functionality.
 - Dedicated components:
   - **MessageContainer** and **MessageBox**: Shows timed messages on side of screen that hide themselves after some time.
-  - **TableWrapper**, **TablePage** and **TablePaginer**: For showing and handling tables. Used in administration panel.
+  - **TableWrapper**, **TablePage**, **TablePaginer**, **TableRow**, **TableCell**, **EntryOptions**: For showing and handling tables. Used in administration panel.
 - Decorative components:
   - **SpinnerTorus**: To show frontend being busy with something (usually communication with backend).
 
 ## Environment
 
 ### Local storage
-
+Constants are in `src/code/data/app/storage.ts`.
 - `app-language`: Language code. Resolved from browser (or user settings, if logged in). Missing or unknown language means fallback to `en` (English).
 - `app-jwt`: JWT token. Present after you log in. Used when reloading whole page (as Pinia state will be lost) to log in again locally if token is still valid.
+- `app-last-api-call`: Timestamp (ms) of the last non-auth API call. Used to detect idle sessions.
+- `app-cookie-consent`: Cookie consent state. If not present, assume cookie panel should be shown..
 
-## Local startup
+## Commands
+
+### Local startup
 
 To run project locally in development mode, execute in terminal:
 ```
@@ -90,7 +106,7 @@ npm run preview
 
 Stop server via `Ctrl+C`.
 
-## Verification
+### Verification
 To check validity of Typescript and Vue-specific changes using configuration in `tsconfig*.json` files:
 ```
 npm run type-check
@@ -102,21 +118,31 @@ npm run lint
 ```
 It runs two linters (`oxlint` and `eslint`).
 
-## Testing
+### Testing
 
 You can run tests in terminal:
 ```
 npm run test:ci
+npm run test:e2e
+```
+
+### Other
+
+Run `prettier` via:
+```
+npm run format
 ```
 
 ## Deployment
 
 Done using **GitHub Actions** on GitHub. See `.github/workflows/deploy.yml`.
+We also have `.github/workflows/ci.yml` for verification and security.
 
 ## Tech stack
 
-- Language: HTML, CSS, JavaScript/TypeScript
-- Framework: **Node.js** 24, **Vue.js** 3.5.39
+- Languages: HTML, CSS, JavaScript/TypeScript
+- Frameworks: **Node.js** 24, **Vue.js** 3.5.39
+- Tests: **Vitest** and **Cypress**.
 
 ### Additional packages
 

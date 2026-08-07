@@ -254,7 +254,7 @@ const rowClass = (entry: E | null, rowIndex: number) => {
  */
 const getTabIndex = (): number => {
   return props.canSelect ? 0 : -1;
-}
+};
 
 /**
  * Select entry. If this entry is already selected, it is deselected.
@@ -318,12 +318,7 @@ defineExpose({
 </script>
 
 <template>
-  <div
-    class="table-container"
-    role="table"
-    :data-testid="tableId"
-    :style="{ '--col-count': visibleColumnsCount }"
-  >
+  <div class="table-container" role="table" :data-testid="tableId" :style="{ '--col-count': visibleColumnsCount }">
     <!-- TABLE HEADER -->
     <div class="table-header-group" role="rowgroup">
       <div class="table-header-row" role="row">

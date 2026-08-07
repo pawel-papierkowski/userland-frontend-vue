@@ -26,7 +26,6 @@ const selUserRecord = defineModel<UserTableEntry | null>();
 watch(selUserRecord, () => {
   AppUserEventer.notifyUserSelected();
 });
-
 </script>
 
 <template>

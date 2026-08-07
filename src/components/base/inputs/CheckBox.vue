@@ -83,19 +83,9 @@ const showSymbol = (): string => {
 </script>
 
 <template>
-  <div
-    class="checkbox-wrapper"
-    :data-testid="id"
-    @click="cycle()"
-    @keydown="handleKeydown"
-  >
+  <div class="checkbox-wrapper" :data-testid="id" @click="cycle()" @keydown="handleKeydown">
     <!-- Hidden button: labelable target for <label for="...">. -->
-    <button
-      :id="id"
-      class="hidden-label-button"
-      tabindex="-1"
-      aria-hidden="true"
-    ></button>
+    <button :id="id" class="hidden-label-button" tabindex="-1" aria-hidden="true"></button>
     <div
       class="checkbox"
       :class="{ disabled: disabled, err: invalid }"

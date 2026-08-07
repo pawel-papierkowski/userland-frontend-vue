@@ -38,12 +38,7 @@ const dismiss = () => {
 </script>
 
 <template>
-  <div
-    v-if="isVisible"
-    class="cookie-banner"
-    :class="{ leaving: isLeaving }"
-    role="alert"
-  >
+  <div v-if="isVisible" class="cookie-banner" :class="{ leaving: isLeaving }" role="alert">
     <div>
       <span class="cookie-message">{{ t('general.cookie.message') }}</span>
     </div>
@@ -74,7 +69,9 @@ const dismiss = () => {
   font-size: 14px;
   z-index: 9999;
 
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
   transform: translateY(0);
   opacity: 1;
 }

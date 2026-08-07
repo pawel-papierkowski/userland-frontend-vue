@@ -37,4 +37,3 @@ export const prolongExpiration = 15;
 
 /** For JWT with long validity, if last api call happened in past more than this value, prolong silently. In minutes. */
 export const prolongAfterLongTime = 12 * 60; // 12h
-

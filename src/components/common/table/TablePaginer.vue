@@ -154,10 +154,24 @@ const pageInputDisabled = () => {
   <div class="table-paginer" :data-testid="`${props.tableId}_paginer`">
     <div class="table-paginer-grid">
       <div class="table-paginer-side"></div>
-      <div class="table-paginer-navbtn" :class="stylePrevPage()" :tabindex="canGoPrevPage() ? 0 : -1"
-        @keydown="onKeydownFirstPage" @click="goFirstPage()">⏮️</div>
-      <div class="table-paginer-navbtn" :class="stylePrevPage()" :tabindex="canGoPrevPage() ? 0 : -1"
-        @keydown="onKeydownPrevPage" @click="goPrevPage()">◀️</div>
+      <div
+        class="table-paginer-navbtn"
+        :class="stylePrevPage()"
+        :tabindex="canGoPrevPage() ? 0 : -1"
+        @keydown="onKeydownFirstPage"
+        @click="goFirstPage()"
+      >
+        ⏮️
+      </div>
+      <div
+        class="table-paginer-navbtn"
+        :class="stylePrevPage()"
+        :tabindex="canGoPrevPage() ? 0 : -1"
+        @keydown="onKeydownPrevPage"
+        @click="goPrevPage()"
+      >
+        ◀️
+      </div>
       <div class="table-paginer-entry">
         <input
           v-model="localPage"
@@ -173,10 +187,24 @@ const pageInputDisabled = () => {
           meta.pageCount
         }}</span>
       </div>
-      <div class="table-paginer-navbtn" :class="styleNextPage()" :tabindex="canGoNextPage() ? 0 : -1"
-        @keydown="onKeydownNextPage" @click="goNextPage()">▶️</div>
-      <div class="table-paginer-navbtn" :class="styleNextPage()" :tabindex="canGoNextPage() ? 0 : -1"
-        @keydown="onKeydownLastPage" @click="goLastPage()">⏭️</div>
+      <div
+        class="table-paginer-navbtn"
+        :class="styleNextPage()"
+        :tabindex="canGoNextPage() ? 0 : -1"
+        @keydown="onKeydownNextPage"
+        @click="goNextPage()"
+      >
+        ▶️
+      </div>
+      <div
+        class="table-paginer-navbtn"
+        :class="styleNextPage()"
+        :tabindex="canGoNextPage() ? 0 : -1"
+        @keydown="onKeydownLastPage"
+        @click="goLastPage()"
+      >
+        ⏭️
+      </div>
       <div class="table-paginer-side"></div>
     </div>
     <div class="table-paginer-options">

@@ -143,7 +143,15 @@ describe('ComboBox', () => {
       // Check if combobox correctly selects option via mouse.
 
       // Arrange&Act: Set up combobox.
-      const comboBox = createComponent(null, 'someCombobox', createOptions(), false, false, 'test.comboBox', 'test.comboBox.null');
+      const comboBox = createComponent(
+        null,
+        'someCombobox',
+        createOptions(),
+        false,
+        false,
+        'test.comboBox',
+        'test.comboBox.null',
+      );
 
       // Assert: Combobox main field is present and shows selected option (in this case null, that's it, unselected).
       expect(comboBox.find('.combobox-selected-text').text()).toBe('Option UNSELECTED (null)');
@@ -192,8 +200,9 @@ describe('ComboBox', () => {
       // Verifies that clicking a <label for="id"> opens the combobox list.
 
       // Arrange: Mount ComboBox inside a wrapper with a paired <label>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <label for="testCb">Test Label</label>
             <ComboBox
@@ -204,14 +213,16 @@ describe('ComboBox', () => {
             />
           </div>
         `,
-        components: { ComboBox },
-        setup() {
-          const value = ref<string | number | null>(null);
-          return { value, options: createOptions() };
+          components: { ComboBox },
+          setup() {
+            const value = ref<string | number | null>(null);
+            return { value, options: createOptions() };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const comboBox = wrapper.findComponent(ComboBox);
@@ -254,7 +265,15 @@ describe('ComboBox', () => {
       // Ensure combobox marked as invalid is visually distinct and fully functional.
 
       // Arrange&Act: Set up combobox marked as invalid.
-      const comboBox = createComponent(null, 'someCombobox', createOptions(), false, true, 'test.comboBox', 'test.comboBox.null');
+      const comboBox = createComponent(
+        null,
+        'someCombobox',
+        createOptions(),
+        false,
+        true,
+        'test.comboBox',
+        'test.comboBox.null',
+      );
 
       // Assert: CSS classes are correctly assigned, ensuring component is visually invalid.
       expect(comboBox.find('.combobox').classes()).toStrictEqual(['combobox', 'err']);
@@ -579,8 +598,9 @@ describe('ComboBox', () => {
       // through a form) opens the list. Uses an <input> as the previous field.
 
       // Arrange: Mount a wrapper with an <input> followed by a <ComboBox>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <input id="prevField" type="text" />
             <ComboBox
@@ -591,14 +611,16 @@ describe('ComboBox', () => {
             />
           </div>
         `,
-        components: { ComboBox },
-        setup() {
-          const value = ref<string | number | null>(null);
-          return { value, options: createOptions() };
+          components: { ComboBox },
+          setup() {
+            const value = ref<string | number | null>(null);
+            return { value, options: createOptions() };
+          },
         },
-      }, {
-        global: { plugins: [i18n] },
-      });
+        {
+          global: { plugins: [i18n] },
+        },
+      );
       await nextTick();
 
       const comboBox = wrapper.findComponent(ComboBox);

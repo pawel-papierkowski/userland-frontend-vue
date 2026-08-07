@@ -104,18 +104,9 @@ const handleLabelClick = () => {
 </script>
 
 <template>
-  <div
-    class="picker-general"
-    @focusin="handleGeneralFocusIn"
-  >
+  <div class="picker-general" @focusin="handleGeneralFocusIn">
     <!-- Hidden button: labelable target for <label for="...">. -->
-    <button
-      :id="id"
-      class="hidden-label-button"
-      tabindex="-1"
-      aria-hidden="true"
-      @click="handleLabelClick()"
-    ></button>
+    <button :id="id" class="hidden-label-button" tabindex="-1" aria-hidden="true" @click="handleLabelClick()"></button>
 
     <DatePicker
       v-if="mode === 'datetime' || mode === 'date'"

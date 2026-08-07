@@ -40,18 +40,10 @@ const emit = defineEmits(['reload']);
       <div class="form-divide2">
         <div class="form-subform">
           <label for="user-filter-username">{{ t('admin.user.filter.username') }}:</label>
-          <TextBox
-            id="user-filter-username"
-            v-model="form.username"
-            autocomplete="off"
-          />
+          <TextBox id="user-filter-username" v-model="form.username" autocomplete="off" />
 
           <label for="user-filter-email">{{ t('admin.user.filter.email') }}:</label>
-          <TextBox
-            id="user-filter-email"
-            v-model="form.email"
-            autocomplete="off"
-          />
+          <TextBox id="user-filter-email" v-model="form.email" autocomplete="off" />
 
           <label for="user-filter-status">{{ t('admin.user.filter.status') }}:</label>
           <ComboBox

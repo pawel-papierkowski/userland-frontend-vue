@@ -389,7 +389,12 @@ describe('AdminUserTab', () => {
   describe('tab activation (lazy loading)', () => {
     it('does not fetch on mount when user is selected but tab is inactive', async () => {
       // Arrange: Mount with a user selected while the tab is not the active one.
-      createComponent({ modelValue: testUser1, isActive: false, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      createComponent({
+        modelValue: testUser1,
+        isActive: false,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       await nextTick();
 
       // Assert: No fetch is made for an inactive tab.
@@ -401,7 +406,12 @@ describe('AdminUserTab', () => {
       const { promise, resolve } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(promise);
 
-      const wrapper = createComponent({ modelValue: testUser1, isActive: false, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        isActive: false,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       expect(mockFetchData).not.toHaveBeenCalled();
 
       // Act: Switch to this tab.
@@ -421,7 +431,11 @@ describe('AdminUserTab', () => {
       const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(p1);
 
-      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
       await flushPromises();
       await nextTick();
@@ -442,7 +456,11 @@ describe('AdminUserTab', () => {
       const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(p1);
 
-      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
       await flushPromises();
       await nextTick();
@@ -469,7 +487,11 @@ describe('AdminUserTab', () => {
       const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(p1);
 
-      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
       await flushPromises();
       await nextTick();
@@ -498,7 +520,11 @@ describe('AdminUserTab', () => {
       const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
       mockFetchData.mockReturnValue(p1);
 
-      const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData, convertToReq: mockConvertToReq });
+      const wrapper = createComponent({
+        modelValue: testUser1,
+        fetchData: mockFetchData,
+        convertToReq: mockConvertToReq,
+      });
       r1({ data: { entries: testEntries, tableMeta: testMetaResp } });
       await flushPromises();
       await nextTick();

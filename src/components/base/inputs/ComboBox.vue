@@ -71,7 +71,6 @@ const props = withDefaults(
   },
 );
 
-
 /** Template ref for the root element. */
 const comboboxRef = ref<HTMLElement | null>(null);
 /** Indicates visibility of combobox list. */
@@ -193,7 +192,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 };
 
 /** Open list. */
-const openList = (top:boolean|null=null) => {
+const openList = (top: boolean | null = null) => {
   isOpen.value = true;
 
   // Set visually selected entry, if any. Works with null selection.
@@ -203,7 +202,7 @@ const openList = (top:boolean|null=null) => {
     // Still nothing highlighted and we want to highlight either beginning or end of list.
     highlightedIndex.value = top ? 0 : props.options.length - 1;
   }
-}
+};
 
 /**
  * User clicked on combobox option.
@@ -266,12 +265,7 @@ const hidePanel = () => {
   >
     <!-- Hidden button: labelable target for <label for="...">. -->
     <!-- We do not need @click here, as it will bubble up to div's @click above. -->
-    <button
-      :id="id"
-      class="hidden-label-button"
-      tabindex="-1"
-      aria-hidden="true"
-    ></button>
+    <button :id="id" class="hidden-label-button" tabindex="-1" aria-hidden="true"></button>
 
     <div class="combobox-selected">
       <span class="combobox-selected-text">{{ showOption(selOption) }}</span>

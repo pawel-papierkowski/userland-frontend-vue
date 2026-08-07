@@ -523,12 +523,7 @@ defineExpose({ showPanel, hidePanel, flipPanel });
 </script>
 
 <template>
-  <div
-    class="picker-time"
-    :class="{ err: invalid }"
-    ref="pickerRef"
-    @focusout="handleFocusOut">
-
+  <div class="picker-time" :class="{ err: invalid }" ref="pickerRef" @focusout="handleFocusOut">
     <input
       :id="`timepicker_${id}`"
       type="text"

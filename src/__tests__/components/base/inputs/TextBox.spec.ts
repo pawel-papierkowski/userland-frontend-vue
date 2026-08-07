@@ -122,22 +122,25 @@ describe('TextBox', () => {
       // association) and separately verify focusability.
 
       // Arrange: Mount TextBox inside a wrapper with a paired <label>.
-      const wrapper = mount({
-        template: `
+      const wrapper = mount(
+        {
+          template: `
           <div>
             <label for="testTb">Test Label</label>
             <TextBox id="testTb" v-model="value" />
           </div>
         `,
-        components: { TextBox },
-        setup() {
-          const value = ref<string | null>(null);
-          return { value };
+          components: { TextBox },
+          setup() {
+            const value = ref<string | null>(null);
+            return { value };
+          },
         },
-      }, {
-        global: {},
-        attachTo: document.body,
-      });
+        {
+          global: {},
+          attachTo: document.body,
+        },
+      );
       await nextTick();
 
       const textBox = wrapper.findComponent(TextBox);
@@ -152,7 +155,9 @@ describe('TextBox', () => {
       // In jsdom, the synthetic click reaches the input (verified below) but
       // does not trigger focus — that requires calling .focus() directly.
       let clickReceived = false;
-      input.element.addEventListener('click', () => { clickReceived = true; });
+      input.element.addEventListener('click', () => {
+        clickReceived = true;
+      });
       await label.trigger('click');
       await nextTick();
 
