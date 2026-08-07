@@ -71,7 +71,7 @@ const handlePasswordResetConfirmation = async () => {
     clearForm();
     isBusy.value = false; // Enable submit button.
     AppMessager.errorT(error, 'user.passwordReset.msg.error.title', 'user.passwordReset.msg.error.content');
-    apiLogging.logError(error, 'Password reset confirmation failed! Token: ' + tokenStr);
+    apiLogging.logError(error, 'Password reset confirmation failed!');
   }
 };
 

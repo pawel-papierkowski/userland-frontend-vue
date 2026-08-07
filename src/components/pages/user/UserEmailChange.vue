@@ -66,7 +66,7 @@ const callEmailChangeApi = async () => {
     router.push({ name: 'home' }); // go to home page
   } catch (error) {
     AppMessager.errorT(error, 'user.emailChange.msg.error.title', 'user.emailChange.msg.error.content');
-    apiLogging.logError(error, 'Email address change failed! Token: ' + tokenStr);
+    apiLogging.logError(error, 'Email address change failed!');
     canSpin.value = false;
   }
 };

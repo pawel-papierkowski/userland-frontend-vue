@@ -66,7 +66,7 @@ const handleAccountDeletion = async () => {
   } catch (error) {
     isBusy.value = false; // Enable submit button.
     AppMessager.errorT(error, 'user.accountDelete.msg.error.title', 'user.accountDelete.msg.error.content');
-    apiLogging.logError(error, 'User account deletion failed! Token: ' + tokenStr);
+    apiLogging.logError(error, 'User account deletion failed!');
   }
 };
 
