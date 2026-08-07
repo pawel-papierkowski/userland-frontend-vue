@@ -240,16 +240,16 @@ onMounted(async () => {
         </div>
       </div>
 
-      <button data-testid="btn-submit" type="submit" :disabled="isBusy">
+      <button data-testid="profileUpdate_btn_submit" type="submit" :disabled="isBusy">
         {{ isBusy ? t('user.profile.button.updateBusy') : t('user.profile.button.update') }}
       </button>
     </form>
 
     <div class="items-horizontal">
-      <button data-testid="btn-emailChange" :disabled="isBusy" @click="handleEmailChange()">
+      <button data-testid="emailChange_btn_submit" :disabled="isBusy" @click="handleEmailChange()">
         {{ t('user.profile.button.emailChange') }}
       </button>
-      <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDelete()">
+      <button data-testid="accountDelete_btn_submit" class="danger" :disabled="isBusy" @click="handleAccountDelete()">
         {{ t('user.profile.button.deleteAccount') }}
       </button>
     </div>

@@ -74,7 +74,7 @@ describe('UserAccountDeletion', () => {
       vi.mocked(backendApiUser.accountDeleteConfirm).mockResolvedValue({ data: {} } as any);
 
       // Act: Click on delete button.
-      await wrapper.find('[data-testid="btn-deleteAccount"]').trigger('click');
+      await wrapper.find('[data-testid="accountDelete_btn_submit"]').trigger('click');
 
       await flushPromises();
 
@@ -128,7 +128,7 @@ describe('UserAccountDeletion', () => {
       const messageStore = useMessageStore();
 
       // Act: Click on delete button.
-      await wrapper.find('[data-testid="btn-deleteAccount"]').trigger('click');
+      await wrapper.find('[data-testid="accountDelete_btn_submit"]').trigger('click');
 
       await flushPromises();
 
@@ -262,7 +262,7 @@ describe('UserAccountDeletion', () => {
       const wrapper = createComponent();
 
       // Assert: Button shows "Delete".
-      expect(wrapper.find('[data-testid="btn-deleteAccount"]').text()).toBe('Delete');
+      expect(wrapper.find('[data-testid="accountDelete_btn_submit"]').text()).toBe('Delete');
     });
 
     it('renders the warning message', () => {

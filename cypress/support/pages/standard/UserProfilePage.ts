@@ -43,17 +43,17 @@ class UserProfilePage {
 
   /** Get the submit (update profile) button. */
   getSubmitButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('btn-submit');
+    return cy.getByTestId('profileUpdate_btn_submit');
   }
 
   /** Get the "change email address" button. */
   getEmailChangeButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('btn-emailChange');
+    return cy.getByTestId('emailChange_btn_submit');
   }
 
   /** Get the "delete account" button. */
   getDeleteAccountButton(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('btn-deleteAccount');
+    return cy.getByTestId('accountDelete_btn_submit');
   }
 
   /** Get all inline validation error messages. */

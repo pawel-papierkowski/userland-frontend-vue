@@ -85,7 +85,7 @@ onMounted(() => {
       <div class="onpage-msg warning" v-html="t('user.accountDelete.form.warning')" />
     </div>
 
-    <button data-testid="btn-deleteAccount" class="danger" :disabled="isBusy" @click="handleAccountDeletion()">
+    <button data-testid="accountDelete_btn_submit" class="danger" :disabled="isBusy" @click="handleAccountDeletion()">
       {{ isBusy ? t('user.accountDelete.form.buttonBusy') : t('user.accountDelete.form.button') }}
     </button>
   </div>

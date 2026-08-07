@@ -124,7 +124,7 @@ describe('UserLandProfile', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Act: Click on email change button.
-    await userProfile.find('[data-testid="btn-emailChange"]').trigger('click');
+    await userProfile.find('[data-testid="emailChange_btn_submit"]').trigger('click');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
@@ -157,7 +157,7 @@ describe('UserLandProfile', () => {
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
     // Act: Click on account delete button.
-    await userProfile.find('[data-testid="btn-deleteAccount"]').trigger('click');
+    await userProfile.find('[data-testid="accountDelete_btn_submit"]').trigger('click');
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 

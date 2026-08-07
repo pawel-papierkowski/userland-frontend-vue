@@ -163,7 +163,7 @@ onMounted(() => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isBusy">
+      <button type="submit" data-testid="passwordReset_btn_submit" :disabled="isBusy">
         {{ isBusy ? t('user.passwordReset.form.buttonBusy') : t('user.passwordReset.form.button') }}
       </button>
     </form>

@@ -141,7 +141,7 @@ const isInvalid = (msgError: string | null): boolean => {
         </div>
       </div>
 
-      <button type="submit" :disabled="isBusy">
+      <button type="submit" data-testid="emailChangeStart_btn_submit" :disabled="isBusy">
         {{ isBusy ? t('user.emailChangeStart.form.buttonBusy') : t('user.emailChangeStart.form.button') }}
       </button>
     </form>
