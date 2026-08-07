@@ -51,6 +51,7 @@ UserLand is portfolio project for frontend in Vue.
 - **Formatting:** `npm run format` (using Prettier)
 - **Run all CI tests:** `npm run test:ci`
 - **Run E2E tests (headless/CI):** `npm run test:e2e`
+- **Run E2E tests for single file (headless/CI):** `npm run test:e2e:one -- path/to/file.cy.ts`
 - **Run E2E tests (interactive):** `npm run test:e2e:dev`
 
 ## Reviewing code
@@ -81,6 +82,9 @@ We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
   - Use `beforeEach()` for common setup (visit page, intercept API calls, login etc).
   - Use `cy.intercept()` to stub API calls instead of relying on a live backend.
   - Use custom commands like `cy.getByTestId()`.
+- Execution of tests
+  - To run test for single file: `npm run test:e2e:one -- path/to/file.cy.ts`. Use it when working on current Cypress-related task like creating tests. Keep in mind this command does not rebuild. If you made changes in code, run rebuild separately before running test file.
+  - To run all tests: `npm run test:e2e`. Use it only at end to verify everything still works after all changes.
 - Page Object Model (POM)
   - Use Page Object Model.
   - POM files are in `cypress/support/pages` and use PascalCase. Example: `UserRegistrationPage.ts`.
