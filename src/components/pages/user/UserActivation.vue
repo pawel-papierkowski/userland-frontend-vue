@@ -40,7 +40,7 @@ const callActivationApi = async () => {
     router.push({ name: 'login' }); // go straight to login page
   } catch (error) {
     AppMessager.errorT(error, 'user.activation.msg.error.title', 'user.activation.msg.error.content');
-    apiLogging.logError(error, 'Activation failed! Token: ' + tokenStr);
+    apiLogging.logError(error, 'Activation failed!');
     canSpin.value = false;
   }
 };

@@ -23,9 +23,15 @@ Date: 2026
 Used IDE: **Visual Studio Code**
 
 ### Security
+
 This project has measures to mitigate npm supply chain attacks:
 - `.npmrc` configuration like using exact versions for `npm ci` or not using freshly released package versions.
 - `ci.yml` that runs lockfile integrity verification, `npm audit` and `check-lockfile.mjs` (verifies package hashes, validates lockfile and new install scripts).
+
+Security notes:
+- JWT is in localStorage: XSS could cause token leak. Standard SPA trade-off, acceptable.
+- Token in URL query string: can leak via browser history. Tokens expire and are single use - enforced by backend.
+- 
 
 ## Functionality
 

@@ -55,6 +55,8 @@ UserLand is portfolio project for frontend in Vue.
 - **Run E2E tests (interactive):** `npm run test:e2e:dev`
 
 ## Reviewing code
+
+### General
 When I ask for review, in order of importance:
 - Analyze general purpose and functionality.
 - Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps: we need to fix that stuff first.
@@ -63,6 +65,9 @@ When I ask for review, in order of importance:
 - I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
   - You can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
   - If previously reported issues still exist, inform about them again unless they were explained or rejected.
+
+### Code review rules
+- Project uses `v-html` in certain places. Only static translation keys or static strings are allowed (safe to use).
 
 ## Testing
 We use **Vitest** for unit testing and **Cypress** for end-to-end testing.
