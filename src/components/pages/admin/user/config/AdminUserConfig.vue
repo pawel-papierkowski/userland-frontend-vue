@@ -6,12 +6,14 @@
  * - v-model - Holds selected user.
  */
 import { ref, reactive, shallowRef, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type { EntryMeta, EntryOption, RowMeta } from '@/code/data/features/common/type.ts';
 import type {
   UserTableEntry,
@@ -30,6 +32,7 @@ import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserConfigFilter from '@/components/pages/admin/user/config/AdminUserConfigFilter.vue';
 
+/** User selected in main user table. Null means no user was selected. */
 const selUserRecord = defineModel<UserTableEntry | null>();
 
 const props = withDefaults(
@@ -39,6 +42,8 @@ const props = withDefaults(
   }>(),
   { isActive: true },
 );
+
+const { usersReloadTrigger } = storeToRefs(useUserEventStore());
 
 /** Selected entry record. Use shallowRef to avoid deep reactivity issues with generic types in templates. */
 const selEntryRecord = shallowRef<UserConfigTableEntry | null>(null);
@@ -62,7 +67,18 @@ const addNewEntry = ref(false);
 /** True if busy executing options. */
 const isBusyOptions = ref(false);
 
+/** Used to enforce reload of this table. */
+const reloadTrigger = ref(0);
+
 // WATCHES
+
+/**
+ * React on main user table being reloaded.
+ * Forces reload of user config table when this tab becomes active again.
+ */
+watch([usersReloadTrigger], () => {
+  reloadTrigger.value++;
+});
 
 /** React on user being (de)selected. */
 watch(selUserRecord, async () => {
@@ -70,7 +86,7 @@ watch(selUserRecord, async () => {
   await tabRef.value?.selectEntry(null, true);
 });
 
-//
+// FUNCTIONS
 
 /**
  * Convert filter form data to request data.
@@ -345,6 +361,7 @@ const resolveRowMeta = (entry: UserConfigTableEntry | null): RowMeta | null => {
     v-model:formFilter="formFilter"
     v-model:formEntry="formEntry"
     :isActive="props.isActive"
+    :reloadTrigger="reloadTrigger"
     tableId="userConfig"
     :columns="userConfigTableColumns"
     :fetchData="backendApiAdminUser.loadConfigPage"

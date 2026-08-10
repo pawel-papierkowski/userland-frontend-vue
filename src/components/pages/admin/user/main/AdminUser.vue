@@ -8,6 +8,7 @@ import { useUserEventStore } from '@/stores/events/user-events.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
+import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
@@ -25,8 +26,7 @@ import AdminUserEditor from '@/components/pages/admin/user/main/AdminUserEditor.
 import TableWrapper from '@/components/common/table/TableWrapper.vue';
 import TablePage from '@/components/common/table/TablePage.vue';
 
-const userEventStore = useUserEventStore();
-const { userUpdatedTrigger, diffUserData } = storeToRefs(userEventStore);
+const { userUpdatedTrigger, userUpdatedDiff } = storeToRefs(useUserEventStore());
 
 /** User table filtering form data. */
 const form: UserTableFilterForm = reactive({
@@ -98,6 +98,7 @@ const handleReload = async () => {
     currSortBy.value = data.value.tableMeta.sortBy;
     currSortOrder.value = data.value.tableMeta.sortOrder;
     isLoading.value = false;
+    AppUserEventer.notifyUsersReload();
   } catch (error) {
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
@@ -145,7 +146,8 @@ const processEntry = (entry: UserTableEntry) => {
 
 /** React on user data being updated. */
 watch(userUpdatedTrigger, async () => {
-  if (diffUserData.value.username !== null || diffUserData.value.email !== null) await handleReload();
+  // We need to react only to change in username or email, since other editable data is not visible in main user table.
+  if (userUpdatedDiff.value.username !== null || userUpdatedDiff.value.email !== null) await handleReload();
 });
 
 /** Automatically call once user enters page. */

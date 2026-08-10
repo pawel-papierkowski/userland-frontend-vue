@@ -8,8 +8,15 @@ import type { UserFullDataForm } from '@/code/data/features/user/admin-user-type
  */
 export class AppUserEventer {
   /**
+   * Notifies that user table has been reloaded to anyone interested.
+   */
+  public static notifyUsersReload() {
+    const eventStore = useUserEventStore();
+    eventStore.notifyUsersReload();
+  }
+
+  /**
    * Notifies that user has been (de)selected to anyone interested.
-   * @param diffData Changed fields.
    */
   public static notifyUserSelected() {
     const eventStore = useUserEventStore();

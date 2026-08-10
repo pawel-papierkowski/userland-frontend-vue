@@ -10,30 +10,44 @@ import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
  * This is used for cross-component communication when direct parent-child events are not practical.
  */
 export const useUserEventStore = defineStore('user-events', () => {
+  /** Trigger for user table reload. Increment to notify. */
+  const usersReloadTrigger = ref(0);
+
+  /** Notify that user table was reloaded. */
+  function notifyUsersReload() {
+    usersReloadTrigger.value++;
+  }
+
   /** Trigger for user (de)selection. Increment to notify. */
   const userSelectedTrigger = ref(0);
-
-  /** Trigger for user data update. Increment to notify. */
-  const userUpdatedTrigger = ref(0);
-  /** Changed user data. Fields that weren't changed will be null. */
-  const diffUserData: Ref<UserFullDataForm> = ref(emptyUserForm);
 
   /** Notify that different user has been selected or deselected. */
   function notifyUserSelected() {
     userSelectedTrigger.value++;
   }
 
+  /** Trigger for user data update. Increment to notify. */
+  const userUpdatedTrigger = ref(0);
+  /** Changed user data. Fields that weren't changed will be null. */
+  const userUpdatedDiff: Ref<UserFullDataForm> = ref(emptyUserForm);
+
   /** Notify that user data has been updated. */
   function notifyUserUpdated(diffData: UserFullDataForm) {
     userUpdatedTrigger.value++;
-    diffUserData.value = diffData;
+    userUpdatedDiff.value = diffData;
   }
 
+  //
+
   return {
+    usersReloadTrigger,
+    notifyUsersReload,
+
     userSelectedTrigger,
-    userUpdatedTrigger,
-    diffUserData,
     notifyUserSelected,
+    
+    userUpdatedTrigger,
+    userUpdatedDiff,
     notifyUserUpdated,
   };
 });

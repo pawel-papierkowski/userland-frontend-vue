@@ -229,7 +229,7 @@ watch([currSortBy, currSortOrder], (_, [oldSortBy, oldSortOrder]) => {
   handleReload();
 });
 
-//
+// FUNCTIONS
 
 /**
  * Select entry. If this entry is already selected, it is deselected.

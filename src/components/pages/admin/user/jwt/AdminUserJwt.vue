@@ -5,11 +5,13 @@
  * Properties:
  * - v-model - Holds selected user.
  */
-import { reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type {
   UserTableEntry,
   UserJwtTableFilterForm,
@@ -21,6 +23,7 @@ import { userJwtTableColumns } from '@/code/data/features/user/user-const.ts';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserJwtFilter from '@/components/pages/admin/user/jwt/AdminUserJwtFilter.vue';
 
+/** User selected in main user table. Null means no user was selected. */
 const selUserRecord = defineModel<UserTableEntry | null>();
 
 const props = withDefaults(
@@ -31,12 +34,29 @@ const props = withDefaults(
   { isActive: true },
 );
 
+const { usersReloadTrigger } = storeToRefs(useUserEventStore());
+
 const formFilter: UserJwtTableFilterForm = reactive({
   userId: -1,
   createdFromAt: null,
   createdToAt: null,
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
+
+/** Used to enforce reload of this table. */
+const reloadTrigger = ref(0);
+
+// WATCHES
+
+/**
+ * React on main user table being reloaded.
+ * Forces reload of user JWT table when this tab becomes active again.
+ */
+watch([usersReloadTrigger], () => {
+  reloadTrigger.value++;
+});
+
+// FUNCTIONS
 
 /**
  * Convert form data to request data.
@@ -70,6 +90,7 @@ const processEntry = (entry: UserJwtTableEntry): UserJwtTableEntry => {
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
     :isActive="props.isActive"
+    :reloadTrigger="reloadTrigger"
     tableId="userJwt"
     :columns="userJwtTableColumns"
     :fetchData="backendApiAdminUser.loadJwtPage"

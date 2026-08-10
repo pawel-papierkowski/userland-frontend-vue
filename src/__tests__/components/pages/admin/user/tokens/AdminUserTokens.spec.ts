@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
+import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
@@ -89,8 +90,11 @@ function flushPromises(): Promise<void> {
 // Mocks setup
 
 let mockLoadTokensPage: ReturnType<typeof vi.fn>;
+let pinia: ReturnType<typeof createPinia>;
 
 beforeEach(() => {
+  pinia = createPinia();
+  setActivePinia(pinia);
   vi.clearAllMocks();
   mockLoadTokensPage = vi.mocked(backendApiAdminUser.loadTokensPage) as any;
 });

@@ -23,6 +23,9 @@ import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserHistoryFilter from '@/components/pages/admin/user/history/AdminUserHistoryFilter.vue';
 
+/** User selected in main user table. Null means no user was selected. */
+const selUserRecord = defineModel<UserTableEntry | null>();
+
 const props = withDefaults(
   defineProps<{
     /** True if this tab is currently the active tab in the tab group. */
@@ -31,10 +34,7 @@ const props = withDefaults(
   { isActive: true },
 );
 
-const userEventStore = useUserEventStore();
-const { userUpdatedTrigger } = storeToRefs(userEventStore);
-
-const selUserRecord = defineModel<UserTableEntry | null>();
+const { usersReloadTrigger, userUpdatedTrigger } = storeToRefs(useUserEventStore());
 
 const formFilter: UserHistoryTableFilterForm = reactive({
   userId: -1,
@@ -45,11 +45,20 @@ const formFilter: UserHistoryTableFilterForm = reactive({
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** We need fancier update mechanism for this tab as some stuff panel operator do will change history of user,
- * so we need to reload table even though same user is still selected when we revisit history tab. */
+/** Used to enforce reload of this table. */
 const reloadTrigger = ref(0);
 
-//
+// WATCHES
+
+/**
+ * React on main user table being reloaded or user data being updated.
+ * Forces reload of user history table when this tab becomes active again.
+ */
+watch([usersReloadTrigger, userUpdatedTrigger], () => {
+  reloadTrigger.value++;
+});
+
+// FUNCTIONS
 
 /**
  * Convert form data to request data.
@@ -76,13 +85,6 @@ const convertToReq = (form: UserHistoryTableFilterForm, userId: number): UserHis
 const processEntry = (entry: UserHistoryTableEntry): UserHistoryTableEntry => {
   return { ...entry, createdAt: TimeUtils.zoned(entry.createdAt) };
 };
-
-//
-
-/** React on user data being updated - force reload when this tab becomes active again. */
-watch(userUpdatedTrigger, () => {
-  reloadTrigger.value++;
-});
 </script>
 
 <template>
