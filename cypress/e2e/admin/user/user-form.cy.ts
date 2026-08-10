@@ -255,7 +255,7 @@ describe('Admin User Form', () => {
       // Assert: Button label switches to "Unlock".
       page.getLockButton().should('contain.text', 'Unlock');
 
-      // Act: Unlock the user again.
+      // Act: Click again on same button - unlock the user.
       page.clickLock();
 
       // Assert: Request carries locked: false.
@@ -333,8 +333,10 @@ describe('Admin User Form', () => {
       // Act: Switch to the history tab first, then select the user.
       cy.getByTestId('usertab_history').click();
       page.selectUserRow(0);
-      cy.wait('@userDataRequest');
+      cy.waitIfHappens('@userDataRequest', { timeout: 250 }); // User form data wont be loaded because we are on different tab at time of user selection.
 
+      // Assert: User form data is not loaded.
+      cy.get(`@userDataRequest.all`).should('have.length', 0);
       // Assert: Only the active (history) sub-tab is loaded, the rest is untouched.
       expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 0, configs: 0, tokens: 0, jwt: 0 });
     });

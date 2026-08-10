@@ -597,7 +597,6 @@ describe('AdminUserMain', () => {
     // Deferred reload (user data reload / tab activation)
 
     describe('deferred reload', () => {
-
       it('do not load data when user is selected but tab is inactive', async () => {
         // Arrange & Act: Mount with a user selected on an inactive tab.
         createComponent(testUser, false);

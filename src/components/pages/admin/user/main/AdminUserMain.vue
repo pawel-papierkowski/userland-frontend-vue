@@ -60,30 +60,6 @@ const canSpin = ref(true);
 /** True if data must be reloaded on next activation, even if already loaded for the user. */
 let forceReload = false;
 
-// WATCHES
-
-/**
- * React on main user table being reloaded.
- * Forces reload of user data when this tab is active or becomes active again.
- */
-watch([usersReloadTrigger], async () => {
-  if (props.isActive) await loadUserData(); // reload immediately
-  else forceReload = true; // reload later, when we open this tab
-});
-
-/** React on change to isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
-watch(() => props.isActive,
-  async () => {
-    if (!props.isActive || !forceReload) return;
-    await loadUserData();
-    forceReload = false;
-  });
-
-/** Change in selection requires reload of form. */
-watch(selUserRecord, () => {
-  loadUserData();
-});
-
 // FUNCTIONS
 
 /** Load user data and fill form. */
@@ -292,6 +268,35 @@ const canEditUsers = (): boolean => {
 const isFormDisabled = (): boolean => {
   return isBusy.value || selUserRecord.value === null || isYourOwnAccount() || !canEditUsers();
 };
+
+// WATCHES
+
+/**
+ * React on main user table being reloaded.
+ * Forces reload of user data when this tab is active or becomes active again.
+ */
+watch([usersReloadTrigger], async () => {
+  if (props.isActive) await loadUserData(); // reload immediately
+  else forceReload = true; // reload later, when we open this tab
+});
+
+/** React on change to isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
+watch(() => props.isActive,
+  async () => {
+    if (!props.isActive || !forceReload) return;
+    await loadUserData();
+    forceReload = false;
+  });
+
+/** Change in selection requires reload of form, but only when tab is active. */
+watch(
+  selUserRecord,
+  async () => {
+    if (props.isActive) await loadUserData();
+    else forceReload = true;
+  },
+  { immediate: true },
+);
 </script>
 
 <template>

@@ -263,11 +263,20 @@ const getTabIndex = (): number => {
  */
 const selectEntry = (entry: E | null, force: boolean) => {
   if (!force && !props.canSelect) return;
+
+  // First column is key uniquely identifying entry, like id or business key.
+  const key = props.columns[0]?.name || '';
+
+  // Compare by unique key, not by reference: after a table reload the selected record may be a
+  // different object instance of the same entry, and highlight logic (rowClass) uses key comparison.
+  //const isSelected = selRecord.value === entry;
+  const isSelected = entry !== null && selRecord.value !== null && selRecord.value !== undefined && selRecord.value[key] === entry[key];
+
   // This automatically emits 'update:modelValue' to the parent.
-  if (entry === null || selRecord.value === entry) {
+  if (entry === null || isSelected) { // deselect
     selRecord.value = null;
     focusedRowIndex.value = null;
-  } else selRecord.value = entry;
+  } else selRecord.value = entry; // select
 };
 
 /**
