@@ -466,6 +466,100 @@ describe('TablePage', () => {
       expect(rows[1]?.classes()).toEqual(['table-row']);
     });
 
+    it('deselects on first click when the selected row was reloaded (new object instance)', async () => {
+      // Arrange: First row pre-selected.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      const wrapper = createComponent(
+        data[0]!,
+        null,
+        0,
+        'name',
+        'DESC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Simulate a table reload by replacing the data with brand-new object instances
+      // that hold the same unique keys. Selection keeps pointing at the old instance.
+      const reloadedData: TestEntry[] = [
+        { id: 40, name: 'AA', value: 'BB' },
+        { id: 41, name: 'config', value: 'true' },
+      ];
+      await wrapper.setProps({ data: reloadedData });
+      await nextTick();
+
+      // Act: Click the row that is highlighted as selected (first key-equal row).
+      const rows = wrapper.findAll('.table-row');
+      expect(rows).toHaveLength(2);
+      expect(rows[0]?.classes()).toContain('selected'); // still rendered as selected after reload
+      await rows[0]?.trigger('click');
+      await nextTick();
+
+      // Assert: Emitted null (deselected on the very first click, not the second).
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(1);
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBeNull();
+
+      // Assert: No row has 'selected' class.
+      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[1]?.classes()).toEqual(['table-row']);
+    });
+
+    it('selects a different-row entry on click after a reload (no deselect regression)', async () => {
+      // Arrange: First row pre-selected.
+      const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
+
+      const wrapper = createComponent(
+        data[0]!,
+        null,
+        0,
+        'name',
+        'DESC',
+        tableId,
+        columns,
+        data,
+        metadata,
+        resolveRowMeta,
+        false,
+        true,
+        true,
+        false,
+        false,
+        'test.table.page.empty',
+      );
+
+      // Act: Simulate a table reload by replacing the data with brand-new object instances.
+      const reloadedData: TestEntry[] = [
+        { id: 40, name: 'AA', value: 'BB' },
+        { id: 41, name: 'config', value: 'true' },
+      ];
+      await wrapper.setProps({ data: reloadedData });
+      await nextTick();
+
+      // Act: Click the second row (different unique key) after the reload.
+      const rows = wrapper.findAll('.table-row');
+      expect(rows).toHaveLength(2);
+      await rows[1]?.trigger('click');
+      await nextTick();
+
+      // Assert: The different row was selected (not deselected).
+      expect(wrapper.emitted('update:modelValue')).toHaveLength(1);
+      expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(reloadedData[1]);
+
+      // Assert: Second row has 'selected' class.
+      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[1]?.classes()).toEqual(['table-row', 'selected']);
+    });
+
     it('does not select when canSelect is false', async () => {
       // Arrange: CanSelect disabled.
       const { columns, data, metadata, resolveRowMeta } = generateAll(false, 0, 'name', 'DESC');
