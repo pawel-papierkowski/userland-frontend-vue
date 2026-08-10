@@ -17,6 +17,7 @@ import type {
   UserJwtTableFilterForm,
   UserJwtTableReq,
   UserJwtTableEntry,
+  AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userJwtTableColumns } from '@/code/data/features/user/user-const.ts';
 
@@ -43,17 +44,21 @@ const formFilter: UserJwtTableFilterForm = reactive({
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** Used to enforce reload of this table. */
+/** Reference to tab component. */
+const tabRef = ref<AdminUserTabExpose | null>(null);
+
+/** Used to enforce reload of this table later. */
 const reloadTrigger = ref(0);
 
 // WATCHES
 
 /**
  * React on main user table being reloaded.
- * Forces reload of user JWT table when this tab becomes active again.
+ * Forces reload of user JWT table when this tab is active or becomes active again.
  */
-watch([usersReloadTrigger], () => {
-  reloadTrigger.value++;
+watch([usersReloadTrigger], async () => {
+  if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
+  else reloadTrigger.value++; // reload later, when we open this tab
 });
 
 // FUNCTIONS
@@ -87,6 +92,7 @@ const processEntry = (entry: UserJwtTableEntry): UserJwtTableEntry => {
 
 <template>
   <AdminUserTab
+    ref="tabRef"
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
     :isActive="props.isActive"

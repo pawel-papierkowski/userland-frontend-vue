@@ -6,6 +6,8 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
+
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -100,13 +102,14 @@ beforeEach(() => {
 });
 
 /** Create mounted component. */
-function createComponent(modelValue?: TestUserEntry | null) {
+function createComponent(modelValue?: TestUserEntry | null, isActive = true) {
   return mount(AdminUserTokens, {
     global: {
       plugins: [i18n],
     },
     props: {
       modelValue: modelValue ?? null,
+      isActive,
     },
   });
 }
@@ -269,6 +272,107 @@ describe('AdminUserTokens', () => {
       expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
       const callArg = mockLoadTokensPage.mock.calls[0]?.[0];
       expect(callArg).toMatchObject({ userId: testUser2.id });
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Deferred reload (user table reload / tab activation)
+
+  describe('deferred reload', () => {
+    it('do not load data when user is selected but tab is inactive', async () => {
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      createComponent(testUser1, false);
+
+      // Assert: No fetch is made for an inactive tab.
+      expect(mockLoadTokensPage).not.toHaveBeenCalled();
+    });
+
+    it('load data for the selected user when the tab is active', async () => {
+      // Arrange & Act: Mount with a user selected on the active tab.
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadTokensPage.mockReturnValue(promise);
+
+      createComponent(testUser1, true);
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Data was loaded.
+      expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
+    });
+
+    it('reload immediately when user table is reloaded and tab is active', async () => {
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadTokensPage.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an active tab.
+      const wrapper = createComponent(testUser1);
+
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      mockLoadTokensPage.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is NOT reloaded again on reactivation of tab.
+      expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: { entries: [], tableMeta: emptyMeta } });
+    });
+
+    it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadTokensPage.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      const wrapper = createComponent(testUser1, false);
+
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (tab is not active).
+      expect(mockLoadTokensPage).not.toHaveBeenCalled();
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (deferred until tab activation).
+      expect(mockLoadTokensPage).not.toHaveBeenCalled();
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      mockLoadTokensPage.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is reloaded on reactivation after a main user table reload.
+      expect(mockLoadTokensPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: { entries: [], tableMeta: emptyMeta } });
     });
   });
 

@@ -6,6 +6,8 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
+
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -131,7 +133,7 @@ function flushPromises(): Promise<void> {
 // ////////////////////////////////////////////////////////////////////////////
 // Mocks setup
 
-let mockLoadPage: ReturnType<typeof vi.fn>;
+let mockLoadPermissionsPage: ReturnType<typeof vi.fn>;
 let mockEditEntry: ReturnType<typeof vi.fn>;
 let mockDeleteEntry: ReturnType<typeof vi.fn>;
 let mockGetEmail: ReturnType<typeof vi.fn>;
@@ -143,7 +145,7 @@ beforeEach(() => {
   setActivePinia(pinia);
   vi.clearAllMocks();
 
-  mockLoadPage = vi.mocked(backendApiAdminUser.loadPermissionsPage) as any;
+  mockLoadPermissionsPage = vi.mocked(backendApiAdminUser.loadPermissionsPage) as any;
   mockEditEntry = vi.mocked(backendApiAdminUser.editPermissionEntry) as any;
   mockDeleteEntry = vi.mocked(backendApiAdminUser.deletePermissionEntry) as any;
   mockGetEmail = vi.mocked(AppLoginer.getEmail) as any;
@@ -155,13 +157,14 @@ beforeEach(() => {
 });
 
 /** Create mounted component. */
-function createComponent(modelValue?: TestUserEntry | null) {
+function createComponent(modelValue?: TestUserEntry | null, isActive = true) {
   return mount(AdminUserPermissions, {
     global: {
       plugins: [i18n, pinia],
     },
     props: {
       modelValue: modelValue ?? null,
+      isActive,
     },
   });
 }
@@ -189,7 +192,7 @@ describe('AdminUserPermissions', () => {
       createComponent();
 
       // Assert: No API call made when no user is selected.
-      expect(mockLoadPage).not.toHaveBeenCalled();
+      expect(mockLoadPermissionsPage).not.toHaveBeenCalled();
     });
 
     it('shows emptyNoUserText', () => {
@@ -210,7 +213,7 @@ describe('AdminUserPermissions', () => {
     it('shows add button ENABLED when user has permissions', async () => {
       // Arrange: User has permissions and is not self.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
       mockGetEmail.mockReturnValue('admin@test.com');
       mockHasPermissionsAny.mockReturnValue(true);
 
@@ -231,7 +234,7 @@ describe('AdminUserPermissions', () => {
     it('shows add button DISABLED when user lacks permissions', async () => {
       // Arrange: User lacks edit permissions.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
       mockHasPermissionsAny.mockReturnValue(false);
 
       const wrapper = createComponent(testUser1);
@@ -251,7 +254,7 @@ describe('AdminUserPermissions', () => {
     it('shows add button DISABLED when selected user is self', async () => {
       // Arrange: Selected user has same email as logged-in user.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
       mockGetEmail.mockReturnValue('user1@test.com');
 
       const wrapper = createComponent(testUser1);
@@ -275,7 +278,7 @@ describe('AdminUserPermissions', () => {
     it('sets up empty form and shows new entry row', async () => {
       // Arrange: Mount with user and resolved data.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
 
@@ -305,7 +308,7 @@ describe('AdminUserPermissions', () => {
     it('rejects save when name is empty', async () => {
       // Arrange: Mount with user, add new entry.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
@@ -334,7 +337,7 @@ describe('AdminUserPermissions', () => {
     it('rejects save when value is empty', async () => {
       // Arrange: Mount with user, add new entry.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
@@ -379,7 +382,7 @@ describe('AdminUserPermissions', () => {
     it('calls API and shows success on save for new entry', async () => {
       // Arrange: Mount with user, add new entry.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
       mockEditEntry.mockResolvedValue({ data: {} });
 
       const wrapper = createComponent(testUser1);
@@ -431,7 +434,7 @@ describe('AdminUserPermissions', () => {
     it('calls API with entry id for existing entry', async () => {
       // Arrange: Mount with user and entries in the table.
       const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(loadPromise);
+      mockLoadPermissionsPage.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(testUser1);
       loadResolve({
@@ -476,7 +479,7 @@ describe('AdminUserPermissions', () => {
     it('exits add mode when cancel is clicked', async () => {
       // Arrange: Mount with user, add new entry.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
@@ -510,7 +513,7 @@ describe('AdminUserPermissions', () => {
     it('populates form and selects entry when edit is clicked', async () => {
       // Arrange: Mount with user and entries.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({
@@ -542,7 +545,7 @@ describe('AdminUserPermissions', () => {
     it('calls API and shows success on delete', async () => {
       // Arrange: Mount with user and entries.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
       mockDeleteEntry.mockResolvedValue({ data: {} });
 
       const wrapper = createComponent(testUser1);
@@ -574,13 +577,153 @@ describe('AdminUserPermissions', () => {
   });
 
   // //////////////////////////////////////////////////////////////////////////
+  // User selection
+
+  describe('user selection', () => {
+    it('deselects entry when user selection changes', async () => {
+      // Arrange: Mount with user.
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise);
+
+      const wrapper = createComponent(testUser1);
+      resolve({
+        data: {
+          entries: testEntries,
+          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
+        },
+      });
+      await flushPromises();
+      await nextTick();
+      await nextTick();
+
+      // Select an entry by clicking edit.
+      const editBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '✏️');
+      await editBtns[0]?.trigger('click');
+      await nextTick();
+
+      // Assert: Verify we have add entry button and save/cancel for the selected entry.
+      let saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
+      expect(saveBtns.length).toBeGreaterThanOrEqual(2);
+
+      // Act: Deselect user.
+      await wrapper.setProps({ modelValue: null });
+      await nextTick();
+
+      // Assert: Add entry and save/cancel buttons are gone.
+      saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
+      expect(saveBtns.length).toBe(0);
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Deferred reload (user table reload / tab activation)
+
+  describe('deferred reload', () => {
+    it('do not load data when user is selected but tab is inactive', async () => {
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      createComponent(testUser1, false);
+
+      // Assert: No fetch is made for an inactive tab.
+      expect(mockLoadPermissionsPage).not.toHaveBeenCalled();
+    });
+
+    it('load data for the selected user when the tab is active', async () => {
+      // Arrange & Act: Mount with a user selected on the active tab.
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise);
+
+      createComponent(testUser1, true);
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Data was loaded.
+      expect(mockLoadPermissionsPage).toHaveBeenCalledTimes(1);
+    });
+
+    it('reload immediately when user table is reloaded and tab is active', async () => {
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an active tab.
+      const wrapper = createComponent(testUser1);
+
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadPermissionsPage).toHaveBeenCalledTimes(1);
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadPermissionsPage).toHaveBeenCalledTimes(1);
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is NOT reloaded again on reactivation of tab.
+      expect(mockLoadPermissionsPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: { entries: [], tableMeta: emptyMeta } });
+    });
+
+    it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
+      const { promise, resolve } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      const wrapper = createComponent(testUser1, false);
+
+      resolve({ data: { entries: [], tableMeta: emptyMeta } });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (tab is not active).
+      expect(mockLoadPermissionsPage).not.toHaveBeenCalled();
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (deferred until tab activation).
+      expect(mockLoadPermissionsPage).not.toHaveBeenCalled();
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      mockLoadPermissionsPage.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is reloaded on reactivation after a main user table reload.
+      expect(mockLoadPermissionsPage).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: { entries: [], tableMeta: emptyMeta } });
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
   // Error handling
 
   describe('error handling', () => {
     it('shows error when saveEntry fails', async () => {
       // Arrange: Mount with user, add new entry, save API fails.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({ data: { entries: [], tableMeta: emptyMeta } });
@@ -629,7 +772,7 @@ describe('AdminUserPermissions', () => {
     it('shows error when deleteEntry fails', async () => {
       // Arrange: Mount with user and entries.
       const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
+      mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
       resolve({
@@ -658,45 +801,6 @@ describe('AdminUserPermissions', () => {
         'admin.user.permissions.table.msg.delete.fail.content',
       );
       expect(apiLogging.logError).toHaveBeenCalledWith(testError, 'Failed to delete user permission entry!');
-    });
-  });
-
-  // //////////////////////////////////////////////////////////////////////////
-  // User selection
-
-  describe('user selection', () => {
-    it('deselects entry when user selection changes', async () => {
-      // Arrange: Mount with user.
-      const { promise, resolve } = createDeferredPromise<any>();
-      mockLoadPage.mockReturnValue(promise);
-
-      const wrapper = createComponent(testUser1);
-      resolve({
-        data: {
-          entries: testEntries,
-          tableMeta: { pageCount: 1, entryCount: 2, pageSize: 10, page: 0, sortBy: 'name', sortOrder: 'ASC' },
-        },
-      });
-      await flushPromises();
-      await nextTick();
-      await nextTick();
-
-      // Select an entry by clicking edit.
-      const editBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '✏️');
-      await editBtns[0]?.trigger('click');
-      await nextTick();
-
-      // Assert: Verify we have add entry button and save/cancel for the selected entry.
-      let saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
-      expect(saveBtns.length).toBeGreaterThanOrEqual(2);
-
-      // Act: Deselect user.
-      await wrapper.setProps({ modelValue: null });
-      await nextTick();
-
-      // Assert: Add entry and save/cancel buttons are gone.
-      saveBtns = wrapper.findAll('.entry-btn').filter((b) => b.text() === '➕' || b.text() === '💾');
-      expect(saveBtns.length).toBe(0);
     });
   });
 });

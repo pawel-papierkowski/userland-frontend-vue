@@ -68,17 +68,18 @@ const addNewEntry = ref(false);
 /** True if busy executing options. */
 const isBusyOptions = ref(false);
 
-/** Used to enforce reload of this table. */
+/** Used to enforce reload of this table later. */
 const reloadTrigger = ref(0);
 
 // WATCHES
 
 /**
  * React on main user table being reloaded.
- * Forces reload of user permissions table when this tab becomes active again.
+ * Forces reload of user permissions table when this tab is active or becomes active again.
  */
-watch([usersReloadTrigger], () => {
-  reloadTrigger.value++;
+watch([usersReloadTrigger], async () => {
+  if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
+  else reloadTrigger.value++; // reload later, when we open this tab
 });
 
 /** React on user being (de)selected. */

@@ -31,7 +31,7 @@ watch(selUserRecord, () => {
 <template>
   <TabGroup langPrefix="admin.user.tabs" id="usertab">
     <template #main>
-      <AdminUserMain v-model="selUserRecord" />
+      <AdminUserMain v-model="selUserRecord" :isActive="isActive" />
     </template>
     <template #history="{ isActive }">
       <AdminUserHistory v-model="selUserRecord" :isActive="isActive" />

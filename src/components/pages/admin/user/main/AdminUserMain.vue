@@ -8,10 +8,12 @@
 import { ref, reactive, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
 
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
+import { useUserEventStore } from '@/stores/events/user-events.ts';
 import type {
   UserTableEntry,
   UserFullDataReq,
@@ -30,6 +32,8 @@ import TextBox from '@/components/base/inputs/TextBox.vue';
 
 const { t } = useI18n();
 
+const { usersReloadTrigger } = storeToRefs(useUserEventStore());
+
 /** User data for form. */
 const form: UserFullDataForm = reactive({ ...emptyUserForm });
 /** Version of form just after load or update to determine differences. */
@@ -38,6 +42,14 @@ const diffForm: Ref<UserFullDataForm> = ref({ ...emptyUserForm });
 /** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
 
+const props = withDefaults(
+  defineProps<{
+    /** True if this tab is currently the active tab in the tab group. */
+    isActive?: boolean;
+  }>(),
+  { isActive: true },
+);
+
 /** True if busy doing something, otherwise false. Used to disable buttons. */
 const isBusy = ref(false);
 /** True if data load is in progress, otherwise false. Used to hide form. */
@@ -45,12 +57,34 @@ const isLoading = ref(false);
 /** Can spinner spin? */
 const canSpin = ref(true);
 
+/** True if data must be reloaded on next activation, even if already loaded for the user. */
+let forceReload = false;
+
+// WATCHES
+
+/**
+ * React on main user table being reloaded.
+ * Forces reload of user data when this tab is active or becomes active again.
+ */
+watch([usersReloadTrigger], async () => {
+  if (props.isActive) await loadUserData(); // reload immediately
+  else forceReload = true; // reload later, when we open this tab
+});
+
+/** React on change to isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
+watch(() => props.isActive,
+  async () => {
+    if (!props.isActive || !forceReload) return;
+    await loadUserData();
+    forceReload = false;
+  });
+
 /** Change in selection requires reload of form. */
 watch(selUserRecord, () => {
   loadUserData();
 });
 
-//
+// FUNCTIONS
 
 /** Load user data and fill form. */
 const loadUserData = async () => {

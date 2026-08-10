@@ -17,6 +17,7 @@ import type {
   UserHistoryTableFilterForm,
   UserHistoryTableReq,
   UserHistoryTableEntry,
+  AdminUserTabExpose,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userHistoryTableColumns } from '@/code/data/features/user/user-const.ts';
 
@@ -45,17 +46,21 @@ const formFilter: UserHistoryTableFilterForm = reactive({
   tableMeta: { pageSize: null, page: null, sortBy: null, sortOrder: null },
 });
 
-/** Used to enforce reload of this table. */
+/** Reference to tab component. */
+const tabRef = ref<AdminUserTabExpose | null>(null);
+
+/** Used to enforce reload of this table later. */
 const reloadTrigger = ref(0);
 
 // WATCHES
 
 /**
  * React on main user table being reloaded or user data being updated.
- * Forces reload of user history table when this tab becomes active again.
+ * Forces reload of user history table when this tab is active or becomes active again.
  */
-watch([usersReloadTrigger, userUpdatedTrigger], () => {
-  reloadTrigger.value++;
+watch([usersReloadTrigger, userUpdatedTrigger], async () => {
+  if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
+  else reloadTrigger.value++; // reload later, when we open this tab
 });
 
 // FUNCTIONS
@@ -89,6 +94,7 @@ const processEntry = (entry: UserHistoryTableEntry): UserHistoryTableEntry => {
 
 <template>
   <AdminUserTab
+    ref="tabRef"
     v-model="selUserRecord"
     v-model:formFilter="formFilter"
     :isActive="props.isActive"
