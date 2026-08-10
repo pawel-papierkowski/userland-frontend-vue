@@ -50,10 +50,13 @@ function stubUserDataError() {
 /**
  * Stub the edit-user-data API. It applies the PATCH payload over the current
  * state and replies with the updated full user (mirrors backend behavior).
+ * The returned mutable state is shared with load stubs (e.g. `stubUserData`) so
+ * that re-fetches after an edit return the updated data, like a real backend.
  * @param initial Initial full user data.
+ * @returns Mutable full user state that subsequent PATCH calls are applied to.
  */
-function stubEditUser(initial: UserFullDataResp) {
-  const current: UserFullDataResp = { ...initial };
+function stubEditUser(initial: UserFullDataResp): UserFullDataResp {
+  const current: UserFullDataResp = { ...initial, profile: { ...initial.profile } };
   cy.intercept('PATCH', '**/api/admin/user', (req) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const body = req.body as any;
@@ -64,6 +67,7 @@ function stubEditUser(initial: UserFullDataResp) {
     current.modifiedAt = '2024-10-05T12:00:00Z';
     req.reply({ statusCode: 200, body: { ...current } });
   }).as('userEditRequest');
+  return current;
 }
 
 /** Stub the edit-user-data API to fail with a 500 error. */
@@ -163,8 +167,8 @@ describe('Admin User Form', () => {
       // Arrange: Stub table and edit APIs, log in and select the user.
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
-      stubUserData([ivyFull]);
-      stubEditUser(ivyFull);
+      const editState = stubEditUser(ivyFull);
+      stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
 
       // Act: Visit admin panel page about users.
@@ -234,8 +238,8 @@ describe('Admin User Form', () => {
       // Arrange: Stub table, full-data and edit APIs, log in and select.
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
-      stubUserData([ivyFull]);
-      stubEditUser(ivyFull);
+      const editState = stubEditUser(ivyFull);
+      stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
@@ -274,8 +278,8 @@ describe('Admin User Form', () => {
       // Arrange: Stub table and full-data APIs for the own-account user, log in.
       stubUserTable([selfTableEntry]);
       const selfFull = fullUsers.find((u) => u.id === 10)!;
-      stubUserData([selfFull]);
-      stubEditUser(selfFull);
+      const editState = stubEditUser(selfFull);
+      stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
       const page = new AdminUserFormPage();
       page.visit();
@@ -396,8 +400,8 @@ describe('Admin User Form', () => {
       // Arrange: Stub the table, full-data and sub-tab APIs, log in on the page.
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
-      stubUserData([ivyFull]);
-      stubEditUser(ivyFull);
+      const editState = stubEditUser(ivyFull);
+      stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
 
       // Act: Visit admin panel page about users.
