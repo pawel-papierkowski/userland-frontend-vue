@@ -39,7 +39,7 @@
 import type { Interception } from 'cypress/types/net-stubbing';
 
 import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
-import { createTestJwt, type LoginPerm } from '@/../cypress/support/helpers/general.ts';
+import { createTestJwt, type JwtPerm } from '@/../cypress/support/helpers/general.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Commands
@@ -73,7 +73,7 @@ Cypress.Commands.add('visitUserLand', (path: string = '/') => {
  * @param permissions Optional permissions the logged in user should have in the simulated JWT.
  * Example: [{ prefix: 'role', suffix: 'operator' }] makes user an admin panel operator.
  */
-Cypress.Commands.add('login', (path: string = '/', permissions: LoginPerm[] = []) => {
+Cypress.Commands.add('login', (path: string = '/', permissions: JwtPerm[] = []) => {
   return cy.visit(path, {
     onBeforeLoad(win: Cypress.AUTWindow): void {
       win.localStorage.setItem(locstLang, 'en');
@@ -122,7 +122,7 @@ declare global {
     interface Chainable<Subject> {
       waitIfHappens(alias: string, options?: { timeout?: number }): Chainable<Interception | null>;
       visitUserLand(path: string): Chainable<AUTWindow>;
-      login(path?: string, permissions?: LoginPerm[]): Chainable<AUTWindow>;
+      login(path?: string, permissions?: JwtPerm[]): Chainable<AUTWindow>;
       getByTestId(id: string): Chainable<JQuery<HTMLElement>>;
     }
   }

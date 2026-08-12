@@ -207,11 +207,27 @@ export class AppLoginer {
     return token || null;
   }
 
+  //
+
+  /**
+   * Check if user has given permission.
+   * @param permName Name of permission. Example: 'role_operator'.
+   * @returns True if has given permission.
+   */
+  public static hasPermission(permName: string): boolean {
+    const loginStore = useLoginStore();
+    if (!loginStore.loginState.isLogged) return false;
+    return loginStore.loginState.permissions.indexOf(permName) !== -1;
+  }
+
   /**
    * Check if user has at least one of given permissions.
    * @param permNames Name of permissions. Example: ['role_admin', 'role_operator'].
+   * @returns True if user has at least one of given permissions.
    */
   public static hasPermissionsAny(permNames: string[]): boolean {
+    if (permNames.length === 0) return true; // empty array is treated as success
+
     for (const permName of permNames) {
       if (AppLoginer.hasPermission(permName)) return true;
     }
@@ -219,12 +235,16 @@ export class AppLoginer {
   }
 
   /**
-   * Check if user has given permission.
-   * @param permName Name of permission. Example: 'role_operator'.
+   * Check if user has all given permissions.
+   * @param permNames Name of permissions. Example: ['role_operator', 'user_view'].
+   * @returns True if user has all given permissions.
    */
-  public static hasPermission(permName: string): boolean {
-    const loginStore = useLoginStore();
-    if (!loginStore.loginState.isLogged) return false;
-    return loginStore.loginState.permissions.indexOf(permName) !== -1;
+  public static hasPermissionsAll(permNames: string[]): boolean {
+    if (permNames.length === 0) return true; // empty array is treated as success
+
+    for (const permName of permNames) {
+      if (!AppLoginer.hasPermission(permName)) return false;
+    }
+    return true;
   }
 }

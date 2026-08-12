@@ -42,7 +42,9 @@ vi.mock('@/code/stores/messages/AppMessager.ts');
 vi.mock('@/code/stores/login/AppLoginer.ts', () => ({
   AppLoginer: {
     getEmail: vi.fn<() => void>(),
+    hasPermission: vi.fn<() => void>(),
     hasPermissionsAny: vi.fn<() => void>(),
+    hasPermissionsAll: vi.fn<() => void>(),
   },
 }));
 vi.mock('@/code/stores/events/AppUserEventer.ts', () => ({
@@ -118,7 +120,9 @@ function isDisabled(el: DOMWrapper<Element>): boolean {
 let mockLoadUserData: ReturnType<typeof vi.fn>;
 let mockEditUserData: ReturnType<typeof vi.fn>;
 let mockGetEmail: ReturnType<typeof vi.fn>;
+let mockHasPermission: ReturnType<typeof vi.fn>;
 let mockHasPermissionsAny: ReturnType<typeof vi.fn>;
+let mockHasPermissionsAll: ReturnType<typeof vi.fn>;
 let pinia: ReturnType<typeof createPinia>;
 
 beforeEach(() => {
@@ -129,11 +133,15 @@ beforeEach(() => {
   mockLoadUserData = vi.mocked(backendApiAdminUser.loadUserData) as any;
   mockEditUserData = vi.mocked(backendApiAdminUser.editUserData) as any;
   mockGetEmail = vi.mocked(AppLoginer.getEmail) as any;
+  mockHasPermission = vi.mocked(AppLoginer.hasPermission) as any;
   mockHasPermissionsAny = vi.mocked(AppLoginer.hasPermissionsAny) as any;
+  mockHasPermissionsAll = vi.mocked(AppLoginer.hasPermissionsAll) as any;
 
   // Default: admin user viewing another user, has full permissions.
   mockGetEmail.mockReturnValue('admin@test.com');
+  mockHasPermission.mockReturnValue(true);
   mockHasPermissionsAny.mockReturnValue(true);
+  mockHasPermissionsAll.mockReturnValue(true);
 });
 
 /** Create filter with stubbing. */
@@ -474,7 +482,9 @@ describe('AdminUserMain', () => {
 
     it('disables all inputs when lacking permissions', async () => {
       // Arrange: User lacks edit permissions.
+      mockHasPermission.mockReturnValue(false);
       mockHasPermissionsAny.mockReturnValue(false);
+      mockHasPermissionsAll.mockReturnValue(false);
       const { promise, resolve } = createDeferredPromise<any>();
       mockLoadUserData.mockReturnValue(promise);
 

@@ -100,13 +100,13 @@ const subTableEndpoints: string[] = ['history', 'permissions', 'configs', 'jwt']
  */
 function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserTokensPage {
   stubUserTable([user]);
-  const ivyFull = allUsers.find((u) => u.id === user.id)!;
-  stubUserData([ivyFull]);
+  const userFull = allUsers.find((u) => u.id === user.id)!;
+  stubUserData([userFull]);
   stubUserSubTables(subTableEndpoints);
 
   const common = new AdminUserPage();
   const page = new AdminUserTokensPage();
-  common.visit();
+  common.visitAsAdmin();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -130,7 +130,7 @@ describe('Admin User Tokens', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTokensPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the Tokens tab without selecting any user.

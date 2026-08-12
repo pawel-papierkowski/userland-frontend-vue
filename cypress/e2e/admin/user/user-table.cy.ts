@@ -89,7 +89,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit([{ prefix: 'user', suffix: 'view' }]);
+      common.visit([{ prefix: 'role', suffix: 'operator' }, { prefix: 'user', suffix: 'view' }]);
 
       // Assert: Wait for the initial load to finish.
       cy.wait('@userTableRequest');
@@ -107,19 +107,21 @@ describe('Admin User Page', () => {
       page.getCell(4, 'username').should('contain.text', 'erin');
     });
 
-    it('kicks out from page if no correct permissions', () => {
+    it('kicks out from page if no proper permissions', () => {
       // Arrange: Stub the user table API with fixture data.
       stubUserTable();
 
-      // Act: Visit admin panel page about users.
+      // Act: Visit admin panel page about users without proper permissions.
       const common = new AdminUserPage();
-      common.visit([]); // no permissions
+      common.visit([{ prefix: 'role', suffix: 'operator' }]);
+      // Note: role_operator is not enough, you need permission for user feature.
 
       // Assert: Table was not loaded.
-      cy.waitIfHappens('@userTableRequest', { timeout: 500 });
+      cy.waitIfHappens('@userTableRequest', { timeout: 250 });
       cy.get('@userTableRequest.all').should('have.length', 0);
 
-      // Assert: User was kicked out to login page.
+      // Assert: User was kicked out to main page.
+      cy.url().should('eq', Cypress.config().baseUrl);
     });
 
     it('shows empty message when table has no users', () => {
@@ -129,7 +131,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
 
       // Assert: Wait for the initial load and verify the empty message.
       cy.wait('@userTableRequest');
@@ -148,7 +150,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Assert: First page is shown, there are two pages total.
@@ -175,7 +177,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Click the Username header to sort ascending.
@@ -221,7 +223,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill username filter and submit.
@@ -243,7 +245,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill email filter and submit.
@@ -266,7 +268,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Select ACTIVE status and submit.
@@ -288,7 +290,7 @@ describe('Admin User Page', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill username filter that matches nothing and submit.

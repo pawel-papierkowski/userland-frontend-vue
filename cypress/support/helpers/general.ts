@@ -2,7 +2,7 @@
 // Simulated JWT
 
 /** Single permission encoded in a simulated JWT. Prefix and suffix are joined with underscore (e.g. 'role_admin'). */
-export type LoginPerm = { prefix: string; suffix: string };
+export type JwtPerm = { prefix: string; suffix: string };
 
 /**
  * Generate a valid JWT token for testing that passes the frontend expiration check.
@@ -12,7 +12,7 @@ export type LoginPerm = { prefix: string; suffix: string };
  * Example: `[{ prefix: 'role', suffix: 'admin,operator' }]` will end up as `'role_admin'` and `'role_operator'`.
  * @returns JWT token as string.
  */
-export function createTestJwt(permissions: LoginPerm[] = []): string {
+export function createTestJwt(permissions: JwtPerm[] = []): string {
   const encode = (obj: object): string =>
     btoa(JSON.stringify(obj)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 

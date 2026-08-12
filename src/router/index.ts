@@ -31,10 +31,14 @@ import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue'
 */
 
 // Defined metadata sets.
-const meta4unlogged = { layout: 'STANDARD', requiresAuth: false, permissions: [] };
-const meta4logged = { layout: 'STANDARD', requiresAuth: true, permissions: [] };
-const meta4adminLogin = { layout: 'ADMIN', requiresAuth: false, permissions: [] }; // note this page is available for everyone
-const meta4admin = { layout: 'ADMIN', requiresAuth: true, permissions: ['role_operator', 'role_admin'] };
+// standard pages
+const meta4unlogged = { layout: 'STANDARD', requiresAuth: false, permAny: [], permAll: [] };
+const meta4logged = { layout: 'STANDARD', requiresAuth: true, permAny: [], permAll: [] };
+// admin panel
+const meta4adminLogin = { layout: 'ADMIN', requiresAuth: false, permAny: [], permAll: [] }; // note this page is available for everyone to make login possible
+const meta4admin = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: [] }; // note individual pages may require additional permissions
+// admin panel: individual features
+const meta4adminUser = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: ['user_view'] };
 
 // Define all routes for this app. Notes:
 // - Most of pages are lazily loaded.
@@ -137,7 +141,7 @@ const routes = [
     name: 'admin-user',
     path: '/admin/user',
     component: () => import('@/components/pages/admin/user/main/AdminUser.vue'),
-    meta: meta4admin,
+    meta: meta4adminUser,
   },
 
   // Catch-all 404 route MUST be at the end
@@ -170,13 +174,14 @@ router.beforeEach((to) => {
       return { name: 'home' }; // Redirects to home page.
     }
 
+    const hasPermissions = checkAccessPermissions(to.meta);
     // Is authenticated, but not authorized?
-    if (!checkAccessPermissions(to.meta)) {
+    if (!hasPermissions) {
       return { name: 'home' }; // Redirects to the normal login route.
     }
 
     // Is on admin login page, but already authenticated AND authorized?
-    if (checkAccessPermissions(to.meta) && to.name?.toString() === 'admin-login') {
+    if (hasPermissions && to.name?.toString() === 'admin-login') {
       return { name: 'admin-main' }; // Redirects to main page of administration panel.
     }
   }
@@ -184,20 +189,19 @@ router.beforeEach((to) => {
   // If no return statement is hit, the navigation proceeds normally.
 });
 
+// ////////////////////////////////////////////////////////////////////////////
+
 /**
  * Check if currently logged user has access to given route.
  * @param meta Metadata about route.
  * @returns True if given user has access, otherwise false.
  */
 const checkAccessPermissions = (meta: RouteMeta): boolean => {
-  const permissions = meta.permissions as string[];
-  if (permissions.length === 0) return true; // this route does not need any permissions
+  if (AppLoginer.hasPermission('role_admin')) return true; // admin role has unrestricted access anywhere
 
-  // You need just one of permissions on list to be allowed here.
-  for (const perm of permissions) {
-    if (AppLoginer.hasPermission(perm)) return true;
-  }
-  return false;
+  if (!AppLoginer.hasPermissionsAny(meta.permAny as string[])) return false;
+  if (!AppLoginer.hasPermissionsAll(meta.permAll as string[])) return false;
+  return true;
 };
 
 export default router;

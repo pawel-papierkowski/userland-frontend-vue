@@ -99,7 +99,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Assert: Form is rendered (no user selected yet) but all inputs are disabled.
@@ -126,7 +126,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row to trigger loading of user data.
@@ -154,7 +154,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row to trigger a failing load.
@@ -184,7 +184,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.
@@ -226,7 +226,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: select first user in table.
@@ -261,7 +261,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: select first user in table.
@@ -306,7 +306,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the own-account user row.
@@ -340,7 +340,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row, staying on the main tab.
@@ -361,7 +361,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the history tab first, then select the user.
@@ -385,7 +385,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.
@@ -440,7 +440,7 @@ describe('Admin User Form', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.

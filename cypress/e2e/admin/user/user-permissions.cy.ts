@@ -10,6 +10,7 @@ import type { UserFullDataResp, UserPermissionTableEntry } from '@/code/data/fea
 import type { EntryMeta } from '@/code/data/features/common/type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 
+import { type JwtPerm } from '@/../cypress/support/helpers/general.ts';
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
 import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
@@ -143,17 +144,22 @@ const subTableEndpoints: string[] = ['history', 'configs', 'tokens', 'jwt'] as c
  * the corresponding tab is activated, so callers open the desired tab themselves.
  * @param allUsers All users in table.
  * @param user User table entry to show.
+ * @param permissions Permissions.
  * @returns Nothing.
  */
-function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserPermissionsPage {
+function setupSelectedUser(
+  allUsers: UserFullDataResp[],
+  user: UserTableEntry,
+  permissions: JwtPerm[]=[{ prefix: 'role', suffix: 'operator' }, { prefix: 'user', suffix: 'view' }, { prefix: 'user', suffix: 'edit' }]
+): AdminUserPermissionsPage {
   stubUserTable([user]);
-  const ivyFull = allUsers.find((u) => u.id === user.id)!;
-  stubUserData([ivyFull]);
+  const userFull = allUsers.find((u) => u.id === user.id)!;
+  stubUserData([userFull]);
   stubUserSubTables(subTableEndpoints);
 
   const common = new AdminUserPage();
   const page = new AdminUserPermissionsPage();
-  common.visit();
+  common.visit(permissions);
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -177,7 +183,7 @@ describe('Admin User Permissions', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserPermissionsPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the Permissions tab without selecting any user.
@@ -425,8 +431,13 @@ describe('Admin User Permissions', () => {
       common.openPermissionsTab();
       cy.wait('@userPermissionsRequest');
 
-      // Act: Click the add button (paginer options), pick a name from the combobox and fill the value.
+      // Act: Click the add button (paginer options).
       page.clickAdd();
+
+      // Assert: New add-new-entry row appear.
+      page.getRow(-1).should('exist');
+
+      // Act: Pick a name from the combobox and fill the value.
       page.selectPermissionName(-1, 'role');
       page.fillValue(-1, 'value-new');
 
@@ -445,6 +456,9 @@ describe('Admin User Permissions', () => {
 
       // Act: Wait for the reload after save.
       cy.wait('@userPermissionsRequest');
+
+      // Assert: The add-new-entry row is gone.
+      page.getRow(-1).should('not.exist');
 
       // Assert: The new entry is rendered at the top (it has the newest created date).
       page.getCell(0, 'name').should('contain.text', 'role');
@@ -571,6 +585,31 @@ describe('Admin User Permissions', () => {
 
       // Assert: Success message is shown.
       cy.getByTestId('msgContainer').find('.message-success').should('contain.text', 'User permission entry was deleted.');
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Failures
+
+  describe('failures', () => {
+    it('cannot add permission entry due to lack of permissions', () => {
+      // Arrange: Stub permissions and select a user.
+      stubUserPermissions(permissionEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      const page = setupSelectedUser(fullUsers, ivyTableEntry, [{ prefix: 'role', suffix: 'operator' }, { prefix: 'user', suffix: 'view' }]);
+      // Note: you need user_edit permission to add entry.
+
+      // Open the Permissions tab and consume the initial load.
+      common.openPermissionsTab();
+      cy.wait('@userPermissionsRequest');
+
+      // Act: Click the add button (paginer options). Nothing will happen, as add button is disabled.
+      page.clickAdd();
+
+      // Assert: The add-new-entry row is not present.
+      page.getRow(-1).should('not.exist');
     });
 
     it('shows failure message when saving new entry with invalid data', () => {

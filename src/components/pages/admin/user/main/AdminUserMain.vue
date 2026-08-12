@@ -257,7 +257,8 @@ const isYourOwnAccount = (): boolean => {
  * @returns True if we can edit users, otherwise false.
  */
 const canEditUsers = (): boolean => {
-  return AppLoginer.hasPermissionsAny(['role_admin', 'user_edit']);
+  if (AppLoginer.hasPermission('role_admin')) return true;
+  return AppLoginer.hasPermissionsAll(['role_admin', 'user_edit']);
 };
 
 /**

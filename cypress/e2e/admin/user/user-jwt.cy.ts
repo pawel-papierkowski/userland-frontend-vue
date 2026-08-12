@@ -100,13 +100,13 @@ const subTableEndpoints: string[] = ['history', 'permissions', 'configs', 'token
  */
 function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserJwtPage {
   stubUserTable([user]);
-  const ivyFull = allUsers.find((u) => u.id === user.id)!;
-  stubUserData([ivyFull]);
+  const userFull = allUsers.find((u) => u.id === user.id)!;
+  stubUserData([userFull]);
   stubUserSubTables(subTableEndpoints);
 
   const common = new AdminUserPage();
   const page = new AdminUserJwtPage();
-  common.visit();
+  common.visitAsAdmin();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -130,7 +130,7 @@ describe('Admin User JWT', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserJwtPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the JWT tab without selecting any user.

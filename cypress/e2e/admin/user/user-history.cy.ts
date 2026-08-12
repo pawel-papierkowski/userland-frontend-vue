@@ -106,13 +106,13 @@ const subTableEndpoints: string[] = ['permissions', 'configs', 'tokens', 'jwt'] 
  */
 function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserHistoryPage {
   stubUserTable([user]);
-  const ivyFull = allUsers.find((u) => u.id === user.id)!;
-  stubUserData([ivyFull]);
+  const userFull = allUsers.find((u) => u.id === user.id)!;
+  stubUserData([userFull]);
   stubUserSubTables(subTableEndpoints);
 
   const common = new AdminUserPage();
   const page = new AdminUserHistoryPage();
-  common.visit();
+  common.visitAsAdmin();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -136,7 +136,7 @@ describe('Admin User History', () => {
       // Act: Visit admin panel page about users.
       const common = new AdminUserPage();
       const page = new AdminUserHistoryPage();
-      common.visit();
+      common.visitAsAdmin();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the History tab without selecting any user.
