@@ -7,6 +7,7 @@ import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserJwtPage from '@/../cypress/support/pages/admin/AdminUserJwtPage.ts';
 
 /** Full users loaded from the fixture. Populated in `before()`. */
@@ -103,8 +104,9 @@ function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): 
   stubUserData([ivyFull]);
   stubUserSubTables(subTableEndpoints);
 
+  const common = new AdminUserPage();
   const page = new AdminUserJwtPage();
-  page.visit();
+  common.visit();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -124,12 +126,15 @@ describe('Admin User JWT', () => {
     it('shows empty message and disabled filter when no user is selected', () => {
       // Arrange: Stub the user table API and log in on the page.
       stubUserTable([ivyTableEntry]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserJwtPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the JWT tab without selecting any user.
-      page.openJwtTab();
+      common.openJwtTab();
 
       // Assert: Empty message for "no user selected" is shown.
       page.getTable().should('be.visible');
@@ -144,10 +149,13 @@ describe('Admin User JWT', () => {
     it('shows empty message and disabled filter when user was deselected', () => {
       // Arrange: Stub all APIs, log in, select a user and stub JWT data.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the JWT tab.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Act: Deselect user.
@@ -166,10 +174,13 @@ describe('Admin User JWT', () => {
     it('shows JWT data for the selected user', () => {
       // Arrange: Stub all APIs, log in, select a user and stub JWT data.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the JWT tab.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Assert: correct data was loaded only once.
@@ -188,8 +199,8 @@ describe('Admin User JWT', () => {
       page.getCell(4, 'token').should('contain.text', 'sig06');
 
       // Act: Go to the Main tab and then return to the JWT tab.
-      page.openMainTab();
-      page.openJwtTab();
+      common.openMainTab();
+      common.openJwtTab();
       cy.waitIfHappens('@userJwtRequest', { timeout: 500 });
 
       // Assert: correct data was loaded only once (no new reload).
@@ -205,10 +216,13 @@ describe('Admin User JWT', () => {
     it('filters JWT table by created from date', () => {
       // Arrange: Stub JWT and select a user.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the JWT tab and consume the initial (unfiltered) load.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Act: Pick July 15th 2024 as the "created from" date and submit.
@@ -235,10 +249,13 @@ describe('Admin User JWT', () => {
     it('filters JWT table by created to date', () => {
       // Arrange: Stub JWT and select a user.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the JWT tab and consume the initial (unfiltered) load.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Act: Pick July 15th 2024 as the "created to" date and submit.
@@ -263,10 +280,13 @@ describe('Admin User JWT', () => {
     it('shows empty message when filter matches no JWT', () => {
       // Arrange: Stub JWT and select a user.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the JWT tab and consume the initial (unfiltered) load.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Act: Pick January 1st 2024 as the "created to" date (before any entry) and submit.
@@ -287,10 +307,13 @@ describe('Admin User JWT', () => {
     it('navigates to next page of JWT table', () => {
       // Arrange: Stub JWT and select a user.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the JWT tab and consume the initial load.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Assert: First page is shown, there are two pages total.
@@ -312,10 +335,13 @@ describe('Admin User JWT', () => {
     it('sorts JWT table by token column', () => {
       // Arrange: Stub JWT and select a user.
       stubUserJwt();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the JWT tab and consume the initial load.
-      page.openJwtTab();
+      common.openJwtTab();
       cy.wait('@userJwtRequest');
 
       // Act: Click the Token header to sort ascending.

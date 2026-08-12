@@ -7,6 +7,7 @@ import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserHistoryPage from '@/../cypress/support/pages/admin/AdminUserHistoryPage.ts';
 
 /** Full users loaded from the fixture. Populated in `before()`. */
@@ -109,8 +110,9 @@ function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): 
   stubUserData([ivyFull]);
   stubUserSubTables(subTableEndpoints);
 
+  const common = new AdminUserPage();
   const page = new AdminUserHistoryPage();
-  page.visit();
+  common.visit();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -130,12 +132,15 @@ describe('Admin User History', () => {
     it('shows empty message and disabled filter when no user is selected', () => {
       // Arrange: Stub the user table API and log in on the page.
       stubUserTable([ivyTableEntry]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserHistoryPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the History tab without selecting any user.
-      page.openHistoryTab();
+      common.openHistoryTab();
 
       // Assert: Empty message for "no user selected" is shown.
       page.getTable().should('be.visible');
@@ -152,10 +157,13 @@ describe('Admin User History', () => {
     it('shows empty message and disabled filter when user was deselected', () => {
       // Arrange: Stub all APIs, log in, select a user and stub history data.
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the History tab.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Deselect user.
@@ -176,10 +184,13 @@ describe('Admin User History', () => {
     it('shows history data for the selected user', () => {
       // Arrange: Stub all APIs, log in, select a user and stub history data.
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the History tab.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Assert: correct data was loaded only once.
@@ -201,8 +212,8 @@ describe('Admin User History', () => {
       page.getCell(4, 'what').should('contain.text', 'PROLONG');
 
       // Act: Go to the Main tab and then return to the History tab.
-      page.openMainTab();
-      page.openHistoryTab();
+      common.openMainTab();
+      common.openHistoryTab();
       cy.waitIfHappens('@userHistoryRequest', { timeout: 500 });
 
       // Assert: correct data was loaded only once (no new reload).
@@ -218,10 +229,13 @@ describe('Admin User History', () => {
     it('filters history table by created from date', () => {
       // Arrange
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Pick July 15th 2024 as the "created from" date and submit.
@@ -246,10 +260,13 @@ describe('Admin User History', () => {
     it('filters history table by who', () => {
       // Arrange: Stub history and select a user.
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial (unfiltered) load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Select USER as 'who' and submit.
@@ -269,10 +286,13 @@ describe('Admin User History', () => {
     it('filters history table by what', () => {
       // Arrange
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Select 'LOGIN' as 'what' and submit.
@@ -290,10 +310,13 @@ describe('Admin User History', () => {
     it('shows empty message when filter matches no history', () => {
       // Arrange
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Select a combination that has no matching entries and submit.
@@ -314,10 +337,13 @@ describe('Admin User History', () => {
     it('navigates to next page of history table', () => {
       // Arrange
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Assert: First page is shown, there are two pages total.
@@ -339,10 +365,13 @@ describe('Admin User History', () => {
     it('sorts history table by who column', () => {
       // Arrange
       stubUserHistory();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the History tab and consume the initial load.
-      page.openHistoryTab();
+      common.openHistoryTab();
       cy.wait('@userHistoryRequest');
 
       // Act: Click the Who header to sort ascending.

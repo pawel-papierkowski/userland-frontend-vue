@@ -154,6 +154,7 @@ onMounted(() => {
             id="confirmPassword"
             type="password"
             v-model="form.confirmPassword"
+            :allowPaste="false"
             autocomplete="new-password"
             :required="true"
             :disabled="isBusy"

@@ -6,11 +6,6 @@ class AdminUserFormPage {
   // //////////////////////////////////////////////////////////////////////////
   // General.
 
-  /** Log in as admin and visit the admin user page. */
-  visit(): Cypress.Chainable<Cypress.AUTWindow> {
-    return cy.login('/admin/user', [{ prefix: 'role', suffix: 'admin' }]);
-  }
-
   /**
    * Select a user in the user table by its row index (zero-based) to open its form.
    * Note: the element with `data-testid="users_..."` is the row's inner element that

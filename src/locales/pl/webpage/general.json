@@ -1,7 +1,7 @@
 {
   "homeArea": {
     "welcome": "Witamy w projekcie demonstracyjnym <b>UserLand</b>!",
-    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz README.md w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itd.",
+    "description": "Ten projekt portfolio pokazuje podstawową wiedzę na temat programowania backendu i frontendu (fullstack). Zobacz <code>README.md</code> w repozytorium, by poznać szczegóły projektu, jego strukturę, jak go postawić itd.",
     "techstack": {
       "title": "Technikalia",
       "backend": "Stos technologiczny backendu:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
@@ -13,15 +13,15 @@
         "descr": "<b>Główna strona</b> jest dostępna dla każdego. Możesz odwiedzić:",
         "home": "Stronę domową dostępną dla wszystkich - jesteś tutaj.",
         "member": "Strefę członków dostępną tylko dla zalogowanych użytkowników.",
-        "test": "Strefę testów pokazującą mniejsze komponenty.",
+        "test": "Strefę testów pokazującą własne komponenty.",
         "debug": "Strefę debugu pokazującą dane JWT i przyciski do wywołania pewnych endpointów backendu."
       },
       "user": {
-        "descr": "<b>Użytkownik</b> jest is main focus of this project. Możesz:",
-        "register": "Zarejestrować konto użytkownika.",
+        "descr": "<b>Użytkownik</b> znajduje się w centrum tego projektu. Możesz:",
+        "register": "Zarejestrować/aktywować konto użytkownika.",
         "login": "Zalogować/wylogować się.",
         "edit": "Edytować profil użytkownika.",
-        "email": "Zmienić email.",
+        "email": "Zmienić email (z przyczyn bezpieczeństwa jest to osobna ścieżka od profilu użytkownika).",
         "reset": "Zresetować hasło.",
         "delete": "Usunąć konto użytkownika."
       },

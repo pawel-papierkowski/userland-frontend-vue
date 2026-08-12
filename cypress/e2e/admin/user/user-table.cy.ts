@@ -5,6 +5,7 @@
 import { locstJwt } from '@/code/data/app/storage.ts';
 
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserTablePage from '@/../cypress/support/pages/admin/AdminUserTablePage.ts';
 
 /** Users loaded from the fixture. Populated in `before()`. */
@@ -82,10 +83,13 @@ describe('Admin User Page', () => {
 
   describe('table rendering', () => {
     it('shows user table with data from fixture', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit([{ prefix: 'user', suffix: 'view' }]);
 
       // Assert: Wait for the initial load to finish.
       cy.wait('@userTableRequest');
@@ -103,11 +107,29 @@ describe('Admin User Page', () => {
       page.getCell(4, 'username').should('contain.text', 'erin');
     });
 
+    it('kicks out from page if no correct permissions', () => {
+      // Arrange: Stub the user table API with fixture data.
+      stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      common.visit([]); // no permissions
+
+      // Assert: Table was not loaded.
+      cy.waitIfHappens('@userTableRequest', { timeout: 500 });
+      cy.get('@userTableRequest.all').should('have.length', 0);
+
+      // Assert: User was kicked out to login page.
+    });
+
     it('shows empty message when table has no users', () => {
-      // Arrange: Stub the user table API with an empty dataset and log in on the page.
+      // Arrange: Stub the user table API with an empty dataset.
       stubUserTable([]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
 
       // Assert: Wait for the initial load and verify the empty message.
       cy.wait('@userTableRequest');
@@ -120,10 +142,13 @@ describe('Admin User Page', () => {
 
   describe('table navigation', () => {
     it('navigates to next page of user table', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Assert: First page is shown, there are two pages total.
@@ -144,10 +169,13 @@ describe('Admin User Page', () => {
     });
 
     it('sorts user table by username column', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Click the Username header to sort ascending.
@@ -187,10 +215,13 @@ describe('Admin User Page', () => {
 
   describe('user filter', () => {
     it('filters user table by username', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill username filter and submit.
@@ -206,10 +237,13 @@ describe('Admin User Page', () => {
     });
 
     it('filters user table by email', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill email filter and submit.
@@ -226,10 +260,13 @@ describe('Admin User Page', () => {
     });
 
     it('filters user table by status', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Select ACTIVE status and submit.
@@ -245,10 +282,13 @@ describe('Admin User Page', () => {
     });
 
     it('shows empty message when filter matches no users', () => {
-      // Arrange: Stub the user table API with fixture data and log in on the page.
+      // Arrange: Stub the user table API with fixture data.
       stubUserTable();
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserTablePage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest'); // initial load
 
       // Act: Fill username filter that matches nothing and submit.

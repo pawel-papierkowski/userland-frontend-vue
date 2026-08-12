@@ -2,9 +2,7 @@
 
 This project is *frontend* part of **UserLand system**, designed to work with backend project `userland-backend-java`.
 
-Project is in development.
-
-Description below sums up intended state when project is completed: functionality, features etc.
+Project is finished.
 
 ## Basic info
 
@@ -14,10 +12,10 @@ Date: 2026
 
 - Webpage address:
   - User website: https://pawelpapierkowski.net.pl/userland-frontend-vue
-  - Admin panel: https://pawelpapierkowski.net.pl/userland-frontend-vue/panel
+  - Admin panel: https://pawelpapierkowski.net.pl/userland-frontend-vue/admin
 - Locally run Vue server:
   - User website: http://localhost:5173/
-  - Admin panel: http://localhost:5173/panel
+  - Admin panel: http://localhost:5173/admin
 - Link to source code: https://github.com/pawel-papierkowski/userland-frontend-vue
 
 Used IDE: **Visual Studio Code**
@@ -38,8 +36,9 @@ This project fully manages user on frontend side.
 
 ### Features
 - Has publicly available user website and admin panel.
+- Access is controlled by permissions encoded in JWT. Backend verifies and enforces access.
 - Support for multiple languages.
-- Nice error messages from backend endpoints leveraging Problem Details.
+- Show nice error messages from backend endpoints leveraging Problem Details.
 
 ### Pages
 
@@ -48,21 +47,21 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
 - **User website**: Available to everyone.
   - **Main page**: This is what you see when you enter website.
   - **Registration**: Fields needed for registering user and registration button.
-  - **Login**: Two fields where you enter email and password plus login button. Will redirect back to main page.
-  - **Password reset**: From link in mail. Shows two fields to enter new password and button to confirm change.
-  - **Account deletion**: From link in mail. Shows warning about irreversibility of this action and button to confirm account deletion.
-  - **Email change**: From link in mail. Shows info about new email and button to confirm change.
+  - **Login**: Two fields where you enter email and password plus login button. Will redirect back to main page after successful login.
+  - **Password reset**: Link in mail leads to page that shows two fields to enter new password and button to confirm change.
+  - **Account deletion**: Link in mail leads to page that shows warning about irreversibility of this action and button to confirm account deletion.
+  - **Email change**: Shows fields for new email, password and button to send email with link that will actually change email of this account.
   - **Members-only area**: Available only after logging in, though you do not need any special permissions. If you are unlogged, redirects to main page.
-  - **Test area**: Contains various components to show them. Also has buttons that generate messages, spinner etc.
-  - **Debug area**: Contains various debug information. You also can call backend manually using `/check` endpoints.
-- **Administration panel**: If unlogged, only page available is Login page. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
-  - **Login**: works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
-  - **Main page**: just a placeholder.
+  - **Test area**: Contains few tabs: buttons that generate messages, various custom components to show off them, spinner etc.
+  - **Debug area**: Contains various debug information, mainly JWT payload (if any). You also can call backend manually using `/check` endpoints.
+- **Administration panel**: If unlogged, only page available is login page on admin side. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
+  - **Login**: Works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
+  - **Main page**: Just a placeholder.
   - **User manager**:
     - Viewing list of users in table.
     - Viewing details of selected user.
     - Viewing related data in separate tabs like history or permissions.
-    - Editing data of selected user.
+    - Editing data of selected user. You need additional permission for that.
     - Editing some related data of selected user (config, permissions).
     - Special options for user like lock/unlock.
 
@@ -92,7 +91,7 @@ Constants are in `src/code/data/app/storage.ts`.
 - `app-language`: Language code. Resolved from browser (or user settings, if logged in). Missing or unknown language means fallback to `en` (English).
 - `app-jwt`: JWT token. Present after you log in. Used when reloading whole page (as Pinia state will be lost) to log in again locally if token is still valid.
 - `app-last-api-call`: Timestamp (ms) of the last non-auth API call. Used to detect idle sessions.
-- `app-cookie-consent`: Cookie consent state. If not present, assume cookie panel should be shown..
+- `app-cookie-consent`: Cookie consent state. If not present, assume cookie panel should be shown.
 
 ## Commands
 
@@ -103,7 +102,7 @@ To run project locally in development mode, execute in terminal:
 npm run dev
 ```
 
-If you want to check production version:
+If you want to run production version:
 ```
 npm run build
 npm run preview
@@ -160,4 +159,4 @@ Besides Vue itself, we use additional libraries.
 
 - Development only
   - **start-server-and-test**: utility for starting server, waiting for it and running tests. After finishing, server is killed. Useful for e2e tests.
-  - **Cypress**: as end-to-end testing package.
+  - **Cypress**: end-to-end testing package.

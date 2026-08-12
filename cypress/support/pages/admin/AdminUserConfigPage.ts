@@ -12,11 +12,6 @@ class AdminUserConfigPage {
   // //////////////////////////////////////////////////////////////////////////
   // General.
 
-  /** Log in as admin and visit the admin user page. */
-  visit(): Cypress.Chainable<Cypress.AUTWindow> {
-    return cy.login('/admin/user', [{ prefix: 'role', suffix: 'admin' }]);
-  }
-
   /**
    * Select a user in the user table by its row index (zero-based) to open its editor.
    * Note: the element with `data-testid="users_..."` is the row's inner element that
@@ -25,16 +20,6 @@ class AdminUserConfigPage {
    */
   selectUserRow(rowIndex: number): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.getByTestId(`users_${rowIndex}`).parent('[role="row"]').click();
-  }
-
-  /** Switch to the Main tab of the selected user. */
-  openMainTab(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('usertab_main').click();
-  }
-
-  /** Switch to the Config tab of the selected user. */
-  openConfigTab(): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.getByTestId('usertab_config').click();
   }
 
   // /////////////////////////////////////////////////////////////////////

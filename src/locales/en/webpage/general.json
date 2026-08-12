@@ -1,7 +1,7 @@
 {
   "homeArea": {
     "welcome": "Welcome to demonstration project <b>UserLand</b>!",
-    "description": "This portfolio project demonstrates basic knowledge about backend and frontend programming (fullstack). See README.md in repository for details on project, its structure, how to deploy it etc.",
+    "description": "This portfolio project demonstrates basic knowledge about backend and frontend programming (fullstack). See <code>README.md</code> in repository for details on project, its structure, how to deploy it etc.",
     "techstack": {
       "title": "Tech",
       "backend": "Backend tech stack:<br/><ul><li><b>Java</b> 25</li><li><b>Spring Boot</b> 4.0.5</li><li><b>PostgreSQL</b> 17.9</li></ul>",
@@ -13,15 +13,15 @@
         "descr": "<b>Main website</b> is available to everyone. You can visit pages below:",
         "home": "Homepage available to everyone - you are here.",
         "member": "Member area available only to logged-in users.",
-        "test": "Test area to show off smaller components.",
+        "test": "Test area to show off custom components.",
         "debug": "Debug area to show JWT data and buttons to call certain backend endpoints."
       },
       "user": {
         "descr": "<b>User</b> is main focus of this project. You can:",
-        "register": "Register user account.",
+        "register": "Register/activate user account.",
         "login": "Login/logout user.",
         "edit": "Edit user profile.",
-        "email": "Change email.",
+        "email": "Change email (for security reasons it is separate flow from user profile).",
         "reset": "Reset password.",
         "delete": "Delete user account."
       },
@@ -38,7 +38,7 @@
       "CheckBox": "<code>CheckBox</code> is custom component that replaces <code>input</code> with <code>type='checkbox'</code>.",
       "RadioBox": "<code>RadioBox</code> is custom component that replaces <code>input</code> with <code>type='radio'</code>.",
       "DateTimePicker": "<code>DateTimePicker</code> allows picking date and/or time.",
-      "SlideShow": "You can see <code>SlideShow</code>! This is where you see this text.",
+      "SlideShow": "You can see <code>SlideShow</code>! This is where you see this very text.",
       "MessageContainer": "<code>MessageContainer</code> and <code>MessageBox</code> show small messages in box that can appear temporalily on right. They provide feedback on user actions.",
       "Table": "Family of <code>Table*</code> components handle showing and editing table. Used in administration panel.",
       "SpinnerTorus": "<code>SpinnerTorus</code> shows activity when you wait for frontend to finish action like calling backend."

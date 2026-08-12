@@ -1,14 +1,6 @@
 /** Page Object for the Admin User page (`/admin/user`) — main user table. */
 class AdminUserTablePage {
   // //////////////////////////////////////////////////////////////////////////
-  // General.
-
-  /** Log in as admin and visit the admin user page. */
-  visit(): Cypress.Chainable<Cypress.AUTWindow> {
-    return cy.login('/admin/user', [{ prefix: 'role', suffix: 'admin' }]);
-  }
-
-  // //////////////////////////////////////////////////////////////////////////
   // Get elements.
 
   /** Get the whole user table element. */

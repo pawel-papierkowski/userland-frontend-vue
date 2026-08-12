@@ -7,6 +7,7 @@ import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserFormPage from '@/../cypress/support/pages/admin/AdminUserFormPage.ts';
 
 /** Full users loaded from the fixture. Populated in `before()`. */
@@ -94,8 +95,11 @@ describe('Admin User Form', () => {
     it('shows form with disabled inputs when no user is selected', () => {
       // Arrange: Stub the table API and log in on the page.
       stubUserTable([ivyTableEntry]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Assert: Form is rendered (no user selected yet) but all inputs are disabled.
@@ -118,8 +122,11 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row to trigger loading of user data.
@@ -143,8 +150,11 @@ describe('Admin User Form', () => {
       stubUserTable([ivyTableEntry]);
       stubUserDataError();
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row to trigger a failing load.
@@ -172,8 +182,9 @@ describe('Admin User Form', () => {
       stubUserSubTables(subTableEndpoints);
 
       // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.
@@ -211,9 +222,14 @@ describe('Admin User Form', () => {
       stubUserData([ivyFull]);
       stubEditUserError();
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
+
+      // Act: select first user in table.
       page.selectUserRow(0);
       cy.wait('@userDataRequest');
 
@@ -241,9 +257,14 @@ describe('Admin User Form', () => {
       const editState = stubEditUser(ivyFull);
       stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
+
+      // Act: select first user in table.
       page.selectUserRow(0);
       cy.wait('@userDataRequest');
 
@@ -281,8 +302,11 @@ describe('Admin User Form', () => {
       const editState = stubEditUser(selfFull);
       stubUserData([editState]);
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the own-account user row.
@@ -312,8 +336,11 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row, staying on the main tab.
@@ -330,8 +357,11 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the history tab first, then select the user.
@@ -351,8 +381,11 @@ describe('Admin User Form', () => {
       const ivyFull = fullUsers.find((u) => u.id === 9)!;
       stubUserData([ivyFull]);
       stubUserSubTables(subTableEndpoints);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.
@@ -405,8 +438,9 @@ describe('Admin User Form', () => {
       stubUserSubTables(subTableEndpoints);
 
       // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserFormPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Select the user row.

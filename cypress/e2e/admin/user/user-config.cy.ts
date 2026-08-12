@@ -10,6 +10,7 @@ import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
+import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserConfigPage from '@/../cypress/support/pages/admin/AdminUserConfigPage.ts';
 
 /** Full users loaded from the fixture. Populated in `before()`. */
@@ -148,8 +149,9 @@ function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): 
   stubUserData([ivyFull]);
   stubUserSubTables(subTableEndpoints);
 
+  const common = new AdminUserPage();
   const page = new AdminUserConfigPage();
-  page.visit();
+  common.visit();
   cy.wait('@userTableRequest');
   page.selectUserRow(0);
   return page;
@@ -169,12 +171,15 @@ describe('Admin User Config', () => {
     it('shows empty message and disabled filter when no user is selected', () => {
       // Arrange: Stub the user table API and log in on the page.
       stubUserTable([ivyTableEntry]);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = new AdminUserConfigPage();
-      page.visit();
+      common.visit();
       cy.wait('@userTableRequest');
 
       // Act: Switch to the Config tab without selecting any user.
-      page.openConfigTab();
+      common.openConfigTab();
 
       // Assert: Empty message for "no user selected" is shown.
       page.getTable().should('be.visible');
@@ -189,10 +194,13 @@ describe('Admin User Config', () => {
     it('shows empty message and disabled filter when user was deselected', () => {
       // Arrange: Stub all APIs, log in, select a user and stub config data.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the Config tab.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Deselect user.
@@ -211,10 +219,13 @@ describe('Admin User Config', () => {
     it('shows config data for the selected user', () => {
       // Arrange: Stub all APIs, log in, select a user and stub config data.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Act: Open the Config tab.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Assert: correct data was loaded only once.
@@ -234,8 +245,8 @@ describe('Admin User Config', () => {
       page.getCell(4, 'name').should('contain.text', 'config-06');
 
       // Act: Go to the Main tab and then return to the Config tab.
-      page.openMainTab();
-      page.openConfigTab();
+      common.openMainTab();
+      common.openConfigTab();
       cy.waitIfHappens('@userConfigsRequest', { timeout: 500 });
 
       // Assert: correct data was loaded only once (no new reload).
@@ -251,10 +262,13 @@ describe('Admin User Config', () => {
     it('filters config table by created from date', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial (unfiltered) load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Pick July 15th 2024 as the "created from" date and submit.
@@ -281,10 +295,13 @@ describe('Admin User Config', () => {
     it('filters config table by created to date', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial (unfiltered) load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Pick July 15th 2024 as the "created to" date and submit.
@@ -309,10 +326,13 @@ describe('Admin User Config', () => {
     it('shows empty message when filter matches no config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial (unfiltered) load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Pick January 1st 2024 as the "created to" date (before any entry) and submit.
@@ -333,10 +353,13 @@ describe('Admin User Config', () => {
     it('navigates to next page of config table', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Assert: First page is shown, there are two pages total.
@@ -358,10 +381,13 @@ describe('Admin User Config', () => {
     it('sorts config table by name column', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click the Name header to sort ascending.
@@ -388,10 +414,13 @@ describe('Admin User Config', () => {
     it('adds a new config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click the add button (paginer options) and fill the new-entry row.
@@ -426,10 +455,13 @@ describe('Admin User Config', () => {
     it('cancels adding a new config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click add, fill the new-entry row, then cancel.
@@ -448,10 +480,13 @@ describe('Admin User Config', () => {
     it('edits an existing config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click the edit button of the first row and change name and value.
@@ -483,10 +518,13 @@ describe('Admin User Config', () => {
     it('cancels editing an existing config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click the edit button of the first row, change the name, then cancel.
@@ -505,10 +543,13 @@ describe('Admin User Config', () => {
     it('deletes an existing config entry', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click the delete button of the first row.
@@ -532,10 +573,13 @@ describe('Admin User Config', () => {
     it('shows failure message when saving new entry with invalid data', () => {
       // Arrange: Stub config and select a user.
       stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
       const page = setupSelectedUser(fullUsers, ivyTableEntry);
 
       // Open the Config tab and consume the initial load.
-      page.openConfigTab();
+      common.openConfigTab();
       cy.wait('@userConfigsRequest');
 
       // Act: Click add and try to save with an empty name.
