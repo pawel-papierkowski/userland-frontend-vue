@@ -22,6 +22,61 @@ vi.mock('@/services/features/api-users.ts', () => ({
 //
 
 /**
+ * Options for creating test JWT token.
+ */
+interface JwtTokenOptions {
+  /** When token was issued. Default: current system time (fake time). */
+  issuedAt?: Date;
+  /** When token expires. Default: 6 hours after token was issued. */
+  expiresAt?: Date;
+}
+
+/**
+ * Create a JWT token for tests.
+ * Permissions are encoded the same way as on backend: permission 'role_admin' is stored as field 'role' with value 'admin',
+ * 'user_edit' is stored as field 'user' with value 'edit', and so on.
+ * Note: signature is a dummy, as tests do not verify it.
+ * @param permissions List of permission names to encode in token.
+ * @param options Optional custom dates.
+ * @returns JWT token.
+ */
+const createTestToken = (permissions: string[], options: JwtTokenOptions = {}): string => {
+  const issuedAt = options.issuedAt ?? new Date();
+  const expiresAt = options.expiresAt ?? new Date(issuedAt.getTime() + 6 * 60 * 60 * 1000);
+
+  // Group permissions by their prefix, e.g. 'role_admin' and 'role_operator' are stored as role: 'admin,operator'.
+  const permissionFields: Record<string, string[]> = {};
+  for (const permission of permissions) {
+    const separatorIndex = permission.indexOf('_');
+    const prefix = permission.slice(0, separatorIndex);
+    const suffix = permission.slice(separatorIndex + 1);
+
+    if (!permissionFields[prefix]) permissionFields[prefix] = [];
+    permissionFields[prefix].push(suffix);
+  }
+
+  const payload: Record<string, string | number> = {
+    name: 'Paweł Papierkowski',
+    sub: 'pawel.papierkowski@gmail.com',
+    iat: Math.floor(issuedAt.getTime() / 1000),
+    exp: Math.floor(expiresAt.getTime() / 1000),
+  };
+  for (const [prefix, suffixes] of Object.entries(permissionFields)) {
+    payload[prefix] = suffixes.join(',');
+  }
+
+  // Base64Url encode JSON and put it together with a dummy signature (tests do not verify it).
+  const encode = (value: unknown): string => {
+    const bytes = new TextEncoder().encode(JSON.stringify(value));
+    let binary = '';
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  };
+
+  return `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode(payload)}.dummy-signature`;
+};
+
+/**
  * Verifies that login state is unlogged.
  * @param loginStore Pinia storage with login state.
  */
@@ -74,8 +129,7 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
 
       // Arrange: Create valid token for user without any permissions.
-      const token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      const token = createTestToken([]);
 
       // Act: Log in user using given token.
       AppLoginer.login(token);
@@ -89,8 +143,8 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.token).toBe(token);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464175000));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779485775000));
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date('2026-05-22T17:50:00Z'));
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date('2026-05-22T23:50:00Z'));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
     });
 
@@ -99,8 +153,7 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
 
       // Arrange: Create valid token for user with many permissions.
-      const token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0Iiwic3ViIjoicGF3ZWwucGFwaWVya293c2tpQGdtYWlsLmNvbSIsImlhdCI6MTc3OTQ2NDkxOCwiZXhwIjoxNzc5NDg2NTE4fQ.tSJ_l785hoinpYkzezJtLRx2ldBb0XQ6DKvKGZvLdw0';
+      const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
 
       // Act: Log in user using given token.
       AppLoginer.login(token);
@@ -114,8 +167,8 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.token).toBe(token);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464918000));
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486518000));
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date('2026-05-22T18:30:00Z'));
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date('2026-05-23T00:30:00Z'));
       expect(loginStore.loginState.permissions).toStrictEqual(['role_admin', 'role_operator', 'user_edit']);
     });
 
@@ -123,9 +176,11 @@ describe('AppLoginer', () => {
       vi.setSystemTime(new Date('2026-05-20T12:00:00Z'));
       const loginStore = useLoginStore();
 
-      // Arrange: Create valid token for user without any permissions.
-      const token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MTA4NTkyLCJleHAiOjE3NzkxMzAxOTJ9.DyOcEQBYyYyiiZgrPNB5mq49tfhoUBjUuA8izA6_b7Y';
+      // Arrange: Create already expired token (expiration in the past).
+      const token = createTestToken([], {
+        issuedAt: new Date('2026-05-20T11:00:00Z'),
+        expiresAt: new Date('2026-05-20T11:05:00Z'),
+      });
 
       // Act: Log in user using given token.
       AppLoginer.login(token);
@@ -171,8 +226,7 @@ describe('AppLoginer', () => {
 
       // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token = createTestToken([]);
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779108592000);
@@ -240,8 +294,7 @@ describe('AppLoginer', () => {
 
       // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token = createTestToken([]);
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
@@ -278,19 +331,19 @@ describe('AppLoginer', () => {
       const loginStore = useLoginStore();
       const messageStore = useMessageStore();
 
-      // Arrange: Mock successful API response.
-      const newToken =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+      // Arrange: Mock successful API response. New token, different from the current one.
+      const newToken = createTestToken([]);
       vi.mocked(backendApiUser.prolong).mockResolvedValue({
         data: {
           jwtToken: newToken,
         },
       } as any);
 
-      // Arrange: Set loginStore to logged in state.
+      // Arrange: Set loginStore to logged in state (with token issued few minutes earlier).
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token = createTestToken([], {
+        issuedAt: new Date('2026-05-22T17:40:00Z'),
+      });
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
@@ -312,8 +365,8 @@ describe('AppLoginer', () => {
       expect(loginStore.loginState.token).toBe(newToken);
       expect(loginStore.loginState.username).toBe('Paweł Papierkowski');
       expect(loginStore.loginState.email).toBe('pawel.papierkowski@gmail.com');
-      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date(1779464665000)); // different issued and expired
-      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date(1779486265000));
+      expect(loginStore.loginState.issuedAt).toStrictEqual(new Date('2026-05-22T17:50:00Z')); // different issued and expired
+      expect(loginStore.loginState.expiresAt).toStrictEqual(new Date('2026-05-22T23:50:00Z'));
       expect(loginStore.loginState.permissions).toStrictEqual([]);
 
       // Assert: Verify info message is present in store.
@@ -338,8 +391,7 @@ describe('AppLoginer', () => {
       };
       vi.mocked(backendApiUser.prolong).mockRejectedValue(errorResponse);
 
-      const oldToken =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      const oldToken = createTestToken([]);
 
       // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
@@ -407,8 +459,7 @@ describe('AppLoginer', () => {
     });
 
     it('should handle concurrent prolong requests with a single promise', async () => {
-      const newToken =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQ2NjUsImV4cCI6MTc3OTQ4NjI2NX0.J4sUKkMC1jQ6m_qhM0JngzTnED2N-SZ8KAD1CfJYcXw';
+      const newToken = createTestToken([]);
 
       // Delay the mock response to ensure concurrency
       vi.mocked(backendApiUser.prolong).mockImplementation(
@@ -446,8 +497,7 @@ describe('AppLoginer', () => {
 
       // Arrange: Set loginStore to logged in state and seed localStorage.
       loginStore.loginState.isLogged = true;
-      loginStore.loginState.token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3Nzk0NjQxNzUsImV4cCI6MTc3OTQ4NTc3NX0.9uyhVSXHMlsayiljRynygCI03uKCWd0pl4kbYS7l-4A';
+      loginStore.loginState.token = createTestToken([]);
       loginStore.loginState.username = 'Paweł Papierkowski';
       loginStore.loginState.email = 'pawel.papierkowski@gmail.com';
       loginStore.loginState.issuedAt = new Date(1779464175000);
@@ -488,6 +538,163 @@ describe('AppLoginer', () => {
 
       // Assert: No message was added.
       expect(messageStore.messages).toHaveLength(0);
+    });
+  });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Permissions.
+
+  describe('permissions', () => {
+    // ////////////////////////////////////////////////////////////////////////
+    // hasPermission.
+
+    describe('hasPermission', () => {
+      it('returns false when not logged in', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // No arrange or act: user is not logged in by default.
+
+        // Assert: hasPermission returns false for any permission.
+        expect(AppLoginer.hasPermission('role_operator')).toBe(false);
+      });
+
+      it('returns false for logged user without permissions', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // Arrange: Create valid token for user without any permissions.
+        const token = createTestToken([]);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermission returns false for any permission.
+        expect(AppLoginer.hasPermission('role_operator')).toBe(false);
+        expect(AppLoginer.hasPermission('user_edit')).toBe(false);
+      });
+
+      it('returns true when user has the permission', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermission returns true for owned permission.
+        expect(AppLoginer.hasPermission('role_operator')).toBe(true);
+      });
+
+      it('returns false when user does not have the permission', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermission returns false for unowned permission.
+        expect(AppLoginer.hasPermission('user_delete')).toBe(false);
+      });
+    });
+
+    // ////////////////////////////////////////////////////////////////////////
+    // hasPermissionsAny.
+
+    describe('hasPermissionsAny', () => {
+      it('returns true for empty permission list even when not logged in', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // No arrange or act: user is not logged in by default.
+
+        // Assert: Empty list is treated as success.
+        expect(AppLoginer.hasPermissionsAny([])).toBe(true);
+      });
+
+      it('returns false when not logged in and permissions are requested', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // No arrange or act: user is not logged in by default.
+
+        // Assert: hasPermissionsAny returns false.
+        expect(AppLoginer.hasPermissionsAny(['role_operator', 'user_edit'])).toBe(false);
+      });
+
+      it('returns true when user has at least one of the given permissions', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermissionsAny returns true (user owns role_admin).
+        expect(AppLoginer.hasPermissionsAny(['role_admin', 'user_delete'])).toBe(true);
+      });
+
+      it('returns false when user has none of the given permissions', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermissionsAny returns false.
+        expect(AppLoginer.hasPermissionsAny(['user_delete', 'user_view'])).toBe(false);
+      });
+    });
+
+    // ////////////////////////////////////////////////////////////////////////
+    // hasPermissionsAll.
+
+    describe('hasPermissionsAll', () => {
+      it('returns true for empty permission list even when not logged in', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // No arrange or act: user is not logged in by default.
+
+        // Assert: Empty list is treated as success.
+        expect(AppLoginer.hasPermissionsAll([])).toBe(true);
+      });
+
+      it('returns false when not logged in and permissions are requested', () => {
+        vi.setSystemTime(new Date('2026-05-22T17:50:00Z'));
+
+        // No arrange or act: user is not logged in by default.
+
+        // Assert: hasPermissionsAll returns false.
+        expect(AppLoginer.hasPermissionsAll(['role_admin', 'user_edit'])).toBe(false);
+      });
+
+      it('returns true when user has all of the given permissions', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermissionsAll returns true (user owns both permissions).
+        expect(AppLoginer.hasPermissionsAll(['role_admin', 'role_operator'])).toBe(true);
+      });
+
+      it('returns false when user is missing at least one of the given permissions', () => {
+        vi.setSystemTime(new Date('2026-05-22T18:30:00Z'));
+
+        // Arrange: Create valid token for user with many permissions.
+        const token = createTestToken(['role_admin', 'role_operator', 'user_edit']);
+
+        // Act: Log in user using given token.
+        AppLoginer.login(token);
+
+        // Assert: hasPermissionsAll returns false (user does not own user_delete).
+        expect(AppLoginer.hasPermissionsAll(['role_admin', 'user_delete'])).toBe(false);
+      });
     });
   });
 });
