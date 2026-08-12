@@ -6,9 +6,11 @@ Project is finished.
 
 ## Basic info
 
-Author: Paweł Papierkowski
+Author: **Paweł Papierkowski**
 
-Date: 2026
+Date: **2026**
+
+Used IDE: **Visual Studio Code**
 
 - Webpage address:
   - User website: https://pawelpapierkowski.net.pl/userland-frontend-vue
@@ -17,8 +19,6 @@ Date: 2026
   - User website: http://localhost:5173/
   - Admin panel: http://localhost:5173/admin
 - Link to source code: https://github.com/pawel-papierkowski/userland-frontend-vue
-
-Used IDE: **Visual Studio Code**
 
 ### Security
 
@@ -57,11 +57,11 @@ Frontend is split into two parts: **user website** and **admin panel**. Website 
 - **Administration panel**: If unlogged, only page available is login page on admin side. Other pages redirect to login page (if unlogged) or main page on user website (if logged without required permissions).
   - **Login**: Works same as login on user website, except it will redirect to user website if user account do not have rights to admin panel.
   - **Main page**: Just a placeholder.
-  - **User manager**:
+  - **User manager**: Requires `role_admin` or `role_operator` with at least `user_view` permission.
     - Viewing list of users in table.
     - Viewing details of selected user.
     - Viewing related data in separate tabs like history or permissions.
-    - Editing data of selected user. You need additional permission for that.
+    - Editing data of selected user. You need additional `user_edit` permission for that.
     - Editing some related data of selected user (config, permissions).
     - Special options for user like lock/unlock.
 
@@ -83,8 +83,6 @@ All custom components implement roles, ARIA and keyboard where applicable.
   - **TableWrapper**, **TablePage**, **TablePaginer**, **TableRow**, **TableCell**, **EntryOptions**: For showing and handling tables. Used in administration panel.
 - Decorative components:
   - **SpinnerTorus**: To show frontend being busy with something (usually communication with backend).
-
-## Environment
 
 ### Local storage
 Constants are in `src/code/data/app/storage.ts`.
