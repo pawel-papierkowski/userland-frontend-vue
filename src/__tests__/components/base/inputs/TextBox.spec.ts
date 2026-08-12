@@ -122,6 +122,42 @@ describe('TextBox', () => {
       const result = emitted?.at(-1)![0] as string;
       expect(result).toBe('A');
     });
+
+    it('allows pasting text into <input> when allowPaste is true', async () => {
+      // Ensures pasted text is accepted when pasting is allowed (default behavior).
+
+      // Arrange: Create textbox with pasting allowed.
+      const textBox = createComponent(null, 'someTextBox', 'off', true, 'Type here', false, false);
+      const input = textBox.find('input');
+
+      // Act: Capture paste event and trigger it on <input>.
+      let pasteEvent: Event | undefined;
+      input.element.addEventListener('paste', (event: Event) => {
+        pasteEvent = event;
+      });
+      await input.trigger('paste');
+
+      // Assert: Paste event was not prevented, so pasted text is accepted.
+      expect(pasteEvent?.defaultPrevented).toBe(false);
+    });
+
+    it('prevents pasting text into <input> when allowPaste is false', async () => {
+      // Ensures pasted text is rejected when pasting is disabled.
+
+      // Arrange: Create textbox with pasting disallowed.
+      const textBox = createComponent(null, 'someTextBox', 'off', false, 'Type here', false, false);
+      const input = textBox.find('input');
+
+      // Act: Capture paste event and trigger it on <input>.
+      let pasteEvent: Event | undefined;
+      input.element.addEventListener('paste', (event: Event) => {
+        pasteEvent = event;
+      });
+      await input.trigger('paste');
+
+      // Assert: Paste event was prevented, so pasted text is rejected.
+      expect(pasteEvent?.defaultPrevented).toBe(true);
+    });
   });
 
   // ////////////////////////////////////////////////////////////////////////////
