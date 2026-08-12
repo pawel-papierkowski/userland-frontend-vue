@@ -13,6 +13,7 @@
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - type - Type of input. Optional, default is 'text'.
  * - required - Is required?
+ * - allowPaste - If false, this input does not allow pasting text into field. Optional, default is true.
  * - autocomplete - For autocomplete attribute of <input>. Optional.
  * - placeholder - Shows grayed out text in background of input if null/empty. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
@@ -22,7 +23,6 @@
 /** Current value of textbox. */
 const currValue = defineModel<string | null>({ required: true });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = withDefaults(
   defineProps<{
     /** Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional. */
@@ -31,6 +31,8 @@ const props = withDefaults(
     type?: string;
     /** If true, this input has required attribute. Optional, default is false. */
     required?: boolean;
+    /** If false, this input does not allow pasting text into field. Optional, default is true. */
+    allowPaste?: boolean;
     /** For autocomplete attribute of <input>. Optional. */
     autocomplete?: string;
     /** Shows grayed out text in background of input if null/empty. Optional. */
@@ -44,11 +46,20 @@ const props = withDefaults(
     id: '',
     type: 'text',
     required: false,
+    allowPaste: true,
     placeholder: '',
     disabled: false,
     invalid: false,
   },
 );
+
+/**
+ * Handle paste event.
+ * @param event Event data.
+ */
+function onPaste(event: ClipboardEvent) {
+  if (!props.allowPaste) event.preventDefault();
+}
 </script>
 
 <template>
@@ -64,6 +75,7 @@ const props = withDefaults(
       :required="required"
       :disabled="disabled"
       :tabindex="disabled ? -1 : 0"
+      @paste="onPaste"
     />
   </div>
 </template>

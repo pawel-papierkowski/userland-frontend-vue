@@ -11,6 +11,7 @@ function createComponent(
   modelValue: string | null,
   id: string,
   autocomplete: string,
+  allowPaste: boolean,
   placeholder: string,
   disabled: boolean,
   invalid: boolean,
@@ -20,6 +21,7 @@ function createComponent(
       modelValue,
       id,
       autocomplete,
+      allowPaste,
       placeholder,
       disabled,
       invalid,
@@ -31,12 +33,16 @@ function createComponent(
 
 /** Tests of TextBox component. */
 describe('TextBox', () => {
-  describe('general', () => {
+
+  // ////////////////////////////////////////////////////////////////////////////
+  // Presentation
+
+  describe('presentation', () => {
     it('has correct presentation for standard state', async () => {
       // Ensures component shows correctly for standard state.
 
       // Arrange&Act: Create textbox.
-      const textBox = createComponent('Text in TextBox', 'someTextBox', 'off', 'Type here', false, false);
+      const textBox = createComponent('Text in TextBox', 'someTextBox', 'off', true, 'Type here', false, false);
 
       // Assert: Input state is correct.
       const input = textBox.find('input');
@@ -56,7 +62,7 @@ describe('TextBox', () => {
       // Ensures component shows correctly for disabled state.
 
       // Arrange&Act: Create textboxx.
-      const textBox = createComponent('Text in TextBox', '', '', '', true, false);
+      const textBox = createComponent('Text in TextBox', '', '', true, '', true, false);
 
       // Assert: Input state is correct.
       const input = textBox.find('input');
@@ -76,7 +82,7 @@ describe('TextBox', () => {
       // Ensures component shows correctly for invalid state.
 
       // Arrange&Act: Create textboxx.
-      const textBox = createComponent(null, '', 'on', '', false, true);
+      const textBox = createComponent(null, '', 'on', true, '', false, true);
 
       // Assert: Input state is correct.
       const input = textBox.find('input');
@@ -91,14 +97,17 @@ describe('TextBox', () => {
       // Assert: Textbox has correct data-testid attribute.
       expect(textBox.attributes('data-testid')).toBe('textbox_');
     });
+  });
 
-    //
+  // ////////////////////////////////////////////////////////////////////////////
+  // Usage
 
+  describe('usage', () => {
     it('typing changes model value', async () => {
       // Ensures component behaves correctly when user types something in input.
 
       // Arrange: Create textbox and set focus.
-      const textBox = createComponent(null, 'someTextBox', 'off', 'Type here', false, false);
+      const textBox = createComponent(null, 'someTextBox', 'off', true, 'Type here', false, false);
 
       // Act: Type something in <input>.
       const input = textBox.find('input');
@@ -113,7 +122,12 @@ describe('TextBox', () => {
       const result = emitted?.at(-1)![0] as string;
       expect(result).toBe('A');
     });
+  });
 
+  // ////////////////////////////////////////////////////////////////////////////
+  // Navigation
+
+  describe('navigation', () => {
     it('clicking <label for> makes <input id> active', async () => {
       // Verifies that clicking a <label for="id"> makes <input id> active.
       // In jsdom, the synthetic click from <label> reaches the <input>, but
@@ -177,14 +191,14 @@ describe('TextBox', () => {
       // not disabled), which means Tab navigation can reach it.
 
       // Arrange: Create enabled textbox.
-      let textBox = createComponent(null, 'enabledTb', '', '', false, false);
+      let textBox = createComponent(null, 'enabledTb', '', true, '', false, false);
       let input = textBox.find('input');
 
       // Assert: Enabled input has tabindex="0" (reachable via Tab).
       expect(input.attributes('tabindex')).toBe('0');
 
       // Arrange: Create disabled textbox.
-      textBox = createComponent(null, 'disabledTb', '', '', true, false);
+      textBox = createComponent(null, 'disabledTb', '', true, '', true, false);
       input = textBox.find('input');
 
       // Assert: Disabled input has tabindex="-1" (skipped by Tab).
