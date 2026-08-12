@@ -1,6 +1,6 @@
 # Vue 3 Frontend Project Instructions
 
-UserLand is portfolio project for frontend in Vue.
+UserLand is portfolio project for frontend in Vue. It is part of bigger project that contains frontend and backend.
 
 ## Tech Stack & Architecture
 - **Framework:** Vue 3 using the Composition API exclusively. 
@@ -37,12 +37,12 @@ UserLand is portfolio project for frontend in Vue.
   - This project uses multiple languages.
   - Languages are in `/src/locales`. Each language has its own subdirectory (name is code of language, for example `/en` subdirectory for English).
   - File structure (directories, file names and language keys in files) must be identical for all languages. Only difference is translation strings.
-  - Emojis are not allowed to be inserted by AI unless explicitly asked. Existing emojis are ok.
+  - Emojis cannot be inserted by AI unless explicitly allowed. Existing emojis are ok.
   - If new language keys and translations are needed, always add them for all available languages (even for texts that are used only in tests) for consistency.
 - **Custom components:**:
   - Must support ARIA where applicable.
   - Must support keyboard navigation inside component where applicable.
-  - Must support tabbing into component and `<label>` clicking (usually via hidden `<button>`, as `<div>` is not labelable). Tests for these two features must use mount with multiple components (like paired label and tested component itself) whenever possible. See relevant tests in `ComboBox.spec.ts` for how to do it.
+  - Must support tabbing into component and `<label>` clicking (usually via hidden `<button>`, as `<div>` is not labelable) where applicable. Tests for these two features must use mount with multiple components (like paired label and tested component itself) whenever possible. See relevant tests in `ComboBox.spec.ts` for how to do it.
 
 ## Available Scripts & Commands
 - **Run dev server:** `npm run dev`
