@@ -298,6 +298,11 @@ describe('AdminUserPermissions', () => {
       const cancelBtns = btns.filter((b) => b.text() === '❌');
       expect(saveBtns.length).toBeGreaterThanOrEqual(1);
       expect(cancelBtns.length).toBeGreaterThanOrEqual(1);
+
+      // Assert: Name combobox shows placeholder (empty name is not a valid option).
+      const combobox = wrapper.find('[data-testid="permission-name"]');
+      expect(combobox.exists()).toBe(true);
+      expect(combobox.find('.combobox-selected-text').text()).toBe('Select permission from list');
     });
   });
 

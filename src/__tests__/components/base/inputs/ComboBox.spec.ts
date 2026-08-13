@@ -139,6 +139,34 @@ describe('ComboBox', () => {
       expect(options[3]?.attributes('data-testid')).toBe('someCombobox_3');
     });
 
+    it('shows placeholder when selected value is not in options', async () => {
+      // Check that combobox shows placeholder text when the current value is not one of the
+      // options.
+
+      // Arrange&Act: Set up combobox with empty string value not present in options.
+      const comboBox = createComponent(
+        '',
+        'someCombobox',
+        createOptionsNoNull(),
+        false,
+        false,
+        'test.comboBox',
+        'test.comboBox.null',
+      );
+
+      // Assert: Placeholder is shown instead of the (missing) value.
+      expect(comboBox.find('.combobox-selected-text').text()).toBe('Option UNSELECTED (null)');
+
+      // Act: Open options and select a valid one.
+      await comboBox.find('.combobox-selected').trigger('click');
+      await nextTick();
+      await comboBox.find('[data-testid="someCombobox_0"]').trigger('click');
+      await nextTick();
+
+      // Assert: Valid option is now shown instead of placeholder.
+      expect(comboBox.find('.combobox-selected-text').text()).toBe('Option A');
+    });
+
     it('is correctly selected via mouse', async () => {
       // Check if combobox correctly selects option via mouse.
 

@@ -7,6 +7,7 @@
  */
 import { ref, reactive, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
 
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
@@ -32,6 +33,8 @@ import ComboBox from '@/components/base/inputs/ComboBox.vue';
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import AdminUserPermissionsFilter from '@/components/pages/admin/user/permissions/AdminUserPermissionsFilter.vue';
+
+const { t } = useI18n();
 
 /** User selected in main user table. Null means no user was selected. */
 const selUserRecord = defineModel<UserTableEntry | null>();
@@ -409,14 +412,14 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
     </template>
     <template #column_name="{ entry, isEditMode, formEntry, fieldMeta }">
       <template v-if="isEditMode && formEntry">
-        <!-- Name of permission requires combobox instead of default input. -->
+        <!-- Name of permission requires combobox instead of default input. Note names are presented as is - no translation here. Only placeholder is explicitly translated. -->
         <ComboBox
           id="permission-name"
           :class="fieldMeta?.css"
           v-model="formEntry.name"
           :options="enUserPermissionName"
           langPrefix=""
-          placeholder="tech.user.permissionName.null"
+          :placeholder="t('tech.user.permissionName.null')"
         />
       </template>
       <template v-else>

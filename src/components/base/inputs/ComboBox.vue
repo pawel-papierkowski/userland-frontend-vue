@@ -32,7 +32,7 @@
  * - options - Array of options, will be shown after user clicks on component. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
- * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation.
+ * - langPrefix - Prefix, used for auto-translating entries in dropdown list. If empty, options and placeholder will be shown as is without translation.
  * - placeholder - Translated text to use if nothing is selected and for 'unselected' option.
  *
  * Notes:
@@ -57,9 +57,9 @@ const props = withDefaults(
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
     invalid?: boolean;
-    /** Prefix, used for auto-translating entries in dropdown list. If empty, options will be shown as is without translation. */
+    /** Prefix, used for auto-translating entries in dropdown list. If empty, options and placeholder will be shown as is without translation. */
     langPrefix?: string;
-    /** Translation key to use if nothing is selected and for 'unselected' option. */
+    /** Translation key to use if nothing is selected and for 'unselected' option. Treated as raw text if langPrefix is empty. */
     placeholder?: string;
   }>(),
   {
@@ -217,14 +217,16 @@ const selectOption = (option: number | string | null) => {
 };
 
 /**
- * Show text of option.
+ * Show text of option if selected. In case of no selection or value that is not in options, placeholder text will be shown.
  * @param option Option to show.
  */
 const showOption = (option: number | string | null): number | string | null => {
-  if (option === null) {
+  // When to show placeholder text?
+  if (option === null || !props.options.includes(option)) {
     if (props.langPrefix) return t(props.placeholder);
     return props.placeholder;
   }
+  // Show actual option value (either translated or as is).
   if (props.langPrefix) return t(props.langPrefix + '.' + option);
   return option;
 };
