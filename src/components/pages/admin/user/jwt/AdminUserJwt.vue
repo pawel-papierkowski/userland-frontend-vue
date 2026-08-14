@@ -35,7 +35,7 @@ const props = withDefaults(
   { isActive: true },
 );
 
-const { usersReloadTrigger } = storeToRefs(useUserEventStore());
+const { usersReloadTrigger, userUpdatedPermissionsTrigger } = storeToRefs(useUserEventStore());
 
 const formFilter: UserJwtTableFilterForm = reactive({
   userId: -1,
@@ -53,10 +53,10 @@ const reloadTrigger = ref(0);
 // WATCHES
 
 /**
- * React on main user table being reloaded.
+ * React on main user table being reloaded or permissions being changed (as it clears JWTs).
  * Forces reload of user JWT table when this tab is active or becomes active again.
  */
-watch([usersReloadTrigger], async () => {
+watch([usersReloadTrigger, userUpdatedPermissionsTrigger], async () => {
   if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
   else reloadTrigger.value++; // reload later, when we open this tab
 });

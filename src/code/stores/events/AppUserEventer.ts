@@ -24,6 +24,22 @@ export class AppUserEventer {
   }
 
   /**
+   * Notifies that user's config has been updated to anyone interested.
+   */
+  public static notifyUserUpdatedConfig() {
+    const eventStore = useUserEventStore();
+    eventStore.notifyUserUpdatedConfig();
+  }
+
+  /**
+   * Notifies that user's permissions has been updated to anyone interested.
+   */
+  public static notifyUserUpdatedPermissions() {
+    const eventStore = useUserEventStore();
+    eventStore.notifyUserUpdatedPermissions();
+  }
+
+  /**
    * Notifies that user data has been updated to anyone interested.
    * @param diffData Changed fields.
    */

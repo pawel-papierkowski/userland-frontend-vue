@@ -18,6 +18,8 @@ export const useUserEventStore = defineStore('user-events', () => {
     usersReloadTrigger.value++;
   }
 
+  //
+
   /** Trigger for user (de)selection. Increment to notify. */
   const userSelectedTrigger = ref(0);
 
@@ -25,6 +27,28 @@ export const useUserEventStore = defineStore('user-events', () => {
   function notifyUserSelected() {
     userSelectedTrigger.value++;
   }
+
+  //
+
+  /** Trigger for user config update. Increment to notify. */
+  const userUpdatedConfigTrigger = ref(0);
+
+  /** Notify that user config has been updated. */
+  function notifyUserUpdatedConfig() {
+    userUpdatedConfigTrigger.value++;
+  }
+
+  //
+
+  /** Trigger for user permissions update. Increment to notify. */
+  const userUpdatedPermissionsTrigger = ref(0);
+
+  /** Notify that user permissions has been updated. */
+  function notifyUserUpdatedPermissions() {
+    userUpdatedPermissionsTrigger.value++;
+  }
+
+  //
 
   /** Trigger for user data update. Increment to notify. */
   const userUpdatedTrigger = ref(0);
@@ -37,7 +61,7 @@ export const useUserEventStore = defineStore('user-events', () => {
     userUpdatedDiff.value = diffData;
   }
 
-  //
+  // //////////////////////////////////////////////////////////////////////////
 
   return {
     usersReloadTrigger,
@@ -45,7 +69,13 @@ export const useUserEventStore = defineStore('user-events', () => {
 
     userSelectedTrigger,
     notifyUserSelected,
-    
+
+    userUpdatedConfigTrigger,
+    notifyUserUpdatedConfig,
+
+    userUpdatedPermissionsTrigger,
+    notifyUserUpdatedPermissions,
+
     userUpdatedTrigger,
     userUpdatedDiff,
     notifyUserUpdated,

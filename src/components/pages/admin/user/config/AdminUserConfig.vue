@@ -10,7 +10,6 @@ import { storeToRefs } from 'pinia';
 
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
 
 import { useUserEventStore } from '@/stores/events/user-events.ts';
@@ -27,6 +26,8 @@ import type {
 import { userConfigTableColumns } from '@/code/data/features/user/user-const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
@@ -146,7 +147,7 @@ const addEntry = async () => {
 };
 
 /**
- * Save given entry.
+ * Save given entry. Both for new entry and editing existing entry.
  * @param entry Table entry.
  */
 const saveEntry = async (entry: UserConfigTableEntry | null) => {
@@ -163,6 +164,7 @@ const saveEntry = async (entry: UserConfigTableEntry | null) => {
       'admin.user.config.table.msg.save.success.title',
       'admin.user.config.table.msg.save.success.content',
     );
+    AppUserEventer.notifyUserUpdatedConfig();
   } catch (error) {
     AppMessager.errorT(
       error,
@@ -230,6 +232,7 @@ const deleteEntry = async (entry: UserConfigTableEntry | null) => {
       'admin.user.config.table.msg.delete.success.title',
       'admin.user.config.table.msg.delete.success.content',
     );
+    AppUserEventer.notifyUserUpdatedConfig();
   } catch (error) {
     AppMessager.errorT(
       error,

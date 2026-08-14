@@ -35,7 +35,7 @@ const props = withDefaults(
   { isActive: true },
 );
 
-const { usersReloadTrigger, userUpdatedTrigger } = storeToRefs(useUserEventStore());
+const { usersReloadTrigger, userUpdatedTrigger, userUpdatedConfigTrigger, userUpdatedPermissionsTrigger } = storeToRefs(useUserEventStore());
 
 const formFilter: UserHistoryTableFilterForm = reactive({
   userId: -1,
@@ -58,7 +58,7 @@ const reloadTrigger = ref(0);
  * React on main user table being reloaded or user data being updated.
  * Forces reload of user history table when this tab is active or becomes active again.
  */
-watch([usersReloadTrigger, userUpdatedTrigger], async () => {
+watch([usersReloadTrigger, userUpdatedTrigger, userUpdatedConfigTrigger, userUpdatedPermissionsTrigger], async () => {
   if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
   else reloadTrigger.value++; // reload later, when we open this tab
 });
