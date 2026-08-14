@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { defDuration } from '@/stores/messages.ts';
+import { durRegistrationSuccess } from '@/stores/messages/const.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
@@ -94,7 +94,7 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', defDuration * 2);
+  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', durRegistrationSuccess);
   logger.debug('Registered user using form data:', { ...form });
 };
 

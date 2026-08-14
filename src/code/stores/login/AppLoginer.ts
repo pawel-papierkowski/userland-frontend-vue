@@ -6,6 +6,7 @@ import { useLoginStore } from '@/stores/login.ts';
 import { prolongExpiration, prolongAfterLongTime } from '@/code/data/app/const.ts';
 import { locstJwt, locstLastApiCall } from '@/code/data/app/storage.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
+import { durSessionExpired } from '@/stores/messages/const.ts';
 
 import apiLogging from '@/services/api-logging.ts';
 
@@ -73,7 +74,7 @@ export class AppLoginer {
     loginStore.loginState = loginStore.resetLoginState();
     localStorage.removeItem(locstJwt);
 
-    AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content');
+    AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content', durSessionExpired);
     logger.debug('Session expired.');
   }
 

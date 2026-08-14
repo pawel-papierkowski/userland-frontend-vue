@@ -87,7 +87,7 @@
               "button": "➕",
               "action": "Dodaj wpis uprawnień.",
               "notYourself": "Nie możesz dodawać swoich własnych uprawnień.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis uprawnienia."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by dodać wpis uprawnienia."
             },
             "save": {
               "button": "💾",
@@ -101,13 +101,13 @@
               "button": "✏️",
               "action": "Edytuj wpis uprawnień.",
               "notYourself": "Nie możesz edytować swoich własnych uprawnień.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis uprawnienia."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by zmodyfikować wpis uprawnienia."
             },
             "delete": {
               "button": "🗑️",
               "action": "Usuń wpis uprawnień.",
               "notYourself": "Nie możesz usuwać swoich własnych uprawnień.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis uprawnienia."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by usunąć wpis uprawnienia."
             }
           },
           "msg": {
@@ -165,7 +165,7 @@
               "button": "➕",
               "action": "Dodaj wpis konfiguracji.",
               "notYourself": "Nie możesz dodawać swojej własnej konfiguracji.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by dodać wpis konfiguracji."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by dodać wpis konfiguracji."
             },
             "save": {
               "button": "💾",
@@ -179,13 +179,13 @@
               "button": "✏️",
               "action": "Edytuj wpis konfiguracji.",
               "notYourself": "Nie możesz edytować swojej własnej konfiguracji.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by zmodyfikować wpis konfiguracji."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by zmodyfikować wpis konfiguracji."
             },
             "delete": {
               "button": "🗑️",
               "action": "Usuń wpis konfiguracji.",
               "notYourself": "Nie możesz usuwać swojej własnej konfiguracji.",
-              "adminOnly": "Musisz mieć uprawnienia administratora, by usunąć wpis konfiguracji."
+              "adminOnly": "Musisz mieć uprawnienia do edycji użytkownika, by usunąć wpis konfiguracji."
             }
           },
           "msg": {

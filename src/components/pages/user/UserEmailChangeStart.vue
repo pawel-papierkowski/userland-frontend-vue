@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { defDuration } from '@/stores/messages.ts';
+import { durEmailChange } from '@/stores/messages/const.ts';
 
 import { Verifier } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -85,7 +85,7 @@ const showMessage = () => {
   AppMessager.successT(
     'user.emailChangeStart.msg.success.title',
     'user.emailChangeStart.msg.success.content',
-    defDuration * 2,
+    durEmailChange,
   );
   logger.debug('Successfully sent email change request.');
 };

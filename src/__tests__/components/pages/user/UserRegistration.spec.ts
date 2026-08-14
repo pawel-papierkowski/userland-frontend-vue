@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';

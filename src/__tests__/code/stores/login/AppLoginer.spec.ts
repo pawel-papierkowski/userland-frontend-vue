@@ -4,7 +4,7 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
 import { useLoginStore } from '@/stores/login.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 

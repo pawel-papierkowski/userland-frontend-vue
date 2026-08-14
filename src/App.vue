@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 
 import { languages, fallbackLang } from '@/code/data/app/const.ts';
 import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
+import { durSessionExpired } from '@/stores/messages/const.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
@@ -23,7 +24,7 @@ const relogUser = () => {
   if (jwt !== null) {
     const result = AppLoginer.login(jwt);
     if (!result) {
-      AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content');
+      AppMessager.warningT('user.session.msg.warning.title', 'user.session.msg.warning.content', durSessionExpired);
     }
   }
 };

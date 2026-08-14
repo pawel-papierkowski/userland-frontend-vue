@@ -3,13 +3,7 @@ import { ref } from 'vue';
 
 import type { Message } from '@/code/stores/messages/types.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
-
-/** Default duration of messages in seconds. */
-export const defDuration = 10;
-/** Default duration of info messages in seconds. */
-export const defDurationInfo = 5;
-/** Default duration of success messages in seconds. */
-export const defDurationSuccess = 5;
+import { defDuration } from '@/stores/messages/const.ts';
 
 /** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
 const maxMessages = 20;

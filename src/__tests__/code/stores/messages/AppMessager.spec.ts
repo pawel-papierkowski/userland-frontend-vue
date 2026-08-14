@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 

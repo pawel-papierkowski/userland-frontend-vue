@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n';
 import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { defDuration } from '@/stores/messages.ts';
+import { durPasswordReset } from '@/stores/messages/const.ts';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifier } from '@/code/utils/Verifer.ts';
@@ -101,7 +101,7 @@ const showMessage = () => {
   AppMessager.successT(
     'user.passwordReset.msg.success.title',
     'user.passwordReset.msg.success.content',
-    defDuration * 2,
+    durPasswordReset,
   );
   logger.debug('Successfully set new password.');
 };

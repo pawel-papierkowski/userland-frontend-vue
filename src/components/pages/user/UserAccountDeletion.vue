@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n';
 import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { defDuration } from '@/stores/messages.ts';
+import { durAccountDelete } from '@/stores/messages/const.ts';
 import type { UserAccountDeleteReq } from '@/code/data/features/user/user-type';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
@@ -53,12 +53,12 @@ const handleAccountDeletion = async () => {
     const payload: UserAccountDeleteReq = { token: tokenStr };
     await backendApiUser.accountDeleteConfirm(payload);
 
-    logger.debug('Deleted user account using token:', tokenStr);
     AppMessager.successT(
       'user.accountDelete.msg.success.title',
       'user.accountDelete.msg.success.content',
-      defDuration * 2,
+      durAccountDelete,
     );
+    logger.debug('Deleted user account.');
 
     // User account ceased to exist, so we log out user on frontend.
     AppLoginer.logout(false);

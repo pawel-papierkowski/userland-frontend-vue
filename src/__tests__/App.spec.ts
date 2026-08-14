@@ -8,7 +8,7 @@ import { logger } from '@/code/utils/logger';
 import realRouter from '@/router';
 import { locstJwt } from '@/code/data/app/storage.ts';
 import { useLoginStore } from '@/stores/login.ts';
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 
 import App from '@/App.vue';

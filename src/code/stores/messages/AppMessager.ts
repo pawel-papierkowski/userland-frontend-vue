@@ -1,5 +1,6 @@
 import { isAxiosError } from 'axios';
-import { useMessageStore, defDuration, defDurationInfo, defDurationSuccess } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
+import { defDurationInfo, defDurationSuccess, defDurationWarning, defDurationFailure, defDurationError } from '@/stores/messages/const.ts';
 import i18n from '@/code/lang/i18n.ts';
 
 const { t } = i18n.global;
@@ -59,7 +60,7 @@ export class AppMessager {
    * @param content Content as i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static warningT(title: string, content: string, duration = defDuration) {
+  public static warningT(title: string, content: string, duration = defDurationWarning) {
     this.warning(t(title), t(content), duration);
   }
 
@@ -69,7 +70,7 @@ export class AppMessager {
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static warning(title: string, content: string, duration = defDuration) {
+  public static warning(title: string, content: string, duration = defDurationWarning) {
     this.showWarning(title, content, duration);
   }
 
@@ -81,7 +82,7 @@ export class AppMessager {
    * @param content Content as i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static failureT(title: string, content: string, duration = defDuration) {
+  public static failureT(title: string, content: string, duration = defDurationFailure) {
     this.failure(t(title), t(content), duration);
   }
 
@@ -91,7 +92,7 @@ export class AppMessager {
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  public static failure(title: string, content: string, duration = defDuration) {
+  public static failure(title: string, content: string, duration = defDurationFailure) {
     this.showFailure(title, content, duration);
   }
 
@@ -105,7 +106,7 @@ export class AppMessager {
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static errorT(error: any, fallbackTitle: string, fallbackContent: string, duration = defDuration) {
+  public static errorT(error: any, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     this.error(error, t(fallbackTitle), t(fallbackContent), duration);
   }
 
@@ -117,7 +118,7 @@ export class AppMessager {
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static error(error: any, fallbackTitle: string, fallbackContent: string, duration = defDuration) {
+  public static error(error: any, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     if (isAxiosError(error)) {
       if (error.response) {
         // The server actually responded with an error (e.g., 400 Bad Request). Show it.

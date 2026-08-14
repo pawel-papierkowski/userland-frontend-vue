@@ -87,7 +87,7 @@
               "button": "➕",
               "action": "Add permission entry.",
               "notYourself": "You cannot add your own permission.",
-              "adminOnly": "You need administration permissions to add permission entry."
+              "adminOnly": "You need user edit permissions to add permission entry."
             },
             "save": {
               "button": "💾",
@@ -101,13 +101,13 @@
               "button": "✏️",
               "action": "Edit permission entry.",
               "notYourself": "You cannot edit your own permissions.",
-              "adminOnly": "You need administration permissions to edit permission entry."
+              "adminOnly": "You need user edit permissions to edit permission entry."
             },
             "delete": {
               "button": "🗑️",
               "action": "Delete configuration entry.",
               "notYourself": "You cannot delete your own permissions.",
-              "adminOnly": "You need administration permissions to delete permission entry."
+              "adminOnly": "You need user edit permissions to delete permission entry."
             }
           },
           "msg": {
@@ -165,7 +165,7 @@
               "button": "➕",
               "action": "Add configuration entry.",
               "notYourself": "You cannot add your own configuration.",
-              "adminOnly": "You need administration permissions to add configuration entry."
+              "adminOnly": "You need user edit permissions to add configuration entry."
             },
             "save": {
               "button": "💾",
@@ -179,13 +179,13 @@
               "button": "✏️",
               "action": "Edit configuration entry.",
               "notYourself": "You cannot edit your own configuration.",
-              "adminOnly": "You need administration permissions to edit configuration entry."
+              "adminOnly": "You need user edit permissions to edit configuration entry."
             },
             "delete": {
               "button": "🗑️",
               "action": "Delete configuration entry.",
               "notYourself": "You cannot delete your own configuration.",
-              "adminOnly": "You need administration permissions to delete configuration entry."
+              "adminOnly": "You need user edit permissions to delete configuration entry."
             }
           },
           "msg": {

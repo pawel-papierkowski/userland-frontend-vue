@@ -11,7 +11,7 @@
  */
 import { useI18n } from 'vue-i18n';
 
-import { useMessageStore } from '@/stores/messages.ts';
+import { useMessageStore } from '@/stores/messages/messages.ts';
 import MessageBox from '@/components/common/messages/MessageBox.vue';
 
 const { t } = useI18n();
