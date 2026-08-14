@@ -641,4 +641,170 @@ describe('Admin User Permissions', () => {
       cy.get('@userPermissionEditRequest.all').should('have.length', 0);
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Sub-tab lazy loading
+
+  describe('sub-tab lazy loading', () => {
+    it('does not load permissions data until the permissions tab is opened', () => {
+      // Arrange: Stub permissions and select a user.
+      stubUserPermissions(permissionEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      setupSelectedUser(fullUsers, ivyTableEntry);
+      cy.wait('@userDataRequest');
+
+      // Assert: No permissions data is loaded while staying on the main tab.
+      cy.get('@userPermissionsRequest.all').should('have.length', 0);
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Open the Permissions tab for the first time.
+      common.openPermissionsTab();
+      cy.wait('@userPermissionsRequest');
+
+      // Assert: Permissions data is loaded only once, the rest of sub-tabs is untouched.
+      cy.get('@userPermissionsRequest.all').should('have.length', 1);
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Go to the Main tab and then return to the Permissions tab (nothing important happened).
+      common.openMainTab();
+      common.openPermissionsTab();
+      cy.waitIfHappens('@userPermissionsRequest', { timeout: 500 });
+
+      // Assert: Permissions data is still loaded only once (no new reload).
+      cy.get('@userPermissionsRequest.all').should('have.length', 1);
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 0 });
+    });
+
+    it('history sub-tab is reloaded when permission entries are changed', () => {
+      // Arrange: Stub permissions and select a user.
+      stubUserPermissions(permissionEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
+
+      // Act: Open the History tab first (loads once).
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: Only history is loaded, permissions are untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 1, configs: 0, tokens: 0, jwt: 0 });
+      cy.get('@userPermissionsRequest.all').should('have.length', 0);
+
+      // Act: Open the Permissions tab (loads once).
+      common.openPermissionsTab();
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 1);
+
+      // Act: Add a new permission entry. Permissions reload, history reload is armed.
+      page.clickAdd();
+      page.selectPermissionName(-1, 'role');
+      page.fillValue(-1, 'value-new');
+      page.clickEntryOption(-1, 'save');
+      cy.wait('@userPermissionEditRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 2);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the added permission entry.
+      expectSubTabCalls(subTableEndpoints, { history: 2, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Edit the added permission entry (it is the first row). Permissions reload, history reload is armed.
+      common.openPermissionsTab();
+      page.clickEntryOption(0, 'edit');
+      page.selectPermissionName(0, 'user');
+      page.fillValue(0, 'value-edited');
+      page.clickEntryOption(0, 'save');
+      cy.wait('@userPermissionEditRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 3);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the edited permission entry.
+      expectSubTabCalls(subTableEndpoints, { history: 3, configs: 0, tokens: 0, jwt: 0 });
+
+      // Act: Delete the edited permission entry. Permissions reload, history reload is armed.
+      common.openPermissionsTab();
+      page.clickEntryOption(0, 'delete');
+      cy.wait('@userPermissionDeleteRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 4);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the deleted permission entry. Other sub-tabs stay untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 4, configs: 0, tokens: 0, jwt: 0 });
+    });
+
+    it('jwt sub-tab is reloaded when permission entries are changed', () => {
+      // Arrange: Stub permissions and select a user.
+      stubUserPermissions(permissionEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
+
+      // Act: Open the Jwt tab first (loads once).
+      common.openJwtTab();
+      cy.wait('@subtab_jwt');
+      // Assert: Only jwt is loaded, permissions are untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 1 });
+      cy.get('@userPermissionsRequest.all').should('have.length', 0);
+
+      // Act: Open the Permissions tab (loads once).
+      common.openPermissionsTab();
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 1);
+
+      // Act: Add a new permission entry. Permissions reload, jwt reload is armed.
+      page.clickAdd();
+      page.selectPermissionName(-1, 'role');
+      page.fillValue(-1, 'value-new');
+      page.clickEntryOption(-1, 'save');
+      cy.wait('@userPermissionEditRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 2);
+
+      // Act: Switch to the Jwt tab.
+      common.openJwtTab();
+      cy.wait('@subtab_jwt');
+      // Assert: Jwt was reloaded due to the added permission entry (permission changes clear JWTs).
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 2 });
+
+      // Act: Edit the added permission entry (it is the first row). Permissions reload, jwt reload is armed.
+      common.openPermissionsTab();
+      page.clickEntryOption(0, 'edit');
+      page.selectPermissionName(0, 'user');
+      page.fillValue(0, 'value-edited');
+      page.clickEntryOption(0, 'save');
+      cy.wait('@userPermissionEditRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 3);
+
+      // Act: Switch to the Jwt tab.
+      common.openJwtTab();
+      cy.wait('@subtab_jwt');
+      // Assert: Jwt was reloaded due to the edited permission entry.
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 3 });
+
+      // Act: Delete the edited permission entry. Permissions reload, jwt reload is armed.
+      common.openPermissionsTab();
+      page.clickEntryOption(0, 'delete');
+      cy.wait('@userPermissionDeleteRequest');
+      cy.wait('@userPermissionsRequest');
+      cy.get('@userPermissionsRequest.all').should('have.length', 4);
+
+      // Act: Switch to the Jwt tab.
+      common.openJwtTab();
+      cy.wait('@subtab_jwt');
+      // Assert: Jwt was reloaded due to the deleted permission entry. Other sub-tabs stay untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 0, configs: 0, tokens: 0, jwt: 4 });
+    });
+  });
 });

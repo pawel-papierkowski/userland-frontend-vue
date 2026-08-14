@@ -638,4 +638,104 @@ describe('Admin User Config', () => {
       cy.get('@userConfigEditRequest.all').should('have.length', 0);
     });
   });
+
+  // //////////////////////////////////////////////////////////////////////////
+  // Sub-tab lazy loading
+
+  describe('sub-tab lazy loading', () => {
+    it('does not load config data until the config tab is opened', () => {
+      // Arrange: Stub config and select a user.
+      stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      setupSelectedUser(fullUsers, ivyTableEntry);
+      cy.wait('@userDataRequest');
+
+      // Assert: No config data is loaded while staying on the main tab.
+      cy.get('@userConfigsRequest.all').should('have.length', 0);
+      expectSubTabCalls(subTableEndpoints, { history: 0, permissions: 0, tokens: 0, jwt: 0 });
+
+      // Act: Open the Config tab for the first time.
+      common.openConfigTab();
+      cy.wait('@userConfigsRequest');
+
+      // Assert: Config data is loaded only once, the rest of sub-tabs is untouched.
+      cy.get('@userConfigsRequest.all').should('have.length', 1);
+      expectSubTabCalls(subTableEndpoints, { history: 0, permissions: 0, tokens: 0, jwt: 0 });
+
+      // Act: Go to the Main tab and then return to the Config tab (nothing important happened).
+      common.openMainTab();
+      common.openConfigTab();
+      cy.waitIfHappens('@userConfigsRequest', { timeout: 500 });
+
+      // Assert: Config data is still loaded only once (no new reload).
+      cy.get('@userConfigsRequest.all').should('have.length', 1);
+      expectSubTabCalls(subTableEndpoints, { history: 0, permissions: 0, tokens: 0, jwt: 0 });
+    });
+
+    it('history sub-tab is reloaded when config entries are changed', () => {
+      // Arrange: Stub config and select a user.
+      stubUserConfigs(configEntries);
+
+      // Act: Visit admin panel page about users.
+      const common = new AdminUserPage();
+      const page = setupSelectedUser(fullUsers, ivyTableEntry);
+
+      // Act: Open the History tab first (loads once).
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: Only history is loaded, config is untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 0, tokens: 0, jwt: 0 });
+      cy.get('@userConfigsRequest.all').should('have.length', 0);
+
+      // Act: Open the Config tab (loads once).
+      common.openConfigTab();
+      cy.wait('@userConfigsRequest');
+      cy.get('@userConfigsRequest.all').should('have.length', 1);
+
+      // Act: Add a new config entry. Config reloads, history reload is armed.
+      page.clickAdd();
+      page.fillName(-1, 'config-new');
+      page.fillValue(-1, 'value-new');
+      page.clickEntryOption(-1, 'save');
+      cy.wait('@userConfigEditRequest');
+      cy.wait('@userConfigsRequest');
+      cy.get('@userConfigsRequest.all').should('have.length', 2);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the added config entry.
+      expectSubTabCalls(subTableEndpoints, { history: 2, permissions: 0, tokens: 0, jwt: 0 });
+
+      // Act: Edit the added config entry (it is the first row). Config reloads, history reload is armed.
+      common.openConfigTab();
+      page.clickEntryOption(0, 'edit');
+      page.fillName(0, 'config-edited');
+      page.clickEntryOption(0, 'save');
+      cy.wait('@userConfigEditRequest');
+      cy.wait('@userConfigsRequest');
+      cy.get('@userConfigsRequest.all').should('have.length', 3);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the edited config entry.
+      expectSubTabCalls(subTableEndpoints, { history: 3, permissions: 0, tokens: 0, jwt: 0 });
+
+      // Act: Delete the edited config entry. Config reloads, history reload is armed.
+      common.openConfigTab();
+      page.clickEntryOption(0, 'delete');
+      cy.wait('@userConfigDeleteRequest');
+      cy.wait('@userConfigsRequest');
+      cy.get('@userConfigsRequest.all').should('have.length', 4);
+
+      // Act: Switch to the History tab.
+      common.openHistoryTab();
+      cy.wait('@subtab_history');
+      // Assert: History was reloaded due to the deleted config entry. Other sub-tabs stay untouched.
+      expectSubTabCalls(subTableEndpoints, { history: 4, permissions: 0, tokens: 0, jwt: 0 });
+    });
+  });
 });

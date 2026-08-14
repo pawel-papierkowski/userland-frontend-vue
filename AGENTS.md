@@ -52,6 +52,7 @@ UserLand is portfolio project for frontend in Vue. It is part of bigger project 
 - **Run all CI tests:** `npm run test:ci`
 - **Run E2E tests (headless/CI):** `npm run test:e2e`
 - **Run E2E tests for single file (headless/CI):** `npm run test:e2e:one -- path/to/file.cy.ts`
+  Important: that command does not rebuild, run `npm run build` before first use of this command.
 - **Run E2E tests (interactive):** `npm run test:e2e:dev`
 
 ## Reviewing code
