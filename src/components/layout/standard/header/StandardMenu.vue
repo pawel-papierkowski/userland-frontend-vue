@@ -28,22 +28,32 @@ function onKeydown(event: KeyboardEvent) {
 
 <template>
   <template v-if="!AppLoginer.isLogged()">
-    <router-link class="nav-major" :to="{ name: 'login' }">{{ t('general.header.login') }}</router-link>
-    <router-link class="nav-major" :to="{ name: 'registration' }">{{ t('general.header.registration') }}</router-link>
+    <router-link class="nav-major" data-testid="header_link_login" :to="{ name: 'login' }">{{
+      t('general.header.login')
+    }}</router-link>
+    <router-link class="nav-major" data-testid="header_link_registration" :to="{ name: 'registration' }">{{
+      t('general.header.registration')
+    }}</router-link>
   </template>
 
-  <DropdownMenu v-if="AppLoginer.isLogged()">
+  <DropdownMenu id="user" v-if="AppLoginer.isLogged()">
     <template #trigger>
-      {{ t('general.header.user.options') }}
+      <span data-testid="header_link_options">{{ t('general.header.user.options') }}</span>
     </template>
 
     <template #content>
       <div tabindex="-1" class="dropdown-content">
-        <router-link class="nav-major" :to="{ name: 'user-profile' }">{{
+        <router-link class="nav-major" data-testid="header_link_profile" :to="{ name: 'user-profile' }">{{
           t('general.header.user.profile')
         }}</router-link>
         <hr />
-        <div class="nav-major" tabindex="0" @click="handleLogout()" @keydown="onKeydown">
+        <div
+          class="nav-major"
+          tabindex="0"
+          data-testid="header_link_logout"
+          @click="handleLogout()"
+          @keydown="onKeydown"
+        >
           {{ t('general.header.user.logout') }}
         </div>
       </div>

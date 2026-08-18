@@ -1,8 +1,9 @@
 # Vue 3 Frontend Project Instructions
 
-UserLand is portfolio project for frontend in Vue. It is part of bigger project that contains frontend and backend.
+**UserLand** is a portfolio project for frontend in Vue. It is part of bigger project that contains frontend and backend.
 
 ## Tech Stack & Architecture
+- **Language:** JavaScript/TypeScript.
 - **Framework:** Vue 3 using the Composition API exclusively. 
 - **Script Setup:** Always use `<script setup>` syntax for components. Do NOT use the Options API or standard `setup()` functions.
 - **State Management:** Use Pinia for state management. Avoid using provide/inject unless strictly necessary for component library development.
@@ -62,6 +63,7 @@ When I ask for review, in order of importance:
 - Analyze general purpose and functionality.
 - Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps: we need to fix that stuff first.
 - Verify algorithm and logic. Is this correct way to do it? Can it be done better?
+- Make sure common programming principles (like DRY) are followed.
 - Find tests for reviewed code and review them too. If tests are missing, note their absence and plan what tests should be added. Do not add them automatically unless explicitly asked.
 - I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
   - You can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
