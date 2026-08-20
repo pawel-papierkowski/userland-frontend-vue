@@ -33,10 +33,10 @@ interface JwtTokenOptions {
 
 /**
  * Create a JWT token for tests.
- * Permissions are encoded the same way as on backend: permission 'role_admin' is stored as field 'role' with value 'admin',
- * 'user_edit' is stored as field 'user' with value 'edit', and so on.
+ * Permissions are encoded the same way as on backend: field 'perm' as map where key is prefix and value is string with suffixes separated by comma.
+ * Example: permission 'role_admin' is stored as field 'role' with value 'admin', 'user_edit' is stored as field 'user' with value 'edit', and so on.
  * Note: signature is a dummy, as tests do not verify it.
- * @param permissions List of permission names to encode in token.
+ * @param permissions List of permissions to encode in token. Example: ['role_admin', 'user_view', 'user_edit'].
  * @param options Optional custom dates.
  * @returns JWT token.
  */
@@ -55,15 +55,20 @@ const createTestToken = (permissions: string[], options: JwtTokenOptions = {}): 
     permissionFields[prefix].push(suffix);
   }
 
-  const payload: Record<string, string | number> = {
-    name: 'Paweł Papierkowski',
-    sub: 'pawel.papierkowski@gmail.com',
+  const perms: Record<string, string> = {};
+  for (const [prefix, suffixes] of Object.entries(permissionFields)) {
+    perms[prefix] = suffixes.join(',');
+  }
+
+  const payload: Record<string, string | number | Record<string, string>> = {
+    // Standard claims.
     iat: Math.floor(issuedAt.getTime() / 1000),
     exp: Math.floor(expiresAt.getTime() / 1000),
+    sub: 'pawel.papierkowski@gmail.com',
+    // Custom claims.
+    name: 'Paweł Papierkowski',
+    perms: perms,
   };
-  for (const [prefix, suffixes] of Object.entries(permissionFields)) {
-    payload[prefix] = suffixes.join(',');
-  }
 
   // Base64Url encode JSON and put it together with a dummy signature (tests do not verify it).
   const encode = (value: unknown): string => {

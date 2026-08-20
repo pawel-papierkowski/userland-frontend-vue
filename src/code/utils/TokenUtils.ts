@@ -1,6 +1,6 @@
 import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 
-/** Utility class for handling tokens. */
+/** Utility class for handling normal tokens. */
 export class TokenUtils {
   /**
    * Resolve token from route query. This will get token from URL's parameter.

@@ -8,7 +8,7 @@ import type { UserFullDataResp, UserConfigTableEntry } from '@/code/data/feature
 import type { EntryMeta } from '@/code/data/features/common/type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 
-import { type JwtPerm } from '@/../cypress/support/helpers/general.ts';
+import { type JwtPerm } from '@/__tests__/_helpers/jwt.ts';
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
 import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';

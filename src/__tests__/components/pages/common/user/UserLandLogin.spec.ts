@@ -11,6 +11,8 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { EnMessageLevel } from '@/code/stores/messages/types.ts';
 import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
 
+import { genJwt } from '@/__tests__/_helpers/jwt.ts';
+
 let pinia: ReturnType<typeof createPinia>;
 
 // Mocking dependencies.
@@ -62,8 +64,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkzNjkyMjMsImV4cCI6MTc3OTM5MDgyM30.03Ymh3s3KcPSGCxCKFpPENOYzoAtV9cicW_KLg7P21U',
+        jwtToken: genJwt()
       },
     } as any);
 
@@ -108,8 +109,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiYWRtaW4sb3BlcmF0b3IiLCJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInVzZXIiOiJlZGl0LHZpZXciLCJzdWIiOiJwYXdlbC5wYXBpZXJrb3dza2lAZ21haWwuY29tIiwiaWF0IjoxNzc5MzY4ODUwLCJleHAiOjE3NzkzOTA0NTB9.bvQhFKdcmXYHIt1Y7f0ivTIYsMtik0gWA3SIyWWxH2A',
+        jwtToken: genJwt([{ prefix: 'role', suffix: 'admin' }])
       },
     } as any);
 
@@ -154,8 +154,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiUGF3ZcWCIFBhcGllcmtvd3NraSIsInN1YiI6InBhd2VsLnBhcGllcmtvd3NraUBnbWFpbC5jb20iLCJpYXQiOjE3NzkzNjkyMjMsImV4cCI6MTc3OTM5MDgyM30.03Ymh3s3KcPSGCxCKFpPENOYzoAtV9cicW_KLg7P21U',
+        jwtToken: genJwt()
       },
     } as any);
 
@@ -198,6 +197,9 @@ describe('UserLandLogin', () => {
     // We somehow got expired token from backend. Maybe user's computer has wrong date&time set?
     // Either way we need to handle it gracefully.
 
+    vi.setSystemTime(new Date('2026-05-19T16:00:00Z'));
+    const jwtTokenExpired = genJwt();
+
     vi.setSystemTime(new Date('2026-05-21T16:00:00Z'));
     const userLogin = createComponent();
     const messageStore = useMessageStore();
@@ -205,8 +207,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response, but with expired token.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken:
-          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWRlci5sZXZhcEBnbWFpbC5jb20iLCJpYXQiOjE3NzkwMzYwNTIsImV4cCI6MTc3OTA1NzY1Mn0.RV0mYMnyhQGLBDnDybK6CM0gA_AV48tGY21Xoxdj6Hk',
+        jwtToken: jwtTokenExpired
       },
     } as any);
 

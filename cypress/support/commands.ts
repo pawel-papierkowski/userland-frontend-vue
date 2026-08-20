@@ -39,7 +39,7 @@
 import type { Interception } from 'cypress/types/net-stubbing';
 
 import { locstLang, locstJwt } from '@/code/data/app/storage.ts';
-import { createTestJwt, type JwtPerm } from '@/../cypress/support/helpers/general.ts';
+import { genJwt, type JwtPerm } from '@/__tests__/_helpers/jwt.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Commands
@@ -77,7 +77,7 @@ Cypress.Commands.add('login', (path: string = '/', permissions: JwtPerm[] = []) 
   return cy.visit(path, {
     onBeforeLoad(win: Cypress.AUTWindow): void {
       win.localStorage.setItem(locstLang, 'en');
-      win.localStorage.setItem(locstJwt, createTestJwt(permissions));
+      win.localStorage.setItem(locstJwt, genJwt(permissions));
     },
   });
 });

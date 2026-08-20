@@ -83,15 +83,19 @@ export const useLoginStore = defineStore('login', () => {
    * @param decodedJwt Decoded JWT.
    */
   function readPermissions(decodedJwt: JwtPayload) {
+    // Permissions are in custom claim 'perms': map of prefix -> comma-separated suffixes.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const perms = (decodedJwt as Record<string, any>).perms;
+    if (typeof perms !== 'object' || perms === null) return;
+
     for (const permPrefix of permissions) {
-      const permSuffix = getValue(decodedJwt, permPrefix);
-      if (permSuffix === null) continue;
+      const permSuffixes = getValue(perms, permPrefix);
+      if (permSuffixes === null) continue;
 
       // Example: prefix 'role' and suffix 'admin,operator' will be mapped to ['role_admin', 'role_operator'].
-      const splitSuffix: string[] = permSuffix.split(',');
-      for (const permSuffix of splitSuffix) {
-        const fullPermission = permPrefix + '_' + permSuffix;
-        loginState.value.permissions.push(fullPermission);
+      const splitSuffixes: string[] = permSuffixes.split(',');
+      for (const permSuffix of splitSuffixes) {
+        loginState.value.permissions.push(permPrefix + '_' + permSuffix);
       }
     }
   }

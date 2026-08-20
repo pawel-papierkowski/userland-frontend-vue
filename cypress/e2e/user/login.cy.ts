@@ -2,7 +2,8 @@
 // Login Page E2E Tests
 
 import { locstJwt } from '@/code/data/app/storage.ts';
-import { createTestJwt } from '@/../cypress/support/helpers/general.ts';
+
+import { genJwt } from '@/__tests__/_helpers/jwt.ts';
 import LoginPage from '@/../cypress/support/pages/standard/LoginPage.ts';
 
 /** Stub API call to return token on successful login. */
@@ -25,7 +26,7 @@ function stubLoginCall409() {
   }).as('loginRequest');
 }
 
-const TEST_JWT = createTestJwt();
+const TEST_JWT = genJwt();
 
 // ////////////////////////////////////////////////////////////////////////////
 
@@ -135,7 +136,7 @@ describe('Login Page', () => {
   describe('admin panel access', () => {
     it('kicks out user without needed permission when accessing admin panel', () => {
       // Arrange: Stub API call to return a valid JWT without any permissions.
-      stubLoginCall200(createTestJwt());
+      stubLoginCall200(genJwt());
 
       const loginPage = new LoginPage();
 
@@ -156,7 +157,7 @@ describe('Login Page', () => {
 
     it('allows user with needed permission to access admin panel', () => {
       // Arrange: Stub API call to return a valid JWT with role_admin permission.
-      stubLoginCall200(createTestJwt([{ prefix: 'role', suffix: 'admin' }]));
+      stubLoginCall200(genJwt([{ prefix: 'role', suffix: 'admin' }]));
 
       const loginPage = new LoginPage();
 
@@ -179,7 +180,7 @@ describe('Login Page', () => {
   describe('admin login page', () => {
     it('redirects to admin main page when logging in with needed permission', () => {
       // Arrange: Stub API call to return a valid JWT with role_admin permission.
-      stubLoginCall200(createTestJwt([{ prefix: 'role', suffix: 'admin' }]));
+      stubLoginCall200(genJwt([{ prefix: 'role', suffix: 'admin' }]));
 
       const loginPage = new LoginPage();
 
@@ -196,7 +197,7 @@ describe('Login Page', () => {
 
     it('redirects to home page when logging in without needed permission', () => {
       // Arrange: Stub API call to return a valid JWT without any permissions.
-      stubLoginCall200(createTestJwt());
+      stubLoginCall200(genJwt());
 
       const loginPage = new LoginPage();
 

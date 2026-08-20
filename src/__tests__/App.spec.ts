@@ -51,7 +51,7 @@ function createFakeJwt(expiresInSeconds: number): string {
       name: 'testuser',
       iat: nowSec,
       exp: nowSec + expiresInSeconds,
-      role: 'user',
+      perms: { role: 'user' },
     }),
   );
   return `${header}.${payload}.fakesignature`;
