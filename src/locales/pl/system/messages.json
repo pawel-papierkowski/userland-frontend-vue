@@ -111,6 +111,10 @@
       "title": "Niepowodzenie",
       "content": "Token użytkownika już istnieje."
     },
+    "user_0014": {
+      "title": "Niepowodzenie",
+      "content": "Token użytkownika już został zużyty."
+    },
     "user_0021": {
       "title": "Niepowodzenie",
       "content": "Zmienna konfiguracji użytkownika nie istnieje."

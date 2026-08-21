@@ -111,6 +111,10 @@
       "title": "Failure",
       "content": "User token already exists."
     },
+    "user_0014": {
+      "title": "Failure",
+      "content": "User token was already used."
+    },
     "user_0021": {
       "title": "Failure",
       "content": "User config entry is missing."
