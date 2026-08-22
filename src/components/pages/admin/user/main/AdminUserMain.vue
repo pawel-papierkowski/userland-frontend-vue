@@ -135,6 +135,7 @@ const saveUserData = async (): Promise<UserFullDataResp | null> => {
 const convertToReq = (form: UserFullDataForm): UserFullDataReq => {
   return {
     id: selUserRecord.value?.id ?? -1,
+    version: form.version,
     username: form.username,
     email: form.email,
     locked: null, // no change, we lock via separate button
@@ -191,6 +192,7 @@ const convertLockToReq = (locked: boolean): UserFullDataReq => {
   // null here means "do not change given value", so we only change field locked
   return {
     id: selUserRecord.value?.id ?? -1,
+    version: form.version,
     username: null,
     email: null,
     locked: locked,
@@ -213,6 +215,7 @@ const clearForm = () => {
 const fillFormData = (data: UserFullDataResp) => {
   form.createdAt = TimeUtils.zoned(data.createdAt);
   form.modifiedAt = TimeUtils.zoned(data.modifiedAt);
+  form.version = data.version;
   form.username = data.username;
   form.email = data.email;
   form.status = data.status;

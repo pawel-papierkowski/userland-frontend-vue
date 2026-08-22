@@ -6,6 +6,7 @@ import UserProfilePage from '@/../cypress/support/pages/standard/UserProfilePage
 
 /** Default user data returned by the view endpoint. Username matches the simulated JWT name. */
 const DEFAULT_USER_DATA = {
+  version: 1,
   username: 'Test User',
   email: 'test@example.com',
   lang: 'en',
@@ -34,13 +35,13 @@ function stubUserView500() {
   }).as('userViewRequest');
 }
 
-/** Stub API call to return success on profile update. */
-function stubUserEdit(delayMs: number = 0) {
+/** Stub API call to return success and user data on profile update. */
+function stubUserEdit(userData: object = DEFAULT_USER_DATA, delayMs: number = 0) {
   cy.intercept('PATCH', '**/api/users/edit', (req) => {
     req.on('response', (res) => {
       if (delayMs > 0) res.setDelay(delayMs);
     });
-    req.reply({ statusCode: 200, body: {} });
+    req.reply({ statusCode: 200, body: userData });
   }).as('userEditRequest');
 }
 
@@ -103,6 +104,7 @@ describe('Profile Page', () => {
       cy.get('@userEditRequest')
         .its('request.body')
         .should('deep.equal', {
+          version: 1,
           username: 'Test User',
           email: 'test@example.com',
           name: 'John',
@@ -122,7 +124,7 @@ describe('Profile Page', () => {
     it('shows busy state on update button while request is in progress', () => {
       // Arrange: Stub API calls, with delayed update so the busy state can be observed.
       stubUserView();
-      stubUserEdit(1500);
+      stubUserEdit(DEFAULT_USER_DATA, 1500);
       cy.login('/user/profile');
 
       const profilePage = new UserProfilePage();

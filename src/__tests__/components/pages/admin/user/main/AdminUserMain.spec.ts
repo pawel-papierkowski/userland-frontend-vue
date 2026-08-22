@@ -81,6 +81,7 @@ const testUserData: UserFullDataResp = {
   id: 10,
   createdAt: '2024-01-15T10:00:00Z',
   modifiedAt: '2024-06-01T08:00:00Z',
+  version: 1,
   username: 'alice',
   email: 'alice@test.com',
   status: 'ACTIVE',
@@ -301,6 +302,7 @@ describe('AdminUserMain', () => {
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
       expect(payload.id).toBe(testUser.id);
+      expect(payload.version).toBe(1);
       expect(payload.username).toBe('alice');
       expect(payload.email).toBe('alice@test.com');
       expect(payload.locked).toBeNull(); // no change, lock via separate button
@@ -395,6 +397,7 @@ describe('AdminUserMain', () => {
       // Assert: EditUserData called with locked: true.
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
+      expect(payload.version).toBe(1);
       expect(payload.locked).toBe(true);
       // Only locked field should be sent; other fields are null (no change).
       expect(payload.username).toBeNull();
@@ -423,6 +426,7 @@ describe('AdminUserMain', () => {
 
       // Assert: EditUserData called with locked: false.
       const payload = mockEditUserData.mock.calls[0]?.[0] as any;
+      expect(payload.version).toBe(1);
       expect(payload.locked).toBe(false);
     });
 

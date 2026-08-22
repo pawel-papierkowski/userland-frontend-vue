@@ -151,6 +151,10 @@
       "title": "Niepowodzenie",
       "content": "Użytkownik jest zablokowany."
     },
+    "user_0130": {
+      "title": "Niepowodzenie",
+      "content": "Dane użytkownika są nieaktualne. Przeładuj i spróbuj ponownie."
+    },
     "user_0201": {
       "title": "Niepowodzenie",
       "content": "Nie można edytować tego użytkownika."

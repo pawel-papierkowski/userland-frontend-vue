@@ -385,6 +385,7 @@ describe('AdminUserHistory', () => {
       userEventStore.notifyUserUpdated({
         createdAt: '',
         modifiedAt: '',
+        version: 1,
         username: null,
         email: null,
         status: '',
@@ -432,6 +433,7 @@ describe('AdminUserHistory', () => {
       userEventStore.notifyUserUpdated({
         createdAt: '',
         modifiedAt: '',
+        version: 1,
         username: null,
         email: null,
         status: '',

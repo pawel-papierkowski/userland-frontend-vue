@@ -45,6 +45,7 @@ export type UserTableEntry = {
 /** User full data update request. Note: null here means "do not change this field". */
 export type UserFullDataReq = {
   id: number; // Identificator of user.
+  version: number;
   username: string | null;
   email: string | null;
   locked: boolean | null;
@@ -57,6 +58,7 @@ export type UserFullDataResp = {
   id: number; // Identificator of user.
   createdAt: string;
   modifiedAt: string;
+  version: number;
   username: string;
   email: string;
   status: string;
@@ -68,6 +70,7 @@ export type UserFullDataResp = {
 export type UserFullDataForm = {
   createdAt: string;
   modifiedAt: string;
+  version: number;
   username: string | null;
   email: string | null;
   status: string;

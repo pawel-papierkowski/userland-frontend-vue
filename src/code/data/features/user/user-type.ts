@@ -47,6 +47,7 @@ export type UserLoginReq = {
 
 /** User view data. */
 export type UserDataResp = {
+  version: number;
   username: string;
   email: string;
   lang: string;
@@ -63,6 +64,7 @@ export type UserProfileData = {
 
 /** User edit form. */
 export type UserEditForm = {
+  version: number;
   username: string;
   email: string; // we won't be editing it directly, but we can show it
   name: string | null;
@@ -71,6 +73,7 @@ export type UserEditForm = {
 
 /** User edit request. */
 export type UserEditReq = {
+  version: number;
   username: string;
   lang: string;
   profile: UserProfileData;

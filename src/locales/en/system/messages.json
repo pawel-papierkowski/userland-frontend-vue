@@ -151,6 +151,10 @@
       "title": "Failure",
       "content": "User is locked."
     },
+    "user_0130": {
+      "title": "Failure",
+      "content": "User data is stale. Reload and try again."
+    },
     "user_0201": {
       "title": "Failure",
       "content": "Cannot edit this user."

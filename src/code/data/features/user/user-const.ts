@@ -16,6 +16,7 @@ import { EnColumnKind } from '@/code/data/features/common/const.ts';
 export const emptyUserForm: UserFullDataForm = {
   createdAt: '',
   modifiedAt: '',
+  version: -1,
   username: null,
   email: null,
   status: '',

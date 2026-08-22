@@ -27,6 +27,7 @@ const isAdminPanel = route.name === 'admin-profile';
 
 /** User data. */
 const form: UserEditForm = reactive({
+  version: -1,
   username: '',
   email: '',
   name: '',
@@ -49,16 +50,21 @@ const usernameError: ComputedRef<string | null> = computed(() => {
 //
 
 /** Fill form. */
-const fillForm = async () => {
+const loadData = async () => {
   clearForm();
   const data = await resolveUserData();
   if (data === null) return; // failed to load data
+  fillForm(data);
+};
 
+/** Fill form. */
+const fillForm = (data: UserDataResp) => {
+  form.version = data.version;
   form.username = data.username;
   form.email = data.email;
   form.name = data.profile.name;
   form.surname = data.profile.surname;
-};
+}
 
 /** Retrieve all available data about currently logged user from backend. */
 const resolveUserData = async (): Promise<UserDataResp | null> => {
@@ -87,7 +93,8 @@ const saveUserData = async () => {
 
   try {
     const editReq = convertToReq(form);
-    await backendApiUser.edit(editReq); // API CALL
+    const response = await backendApiUser.edit(editReq); // API CALL
+    fillForm(response.data);
 
     updateLocalState(editReq);
     showMessage();
@@ -178,7 +185,7 @@ const isInvalid = (msgError: string | null): boolean => {
 
 /** Automatically call once user enters page. */
 onMounted(async () => {
-  await fillForm();
+  await loadData();
 });
 </script>
 

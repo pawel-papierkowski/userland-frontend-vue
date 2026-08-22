@@ -48,9 +48,10 @@ describe('UserLandProfile', () => {
   it('is correctly filled and submits successfully', async () => {
     // Ensures form is correctly filled when you enter page and successful submit results in correct feedback.
 
-    // Arrange: Mock successful API response.
+    // Arrange: Mock successful API response for getting user and user profile data.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
+        version: 1,
         username: 'SomeNick',
         email: 'some.email@test.com',
         lang: 'en',
@@ -60,20 +61,35 @@ describe('UserLandProfile', () => {
         },
       },
     } as any);
-    vi.mocked(backendApiUser.edit).mockResolvedValue({ data: {} } as any);
+    vi.mocked(backendApiUser.edit).mockResolvedValue({
+      data: {
+        version: 2,
+        username: 'SomeNick',
+        email: 'some.email@test.com',
+        lang: 'en',
+        profile: {
+          name: "John",
+          surname: "Smith",
+        },
+      }
+    } as any);
 
+    // Act: instantiate component, that will already cause API view call.
     const userProfile = createComponent();
     const messageStore = useMessageStore();
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: Form fields are filled correctly.
+    // Assert: Verify API view call.
+    expect(backendApiUser.view).toHaveBeenCalled();
+
+    // Assert: Form fields are filled correctly from API view call.
     expect((userProfile.find('[data-testid="username"]').element as HTMLInputElement).value).toBe('SomeNick');
     expect((userProfile.find('[data-testid="email"]').element as HTMLInputElement).value).toBe('some.email@test.com');
     expect((userProfile.find('[data-testid="name"]').element as HTMLInputElement).value).toBe('');
     expect((userProfile.find('[data-testid="surname"]').element as HTMLInputElement).value).toBe('');
 
-    // Arrange: Change some fields.
+    // Act: Change some fields.
     await userProfile.find('[data-testid="name"]').setValue('John');
     await userProfile.find('[data-testid="surname"]').setValue('Smith');
 
@@ -82,16 +98,23 @@ describe('UserLandProfile', () => {
 
     await flushPromises(); // Wait for all promises (API call) to resolve.
 
-    // Assert: Verify API calls.
-    expect(backendApiUser.view).toHaveBeenCalled();
+    // Assert: Verify API edit call.
+    expect(backendApiUser.view).toHaveBeenCalledTimes(1); // no new view calls
     expect(backendApiUser.edit).toHaveBeenCalledWith(
       expect.objectContaining({
+        version: 1,
         username: 'SomeNick',
         lang: 'en',
         name: 'John',
         surname: 'Smith',
       }),
     );
+
+    // Assert: Form fields are filled correctly from API edit call.
+    expect((userProfile.find('[data-testid="username"]').element as HTMLInputElement).value).toBe('SomeNick');
+    expect((userProfile.find('[data-testid="email"]').element as HTMLInputElement).value).toBe('some.email@test.com');
+    expect((userProfile.find('[data-testid="name"]').element as HTMLInputElement).value).toBe('John');
+    expect((userProfile.find('[data-testid="surname"]').element as HTMLInputElement).value).toBe('Smith');
 
     // Assert: Verify success message is present in store.
     expect(messageStore.messages).toHaveLength(1);
@@ -106,9 +129,10 @@ describe('UserLandProfile', () => {
   it('clicks on email change button', async () => {
     // Ensure correct action (redirection) happens when you click on email change button.
 
-    // Arrange: Mock successful API response.
+    // Arrange: Mock successful API response for getting user and user profile data.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
+        version: 1,
         username: 'SomeNick',
         email: 'some.email@test.com',
         lang: 'en',
@@ -139,9 +163,10 @@ describe('UserLandProfile', () => {
   it('clicks on account delete button', async () => {
     // Ensure correct action (redirection) happens when you click on account delete button.
 
-    // Arrange: Mock successful API response.
+    // Arrange: Mock successful API response for getting user and user profile data.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
+        version: 1,
         username: 'SomeNick',
         email: 'some.email@test.com',
         lang: 'en',
@@ -174,7 +199,7 @@ describe('UserLandProfile', () => {
   it('user data loading failed', async () => {
     // Ensure correct form state when loading user data failed.
 
-    // Arrange: Mock API returning 500 error.
+    // Arrange: Mock API returning 500 error for getting user and user profile data.
     const errorResponse = {
       isAxiosError: true,
       response: {
@@ -205,9 +230,10 @@ describe('UserLandProfile', () => {
   it('sends invalid field', async () => {
     // Ensure correct form state when sending user data failed.
 
-    // Arrange: Mock successful API response.
+    // Arrange: Mock successful API response for getting user and user profile data.
     vi.mocked(backendApiUser.view).mockResolvedValue({
       data: {
+        version: 1,
         username: 'SomeNick',
         email: 'some.email@test.com',
         lang: 'en',
