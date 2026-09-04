@@ -19,6 +19,7 @@ import type {
   UserFullDataReq,
   UserFullDataResp,
   UserFullDataForm,
+  UserFullDataFormDiff,
 } from '@/code/data/features/user/admin-user-type.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
@@ -36,8 +37,8 @@ const { usersReloadTrigger } = storeToRefs(useUserEventStore());
 
 /** User data for form. */
 const form: UserFullDataForm = reactive({ ...emptyUserForm });
-/** Version of form just after load or update to determine differences. */
-const diffForm: Ref<UserFullDataForm> = ref({ ...emptyUserForm });
+/** Version of form just after load or update to determine differences. Fields are nulled when unchanged. */
+const diffForm: Ref<UserFullDataFormDiff> = ref({ ...emptyUserForm });
 
 /** Selected user record. */
 const selUserRecord = defineModel<UserTableEntry | null>();
@@ -238,11 +239,9 @@ const diffFormData = () => {
  * Compare form and diffForm field. Unchanged field is nulled.
  * @param fieldName Name of field to update.
  */
-const resetDiffField = (fieldName: string) => {
-  const key = fieldName as keyof UserFullDataForm; // Cast fieldName to a valid key of the form type.
-  if (form[key] === diffForm.value[key]) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (diffForm.value as any)[key] = null;
+const resetDiffField = (fieldName: keyof UserFullDataForm) => {
+  if (form[fieldName] === diffForm.value[fieldName]) {
+    diffForm.value[fieldName] = null;
   }
 };
 

@@ -8,6 +8,7 @@ import TimePicker from '@/components/base/inputs/datetimepicker/TimePicker.vue';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockOnClickOutside = vi.hoisted(() => vi.fn<(...args: any[]) => any>());
+//const mockOnClickOutside = vi.fn<(event: Event) => void>();
 
 vi.mock('@vueuse/core', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@vueuse/core')>();

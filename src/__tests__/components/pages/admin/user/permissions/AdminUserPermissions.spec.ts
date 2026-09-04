@@ -145,11 +145,11 @@ beforeEach(() => {
   setActivePinia(pinia);
   vi.clearAllMocks();
 
-  mockLoadPermissionsPage = vi.mocked(backendApiAdminUser.loadPermissionsPage) as any;
-  mockEditEntry = vi.mocked(backendApiAdminUser.editPermissionEntry) as any;
-  mockDeleteEntry = vi.mocked(backendApiAdminUser.deletePermissionEntry) as any;
-  mockGetEmail = vi.mocked(AppLoginer.getEmail) as any;
-  mockHasPermissionsAny = vi.mocked(AppLoginer.hasPermissionsAny) as any;
+  mockLoadPermissionsPage = vi.mocked(backendApiAdminUser.loadPermissionsPage);
+  mockEditEntry = vi.mocked(backendApiAdminUser.editPermissionEntry);
+  mockDeleteEntry = vi.mocked(backendApiAdminUser.deletePermissionEntry);
+  mockGetEmail = vi.mocked(AppLoginer.getEmail);
+  mockHasPermissionsAny = vi.mocked(AppLoginer.hasPermissionsAny);
 
   // Default: admin user with full access, viewing another user.
   mockGetEmail.mockReturnValue('admin@test.com');
@@ -212,7 +212,7 @@ describe('AdminUserPermissions', () => {
   describe('resolveAdd permission checks', () => {
     it('shows add button ENABLED when user has permissions', async () => {
       // Arrange: User has permissions and is not self.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
       mockGetEmail.mockReturnValue('admin@test.com');
       mockHasPermissionsAny.mockReturnValue(true);
@@ -233,7 +233,7 @@ describe('AdminUserPermissions', () => {
 
     it('shows add button DISABLED when user lacks permissions', async () => {
       // Arrange: User lacks edit permissions.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
       mockHasPermissionsAny.mockReturnValue(false);
 
@@ -253,7 +253,7 @@ describe('AdminUserPermissions', () => {
 
     it('shows add button DISABLED when selected user is self', async () => {
       // Arrange: Selected user has same email as logged-in user.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
       mockGetEmail.mockReturnValue('user1@test.com');
 
@@ -277,7 +277,7 @@ describe('AdminUserPermissions', () => {
   describe('addEntry', () => {
     it('sets up empty form and shows new entry row', async () => {
       // Arrange: Mount with user and resolved data.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -312,7 +312,7 @@ describe('AdminUserPermissions', () => {
   describe('saveEntry validation', () => {
     it('rejects save when name is empty', async () => {
       // Arrange: Mount with user, add new entry.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -341,7 +341,7 @@ describe('AdminUserPermissions', () => {
 
     it('rejects save when value is empty', async () => {
       // Arrange: Mount with user, add new entry.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -386,7 +386,7 @@ describe('AdminUserPermissions', () => {
   describe('saveEntry', () => {
     it('calls API and shows success on save for new entry', async () => {
       // Arrange: Mount with user, add new entry.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
       mockEditEntry.mockResolvedValue({ data: {} });
 
@@ -438,7 +438,7 @@ describe('AdminUserPermissions', () => {
 
     it('calls API with entry id for existing entry', async () => {
       // Arrange: Mount with user and entries in the table.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(testUser1);
@@ -483,7 +483,7 @@ describe('AdminUserPermissions', () => {
   describe('cancelEntry', () => {
     it('exits add mode when cancel is clicked', async () => {
       // Arrange: Mount with user, add new entry.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -517,7 +517,7 @@ describe('AdminUserPermissions', () => {
   describe('editEntry', () => {
     it('populates form and selects entry when edit is clicked', async () => {
       // Arrange: Mount with user and entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -549,7 +549,7 @@ describe('AdminUserPermissions', () => {
   describe('deleteEntry', () => {
     it('calls API and shows success on delete', async () => {
       // Arrange: Mount with user and entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
       mockDeleteEntry.mockResolvedValue({ data: {} });
 
@@ -587,7 +587,7 @@ describe('AdminUserPermissions', () => {
   describe('user selection', () => {
     it('deselects entry when user selection changes', async () => {
       // Arrange: Mount with user.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -634,7 +634,7 @@ describe('AdminUserPermissions', () => {
 
     it('load data for the selected user when the tab is active', async () => {
       // Arrange & Act: Mount with a user selected on the active tab.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       createComponent(testUser1, true);
@@ -647,7 +647,7 @@ describe('AdminUserPermissions', () => {
     });
 
     it('reload immediately when user table is reloaded and tab is active', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an active tab.
@@ -671,7 +671,7 @@ describe('AdminUserPermissions', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -684,7 +684,7 @@ describe('AdminUserPermissions', () => {
     });
 
     it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an inactive tab.
@@ -708,7 +708,7 @@ describe('AdminUserPermissions', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -727,7 +727,7 @@ describe('AdminUserPermissions', () => {
   describe('error handling', () => {
     it('shows error when saveEntry fails', async () => {
       // Arrange: Mount with user, add new entry, save API fails.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -776,7 +776,7 @@ describe('AdminUserPermissions', () => {
 
     it('shows error when deleteEntry fails', async () => {
       // Arrange: Mount with user and entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPermissionsPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);

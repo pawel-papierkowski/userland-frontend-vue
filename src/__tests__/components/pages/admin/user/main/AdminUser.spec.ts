@@ -113,7 +113,7 @@ beforeEach(() => {
   setActivePinia(pinia);
   vi.clearAllMocks();
 
-  mockLoadPage = vi.mocked(backendApiAdminUser.loadPage) as any;
+  mockLoadPage = vi.mocked(backendApiAdminUser.loadPage);
 
   // Default: TimeUtils.cnvDate returns null (dates are null by default).
   vi.mocked(TimeUtils.cnvDate).mockReturnValue(null);
@@ -170,7 +170,7 @@ describe('AdminUser', () => {
   describe('initial load', () => {
     it('calls loadPage on mount', () => {
       // Arrange: Create deferred promise to control response timing.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       // Act: Mount component.
@@ -185,7 +185,7 @@ describe('AdminUser', () => {
 
     it('renders TablePage with entries after successful load', async () => {
       // Arrange: Mount and resolve with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       const wrapper = createComponent();
@@ -203,7 +203,7 @@ describe('AdminUser', () => {
 
     it('renders empty state when no entries returned', async () => {
       // Arrange: Mount and resolve with empty entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       const wrapper = createComponent();
@@ -220,7 +220,7 @@ describe('AdminUser', () => {
 
     it('sets isLoading to true during load and false after', async () => {
       // Arrange: Create deferred promise.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       const wrapper = createComponent();
@@ -244,7 +244,7 @@ describe('AdminUser', () => {
   describe('error handling', () => {
     it('shows error message on load failure', async () => {
       // Arrange: Mount and reject the API call.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       createComponent();
@@ -269,7 +269,7 @@ describe('AdminUser', () => {
 
     it('logs error on load failure', async () => {
       // Arrange: Mount and reject.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       createComponent();
@@ -295,7 +295,7 @@ describe('AdminUser', () => {
   describe('date conversion (convertToReq)', () => {
     it('calls loadPage with null dates when form has no dates', async () => {
       // Arrange: Mount — default form has all-null dates, cnvDate returns null.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       createComponent();
@@ -312,7 +312,7 @@ describe('AdminUser', () => {
 
     it('appends T00:00:00 to createdFromAt date', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -342,7 +342,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
       vi.mocked(TimeUtils.cnvDate).mockClear();
 
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
       await filterComp.vm.$emit('reload');
       await nextTick();
@@ -360,7 +360,7 @@ describe('AdminUser', () => {
 
     it('appends T23:59:59.999999 to createdToAt date', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -389,7 +389,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
       vi.mocked(TimeUtils.cnvDate).mockClear();
 
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
       await filterComp.vm.$emit('reload');
       await nextTick();
@@ -412,7 +412,7 @@ describe('AdminUser', () => {
   describe('entry processing', () => {
     it('calls TimeUtils.zoned on each entry createdAt', async () => {
       // Arrange: Mount and resolve with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(promise);
 
       createComponent();
@@ -436,7 +436,7 @@ describe('AdminUser', () => {
   describe('pagination', () => {
     it('reloads data when currPage changes', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -448,7 +448,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
 
       // Act: Emit page change from TablePage stub.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const tablePageComp = findStubComp(wrapper, 'TablePage');
@@ -472,7 +472,7 @@ describe('AdminUser', () => {
   describe('sorting', () => {
     it('reloads data when currSortBy changes', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -484,7 +484,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
 
       // Act: Emit sort-by change from TablePage stub.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const tablePageComp = findStubComp(wrapper, 'TablePage');
@@ -501,7 +501,7 @@ describe('AdminUser', () => {
 
     it('reloads data when currSortOrder changes', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -513,7 +513,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
 
       // Act: Emit sort-order change from TablePage stub.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const tablePageComp = findStubComp(wrapper, 'TablePage');
@@ -532,7 +532,7 @@ describe('AdminUser', () => {
       // Arrange: Mount and let initial load complete. The response carries a
       // non-null sort, so the watcher guards (oldVal === null) do not suppress
       // a subsequent user-triggered sort change.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       const wrapper = createComponent();
@@ -545,7 +545,7 @@ describe('AdminUser', () => {
 
       // Act: Emit sort column AND sort order from the TablePage stub in the
       // same flush, mimicking a click on a fresh column header.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const tablePageComp = findStubComp(wrapper, 'TablePage');
@@ -574,7 +574,7 @@ describe('AdminUser', () => {
   describe('user update trigger', () => {
     it('reloads table when userUpdatedTrigger fires with changed username', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       createComponent();
@@ -586,7 +586,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
 
       // Act: Notify user update with changed username.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const userEventStore = useUserEventStore();
@@ -604,7 +604,7 @@ describe('AdminUser', () => {
 
     it('reloads table when userUpdatedTrigger fires with changed email', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       createComponent();
@@ -616,7 +616,7 @@ describe('AdminUser', () => {
       mockLoadPage.mockClear();
 
       // Act: Notify user update with changed email.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p2);
 
       const userEventStore = useUserEventStore();
@@ -634,7 +634,7 @@ describe('AdminUser', () => {
 
     it('does not reload when userUpdatedTrigger fires with no relevant changes', async () => {
       // Arrange: Mount and let initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockLoadPage.mockReturnValue(p1);
 
       createComponent();

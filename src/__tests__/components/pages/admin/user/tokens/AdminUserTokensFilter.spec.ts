@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
@@ -68,7 +68,7 @@ describe('AdminUserTokensFilter', () => {
       const wrapper = createComponent(defaultForm, false);
 
       // Assert: Two pickers for from/to dates.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers).toHaveLength(2);
     });
 
@@ -159,7 +159,7 @@ describe('AdminUserTokensFilter', () => {
       const wrapper = createComponent(defaultForm, false, true);
 
       // Assert: Both pickers receive disabled=true.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('disabled')).toBe(true);
       expect(pickers[1]!.props('disabled')).toBe(true);
     });
@@ -169,7 +169,7 @@ describe('AdminUserTokensFilter', () => {
       const wrapper = createComponent(defaultForm, false);
 
       // Assert: Both pickers receive disabled=false.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('disabled')).toBe(false);
       expect(pickers[1]!.props('disabled')).toBe(false);
     });
@@ -184,7 +184,7 @@ describe('AdminUserTokensFilter', () => {
       const wrapper = createComponent(defaultForm, false);
 
       // Assert: First picker's max is the to-date.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('dateTimeMax')).toBe(defaultForm.createdToAt);
     });
 
@@ -193,7 +193,7 @@ describe('AdminUserTokensFilter', () => {
       const wrapper = createComponent(defaultForm, false);
 
       // Assert: Second picker's min is the from-date.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[1]!.props('dateTimeMin')).toBe(defaultForm.createdFromAt);
     });
   });
@@ -214,7 +214,7 @@ describe('AdminUserTokensFilter', () => {
       const newDate = new Date('2024-06-15');
 
       // Act: From picker emits new value.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[0]!.vm.$emit('update:modelValue', newDate);
 
       // Assert: Form's createdFromAt updated.
@@ -233,7 +233,7 @@ describe('AdminUserTokensFilter', () => {
       const newDate = new Date('2024-06-15');
 
       // Act: To picker emits new value.
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[1]!.vm.$emit('update:modelValue', newDate);
 
       // Assert: Form's createdToAt updated.

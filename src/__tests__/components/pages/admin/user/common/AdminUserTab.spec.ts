@@ -44,7 +44,7 @@ interface TestEntry {
   id: number;
   name: string;
   value: string;
-  [key: string]: any;
+  [key: string]: string | number;
 }
 
 interface TestFormFilter {
@@ -185,7 +185,7 @@ let mockFetchData: ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockConvertToReq = vi.fn<(form: any, userId: number) => void>((form: any, userId: number) => ({ ...form, userId }));
+  mockConvertToReq = vi.fn<(form: Record<string, unknown>, userId: number) => void>((form: Record<string, unknown>, userId: number) => ({ ...form, userId }));
   mockFetchData = vi.fn<() => void>();
 });
 
@@ -234,7 +234,7 @@ describe('AdminUserTab', () => {
   describe('user selected', () => {
     it('calls convertToReq and fetchData on mount with user', async () => {
       // Arrange: Create deferred promise to control fetch timing.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       // Act: Mount with a user selected.
@@ -255,7 +255,7 @@ describe('AdminUserTab', () => {
 
     it('calls processEntry for each returned entry', async () => {
       // Arrange: Fetch resolves with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       // Create transformation that marks each entry.
@@ -279,7 +279,7 @@ describe('AdminUserTab', () => {
 
     it('resets selEntryRecord after data load', async () => {
       // Arrange: Pre-select an entry, then fetch new data.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       const wrapper = createComponent({
@@ -302,7 +302,7 @@ describe('AdminUserTab', () => {
 
     it('shows emptyText when data is empty with user selected', async () => {
       // Arrange: Fetch resolves with empty entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData });
@@ -321,7 +321,7 @@ describe('AdminUserTab', () => {
 
     it('renders table rows when data is loaded', async () => {
       // Arrange: Fetch resolves with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       const wrapper = createComponent({ modelValue: testUser1, fetchData: mockFetchData });
@@ -347,7 +347,7 @@ describe('AdminUserTab', () => {
   describe('user change', () => {
     it('refetches data when user changes', async () => {
       // Arrange: Mount with first user, let fetch complete.
-      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<any>();
+      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise1);
 
       const wrapper = createComponent({
@@ -365,7 +365,7 @@ describe('AdminUserTab', () => {
       vi.clearAllMocks();
 
       // Act: Change user.
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise2);
 
       await wrapper.setProps({ modelValue: testUser2 });
@@ -403,7 +403,7 @@ describe('AdminUserTab', () => {
 
     it('fetches when the tab becomes active and data was not loaded yet', async () => {
       // Arrange: Mount with user on an inactive tab, then activate it.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       const wrapper = createComponent({
@@ -428,7 +428,7 @@ describe('AdminUserTab', () => {
 
     it('does not refetch when tab is reactivated for an already-loaded user', async () => {
       // Arrange: Mount active with user and let the initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p1);
 
       const wrapper = createComponent({
@@ -453,7 +453,7 @@ describe('AdminUserTab', () => {
 
     it('refetches on reactivation when reloadTrigger was bumped', async () => {
       // Arrange: Mount active with user and let the initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p1);
 
       const wrapper = createComponent({
@@ -469,7 +469,7 @@ describe('AdminUserTab', () => {
       // Act: User data was updated (reloadTrigger bumped), then tab is reactivated.
       await wrapper.setProps({ reloadTrigger: 1 });
       await wrapper.setProps({ isActive: false });
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -484,7 +484,7 @@ describe('AdminUserTab', () => {
 
     it('clears previously shown data when user is deselected', async () => {
       // Arrange: Mount with a user and let the initial load complete with rows.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p1);
 
       const wrapper = createComponent({
@@ -517,7 +517,7 @@ describe('AdminUserTab', () => {
 
     it('refetches when same user is re-selected after being deselected', async () => {
       // Arrange: Mount active with user, let the initial load complete.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p1);
 
       const wrapper = createComponent({
@@ -532,7 +532,7 @@ describe('AdminUserTab', () => {
 
       // Act: Deselect user, then select the same user again.
       await wrapper.setProps({ modelValue: null });
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p2);
       await wrapper.setProps({ modelValue: testUser1 });
       await nextTick();
@@ -554,7 +554,7 @@ describe('AdminUserTab', () => {
       // Arrange: Mount with user and let the initial load complete. The
       // response echoes a non-null DESC sort, so the watcher guards (oldVal
       // === null) do not suppress a subsequent user-triggered sort change.
-      const { promise: p1, resolve: r1 } = createDeferredPromise<any>();
+      const { promise: p1, resolve: r1 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p1);
 
       const wrapper = createComponent({
@@ -571,7 +571,7 @@ describe('AdminUserTab', () => {
 
       // Act: Click a fresh sortable column (Value, defSort ASC). TablePage
       // emits both sort column and sort order in the same flush.
-      const { promise: p2, resolve: r2 } = createDeferredPromise<any>();
+      const { promise: p2, resolve: r2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(p2);
 
       const valueHeader = wrapper.findAll('.table-header-cell').find((el) => el.text() === 'Value');
@@ -595,7 +595,7 @@ describe('AdminUserTab', () => {
   describe('error handling', () => {
     it('shows error message on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       createComponent({ modelValue: testUser1, fetchData: mockFetchData });
@@ -621,7 +621,7 @@ describe('AdminUserTab', () => {
 
     it('logs error on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       createComponent({ modelValue: testUser1, fetchData: mockFetchData });
@@ -647,7 +647,7 @@ describe('AdminUserTab', () => {
   describe('exposed methods', () => {
     it('handleReload is exposed and triggers data fetch', async () => {
       // Arrange: Mount with no user, fetchData ready.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise);
 
       const wrapper = createComponent({
@@ -663,7 +663,7 @@ describe('AdminUserTab', () => {
       vi.clearAllMocks();
 
       // Act: Call exposed handleReload.
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise2);
 
       (wrapper.vm as any).handleReload();

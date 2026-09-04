@@ -1,4 +1,4 @@
-import { isAxiosError } from 'axios';
+import { isAxiosError, type AxiosError } from 'axios';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import { defDurationInfo, defDurationSuccess, defDurationWarning, defDurationFailure, defDurationError } from '@/stores/messages/const.ts';
 import i18n from '@/code/lang/i18n.ts';
@@ -105,8 +105,7 @@ export class AppMessager {
    * @param fallbackContent Content to use if cannot process error as i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static errorT(error: any, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
+  public static errorT(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     this.error(error, t(fallbackTitle), t(fallbackContent), duration);
   }
 
@@ -117,8 +116,7 @@ export class AppMessager {
    * @param fallbackContent Content string to use if cannot process error.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public static error(error: any, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
+  public static error(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     if (isAxiosError(error)) {
       if (error.response) {
         // The server actually responded with an error (e.g., 400 Bad Request). Show it.
@@ -142,10 +140,11 @@ export class AppMessager {
    * @param fallbackContent Fallback content.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static processResponseError(error: any, fallbackTitle: string, fallbackContent: string, duration: number) {
-    const data = error.response.data;
-    const errCode = data?.errCode;
+  private static processResponseError(error: AxiosError, fallbackTitle: string, fallbackContent: string, duration: number) {
+    if (!error.response) return; // guard, should never happen as caller checks this
+
+    const data = error.response.data as Record<string, unknown>;
+    const errCode = typeof data?.errCode === 'string' ? data.errCode : null;
 
     // First, check if error code is present in response.
     const errCodeTitleKey = `msgs.${errCode}.title`;

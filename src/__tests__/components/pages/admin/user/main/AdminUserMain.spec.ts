@@ -131,12 +131,12 @@ beforeEach(() => {
   setActivePinia(pinia);
   vi.clearAllMocks();
 
-  mockLoadUserData = vi.mocked(backendApiAdminUser.loadUserData) as any;
-  mockEditUserData = vi.mocked(backendApiAdminUser.editUserData) as any;
-  mockGetEmail = vi.mocked(AppLoginer.getEmail) as any;
-  mockHasPermission = vi.mocked(AppLoginer.hasPermission) as any;
-  mockHasPermissionsAny = vi.mocked(AppLoginer.hasPermissionsAny) as any;
-  mockHasPermissionsAll = vi.mocked(AppLoginer.hasPermissionsAll) as any;
+  mockLoadUserData = vi.mocked(backendApiAdminUser.loadUserData);
+  mockEditUserData = vi.mocked(backendApiAdminUser.editUserData);
+  mockGetEmail = vi.mocked(AppLoginer.getEmail);
+  mockHasPermission = vi.mocked(AppLoginer.hasPermission);
+  mockHasPermissionsAny = vi.mocked(AppLoginer.hasPermissionsAny);
+  mockHasPermissionsAll = vi.mocked(AppLoginer.hasPermissionsAll);
 
   // Default: admin user viewing another user, has full permissions.
   mockGetEmail.mockReturnValue('admin@test.com');
@@ -150,12 +150,12 @@ function createComponent(modelValue?: TestUserEntry | null, isActive = true) {
   return mount(AdminUserMain, {
     global: {
       plugins: [i18n],
-      stubs: { TextBox: false }
+      stubs: { TextBox: false },
     },
     props: {
       modelValue: modelValue ?? null,
       isActive,
-     },
+    },
   });
 }
 
@@ -174,7 +174,7 @@ describe('AdminUserMain', () => {
     });
 
     it('loads data when user is selected via watch', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -191,7 +191,7 @@ describe('AdminUserMain', () => {
     });
 
     it('shows spinner during loading and form after', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -213,7 +213,7 @@ describe('AdminUserMain', () => {
     });
 
     it('fills form fields from response data', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -247,7 +247,7 @@ describe('AdminUserMain', () => {
     });
 
     it('shows error message on load failure', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -283,7 +283,7 @@ describe('AdminUserMain', () => {
   describe('update', () => {
     it('calls editUserData with correct payload on update', async () => {
       // Arrange: Load user data.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -312,7 +312,7 @@ describe('AdminUserMain', () => {
 
     it('notifies user updated after success', async () => {
       // Arrange: Load user data.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -335,7 +335,7 @@ describe('AdminUserMain', () => {
 
     it('shows error on update failure', async () => {
       // Arrange: Load user data.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -378,7 +378,7 @@ describe('AdminUserMain', () => {
   describe('lock toggle', () => {
     it('sends locked=true when unlocking user', async () => {
       // Arrange: Load unlocked user.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -408,7 +408,7 @@ describe('AdminUserMain', () => {
 
     it('sends locked=false when locking user', async () => {
       // Arrange: Load locked user.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -432,7 +432,7 @@ describe('AdminUserMain', () => {
 
     it('shows error on lock failure', async () => {
       // Arrange: Load unlocked user.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -465,7 +465,7 @@ describe('AdminUserMain', () => {
     it('disables all inputs when viewing own account', async () => {
       // Arrange: Logged-in user matches the viewed user.
       mockGetEmail.mockReturnValue('alice@test.com');
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -489,7 +489,7 @@ describe('AdminUserMain', () => {
       mockHasPermission.mockReturnValue(false);
       mockHasPermissionsAny.mockReturnValue(false);
       mockHasPermissionsAll.mockReturnValue(false);
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -518,7 +518,7 @@ describe('AdminUserMain', () => {
 
     it('enables form for admin viewing another user', async () => {
       // Arrange: Admin viewing another user (default mocks).
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -546,7 +546,7 @@ describe('AdminUserMain', () => {
       // Arrange: Logged-in user matches viewed user, has permissions.
       mockGetEmail.mockReturnValue('alice@test.com');
       mockHasPermissionsAny.mockReturnValue(true);
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -564,7 +564,7 @@ describe('AdminUserMain', () => {
 
     it('does not show warning when viewing another user', async () => {
       // Arrange: Admin viewing another user (default mocks).
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(promise);
 
       const wrapper = createComponent(null);
@@ -585,7 +585,7 @@ describe('AdminUserMain', () => {
   describe('busy state', () => {
     it('disables buttons while update is in progress', async () => {
       // Arrange: Load user data.
-      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<any>();
+      const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
 
       const wrapper = createComponent(null);
@@ -596,7 +596,7 @@ describe('AdminUserMain', () => {
       await nextTick();
 
       // Act: Click update, but keep the promise pending.
-      const { promise: updatePromise } = createDeferredPromise<any>();
+      const { promise: updatePromise } = createDeferredPromise<unknown>();
       mockEditUserData.mockReturnValue(updatePromise);
       await wrapper.find('[data-testid="user-form-btn-update"]').trigger('click');
       await nextTick();
@@ -607,104 +607,104 @@ describe('AdminUserMain', () => {
     });
   });
 
-    // //////////////////////////////////////////////////////////////////////////
-    // Deferred reload (user data reload / tab activation)
+  // //////////////////////////////////////////////////////////////////////////
+  // Deferred reload (user data reload / tab activation)
 
-    describe('deferred reload', () => {
-      it('do not load data when user is selected but tab is inactive', async () => {
-        // Arrange & Act: Mount with a user selected on an inactive tab.
-        createComponent(testUser, false);
+  describe('deferred reload', () => {
+    it('do not load data when user is selected but tab is inactive', async () => {
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      createComponent(testUser, false);
 
-        // Assert: No fetch is made for an inactive tab.
-        expect(mockLoadUserData).not.toHaveBeenCalled();
-      });
-
-      it('load data for the selected user when the tab is active', async () => {
-        // Arrange & Act: Mount with a user selected on the active tab.
-        const { promise, resolve } = createDeferredPromise<any>();
-        mockLoadUserData.mockReturnValue(promise);
-
-        createComponent(testUser, true);
-        resolve({ data: testUserData });
-        await flushPromises();
-        await nextTick();
-
-        // Assert: Data was loaded.
-        expect(mockLoadUserData).toHaveBeenCalledTimes(1);
-      });
-
-      it('reload immediately when user table is reloaded and tab is active', async () => {
-        const { promise, resolve } = createDeferredPromise<any>();
-        mockLoadUserData.mockReturnValue(promise);
-
-        // Arrange & Act: Mount with a user selected on an active tab.
-        const wrapper = createComponent(testUser);
-
-       resolve({ data: testUserData });
-        await flushPromises();
-        await nextTick();
-
-        // Assert: Reload of subtable was called (tab is active).
-        expect(mockLoadUserData).toHaveBeenCalledTimes(1);
-        vi.clearAllMocks();
-
-        // Act: Notify main user table was reloaded.
-        const userEventStore = useUserEventStore();
-        userEventStore.notifyUsersReload();
-        await nextTick();
-
-        // Assert: Reload of subtable was called (tab is active).
-        expect(mockLoadUserData).toHaveBeenCalledTimes(1);
-
-        // Act: Deactivate and reactivate the tab.
-        await wrapper.setProps({ isActive: false });
-        const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
-        mockLoadUserData.mockReturnValue(promise2);
-        await wrapper.setProps({ isActive: true });
-        await nextTick();
-
-        // Assert: Data is NOT reloaded again on reactivation of tab.
-        expect(mockLoadUserData).toHaveBeenCalledTimes(1);
-
-        // Cleanup.
-        resolve2({ data: testUserData });
-      });
-
-      it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
-        const { promise, resolve } = createDeferredPromise<any>();
-        mockLoadUserData.mockReturnValue(promise);
-
-        // Arrange & Act: Mount with a user selected on an inactive tab.
-        const wrapper = createComponent(testUser, false);
-
-        resolve({ data: testUserData });
-        await flushPromises();
-        await nextTick();
-
-        // Assert: Reload of subtable was NOT called yet (tab is not active).
-        expect(mockLoadUserData).not.toHaveBeenCalled();
-        vi.clearAllMocks();
-
-        // Act: Notify main user table was reloaded.
-        const userEventStore = useUserEventStore();
-        userEventStore.notifyUsersReload();
-        await nextTick();
-
-        // Assert: Reload of subtable was NOT called yet (deferred until tab activation).
-        expect(mockLoadUserData).not.toHaveBeenCalled();
-
-        // Act: Deactivate and reactivate the tab.
-        await wrapper.setProps({ isActive: false });
-        const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
-        mockLoadUserData.mockReturnValue(promise2);
-        await wrapper.setProps({ isActive: true });
-        await nextTick();
-
-        // Assert: Data is reloaded on reactivation after a main user table reload.
-        expect(mockLoadUserData).toHaveBeenCalledTimes(1);
-
-        // Cleanup.
-        resolve2({ data: testUserData });
-      });
+      // Assert: No fetch is made for an inactive tab.
+      expect(mockLoadUserData).not.toHaveBeenCalled();
     });
+
+    it('load data for the selected user when the tab is active', async () => {
+      // Arrange & Act: Mount with a user selected on the active tab.
+      const { promise, resolve } = createDeferredPromise<unknown>();
+      mockLoadUserData.mockReturnValue(promise);
+
+      createComponent(testUser, true);
+      resolve({ data: testUserData });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Data was loaded.
+      expect(mockLoadUserData).toHaveBeenCalledTimes(1);
+    });
+
+    it('reload immediately when user table is reloaded and tab is active', async () => {
+      const { promise, resolve } = createDeferredPromise<unknown>();
+      mockLoadUserData.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an active tab.
+      const wrapper = createComponent(testUser);
+
+      resolve({ data: testUserData });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadUserData).toHaveBeenCalledTimes(1);
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was called (tab is active).
+      expect(mockLoadUserData).toHaveBeenCalledTimes(1);
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
+      mockLoadUserData.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is NOT reloaded again on reactivation of tab.
+      expect(mockLoadUserData).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: testUserData });
+    });
+
+    it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
+      const { promise, resolve } = createDeferredPromise<unknown>();
+      mockLoadUserData.mockReturnValue(promise);
+
+      // Arrange & Act: Mount with a user selected on an inactive tab.
+      const wrapper = createComponent(testUser, false);
+
+      resolve({ data: testUserData });
+      await flushPromises();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (tab is not active).
+      expect(mockLoadUserData).not.toHaveBeenCalled();
+      vi.clearAllMocks();
+
+      // Act: Notify main user table was reloaded.
+      const userEventStore = useUserEventStore();
+      userEventStore.notifyUsersReload();
+      await nextTick();
+
+      // Assert: Reload of subtable was NOT called yet (deferred until tab activation).
+      expect(mockLoadUserData).not.toHaveBeenCalled();
+
+      // Act: Deactivate and reactivate the tab.
+      await wrapper.setProps({ isActive: false });
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
+      mockLoadUserData.mockReturnValue(promise2);
+      await wrapper.setProps({ isActive: true });
+      await nextTick();
+
+      // Assert: Data is reloaded on reactivation after a main user table reload.
+      expect(mockLoadUserData).toHaveBeenCalledTimes(1);
+
+      // Cleanup.
+      resolve2({ data: testUserData });
+    });
+  });
 });

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 
-import type { UserFullDataForm } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataFormDiff } from '@/code/data/features/user/admin-user-type.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
 /**
@@ -53,10 +53,10 @@ export const useUserEventStore = defineStore('user-events', () => {
   /** Trigger for user data update. Increment to notify. */
   const userUpdatedTrigger = ref(0);
   /** Changed user data. Fields that weren't changed will be null. */
-  const userUpdatedDiff: Ref<UserFullDataForm> = ref(emptyUserForm);
+  const userUpdatedDiff: Ref<UserFullDataFormDiff> = ref(emptyUserForm);
 
   /** Notify that user data has been updated. */
-  function notifyUserUpdated(diffData: UserFullDataForm) {
+  function notifyUserUpdated(diffData: UserFullDataFormDiff) {
     userUpdatedTrigger.value++;
     userUpdatedDiff.value = diffData;
   }

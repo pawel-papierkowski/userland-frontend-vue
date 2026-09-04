@@ -14,7 +14,7 @@ import EntryOptions from '@/components/common/table/EntryOptions.vue';
 interface TestEntry {
   id: number;
   name: string;
-  [key: string]: any;
+  [key: string]: string | number;
 }
 
 /** Convenience function to create component. */

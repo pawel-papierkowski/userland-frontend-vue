@@ -30,17 +30,21 @@ vi.mock('axios', () => {
     interceptors: {
       request: {
         use: vi.fn<any>(),
+        //use: vi.fn<(onFulfilled: (config: unknown) => unknown) => number>(),
       },
       response: {
         use: vi.fn<any>(),
+        //use: vi.fn<(onFulfilled: (response: unknown) => unknown, onRejected?: (error: unknown) => unknown) => number>(),
       },
     },
   };
   return {
     default: {
       create: vi.fn<any>(() => mockAxiosInstance),
+      //create: vi.fn<() => typeof mockAxiosInstance>(),
     },
     isAxiosError: vi.fn<any>((err: any) => err?.isAxiosError === true),
+    //isAxiosError: vi.fn<(err: unknown) => boolean>(),
   };
 });
 

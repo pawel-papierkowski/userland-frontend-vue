@@ -81,6 +81,11 @@ export type UserFullDataForm = {
   surname: string | null;
 };
 
+/** Diff version of UserFullDataForm where all fields can be null (null means unchanged). */
+export type UserFullDataFormDiff = {
+  [K in keyof UserFullDataForm]: UserFullDataForm[K] | null;
+};
+
 // USER HISTORY TABLE
 
 /** User history table filter form. */

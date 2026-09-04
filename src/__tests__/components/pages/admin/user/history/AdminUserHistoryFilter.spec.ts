@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
@@ -63,13 +63,13 @@ describe('AdminUserHistoryFilter', () => {
 
     it('renders two DateTimePickers', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers).toHaveLength(2);
     });
 
     it('renders two ComboBoxes', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos).toHaveLength(2);
     });
 
@@ -87,7 +87,7 @@ describe('AdminUserHistoryFilter', () => {
   describe('ComboBox props', () => {
     it('passes who options, langPrefix and placeholder to first ComboBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos[0]!.props('options')).toEqual(enUserHistoryWho);
       expect(combos[0]!.props('langPrefix')).toBe('tech.user.who');
       expect(combos[0]!.props('placeholder')).toBe('tech.user.who.null');
@@ -95,7 +95,7 @@ describe('AdminUserHistoryFilter', () => {
 
     it('passes what options, langPrefix and placeholder to second ComboBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos[1]!.props('options')).toEqual(enUserHistoryWhat);
       expect(combos[1]!.props('langPrefix')).toBe('tech.user.what');
       expect(combos[1]!.props('placeholder')).toBe('tech.user.what.null');
@@ -103,14 +103,14 @@ describe('AdminUserHistoryFilter', () => {
 
     it('disables ComboBoxes when disabled prop is true', () => {
       const wrapper = createComponent(defaultForm, false, true);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos[0]!.props('disabled')).toBe(true);
       expect(combos[1]!.props('disabled')).toBe(true);
     });
 
     it('enables ComboBoxes when disabled prop is false', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos[0]!.props('disabled')).toBe(false);
       expect(combos[1]!.props('disabled')).toBe(false);
     });
@@ -169,14 +169,14 @@ describe('AdminUserHistoryFilter', () => {
   describe('DateTimePicker disabled state', () => {
     it('disables pickers when disabled prop is true', () => {
       const wrapper = createComponent(defaultForm, false, true);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('disabled')).toBe(true);
       expect(pickers[1]!.props('disabled')).toBe(true);
     });
 
     it('enables pickers when disabled prop is false', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('disabled')).toBe(false);
       expect(pickers[1]!.props('disabled')).toBe(false);
     });
@@ -188,13 +188,13 @@ describe('AdminUserHistoryFilter', () => {
   describe('date constraints', () => {
     it('binds dateTimeMax on from picker to createdToAt', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('dateTimeMax')).toBe(defaultForm.createdToAt);
     });
 
     it('binds dateTimeMin on to picker to createdFromAt', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[1]!.props('dateTimeMin')).toBe(defaultForm.createdFromAt);
     });
   });
@@ -214,7 +214,7 @@ describe('AdminUserHistoryFilter', () => {
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[0]!.vm.$emit('update:modelValue', newDate);
       expect(form.createdFromAt).toBe(newDate);
     });
@@ -230,7 +230,7 @@ describe('AdminUserHistoryFilter', () => {
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[1]!.vm.$emit('update:modelValue', newDate);
       expect(form.createdToAt).toBe(newDate);
     });
@@ -245,7 +245,7 @@ describe('AdminUserHistoryFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       combos[0]!.vm.$emit('update:modelValue', 'USER');
       expect(form.who).toBe('USER');
     });
@@ -260,7 +260,7 @@ describe('AdminUserHistoryFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       combos[1]!.vm.$emit('update:modelValue', 'EDIT');
       expect(form.what).toBe('EDIT');
     });

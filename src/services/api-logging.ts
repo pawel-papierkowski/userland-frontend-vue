@@ -11,8 +11,7 @@ export default {
    * @param error Error itself.
    * @param comment Comment.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logError(error: any, comment: string) {
+  logError(error: unknown, comment: string) {
     if (isAxiosError(error)) {
       if (error.response) {
         // The server actually responded with an error (e.g., 400 Bad Request). Log it.

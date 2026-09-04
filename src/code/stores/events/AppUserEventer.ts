@@ -1,6 +1,6 @@
 import { useUserEventStore } from '@/stores/events/user-events.ts';
 
-import type { UserFullDataForm } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataFormDiff } from '@/code/data/features/user/admin-user-type.ts';
 
 /**
  * Class for notifying about application-wide user-related events.
@@ -43,7 +43,7 @@ export class AppUserEventer {
    * Notifies that user data has been updated to anyone interested.
    * @param diffData Changed fields.
    */
-  public static notifyUserUpdated(diffData: UserFullDataForm) {
+  public static notifyUserUpdated(diffData: UserFullDataFormDiff) {
     const eventStore = useUserEventStore();
     eventStore.notifyUserUpdated(diffData);
   }

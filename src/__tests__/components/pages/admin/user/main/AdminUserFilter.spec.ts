@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 
@@ -73,19 +73,19 @@ describe('AdminUserFilter', () => {
 
     it('renders status ComboBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos).toHaveLength(1);
     });
 
     it('renders two DateTimePickers', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers).toHaveLength(2);
     });
 
     it('renders locked CheckBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const boxes = wrapper.findAllComponents(CheckBox as any);
+      const boxes = wrapper.findAllComponents(CheckBox);
       expect(boxes).toHaveLength(1);
     });
 
@@ -144,7 +144,7 @@ describe('AdminUserFilter', () => {
   describe('ComboBox props', () => {
     it('passes correct options, langPrefix and placeholder to status ComboBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       expect(combos[0]!.props('options')).toEqual(enUserStatus);
       expect(combos[0]!.props('langPrefix')).toBe('tech.user.status');
       expect(combos[0]!.props('placeholder')).toBe('tech.user.status.null');
@@ -157,13 +157,13 @@ describe('AdminUserFilter', () => {
   describe('date constraints', () => {
     it('binds dateTimeMax on from picker to createdToAt', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[0]!.props('dateTimeMax')).toBe(defaultForm.createdToAt);
     });
 
     it('binds dateTimeMin on to picker to createdFromAt', () => {
       const wrapper = createComponent(defaultForm, false);
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       expect(pickers[1]!.props('dateTimeMin')).toBe(defaultForm.createdFromAt);
     });
   });
@@ -174,7 +174,7 @@ describe('AdminUserFilter', () => {
   describe('CheckBox props', () => {
     it('passes allowNull to locked CheckBox', () => {
       const wrapper = createComponent(defaultForm, false);
-      const boxes = wrapper.findAllComponents(CheckBox as any);
+      const boxes = wrapper.findAllComponents(CheckBox);
       expect(boxes[0]!.props('allowNull')).toBe(true);
     });
   });
@@ -226,7 +226,7 @@ describe('AdminUserFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const combos = wrapper.findAllComponents(ComboBox as any);
+      const combos = wrapper.findAllComponents(ComboBox);
       combos[0]!.vm.$emit('update:modelValue', 'PENDING');
       expect(form.status).toBe('PENDING');
     });
@@ -243,7 +243,7 @@ describe('AdminUserFilter', () => {
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[0]!.vm.$emit('update:modelValue', newDate);
       expect(form.createdFromAt).toBe(newDate);
     });
@@ -260,7 +260,7 @@ describe('AdminUserFilter', () => {
       };
       const wrapper = createComponent(form, false);
       const newDate = new Date('2024-06-15');
-      const pickers = wrapper.findAllComponents(DateTimePicker as any);
+      const pickers = wrapper.findAllComponents(DateTimePicker);
       pickers[1]!.vm.$emit('update:modelValue', newDate);
       expect(form.createdToAt).toBe(newDate);
     });
@@ -276,7 +276,7 @@ describe('AdminUserFilter', () => {
         tableMeta: null,
       };
       const wrapper = createComponent(form, false);
-      const boxes = wrapper.findAllComponents(CheckBox as any);
+      const boxes = wrapper.findAllComponents(CheckBox);
       boxes[0]!.vm.$emit('update:modelValue', true);
       expect(form.locked).toBe(true);
     });

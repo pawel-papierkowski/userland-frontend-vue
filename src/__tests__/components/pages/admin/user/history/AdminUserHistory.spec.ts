@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -98,7 +98,7 @@ beforeEach(() => {
   pinia = createPinia();
   setActivePinia(pinia);
   vi.clearAllMocks();
-  mockLoadHistoryPage = vi.mocked(backendApiAdminUser.loadHistoryPage) as any;
+  mockLoadHistoryPage = vi.mocked(backendApiAdminUser.loadHistoryPage);
 });
 
 /** Create mounted component. */
@@ -157,7 +157,7 @@ describe('AdminUserHistory', () => {
   describe('user selected', () => {
     it('calls loadHistoryPage with correct params on mount', async () => {
       // Arrange: Mount with user, resolve data.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       createComponent(testUser1);
@@ -181,7 +181,7 @@ describe('AdminUserHistory', () => {
 
     it('renders table rows when data is loaded', async () => {
       // Arrange: Fetch resolves with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -206,7 +206,7 @@ describe('AdminUserHistory', () => {
 
     it('shows emptyText when data is empty with user selected', async () => {
       // Arrange: Fetch resolves with empty entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -229,7 +229,7 @@ describe('AdminUserHistory', () => {
   describe('user change', () => {
     it('refetches data when user changes', async () => {
       // Arrange: Mount with first user, let fetch complete.
-      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<any>();
+      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise1);
 
       const wrapper = createComponent(testUser1);
@@ -242,7 +242,7 @@ describe('AdminUserHistory', () => {
       vi.clearAllMocks();
 
       // Act: Change user.
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise2);
 
       const testUser2: TestUserEntry = {
@@ -279,7 +279,7 @@ describe('AdminUserHistory', () => {
 
     it('load data for the selected user when the tab is active', async () => {
       // Arrange & Act: Mount with a user selected on the active tab.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       createComponent(testUser1, true);
@@ -292,7 +292,7 @@ describe('AdminUserHistory', () => {
     });
 
     it('reload immediately when user table is reloaded and tab is active', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an active tab.
@@ -316,7 +316,7 @@ describe('AdminUserHistory', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -329,7 +329,7 @@ describe('AdminUserHistory', () => {
     });
 
     it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an inactive tab.
@@ -353,7 +353,7 @@ describe('AdminUserHistory', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -366,7 +366,7 @@ describe('AdminUserHistory', () => {
     });
 
     it('reload immediately when user data is updated and tab is active', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an active tab.
@@ -401,7 +401,7 @@ describe('AdminUserHistory', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -414,7 +414,7 @@ describe('AdminUserHistory', () => {
     });
 
     it('do not reload immediately when user data is updated and tab is inactive', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an inactive tab.
@@ -449,7 +449,7 @@ describe('AdminUserHistory', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -468,7 +468,7 @@ describe('AdminUserHistory', () => {
   describe('error handling', () => {
     it('shows error message on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       createComponent(testUser1);
@@ -493,7 +493,7 @@ describe('AdminUserHistory', () => {
 
     it('logs error on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       createComponent(testUser1);
@@ -519,7 +519,7 @@ describe('AdminUserHistory', () => {
   describe('filter fields', () => {
     it('includes who and what in convertToReq output', async () => {
       // Arrange: Mount with user, resolve data.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
       createComponent(testUser1);

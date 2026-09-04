@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -100,7 +100,7 @@ beforeEach(() => {
   pinia = createPinia();
   setActivePinia(pinia);
   vi.clearAllMocks();
-  mockLoadJwtPage = vi.mocked(backendApiAdminUser.loadJwtPage) as any;
+  mockLoadJwtPage = vi.mocked(backendApiAdminUser.loadJwtPage);
 });
 
 /** Create mounted component. */
@@ -159,7 +159,7 @@ describe('AdminUserJwt', () => {
   describe('user selected', () => {
     it('calls loadJwtPage with correct params on mount', async () => {
       // Arrange: Mount with user, resolve data.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       createComponent(testUser1);
@@ -181,7 +181,7 @@ describe('AdminUserJwt', () => {
 
     it('renders table rows when data is loaded', async () => {
       // Arrange: Fetch resolves with entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -216,7 +216,7 @@ describe('AdminUserJwt', () => {
 
     it('shows emptyText when data is empty with user selected', async () => {
       // Arrange: Fetch resolves with empty entries.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       const wrapper = createComponent(testUser1);
@@ -239,7 +239,7 @@ describe('AdminUserJwt', () => {
   describe('user change', () => {
     it('refetches data when user changes', async () => {
       // Arrange: Mount with first user, let fetch complete.
-      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<any>();
+      const { promise: promise1, resolve: resolve1 } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise1);
 
       const wrapper = createComponent(testUser1);
@@ -252,7 +252,7 @@ describe('AdminUserJwt', () => {
       vi.clearAllMocks();
 
       // Act: Change user.
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise2);
 
       const testUser2: TestUserEntry = {
@@ -289,7 +289,7 @@ describe('AdminUserJwt', () => {
 
     it('load data for the selected user when the tab is active', async () => {
       // Arrange & Act: Mount with a user selected on the active tab.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       createComponent(testUser1, true);
@@ -302,7 +302,7 @@ describe('AdminUserJwt', () => {
     });
 
     it('reload immediately when user table is reloaded and tab is active', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an active tab.
@@ -326,7 +326,7 @@ describe('AdminUserJwt', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -339,7 +339,7 @@ describe('AdminUserJwt', () => {
     });
 
     it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       // Arrange & Act: Mount with a user selected on an inactive tab.
@@ -363,7 +363,7 @@ describe('AdminUserJwt', () => {
 
       // Act: Deactivate and reactivate the tab.
       await wrapper.setProps({ isActive: false });
-      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<any>();
+      const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise2);
       await wrapper.setProps({ isActive: true });
       await nextTick();
@@ -382,7 +382,7 @@ describe('AdminUserJwt', () => {
   describe('error handling', () => {
     it('shows error message on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       createComponent(testUser1);
@@ -407,7 +407,7 @@ describe('AdminUserJwt', () => {
 
     it('logs error on fetch failure', async () => {
       // Arrange: Mount with user, fetch rejects.
-      const { promise, resolve } = createDeferredPromise<any>();
+      const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadJwtPage.mockReturnValue(promise);
 
       createComponent(testUser1);

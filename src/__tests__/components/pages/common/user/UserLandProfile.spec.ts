@@ -21,7 +21,7 @@ vi.mock('@/services/features/api-users', () => ({
   },
 }));
 
-const mockPush = vi.fn<(to: any) => void>();
+const mockPush = vi.fn<(to: string) => void>();
 const mockRoute = { name: 'user-profile' };
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: mockPush }),

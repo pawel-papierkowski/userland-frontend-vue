@@ -17,12 +17,12 @@ import TableRow from '@/components/common/table/TableRow.vue';
 interface TestEntry {
   id: number;
   name: string;
-  [key: string]: any;
+  [key: string]: string | number;
 }
 
 interface TestForm {
   name: string;
-  [key: string]: any;
+  [key: string]: string | number;
 }
 
 const tableId = 'customTableId';
