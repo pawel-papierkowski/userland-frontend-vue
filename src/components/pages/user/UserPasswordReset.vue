@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { durPasswordReset } from '@/stores/messages/const.ts';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
-import { Verifier } from '@/code/utils/Verifer.ts';
+import { Verifer } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user-type';
 
@@ -35,10 +35,10 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyPassword(form.password, usedButton.value);
+  return Verifer.verifyPassword(form.password, usedButton.value);
 });
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
+  return Verifer.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
 //

@@ -11,7 +11,7 @@ export class TimeUtils {
 
     // Parse as UTC by adding 'Z' (standard ISO 8601 expects 'T' separator).
     let dateFixedStr = dateStr.replace('T', ' ') || dateStr;
-    dateFixedStr = dateStr.replace('Z', '') || dateStr;
+    dateFixedStr = dateFixedStr.replace('Z', '') || dateFixedStr; // prevent 'ZZ'
     const date = new Date(dateFixedStr + 'Z');
 
     if (isNaN(date.getTime())) return dateStr; // If parsing fails, return original.

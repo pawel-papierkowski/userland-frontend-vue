@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 
-import { Verifier } from '@/code/utils/Verifer';
+import { Verifer } from '@/code/utils/Verifer';
 
-describe('Verifier', () => {
+describe('Verifer', () => {
   // ////////////////////////////////////////////////////////////////////////////
   // verifyFieldInt
 
@@ -13,7 +13,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify field internally.
-      const result = Verifier.verifyFieldInt(fieldValue, used);
+      const result = Verifer.verifyFieldInt(fieldValue, used);
 
       // Assert: Error is returned.
       expect(result).toBe('Field cannot be empty.');
@@ -25,7 +25,7 @@ describe('Verifier', () => {
       const used = false;
 
       // Act: Verify field internally.
-      const result = Verifier.verifyFieldInt(fieldValue, used);
+      const result = Verifer.verifyFieldInt(fieldValue, used);
 
       // Assert: Null is returned — no error for unused form with empty field.
       expect(result).toBeNull();
@@ -37,7 +37,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify field internally.
-      const result = Verifier.verifyFieldInt(fieldValue, used);
+      const result = Verifer.verifyFieldInt(fieldValue, used);
 
       // Assert: Empty string — field passes basic check, further verification needed.
       expect(result).toBe('');
@@ -54,7 +54,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify field.
-      const result = Verifier.verifyField(fieldValue, used);
+      const result = Verifer.verifyField(fieldValue, used);
 
       // Assert: Error returned.
       expect(result).toBe('Field cannot be empty.');
@@ -66,7 +66,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify field.
-      const result = Verifier.verifyField(fieldValue, used);
+      const result = Verifer.verifyField(fieldValue, used);
 
       // Assert: Null — field is considered valid.
       expect(result).toBeNull();
@@ -83,7 +83,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: Error returned.
       expect(result).toBe('Field cannot be empty.');
@@ -95,7 +95,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: Email format error.
       expect(result).toBe('Need to enter correct email.');
@@ -107,7 +107,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: Email format error.
       expect(result).toBe('Need to enter correct email.');
@@ -119,7 +119,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: No error.
       expect(result).toBeNull();
@@ -131,7 +131,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: No error.
       expect(result).toBeNull();
@@ -143,7 +143,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify email.
-      const result = Verifier.verifyEmail(email, used);
+      const result = Verifer.verifyEmail(email, used);
 
       // Assert: No error.
       expect(result).toBeNull();
@@ -160,7 +160,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Error returned.
       expect(result).toBe('Field cannot be empty.');
@@ -172,7 +172,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Too-short error with count param.
       expect(result).toBe('Password is too short. It must have at least 8 characters.');
@@ -184,7 +184,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Too-long error with count param.
       expect(result).toBe('Password is too long. It must have at most 100 characters.');
@@ -196,7 +196,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Weak password error.
       expect(result).toBe(
@@ -210,7 +210,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Weak password error.
       expect(result).toBe(
@@ -224,7 +224,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: Weak password error.
       expect(result).toBe(
@@ -238,7 +238,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: No error.
       expect(result).toBeNull();
@@ -250,7 +250,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify password.
-      const result = Verifier.verifyPassword(password, used);
+      const result = Verifer.verifyPassword(password, used);
 
       // Assert: No error.
       expect(result).toBeNull();
@@ -268,7 +268,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify confirmation.
-      const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
+      const result = Verifer.verifyConfirmPassword(password, confirmPassword, used);
 
       // Assert: Error returned.
       expect(result).toBe('Field cannot be empty.');
@@ -281,7 +281,7 @@ describe('Verifier', () => {
       const used = false;
 
       // Act: Verify confirmation.
-      const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
+      const result = Verifer.verifyConfirmPassword(password, confirmPassword, used);
 
       // Assert: No error for unused form.
       expect(result).toBeNull();
@@ -294,7 +294,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify confirmation.
-      const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
+      const result = Verifer.verifyConfirmPassword(password, confirmPassword, used);
 
       // Assert: Mismatch error.
       expect(result).toBe('Passwords do not match.');
@@ -307,7 +307,7 @@ describe('Verifier', () => {
       const used = true;
 
       // Act: Verify confirmation.
-      const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
+      const result = Verifer.verifyConfirmPassword(password, confirmPassword, used);
 
       // Assert: No error.
       expect(result).toBeNull();

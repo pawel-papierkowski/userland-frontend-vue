@@ -3,7 +3,7 @@ import { logger } from '@/code/utils/logger.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { useLoginStore } from '@/stores/login.ts';
-import { prolongExpiration, prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { prolongExpiration, prolongIdleThreshold } from '@/code/data/app/const.ts';
 import { locstJwt, locstLastApiCall } from '@/code/data/app/storage.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 import { durSessionExpired } from '@/stores/messages/const.ts';
@@ -155,7 +155,7 @@ export class AppLoginer {
   private static isIdleTooLong(): boolean {
     const lastCallStr = localStorage.getItem(locstLastApiCall);
     if (!lastCallStr) return false;
-    return Date.now() - Number(lastCallStr) >= prolongAfterLongTime * 60 * 1000;
+    return Date.now() - Number(lastCallStr) >= prolongIdleThreshold * 60 * 1000;
   }
 
   //

@@ -13,7 +13,7 @@ const route = useRoute();
   <template v-if="route.meta.layout !== 'ADMIN'">
     <StandardLayout />
   </template>
-  <template v-if="route.meta.layout === 'ADMIN'">
+  <template v-else>
     <AdminLayout />
   </template>
 

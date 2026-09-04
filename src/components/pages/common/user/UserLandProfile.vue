@@ -12,7 +12,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
 
-import { Verifier } from '@/code/utils/Verifer.ts';
+import { Verifer } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
@@ -44,7 +44,7 @@ const isLoading = ref(true);
 const canSpin = ref(true);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyField(form.username, usedButton.value);
+  return Verifer.verifyField(form.username, usedButton.value);
 });
 
 //
@@ -64,7 +64,7 @@ const fillForm = (data: UserDataResp) => {
   form.email = data.email;
   form.name = data.profile.name;
   form.surname = data.profile.surname;
-}
+};
 
 /** Retrieve all available data about currently logged user from backend. */
 const resolveUserData = async (): Promise<UserDataResp | null> => {

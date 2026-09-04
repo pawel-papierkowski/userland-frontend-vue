@@ -3,7 +3,7 @@ import i18n from '@/code/lang/i18n.ts';
 const { t } = i18n.global;
 
 /** Class for verification of common types of fields. */
-export class Verifier {
+export class Verifer {
   /**
    * Verify general string field.
    * @param fieldValue Field to verify.
@@ -11,7 +11,7 @@ export class Verifier {
    * @returns Null if field is correct, otherwise error message.
    */
   public static verifyField(fieldValue: string, used: boolean): string | null {
-    const result = Verifier.verifyFieldInt(fieldValue, used);
+    const result = Verifer.verifyFieldInt(fieldValue, used);
     if (result !== '') return result;
     return null; // no further verification needed here
   }
@@ -23,7 +23,7 @@ export class Verifier {
    * @returns Null if email address is correct, otherwise error message.
    */
   public static verifyEmail(email: string, used: boolean): string | null {
-    const result = Verifier.verifyFieldInt(email, used);
+    const result = Verifer.verifyFieldInt(email, used);
     if (result !== '') return result;
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -38,7 +38,7 @@ export class Verifier {
    * @returns Null if password is correct, otherwise error message.
    */
   public static verifyPassword(password: string, used: boolean): string | null {
-    const result = Verifier.verifyFieldInt(password, used);
+    const result = Verifer.verifyFieldInt(password, used);
     if (result !== '') return result;
 
     if (password.length < 8) return t('form.errPasswordTooShort', { count: 8 });
@@ -56,7 +56,7 @@ export class Verifier {
    * @returns Null if password is correct, otherwise error message.
    */
   public static verifyConfirmPassword(password: string, confirmPassword: string, used: boolean): string | null {
-    const result = Verifier.verifyFieldInt(confirmPassword, used);
+    const result = Verifer.verifyFieldInt(confirmPassword, used);
     if (result !== '') return result;
 
     if (password !== confirmPassword) return t('form.errPasswordMatch');

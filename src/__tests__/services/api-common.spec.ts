@@ -6,7 +6,7 @@ import apiCommon from '@/services/api-common.ts';
 import apiLogging from '@/services/api-logging.ts';
 
 import { logger } from '@/code/utils/logger.ts';
-import { prolongAfterLongTime } from '@/code/data/app/const.ts';
+import { prolongIdleThreshold } from '@/code/data/app/const.ts';
 import { locstLastApiCall } from '@/code/data/app/storage.ts';
 
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
@@ -16,9 +16,9 @@ import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 
 const authUrls = ['/prolong', '/login', '/logout', '/register'];
 /** Offset in minutes to set > 12h idle for tests (13 hours). */
-const idleMoreThan = prolongAfterLongTime + 60;
+const idleMoreThan = prolongIdleThreshold + 60;
 /** Offset in minutes to set < 12h idle for tests (11 hours). */
-const idleLessThan = prolongAfterLongTime - 60;
+const idleLessThan = prolongIdleThreshold - 60;
 
 // ////////////////////////////////////////////////////////////////////////////
 // Mocks.

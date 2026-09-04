@@ -10,7 +10,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { durRegistrationSuccess } from '@/stores/messages/const.ts';
 
-import { Verifier } from '@/code/utils/Verifer.ts';
+import { Verifer } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
@@ -35,16 +35,16 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyField(form.username, usedButton.value);
+  return Verifer.verifyField(form.username, usedButton.value);
 });
 const emailError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyEmail(form.email, usedButton.value);
+  return Verifer.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyPassword(form.password, usedButton.value);
+  return Verifer.verifyPassword(form.password, usedButton.value);
 });
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
+  return Verifer.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
 //
@@ -94,7 +94,11 @@ const convertToReq = (form: UserRegisterForm): UserRegisterReq => {
 
 /** Show success message. */
 const showMessage = () => {
-  AppMessager.successT('user.registration.msg.success.title', 'user.registration.msg.success.content', durRegistrationSuccess);
+  AppMessager.successT(
+    'user.registration.msg.success.title',
+    'user.registration.msg.success.content',
+    durRegistrationSuccess,
+  );
   logger.debug('Registered user using form data:', { ...form });
 };
 

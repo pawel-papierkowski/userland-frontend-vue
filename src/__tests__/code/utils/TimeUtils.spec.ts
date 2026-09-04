@@ -12,7 +12,7 @@ describe('TimeUtils', () => {
     });
 
     it('Handle first day of year', () => {
-      const dateUtc = '2025-01-01T00:00:00.000';
+      const dateUtc = '2025-01-01T00:00:00.000Z';
 
       const actualDate = TimeUtils.zoned(dateUtc);
       const expectedDate = '2025-01-01 01:00:00';

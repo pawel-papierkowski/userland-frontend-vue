@@ -10,25 +10,6 @@ import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
 // Rest is loaded lazily.
-/*
-import UserLandTestArea from '@/components/pages/test/UserLandTestArea.vue';
-import UserLandDebugArea from '@/components/pages/test/UserLandDebugArea.vue';
-import UserLandMember from '@/components/pages/member/UserLandMember.vue';
-
-import UserActivation from '@/components/pages/user/UserActivation.vue';
-import UserPasswordResetStart from '@/components/pages/user/UserPasswordResetStart.vue';
-import UserPasswordReset from '@/components/pages/user/UserPasswordReset.vue';
-import UserEmailChangeStart from '@/components/pages/user/UserEmailChangeStart.vue';
-import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
-import UserAccountDeletionStart from '@/components/pages/user/UserAccountDeletionStart.vue';
-import UserAccountDeletion from '@/components/pages/user/UserAccountDeletion.vue';
-
-import AdminMain from '@/components/pages/admin/general/AdminMain.vue';
-import AdminUser from '@/components/pages/admin/user/main/AdminUser.vue';
-
-import AppNotFound from '@/components/pages/common/AppNotFound.vue';
-import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue';
-*/
 
 // Defined metadata sets.
 // standard pages

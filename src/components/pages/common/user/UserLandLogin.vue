@@ -9,7 +9,7 @@ import { useI18n } from 'vue-i18n';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { Verifier } from '@/code/utils/Verifer.ts';
+import { Verifer } from '@/code/utils/Verifer.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user-type';
@@ -34,7 +34,7 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyEmail(form.email, usedButton.value);
+  return Verifer.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
   if (!form.password) return usedButton.value ? t('form.errFieldEmpty') : null;

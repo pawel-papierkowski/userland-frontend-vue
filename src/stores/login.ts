@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { jwtDecode, type JwtPayload } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 import { logger } from '@/code/utils/logger.ts';
 
 import { permissions } from '@/code/data/app/const.ts';
-import type { LoginState } from '@/code/data/app/types.ts';
+import type { CustomJwtPayload, LoginState } from '@/code/data/app/types.ts';
 
 /**
  * Stores login data, including JWT token.
@@ -36,7 +36,7 @@ export const useLoginStore = defineStore('login', () => {
     loginState.value = resetLoginState();
 
     if (jwtToken) {
-      const decodedJwt = jwtDecode(jwtToken);
+      const decodedJwt = jwtDecode<CustomJwtPayload>(jwtToken);
       if (!verifyToken(decodedJwt)) {
         loginState.value.isLogged = false;
         logger.warn('Failed to use JWT: it is expired.');
@@ -57,7 +57,7 @@ export const useLoginStore = defineStore('login', () => {
    * @param decodedJwt Decoded JWT.
    * @returns True if token is valid, otherwise false.
    */
-  function verifyToken(decodedJwt: JwtPayload): boolean {
+  function verifyToken(decodedJwt: CustomJwtPayload): boolean {
     const nowAt = new Date();
     const expiresAt = new Date((decodedJwt?.exp || 0) * 1000);
     return expiresAt.getTime() > nowAt.getTime();
@@ -67,7 +67,7 @@ export const useLoginStore = defineStore('login', () => {
    * Read all data encoded in JWT, including our custom data like permissions.
    * @param decodedJwt Decoded JWT.
    */
-  function readToken(decodedJwt: JwtPayload) {
+  function readToken(decodedJwt: CustomJwtPayload) {
     loginState.value.email = decodedJwt?.sub || '';
     loginState.value.issuedAt = new Date((decodedJwt?.iat || 0) * 1000);
     loginState.value.expiresAt = new Date((decodedJwt?.exp || 0) * 1000);
@@ -81,10 +81,9 @@ export const useLoginStore = defineStore('login', () => {
    * Read permissions, if any present in token.
    * @param decodedJwt Decoded JWT.
    */
-  function readPermissions(decodedJwt: JwtPayload) {
+  function readPermissions(decodedJwt: CustomJwtPayload) {
     // Permissions are in custom claim 'perms': map of prefix -> comma-separated suffixes.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const perms = (decodedJwt as Record<string, any>).perms;
+    const perms = decodedJwt.perms;
     if (typeof perms !== 'object' || perms === null) return;
 
     for (const permPrefix of permissions) {
@@ -101,14 +100,13 @@ export const useLoginStore = defineStore('login', () => {
 
   /**
    * Retrieve custom value from decoded JWT.
-   * @param decodedJwt Decoded JWT.
+   * @param obj Object to read from.
    * @param fieldName Name of custom field.
    * @returns Value of given field or null if field does not exist.
    */
-  function getValue(decodedJwt: JwtPayload, fieldName: string): string | null {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const value = (decodedJwt as Record<string, any>)[fieldName]; // necessary as decodedJwt[fieldName] generates IDE error
-    return value || (null as string | null);
+  function getValue(obj: object, fieldName: string): string | null {
+    const value = (obj as Record<string, unknown>)[fieldName];
+    return typeof value === 'string' ? value : null;
   }
 
   return { loginState, applyToken, resetLoginState };

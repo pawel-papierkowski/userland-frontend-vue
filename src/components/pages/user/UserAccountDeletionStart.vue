@@ -10,7 +10,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { durAccountDelete } from '@/stores/messages/const.ts';
 
-import { Verifier } from '@/code/utils/Verifer.ts';
+import { Verifer } from '@/code/utils/Verifer.ts';
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import type { UserAccountDeleteLinkForm, UserAccountDeleteLinkReq } from '@/code/data/features/user/user-type';
 
@@ -30,7 +30,7 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifier.verifyPassword(form.password, usedButton.value);
+  return Verifer.verifyPassword(form.password, usedButton.value);
 });
 
 //
