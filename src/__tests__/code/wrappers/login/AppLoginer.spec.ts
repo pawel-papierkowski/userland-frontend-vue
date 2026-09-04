@@ -1,4 +1,3 @@
- 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import type { AxiosResponse } from 'axios';
@@ -7,9 +6,9 @@ import backendApiUser from '@/services/features/api-users.ts';
 
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import { useLoginStore } from '@/stores/login.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 import type { LoginState } from '@/code/data/app/types.ts';
 

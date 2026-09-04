@@ -5,8 +5,8 @@ import { useI18n } from 'vue-i18n';
 
 import { logger } from '@/code/utils/logger.ts';
 
-import { EnMessageLevel, messageLevelStr } from '@/code/stores/messages/types.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { EnMessageLevel, messageLevelStr } from '@/code/wrappers/messages/types.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 
 import type { TestAreaMessageForm } from '@/code/data/other/test-area.ts';
 

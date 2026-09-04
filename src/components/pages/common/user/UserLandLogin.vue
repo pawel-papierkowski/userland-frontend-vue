@@ -10,8 +10,8 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
 import { Verifer } from '@/code/utils/Verifer.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user-type';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';

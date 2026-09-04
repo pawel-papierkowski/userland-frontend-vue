@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { durPasswordReset } from '@/stores/messages/const.ts';
 
 import { Verifer } from '@/code/utils/Verifer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import type { UserPasswordResetLinkForm, UserPasswordResetLinkReq } from '@/code/data/features/user/user-type';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';

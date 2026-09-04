@@ -6,7 +6,7 @@ import { createPinia, setActivePinia } from 'pinia';
 import i18n from '@/code/lang/i18n.ts';
 
 import AdminUserEditor from '@/components/pages/admin/user/main/AdminUserEditor.vue';
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
 
 // Mocks — must be at module level.
 
@@ -29,7 +29,7 @@ vi.mock('@/components/pages/admin/user/tokens/AdminUserTokens.vue', () => ({
 vi.mock('@/components/pages/admin/user/jwt/AdminUserJwt.vue', () => ({
   default: { name: 'AdminUserJwt', template: '<div>jwt</div>' },
 }));
-vi.mock('@/code/stores/events/AppUserEventer.ts');
+vi.mock('@/code/wrappers/events/AppUserEventer.ts');
 
 // ////////////////////////////////////////////////////////////////////////////
 // Test data

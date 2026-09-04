@@ -10,9 +10,9 @@ import { useUserEventStore } from '@/stores/events/user-events.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import apiLogging from '@/services/api-logging.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
 
 import type { UserFullDataReq, UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
 
@@ -37,8 +37,8 @@ vi.mock('@/services/api-logging.ts', () => ({
     logError: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/messages/AppMessager.ts');
-vi.mock('@/code/stores/login/AppLoginer.ts', () => ({
+vi.mock('@/code/wrappers/messages/AppMessager.ts');
+vi.mock('@/code/wrappers/login/AppLoginer.ts', () => ({
   AppLoginer: {
     getEmail: vi.fn<() => void>(),
     hasPermission: vi.fn<() => void>(),
@@ -46,7 +46,7 @@ vi.mock('@/code/stores/login/AppLoginer.ts', () => ({
     hasPermissionsAll: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/events/AppUserEventer.ts', () => ({
+vi.mock('@/code/wrappers/events/AppUserEventer.ts', () => ({
   AppUserEventer: {
     notifyUserSelected: vi.fn<() => void>(),
     notifyUserUpdated: vi.fn<() => void>(),

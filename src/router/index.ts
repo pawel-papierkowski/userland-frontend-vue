@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, type RouteMeta } from 'vue-router';
 
 //import { logger } from '@/code/utils/logger.ts';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 // Certain pages are loaded eagerly.
 import UserLandHome from '@/components/pages/home/UserLandHome.vue';

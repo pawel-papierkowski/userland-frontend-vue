@@ -10,7 +10,7 @@ import { durSessionExpired } from '@/stores/messages/const.ts';
 
 import apiLogging from '@/services/api-logging.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 
 /**
  * Class for handling user login, logout and related functionality like checking login state or permissions.

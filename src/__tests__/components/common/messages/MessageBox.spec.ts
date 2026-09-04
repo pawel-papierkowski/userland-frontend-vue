@@ -3,8 +3,8 @@ import { mount } from '@vue/test-utils';
 
 import i18n from '@/code/lang/i18n.ts';
 
-import type { Message } from '@/code/stores/messages/types.ts';
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import type { Message } from '@/code/wrappers/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import MessageBox from '@/components/common/messages/MessageBox.vue';
 
 //

@@ -12,7 +12,7 @@ import { durPasswordReset } from '@/stores/messages/const.ts';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
 import { Verifer } from '@/code/utils/Verifer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user-type';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';

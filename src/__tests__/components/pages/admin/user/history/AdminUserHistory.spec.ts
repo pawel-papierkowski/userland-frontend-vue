@@ -1,4 +1,3 @@
- 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -14,7 +13,7 @@ import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import apiLogging from '@/services/api-logging.ts';
 
 import AdminUserHistory from '@/components/pages/admin/user/history/AdminUserHistory.vue';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 
 // Mocks — these must be at module level.
 
@@ -28,7 +27,7 @@ vi.mock('@/services/api-logging.ts', () => ({
     logError: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/messages/AppMessager.ts');
+vi.mock('@/code/wrappers/messages/AppMessager.ts');
 // api-admin-users.ts calls backendApi.create('/admin') at module level — mock to prevent side effects.
 vi.mock('@/services/features/api-admin-users.ts', () => ({
   default: {

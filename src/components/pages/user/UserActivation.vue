@@ -10,7 +10,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import type { TokenActivationReq } from '@/code/data/features/user/user-type';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 const route = useRoute();

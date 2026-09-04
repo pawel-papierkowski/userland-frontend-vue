@@ -8,8 +8,8 @@ import { useUserEventStore } from '@/stores/events/user-events.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
 import type {

@@ -25,9 +25,9 @@ import type {
 } from '@/code/data/features/user/admin-user-type.ts';
 import { userConfigTableColumns } from '@/code/data/features/user/user-const.ts';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
 
 import EntryOptions from '@/components/common/table/EntryOptions.vue';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
@@ -78,7 +78,8 @@ const reloadTrigger = ref(0);
  * Forces reload of user config table when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger], async () => {
-  if (props.isActive) await tabRef.value?.handleReload(); // reload immediately
+  if (props.isActive)
+    await tabRef.value?.handleReload(); // reload immediately
   else reloadTrigger.value++; // reload later, when we open this tab
 });
 

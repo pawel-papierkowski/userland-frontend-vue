@@ -5,7 +5,7 @@ import { createPinia, setActivePinia } from 'pinia';
 
 import i18n from '@/code/lang/i18n.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import MessageContainer from '@/components/common/messages/MessageContainer.vue';
 
 let pinia: ReturnType<typeof createPinia>;

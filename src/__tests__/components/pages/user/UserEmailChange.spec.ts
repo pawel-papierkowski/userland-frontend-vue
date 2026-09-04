@@ -1,4 +1,3 @@
- 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -8,9 +7,9 @@ import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import UserEmailChange from '@/components/pages/user/UserEmailChange.vue';
 
 let pinia: ReturnType<typeof createPinia>;

@@ -2,7 +2,7 @@
 /** Main bar in middle of header. */
 import { useI18n } from 'vue-i18n';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 const { t } = useI18n();
 </script>

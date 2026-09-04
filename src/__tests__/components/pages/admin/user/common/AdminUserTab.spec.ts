@@ -10,7 +10,7 @@ import { EnColumnKind } from '@/code/data/features/common/const.ts';
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import apiLogging from '@/services/api-logging.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import type { AdminUserTabExpose } from '@/code/data/features/user/admin-user-type';
 
 // Mock API and message modules.
@@ -24,11 +24,11 @@ vi.mock('@/services/api-logging.ts', () => ({
     logError: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/messages/AppMessager.ts');
+vi.mock('@/code/wrappers/messages/AppMessager.ts');
 // api-users.ts calls backendApi.create() at module level, so mock it to prevent side effects.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
 // AppLoginer imports api-users.ts at module level, so mock to prevent side effects.
-vi.mock('@/code/stores/login/AppLoginer.ts', () => ({}));
+vi.mock('@/code/wrappers/login/AppLoginer.ts', () => ({}));
 
 // ////////////////////////////////////////////////////////////////////////////
 // Test types
@@ -187,7 +187,9 @@ let mockFetchData: FetchDataFn;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockConvertToReq = vi.fn<(form: Record<string, unknown>, userId: number) => Record<string, unknown>>((form: Record<string, unknown>, userId: number) => ({ ...form, userId })) as (form: Record<string, unknown>, userId: number) => Record<string, unknown>;
+  mockConvertToReq = vi.fn<(form: Record<string, unknown>, userId: number) => Record<string, unknown>>(
+    (form: Record<string, unknown>, userId: number) => ({ ...form, userId }),
+  ) as (form: Record<string, unknown>, userId: number) => Record<string, unknown>;
   mockFetchData = vi.fn<() => void>() as unknown as FetchDataFn;
 });
 
@@ -261,7 +263,9 @@ describe('AdminUserTab', () => {
       (mockFetchData as Mock).mockReturnValue(promise);
 
       // Create transformation that marks each entry.
-      const transformEntry = vi.fn<(entry: Record<string, unknown>) => Record<string, unknown>>((entry: Record<string, unknown>) => ({ ...entry, transformed: true }));
+      const transformEntry = vi.fn<(entry: Record<string, unknown>) => Record<string, unknown>>(
+        (entry: Record<string, unknown>) => ({ ...entry, transformed: true }),
+      );
       createComponent({
         modelValue: testUser1,
         fetchData: mockFetchData,

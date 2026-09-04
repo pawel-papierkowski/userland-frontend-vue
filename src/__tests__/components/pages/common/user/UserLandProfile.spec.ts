@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -9,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import UserLandProfile from '@/components/pages/common/user/UserLandProfile.vue';
 
 let pinia: ReturnType<typeof createPinia>;
@@ -69,10 +68,10 @@ describe('UserLandProfile', () => {
         email: 'some.email@test.com',
         lang: 'en',
         profile: {
-          name: "John",
-          surname: "Smith",
+          name: 'John',
+          surname: 'Smith',
         },
-      }
+      },
     } as AxiosResponse);
 
     // Act: instantiate component, that will already cause API view call.

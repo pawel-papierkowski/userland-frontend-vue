@@ -10,8 +10,8 @@
  */
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { EnMessageLevel } from '@/code/stores/messages/types';
-import type { Message } from '@/code/stores/messages/types';
+import { EnMessageLevel } from '@/code/wrappers/messages/types';
+import type { Message } from '@/code/wrappers/messages/types';
 
 const { t } = useI18n();
 

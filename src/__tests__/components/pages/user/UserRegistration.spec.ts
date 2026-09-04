@@ -1,4 +1,3 @@
- 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -9,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
 let pinia: ReturnType<typeof createPinia>;

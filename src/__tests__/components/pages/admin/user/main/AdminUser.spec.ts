@@ -10,7 +10,7 @@ import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import apiLogging from '@/services/api-logging.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import { TimeUtils } from '@/code/utils/TimeUtils';
 
 import { useUserEventStore } from '@/stores/events/user-events.ts';
@@ -37,7 +37,7 @@ vi.mock('@/services/api-logging.ts', () => ({
     logError: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/messages/AppMessager.ts');
+vi.mock('@/code/wrappers/messages/AppMessager.ts');
 vi.mock('@/code/utils/TimeUtils', () => ({
   TimeUtils: {
     cnvDate: vi.fn<() => void>(),
@@ -46,7 +46,7 @@ vi.mock('@/code/utils/TimeUtils', () => ({
 }));
 // Side-effect mocks — modules imported by other modules at the top level.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
-vi.mock('@/code/stores/login/AppLoginer.ts', () => ({}));
+vi.mock('@/code/wrappers/login/AppLoginer.ts', () => ({}));
 
 // ////////////////////////////////////////////////////////////////////////////
 // Test types

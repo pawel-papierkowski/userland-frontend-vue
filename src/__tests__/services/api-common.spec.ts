@@ -8,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { prolongIdleThreshold } from '@/code/data/app/const.ts';
 import { locstLastApiCall } from '@/code/data/app/storage.ts';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 // ////////////////////////////////////////////////////////////////////////////
 // Constants.
@@ -39,12 +39,14 @@ vi.mock('axios', () => {
     default: {
       create: vi.fn<() => typeof mockAxiosInstance>().mockReturnValue(mockAxiosInstance),
     },
-    isAxiosError: vi.fn<(err: unknown) => boolean>((err: unknown) => (err as { isAxiosError?: boolean })?.isAxiosError === true),
+    isAxiosError: vi.fn<(err: unknown) => boolean>(
+      (err: unknown) => (err as { isAxiosError?: boolean })?.isAxiosError === true,
+    ),
   };
 });
 
-vi.mock('@/code/stores/login/AppLoginer.ts', async () => {
-  const actual = (await vi.importActual('@/code/stores/login/AppLoginer.ts')) as {
+vi.mock('@/code/wrappers/login/AppLoginer.ts', async () => {
+  const actual = (await vi.importActual('@/code/wrappers/login/AppLoginer.ts')) as {
     AppLoginer: { shouldProlong: () => boolean };
   };
   return {

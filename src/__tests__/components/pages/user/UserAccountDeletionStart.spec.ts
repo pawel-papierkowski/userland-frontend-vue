@@ -8,7 +8,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import UserAccountDeletionStart from '@/components/pages/user/UserAccountDeletionStart.vue';
 
 let pinia: ReturnType<typeof createPinia>;

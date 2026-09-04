@@ -12,8 +12,8 @@ import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 import backendApiAdminUser from '@/services/features/api-admin-users.ts';
 import apiLogging from '@/services/api-logging.ts';
 
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 import AdminUserPermissions from '@/components/pages/admin/user/permissions/AdminUserPermissions.vue';
 
@@ -29,7 +29,7 @@ vi.mock('@/services/api-logging.ts', () => ({
     logError: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/messages/AppMessager.ts');
+vi.mock('@/code/wrappers/messages/AppMessager.ts');
 // api-users.ts calls backendApi.create('/users') at module level — mock to prevent side effects.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
 // api-admin-users.ts calls backendApi.create('/admin') at module level — mock to prevent side effects.
@@ -40,7 +40,7 @@ vi.mock('@/services/features/api-admin-users.ts', () => ({
     deletePermissionEntry: vi.fn<() => void>(),
   },
 }));
-vi.mock('@/code/stores/login/AppLoginer.ts', () => ({
+vi.mock('@/code/wrappers/login/AppLoginer.ts', () => ({
   AppLoginer: {
     getEmail: vi.fn<() => void>(),
     hasPermissionsAny: vi.fn<() => void>(),

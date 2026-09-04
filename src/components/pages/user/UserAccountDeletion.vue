@@ -14,8 +14,8 @@ import { durAccountDelete } from '@/stores/messages/const.ts';
 import type { UserAccountDeleteReq } from '@/code/data/features/user/user-type';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 
 const route = useRoute();
 const router = useRouter();

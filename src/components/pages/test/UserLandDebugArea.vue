@@ -9,8 +9,8 @@ import { logger } from '@/code/utils/logger.ts';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiCheck from '@/services/features/api-checks.ts';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 
 const loginStore = useLoginStore();
 const { t } = useI18n();

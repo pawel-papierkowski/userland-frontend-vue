@@ -13,8 +13,8 @@ import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
 
 import { Verifer } from '@/code/utils/Verifer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';

@@ -8,7 +8,7 @@ import { watch } from 'vue';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
 
 import TabGroup from '@/components/base/layout/TabGroup.vue';
 import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';

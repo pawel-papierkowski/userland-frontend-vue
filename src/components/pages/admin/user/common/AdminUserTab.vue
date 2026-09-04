@@ -43,7 +43,7 @@ import { useSlots, ref, watch, computed } from 'vue';
 import type { Ref } from 'vue';
 
 import apiLogging from '@/services/api-logging.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 
 import type { UserTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 import type {

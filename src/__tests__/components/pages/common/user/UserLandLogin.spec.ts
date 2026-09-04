@@ -1,4 +1,3 @@
- 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -7,9 +6,9 @@ import type { AxiosResponse } from 'axios';
 import i18n from '@/code/lang/i18n.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
 import backendApiUser from '@/services/features/api-users.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
 
 import { genJwt } from '@/__tests__/_helpers/jwt.ts';
@@ -65,7 +64,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken: genJwt()
+        jwtToken: genJwt(),
       },
     } as AxiosResponse);
 
@@ -110,7 +109,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken: genJwt([{ prefix: 'role', suffix: 'admin' }])
+        jwtToken: genJwt([{ prefix: 'role', suffix: 'admin' }]),
       },
     } as AxiosResponse);
 
@@ -155,7 +154,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken: genJwt()
+        jwtToken: genJwt(),
       },
     } as AxiosResponse);
 
@@ -208,7 +207,7 @@ describe('UserLandLogin', () => {
     // Arrange: Mock successful API response, but with expired token.
     vi.mocked(backendApiUser.login).mockResolvedValue({
       data: {
-        jwtToken: jwtTokenExpired
+        jwtToken: jwtTokenExpired,
       },
     } as AxiosResponse);
 

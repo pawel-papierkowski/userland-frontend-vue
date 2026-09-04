@@ -24,9 +24,9 @@ import type {
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
 
 import { TimeUtils } from '@/code/utils/TimeUtils.ts';
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
-import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
-import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
+import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
+import { AppUserEventer } from '@/code/wrappers/events/AppUserEventer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
 
 import TextBox from '@/components/base/inputs/TextBox.vue';
@@ -279,17 +279,20 @@ const isFormDisabled = (): boolean => {
  * Forces reload of user data when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger], async () => {
-  if (props.isActive) await loadUserData(); // reload immediately
+  if (props.isActive)
+    await loadUserData(); // reload immediately
   else forceReload = true; // reload later, when we open this tab
 });
 
 /** React on change to isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
-watch(() => props.isActive,
+watch(
+  () => props.isActive,
   async () => {
     if (!props.isActive || !forceReload) return;
     await loadUserData();
     forceReload = false;
-  });
+  },
+);
 
 /** Change in selection requires reload of form, but only when tab is active. */
 watch(

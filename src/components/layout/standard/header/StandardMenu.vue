@@ -4,7 +4,7 @@ import { nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 import DropdownMenu from '@/components/base/layout/DropdownMenu.vue';
 

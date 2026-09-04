@@ -10,7 +10,7 @@ import { logger } from '@/code/utils/logger.ts';
 import { apiAddress } from '@/code/data/app/const.ts';
 import { locstLastApiCall } from '@/code/data/app/storage.ts';
 
-import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
+import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 export default {
   /**

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-import type { Message } from '@/code/stores/messages/types.ts';
-import { EnMessageLevel } from '@/code/stores/messages/types.ts';
+import type { Message } from '@/code/wrappers/messages/types.ts';
+import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import { defDuration } from '@/stores/messages/const.ts';
 
 /** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
