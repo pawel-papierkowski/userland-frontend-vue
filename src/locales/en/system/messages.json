@@ -95,6 +95,10 @@
       "content": "JWT token is malformed or expired."
     },
 
+    "auth_0101": {
+      "title": "Failure",
+      "content": "Connection rejected due to rate limit."
+    },
     "user_0001": {
       "title": "Failure",
       "content": "User not found."
@@ -114,6 +118,10 @@
     "user_0014": {
       "title": "Failure",
       "content": "User token was already used."
+    },
+    "user_0015": {
+      "title": "Failure",
+      "content": "User token was not found."
     },
     "user_0021": {
       "title": "Failure",

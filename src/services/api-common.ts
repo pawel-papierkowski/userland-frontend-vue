@@ -51,7 +51,6 @@ export default {
       }
 
       // Attach authorization header.
-      //logger.debug(`Token: ${token}`);
       config.headers.Authorization = `Bearer ${token}`;
       return config;
     });

@@ -45,6 +45,9 @@
   - Must support keyboard navigation inside component where applicable.
   - Must support tabbing into component and `<label>` clicking (usually via hidden `<button>`, as `<div>` is not labelable) where applicable. Tests for these two features must use mount with multiple components (like paired label and tested component itself) whenever possible. See relevant tests in `ComboBox.spec.ts` for how to do it.
 
+### Security
+- Project uses `v-html` in certain places. Only static translation keys or static strings are allowed (safe to use).
+
 ## Available Scripts & Commands
 - **Run dev server:** `npm run dev`
 - **Build for production:** `npm run build`
@@ -68,9 +71,6 @@ When I ask for review, in order of importance:
 - I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
   - You can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
   - If previously reported issues still exist, inform about them again unless they were explained or rejected.
-
-### Code review rules
-- Project uses `v-html` in certain places. Only static translation keys or static strings are allowed (safe to use).
 
 ## Testing
 We use **Vitest** for unit testing and **Cypress** for end-to-end testing.

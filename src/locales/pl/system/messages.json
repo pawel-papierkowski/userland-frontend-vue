@@ -95,6 +95,10 @@
       "content": "Token JWT jest niepoprawny lub nieważny."
     },
 
+    "auth_0101": {
+      "title": "Niepowodzenie",
+      "content": "Połączenie odrzucone przez limit połączeń."
+    },
     "user_0001": {
       "title": "Niepowodzenie",
       "content": "Użytkownik nie został odnaleziony."
@@ -114,6 +118,10 @@
     "user_0014": {
       "title": "Niepowodzenie",
       "content": "Token użytkownika już został zużyty."
+    },
+    "user_0015": {
+      "title": "Niepowodzenie",
+      "content": "Token użytkownika nie został znaleziony."
     },
     "user_0021": {
       "title": "Niepowodzenie",

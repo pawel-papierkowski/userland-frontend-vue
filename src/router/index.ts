@@ -159,7 +159,6 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const isAuthenticated = AppLoginer.isLogged();
-  //logger.debug(`isAuthenticated: ${isAuthenticated}`);
 
   // If the route requires auth and the user isn't logged in, redirect.
   if (to.meta.requiresAuth && !isAuthenticated) {

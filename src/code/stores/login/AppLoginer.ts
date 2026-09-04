@@ -35,7 +35,7 @@ export class AppLoginer {
     if (result) localStorage.setItem(locstJwt, jwtToken);
     else localStorage.removeItem(locstJwt);
 
-    if (result) logger.debug('Logged in successfully.');
+    if (result) logger.debug('Logged in successfully as user "', loginStore.loginState.email, '".');
     else logger.warn('Failed to log in.');
     return result;
   }

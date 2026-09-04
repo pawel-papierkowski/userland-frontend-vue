@@ -101,12 +101,10 @@ const showMessage = (success: boolean) => {
   if (success) {
     if (isAdminPanel && AppLoginer.hasPermissionsAny(['role_admin', 'role_operator'])) {
       AppMessager.infoT('user.login.msg.successAdmin.title', 'user.login.msg.successAdmin.content');
-      logger.debug('Successfully logged in as admin user "', form.email, '".');
       return;
     }
 
     AppMessager.infoT('user.login.msg.success.title', 'user.login.msg.success.content');
-    logger.debug('Successfully logged in as user "', form.email, '".');
     return;
   }
 

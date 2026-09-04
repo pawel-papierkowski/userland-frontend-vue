@@ -29,6 +29,7 @@ This project has measures to mitigate npm supply chain attacks:
 Security notes:
 - JWT is in localStorage: XSS could cause token leak. Standard SPA trade-off, acceptable.
 - Token in URL query string: can leak via browser history. Tokens expire and are single use - enforced by backend.
+- We use `v-html` in some places. Only static strings or static translations are allowed. No parametrization, especially not user-controlled variables.
 
 ## Functionality
 
