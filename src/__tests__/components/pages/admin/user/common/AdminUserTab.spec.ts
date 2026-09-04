@@ -138,9 +138,9 @@ function createComponent(
     modelValue?: TestUserEntry | null;
     entry?: TestEntry | null;
     formFilter?: TestFormFilter;
-    formEntry?: any;
+    formEntry?: Record<string, unknown> | null;
     fetchData?: any;
-    convertToReq?: any;
+    convertToReq?: (form: Record<string, unknown>, userId: number) => Record<string, unknown>;
     processEntry?: ((entry: Record<string, any>) => Record<string, any>) | undefined;
     resolveRowMeta?: ((entry: Record<string, any> | null) => RowMeta | null) | undefined;
     inlineEdit?: boolean;
@@ -181,12 +181,12 @@ function createComponent(
 // ////////////////////////////////////////////////////////////////////////////
 // Mocks
 
-let mockConvertToReq: ReturnType<typeof vi.fn>;
+let mockConvertToReq: (form: Record<string, unknown>, userId: number) => Record<string, unknown>;
 let mockFetchData: ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
-  mockConvertToReq = vi.fn<(form: Record<string, unknown>, userId: number) => void>((form: Record<string, unknown>, userId: number) => ({ ...form, userId }));
+  mockConvertToReq = vi.fn<(form: Record<string, unknown>, userId: number) => Record<string, unknown>>((form: Record<string, unknown>, userId: number) => ({ ...form, userId })) as (form: Record<string, unknown>, userId: number) => Record<string, unknown>;
   mockFetchData = vi.fn<() => void>();
 });
 
