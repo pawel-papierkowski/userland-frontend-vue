@@ -101,6 +101,8 @@ export type UserHistoryTableFilterForm = {
 /** User history table filter request. */
 export type UserHistoryTableReq = {
   userId: number; // User identificator.
+  who: string | null; // If present, filter by who.
+  what: string | null; // If present, filter by what.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.

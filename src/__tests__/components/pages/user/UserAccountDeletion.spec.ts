@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
+import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -26,7 +27,7 @@ vi.mock('@/services/features/api-users', () => ({
 }));
 
 const mockPush = vi.fn<(to: string) => void>();
-const mockRoute = {
+const mockRoute: Pick<RouteLocationNormalizedLoadedGeneric, 'query'> = {
   query: {
     token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
   },
@@ -71,7 +72,7 @@ describe('UserAccountDeletion', () => {
       const messageStore = useMessageStore();
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.accountDeleteConfirm).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.accountDeleteConfirm).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Act: Click on delete button.
       await wrapper.find('[data-testid="accountDelete_btn_submit"]').trigger('click');
@@ -182,8 +183,8 @@ describe('UserAccountDeletion', () => {
       vi.setSystemTime(new Date('2026-05-18T12:00:00Z'));
       AppLoginer.login(jwt);
 
-      // Arrange: Set token to undefined.
-      mockRoute.query.token = undefined as any;
+      // Arrange: Set token to null.
+      mockRoute.query.token = null;
 
       // Act: Create page.
       createComponent();

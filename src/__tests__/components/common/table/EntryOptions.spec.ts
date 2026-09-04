@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -22,7 +21,7 @@ function createComponent(
   meta: EntryMeta | null,
   entry: TestEntry | null,
   langPrefix: string,
-  actions: Record<string, (entry: Record<string, any> | null) => void | Promise<void>>,
+  actions: Record<string, (entry: Record<string, TestEntry> | null) => void | Promise<void>>,
   isBusy: boolean,
 ) {
   return mount(EntryOptions, {
@@ -67,10 +66,10 @@ function createEntry(): TestEntry {
   return { id: 42, name: 'Entry Name', value: 'Entry Value' };
 }
 
-function createActions(): Record<string, (entry: Record<string, any> | null) => void | Promise<void>> {
+function createActions(): Record<string, (entry: Record<string, TestEntry> | null) => void | Promise<void>> {
   return {
-    add: vi.fn<(entry: Record<string, any> | null) => void | Promise<void>>(),
-    del: vi.fn<(entry: Record<string, any> | null) => void | Promise<void>>(),
+    add: vi.fn<(entry: Record<string, TestEntry> | null) => void | Promise<void>>(),
+    del: vi.fn<(entry: Record<string, TestEntry> | null) => void | Promise<void>>(),
   };
 }
 

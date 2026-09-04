@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -67,7 +68,7 @@ describe('UserEmailChange', () => {
       AppLoginer.login(jwt);
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.emailChangeConfirm).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.emailChangeConfirm).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Act: Create page — will call API on mount.
       createComponent();

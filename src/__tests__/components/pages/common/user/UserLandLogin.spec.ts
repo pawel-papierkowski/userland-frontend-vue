@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import i18n from '@/code/lang/i18n.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
@@ -66,7 +67,7 @@ describe('UserLandLogin', () => {
       data: {
         jwtToken: genJwt()
       },
-    } as any);
+    } as AxiosResponse);
 
     // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
@@ -111,7 +112,7 @@ describe('UserLandLogin', () => {
       data: {
         jwtToken: genJwt([{ prefix: 'role', suffix: 'admin' }])
       },
-    } as any);
+    } as AxiosResponse);
 
     // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('pawel.papierkowski@gmail.com');
@@ -156,7 +157,7 @@ describe('UserLandLogin', () => {
       data: {
         jwtToken: genJwt()
       },
-    } as any);
+    } as AxiosResponse);
 
     // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');
@@ -209,7 +210,7 @@ describe('UserLandLogin', () => {
       data: {
         jwtToken: jwtTokenExpired
       },
-    } as any);
+    } as AxiosResponse);
 
     // Arrange: Fill form fields correctly.
     await userLogin.find('[data-testid="email"]').setValue('test@example.com');

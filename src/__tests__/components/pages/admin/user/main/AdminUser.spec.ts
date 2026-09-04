@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, type VueWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -16,7 +15,7 @@ import { TimeUtils } from '@/code/utils/TimeUtils';
 
 import { useUserEventStore } from '@/stores/events/user-events.ts';
 import { emptyUserForm } from '@/code/data/features/user/user-const.ts';
-import type { UserTableFilterForm } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserTableFilterForm, UserTableReq } from '@/code/data/features/user/admin-user-type.ts';
 
 import AdminUser from '@/components/pages/admin/user/main/AdminUser.vue';
 
@@ -118,7 +117,7 @@ beforeEach(() => {
   // Default: TimeUtils.cnvDate returns null (dates are null by default).
   vi.mocked(TimeUtils.cnvDate).mockReturnValue(null);
   // Default: TimeUtils.zoned acts as identity.
-  vi.mocked(TimeUtils.zoned).mockImplementation((s: any) => String(s));
+  vi.mocked(TimeUtils.zoned).mockImplementation((s: string | null | undefined) => String(s));
 });
 
 /**
@@ -301,7 +300,7 @@ describe('AdminUser', () => {
       createComponent();
 
       // Assert: The request has null date fields.
-      const callArg = mockLoadPage.mock.calls[0]?.[0] as any;
+      const callArg = mockLoadPage.mock.calls[0]?.[0] as UserTableReq;
       expect(callArg.createdFromAt).toBeNull();
       expect(callArg.createdToAt).toBeNull();
 
@@ -350,7 +349,7 @@ describe('AdminUser', () => {
       // Assert: CnvDate was called with the date, and the request has the
       // correctly formatted string.
       expect(TimeUtils.cnvDate).toHaveBeenCalledWith(formWithDate.createdFromAt);
-      const callArg = mockLoadPage.mock.calls[0]?.[0] as any;
+      const callArg = mockLoadPage.mock.calls[0]?.[0] as UserTableReq;
       expect(callArg.createdFromAt).toBe('2024-01-15T00:00:00');
 
       // Cleanup.
@@ -397,7 +396,7 @@ describe('AdminUser', () => {
       // Assert: CnvDate was called with the date, and the request has the
       // correctly formatted string.
       expect(TimeUtils.cnvDate).toHaveBeenCalledWith(formWithDate.createdToAt);
-      const callArg = mockLoadPage.mock.calls[0]?.[0] as any;
+      const callArg = mockLoadPage.mock.calls[0]?.[0] as UserTableReq;
       expect(callArg.createdToAt).toBe('2024-12-31T23:59:59.999999');
 
       // Cleanup.

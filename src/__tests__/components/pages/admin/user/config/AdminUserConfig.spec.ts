@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -64,8 +63,8 @@ interface TestConfigEntry {
   createdAt: string;
   name: string;
   value: string;
-  meta: any;
-  [key: string]: any;
+  meta: Record<string, unknown>;
+  [key: string]: string | number | Record<string, unknown>;
 }
 
 const testUser1: TestUserEntry = {

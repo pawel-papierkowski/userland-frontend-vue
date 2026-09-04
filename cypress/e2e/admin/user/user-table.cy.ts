@@ -4,6 +4,8 @@
 
 import { locstJwt } from '@/code/data/app/storage.ts';
 
+import type { UserTableReq } from '@/code/data/features/user/admin-user-type.ts';
+
 import type { UserTableEntry } from '@/../cypress/support/helpers/user.ts';
 import AdminUserPage from '@/../cypress/support/pages/admin/AdminUserPage.ts';
 import AdminUserTablePage from '@/../cypress/support/pages/admin/AdminUserTablePage.ts';
@@ -29,16 +31,15 @@ before(() => {
  */
 function stubUserTable(users: UserTableEntry[] = fixtureUsers, pageSize: number = 5) {
   cy.intercept('POST', '**/api/admin/users', (req) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filter = req.body as any;
+    const filter = req.body as UserTableReq;
 
     // Filtering (mirrors backend behavior for username, email and status).
     let result = users;
     if (filter.username) {
-      result = result.filter((u) => u.username.toLowerCase().includes(filter.username.toLowerCase()));
+      result = result.filter((u) => u.username.toLowerCase().includes(filter.username?.toLowerCase() || ''));
     }
     if (filter.email) {
-      result = result.filter((u) => u.email.toLowerCase().includes(filter.email.toLowerCase()));
+      result = result.filter((u) => u.email.toLowerCase().includes(filter.email?.toLowerCase() || ''));
     }
     if (filter.status) {
       result = result.filter((u) => u.status === filter.status);

@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
+import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -21,7 +22,7 @@ vi.mock('@/services/features/api-users', () => ({
 }));
 
 const mockPush = vi.fn<(to: string) => void>();
-const mockRoute = {
+const mockRoute: Pick<RouteLocationNormalizedLoadedGeneric, 'query'> = {
   query: {
     token: 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs',
   },
@@ -62,7 +63,7 @@ describe('UserPasswordReset', () => {
       const messageStore = useMessageStore();
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.passwordResetConfirm).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.passwordResetConfirm).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Arrange: Fill form fields correctly.
       await wrapper.find('[data-testid="password"]').setValue('n3wP@s5w0rD');
@@ -132,8 +133,8 @@ describe('UserPasswordReset', () => {
       expect(messageStore.messages[0]?.content).toBe('User token is missing.');
 
       // Assert: Form fields are cleared (clearForm behaviour).
-      const passwordInput = wrapper.find('[data-testid="password"]') as any;
-      const confirmInput = wrapper.find('[data-testid="confirmPassword"]') as any;
+      const passwordInput = wrapper.find<HTMLInputElement>('[data-testid="password"]');
+      const confirmInput = wrapper.find<HTMLInputElement>('[data-testid="confirmPassword"]');
       expect(passwordInput.element.value).toBe('');
       expect(confirmInput.element.value).toBe('');
 
@@ -266,8 +267,8 @@ describe('UserPasswordReset', () => {
       // When the URL has no token, the component should show a failure
       // message and navigate home without rendering the form.
 
-      // Arrange: Set token to undefined.
-      mockRoute.query.token = undefined as any;
+      // Arrange: Set token to null.
+      mockRoute.query.token = null;
 
       // Act: Create page — will check token on mount.
       createComponent();

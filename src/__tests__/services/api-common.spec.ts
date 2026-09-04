@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
 import { createPinia, setActivePinia } from 'pinia';
@@ -29,22 +28,18 @@ vi.mock('axios', () => {
   const mockAxiosInstance = {
     interceptors: {
       request: {
-        use: vi.fn<any>(),
-        //use: vi.fn<(onFulfilled: (config: unknown) => unknown) => number>(),
+        use: vi.fn<(onFulfilled: (config: unknown) => unknown) => number>(),
       },
       response: {
-        use: vi.fn<any>(),
-        //use: vi.fn<(onFulfilled: (response: unknown) => unknown, onRejected?: (error: unknown) => unknown) => number>(),
+        use: vi.fn<(onFulfilled: (response: unknown) => unknown, onRejected?: (error: unknown) => unknown) => number>(),
       },
     },
   };
   return {
     default: {
-      create: vi.fn<any>(() => mockAxiosInstance),
-      //create: vi.fn<() => typeof mockAxiosInstance>(),
+      create: vi.fn<() => typeof mockAxiosInstance>().mockReturnValue(mockAxiosInstance),
     },
-    isAxiosError: vi.fn<any>((err: any) => err?.isAxiosError === true),
-    //isAxiosError: vi.fn<(err: unknown) => boolean>(),
+    isAxiosError: vi.fn<(err: unknown) => boolean>((err: unknown) => (err as { isAxiosError?: boolean })?.isAxiosError === true),
   };
 });
 
@@ -75,9 +70,12 @@ vi.mock('@/code/utils/logger.ts', () => ({
 // ////////////////////////////////////////////////////////////////////////////
 // Tests.
 
+type InterceptorConfig = { headers: Record<string, string>; url?: string };
+type ResponseError = { isAxiosError: boolean; response?: { status: number }; config: { url: string } };
+
 describe('api-common', () => {
-  let interceptor: (config: any) => Promise<any>;
-  let responseErrorHandler: (error: any) => Promise<any>;
+  let interceptor: (config: InterceptorConfig) => Promise<InterceptorConfig>;
+  let responseErrorHandler: (error: ResponseError) => Promise<never>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -126,7 +124,7 @@ describe('api-common', () => {
       // Arrange: Token present and shouldProlong returns true (expiry).
       vi.spyOn(AppLoginer, 'shouldProlong').mockReturnValueOnce(true);
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
-      vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ jwt: 'new-token' } as any);
+      vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ result: true, jwt: 'new-token' });
       const config = { headers: {}, url: '/some-endpoint' };
 
       // Act: Call interceptor.
@@ -176,7 +174,7 @@ describe('api-common', () => {
       // Arrange: Set last call to 13 hours ago (> 12h idle).
       localStorage.setItem(locstLastApiCall, String(Date.now() - idleMoreThan * 60 * 1000));
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
-      vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ jwt: 'new-token' } as any);
+      vi.mocked(AppLoginer.prolongSilently).mockResolvedValue({ result: true, jwt: 'new-token' });
       const config = { headers: {}, url: '/some-endpoint' };
 
       // Act: Call interceptor.

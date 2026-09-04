@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi } from 'vitest';
 import { mount, VueWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -40,7 +39,7 @@ function createComponent(
   columns: ColumnData[],
   data: TestEntry[],
   meta: TableMetaResp,
-  resolveRowMeta: (entry: Record<string, any> | null) => RowMeta | null,
+  resolveRowMeta: (entry: Record<string, TestEntry> | null) => RowMeta | null,
   isLoading: boolean,
   canSpin: boolean,
   canSelect: boolean,
@@ -157,8 +156,8 @@ function genMetaData(page: number, sortBy: string, sortOrder: string): TableMeta
   };
 }
 
-function genResolveRowMeta(): (entry: Record<string, any> | null) => RowMeta | null {
-  return vi.fn<(entry: Record<string, any> | null) => RowMeta | null>();
+function genResolveRowMeta(): (entry: Record<string, TestEntry> | null) => RowMeta | null {
+  return vi.fn<(entry: Record<string, TestEntry> | null) => RowMeta | null>();
 }
 
 function generateAll(
@@ -170,7 +169,7 @@ function generateAll(
   columns: ColumnData[];
   data: TestEntry[];
   metadata: TableMetaResp;
-  resolveRowMeta: (entry: Record<string, any> | null) => RowMeta | null;
+  resolveRowMeta: (entry: Record<string, TestEntry> | null) => RowMeta | null;
 } {
   const columns = genColumns();
   const data = genDataPaged(isEmpty ? -1 : page);

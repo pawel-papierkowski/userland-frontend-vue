@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -54,7 +54,7 @@ describe('UserAccountDeletionStart', () => {
       const messageStore = useMessageStore();
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.accountDeleteLink).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.accountDeleteLink).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Arrange: Fill form.
       await wrapper.find('[data-testid="password"]').setValue('5trOnGP@ssw0rd');
@@ -124,7 +124,7 @@ describe('UserAccountDeletionStart', () => {
       expect(messageStore.messages[0]?.content).toBe('User token already exists.');
 
       // Assert: Form field is cleared (clearForm behaviour).
-      const passwordInput = wrapper.find('[data-testid="password"]') as any;
+      const passwordInput = wrapper.find<HTMLInputElement>('[data-testid="password"]');
       expect(passwordInput.element.value).toBe('');
 
       // Assert: Verify no redirection.

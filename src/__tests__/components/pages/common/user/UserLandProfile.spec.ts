@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -60,7 +61,7 @@ describe('UserLandProfile', () => {
           surname: null,
         },
       },
-    } as any);
+    } as AxiosResponse);
     vi.mocked(backendApiUser.edit).mockResolvedValue({
       data: {
         version: 2,
@@ -72,7 +73,7 @@ describe('UserLandProfile', () => {
           surname: "Smith",
         },
       }
-    } as any);
+    } as AxiosResponse);
 
     // Act: instantiate component, that will already cause API view call.
     const userProfile = createComponent();
@@ -141,7 +142,7 @@ describe('UserLandProfile', () => {
           surname: null,
         },
       },
-    } as any);
+    } as AxiosResponse);
 
     const userProfile = createComponent();
 
@@ -175,7 +176,7 @@ describe('UserLandProfile', () => {
           surname: null,
         },
       },
-    } as any);
+    } as AxiosResponse);
 
     const userProfile = createComponent();
 
@@ -242,8 +243,8 @@ describe('UserLandProfile', () => {
           surname: null,
         },
       },
-    } as any);
-    vi.mocked(backendApiUser.edit).mockResolvedValue({ data: {} } as any);
+    } as AxiosResponse);
+    vi.mocked(backendApiUser.edit).mockResolvedValue({ data: {} } as AxiosResponse);
 
     const userProfile = createComponent();
 

@@ -6,9 +6,7 @@ import i18n from '@/code/lang/i18n.ts';
 
 import DatePicker from '@/components/base/inputs/datetimepicker/DatePicker.vue';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockOnClickOutside = vi.hoisted(() => vi.fn<(...args: any[]) => any>());
-//const mockOnClickOutside = vi.fn<(event: Event) => void>();
+const mockOnClickOutside = vi.hoisted(() => vi.fn<(event: MouseEvent) => void>());
 
 vi.mock('@vueuse/core', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@vueuse/core')>();

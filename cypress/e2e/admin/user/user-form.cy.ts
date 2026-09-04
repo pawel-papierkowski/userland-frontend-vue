@@ -2,7 +2,7 @@
 // Admin User Form E2E Tests
 // Tests main user form (AdminUserMain) that shows and edits a single selected user.
 
-import type { UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataReq, UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
@@ -59,8 +59,7 @@ function stubUserDataError() {
 function stubEditUser(initial: UserFullDataResp): UserFullDataResp {
   const current: UserFullDataResp = { ...initial, profile: { ...initial.profile } };
   cy.intercept('PATCH', '**/api/admin/user', (req) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = req.body as any;
+    const body = req.body as UserFullDataReq;
     current.username = body.username ?? current.username;
     current.email = body.email ?? current.email;
     current.locked = body.locked ?? current.locked;
@@ -199,8 +198,7 @@ describe('Admin User Form', () => {
 
       // Assert: Request carries the edited fields (locked and lang are untouched).
       cy.wait('@userEditRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserFullDataReq;
         cy.wrap(body.id).should('equal', 9);
         cy.wrap(body.username).should('equal', 'ivy_new');
         cy.wrap(body.email).should('equal', 'ivy_new@test.com');

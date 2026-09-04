@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import backendApiUser from '@/services/features/api-users.ts';
 
@@ -14,8 +15,8 @@ import type { LoginState } from '@/code/data/app/types.ts';
 
 vi.mock('@/services/features/api-users.ts', () => ({
   default: {
-    logout: vi.fn<typeof backendApiUser.logout>(() => Promise.resolve({} as any)), // Return a resolved promise
-    prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve({} as any)), // Return a resolved promise
+    logout: vi.fn<typeof backendApiUser.logout>(() => Promise.resolve({} as AxiosResponse<unknown>)), // Return a resolved promise
+    prolong: vi.fn<typeof backendApiUser.prolong>(() => Promise.resolve({} as AxiosResponse<unknown>)), // Return a resolved promise
   },
 }));
 
@@ -227,7 +228,7 @@ describe('AppLoginer', () => {
       const messageStore = useMessageStore();
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.logout).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.logout).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Arrange: Set loginStore to logged in state.
       loginStore.loginState.isLogged = true;
@@ -342,7 +343,7 @@ describe('AppLoginer', () => {
         data: {
           jwtToken: newToken,
         },
-      } as any);
+      } as AxiosResponse);
 
       // Arrange: Set loginStore to logged in state (with token issued few minutes earlier).
       loginStore.loginState.isLogged = true;
@@ -470,7 +471,7 @@ describe('AppLoginer', () => {
       vi.mocked(backendApiUser.prolong).mockImplementation(
         () =>
           new Promise((resolve) => {
-            setTimeout(() => resolve({ data: { jwtToken: newToken } } as any), 100);
+            setTimeout(() => resolve({ data: { jwtToken: newToken } } as AxiosResponse), 100);
           }),
       );
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, type DOMWrapper } from '@vue/test-utils';
 import { nextTick } from 'vue';
@@ -15,7 +14,7 @@ import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/stores/login/AppLoginer.ts';
 import { AppUserEventer } from '@/code/stores/events/AppUserEventer.ts';
 
-import type { UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataReq, UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
 
 import AdminUserMain from '@/components/pages/admin/user/main/AdminUserMain.vue';
 
@@ -227,13 +226,13 @@ describe('AdminUserMain', () => {
       // Assert: Divs and inputs contain the loaded data.
       const createdAtDiv = wrapper.find('[data-testid="user-form-createdAt"]');
       const modifiedAtDiv = wrapper.find('[data-testid="user-form-modifiedAt"]');
-      const usernameInput = wrapper.find('[data-testid="user-form-username"]') as any;
-      const emailInput = wrapper.find('[data-testid="user-form-email"]') as any;
+      const usernameInput = wrapper.find<HTMLInputElement>('[data-testid="user-form-username"]');
+      const emailInput = wrapper.find<HTMLInputElement>('[data-testid="user-form-email"]');
       const statusDiv = wrapper.find('[data-testid="user-form-status"]');
       const lockedDiv = wrapper.find('[data-testid="user-form-locked"]');
       const langDiv = wrapper.find('[data-testid="user-form-lang"]');
-      const nameInput = wrapper.find('[data-testid="user-form-name"]') as any;
-      const surnameInput = wrapper.find('[data-testid="user-form-surname"]') as any;
+      const nameInput = wrapper.find<HTMLInputElement>('[data-testid="user-form-name"]');
+      const surnameInput = wrapper.find<HTMLInputElement>('[data-testid="user-form-surname"]');
 
       expect(createdAtDiv.element.textContent).toBe('2024-01-15 11:00:00');
       expect(modifiedAtDiv.element.textContent).toBe('2024-06-01 10:00:00');
@@ -300,7 +299,7 @@ describe('AdminUserMain', () => {
 
       // Assert: EditUserData was called with correct payload.
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
-      const payload = mockEditUserData.mock.calls[0]?.[0] as any;
+      const payload = mockEditUserData.mock.calls[0]?.[0] as UserFullDataReq;
       expect(payload.id).toBe(testUser.id);
       expect(payload.version).toBe(1);
       expect(payload.username).toBe('alice');
@@ -396,7 +395,7 @@ describe('AdminUserMain', () => {
 
       // Assert: EditUserData called with locked: true.
       expect(mockEditUserData).toHaveBeenCalledTimes(1);
-      const payload = mockEditUserData.mock.calls[0]?.[0] as any;
+      const payload = mockEditUserData.mock.calls[0]?.[0] as UserFullDataReq;
       expect(payload.version).toBe(1);
       expect(payload.locked).toBe(true);
       // Only locked field should be sent; other fields are null (no change).
@@ -425,7 +424,7 @@ describe('AdminUserMain', () => {
       await nextTick();
 
       // Assert: EditUserData called with locked: false.
-      const payload = mockEditUserData.mock.calls[0]?.[0] as any;
+      const payload = mockEditUserData.mock.calls[0]?.[0] as UserFullDataReq;
       expect(payload.version).toBe(1);
       expect(payload.locked).toBe(false);
     });

@@ -4,7 +4,7 @@
 // Config entries are edited in-place (inline edit), so there is an additional suite
 // that covers adding, editing and deleting config entries.
 
-import type { UserFullDataResp, UserConfigTableEntry } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataResp, UserConfigTableReq, UserConfigEntryEditReq, UserConfigTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 import type { EntryMeta } from '@/code/data/features/common/type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 
@@ -60,16 +60,17 @@ function stubUserConfigs(initialEntries: UserConfigTableEntry[]) {
   const state: UserConfigTableEntry[] = initialEntries.map((entry) => ({ ...entry }));
 
   cy.intercept('POST', '**/api/admin/user/configs', (req) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filter = req.body as any;
+    const filter = req.body as UserConfigTableReq;
 
     // Filtering (mirrors backend behavior for the created date range).
     let result = state;
     if (filter.createdFromAt) {
-      result = result.filter((e) => e.createdAt >= filter.createdFromAt);
+      const createdFromAt = filter.createdFromAt;
+      result = result.filter((e) => e.createdAt >= createdFromAt);
     }
     if (filter.createdToAt) {
-      result = result.filter((e) => e.createdAt <= filter.createdToAt);
+      const createdToAt = filter.createdToAt;
+      result = result.filter((e) => e.createdAt <= createdToAt);
     }
 
     // Sorting. Default sort is echoed back so the page keeps non-null sort state
@@ -99,8 +100,7 @@ function stubUserConfigs(initialEntries: UserConfigTableEntry[]) {
   }).as('userConfigsRequest');
 
   cy.intercept('PATCH', '**/api/admin/user/config', (req) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const body = req.body as any;
+    const body = req.body as UserConfigEntryEditReq;
     if (body.id === null) {
       // Add a new entry with a fresh id and a created date later than all existing ones.
       const newId = state.reduce((max, e) => Math.max(max, e.id), 0) + 1;
@@ -284,8 +284,7 @@ describe('Admin User Config', () => {
 
       // Assert: Request carries the converted date range bound and the user ID.
       cy.wait('@userConfigsRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserConfigTableReq;
         cy.wrap(body.userId).should('equal', 9);
         cy.wrap(body.createdFromAt).should('equal', '2024-07-15T00:00:00');
         cy.wrap(body.createdToAt).should('equal', null);
@@ -317,8 +316,7 @@ describe('Admin User Config', () => {
 
       // Assert: Request carries the converted end-of-day bound.
       cy.wait('@userConfigsRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserConfigTableReq;
         cy.wrap(body.createdFromAt).should('equal', null);
         cy.wrap(body.createdToAt).should('equal', '2024-07-15T23:59:59.999999');
       });
@@ -444,8 +442,7 @@ describe('Admin User Config', () => {
 
       // Assert: Request carries the new entry data (id null = new entry, correct user).
       cy.wait('@userConfigEditRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserConfigEntryEditReq;
         cy.wrap(body.id).should('equal', null);
         cy.wrap(body.userId).should('equal', 9);
         cy.wrap(body.name).should('equal', 'config-new');
@@ -513,8 +510,7 @@ describe('Admin User Config', () => {
 
       // Assert: Request carries the edited entry data (id of edited entry, correct user).
       cy.wait('@userConfigEditRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserConfigEntryEditReq;
         cy.wrap(body.id).should('equal', 10);
         cy.wrap(body.userId).should('equal', 9);
         cy.wrap(body.name).should('equal', 'config-edited');

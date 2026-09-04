@@ -2,7 +2,7 @@
 // Admin User History E2E Tests
 // Tests the user history tab (AdminUserHistory) and its filter (AdminUserHistoryFilter).
 
-import type { UserFullDataResp, UserHistoryTableEntry } from '@/code/data/features/user/admin-user-type.ts';
+import type { UserFullDataResp, UserHistoryTableReq, UserHistoryTableEntry } from '@/code/data/features/user/admin-user-type.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 
 import { stubUserTable, stubUserData, stubUserSubTables, expectSubTabCalls } from '@/../cypress/support/helpers/user.ts';
@@ -45,22 +45,25 @@ before(() => {
  */
 function stubUserHistory(entries: UserHistoryTableEntry[] = historyEntries, pageSize: number = 5) {
   cy.intercept('POST', '**/api/admin/user/history', (req) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const filter = req.body as any;
+    const filter = req.body as UserHistoryTableReq;
 
     // Filtering (mirrors backend behavior for who, what and created date range).
     let result = entries;
     if (filter.who) {
-      result = result.filter((e) => e.who === filter.who);
+      const who = filter.who;
+      result = result.filter((e) => e.who === who);
     }
     if (filter.what) {
-      result = result.filter((e) => e.what === filter.what);
+      const what = filter.what;
+      result = result.filter((e) => e.what === what);
     }
     if (filter.createdFromAt) {
-      result = result.filter((e) => e.createdAt >= filter.createdFromAt);
+      const createdFromAt = filter.createdFromAt;
+      result = result.filter((e) => e.createdAt >= createdFromAt);
     }
     if (filter.createdToAt) {
-      result = result.filter((e) => e.createdAt <= filter.createdToAt);
+      const createdToAt = filter.createdToAt;
+      result = result.filter((e) => e.createdAt <= createdToAt);
     }
 
     // Sorting. Default sort is echoed back so the page keeps non-null sort state
@@ -245,8 +248,7 @@ describe('Admin User History', () => {
 
       // Assert: Request carries the converted date range bound.
       cy.wait('@userHistoryRequest').then((interception) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const body = interception.request.body as any;
+        const body = interception.request.body as UserHistoryTableReq;
         cy.wrap(body.createdFromAt).should('equal', '2024-07-15T00:00:00');
         cy.wrap(body.createdToAt).should('equal', null);
       });

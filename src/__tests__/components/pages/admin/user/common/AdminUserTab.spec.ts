@@ -5,13 +5,14 @@ import { nextTick } from 'vue';
 
 import i18n from '@/code/lang/i18n.ts';
 
-import type { ColumnData, TableMetaReq, TableMetaResp } from '@/code/data/features/common/type.ts';
+import type { ColumnData, RowMeta, TableMetaReq, TableMetaResp } from '@/code/data/features/common/type.ts';
 import { EnColumnKind } from '@/code/data/features/common/const.ts';
 
 import AdminUserTab from '@/components/pages/admin/user/common/AdminUserTab.vue';
 import apiLogging from '@/services/api-logging.ts';
 
 import { AppMessager } from '@/code/stores/messages/AppMessager.ts';
+import type { AdminUserTabExpose } from '@/code/data/features/user/admin-user-type';
 
 // Mock API and message modules.
 vi.mock('@/services/api-common.ts', () => ({
@@ -140,8 +141,8 @@ function createComponent(
     formEntry?: any;
     fetchData?: any;
     convertToReq?: any;
-    processEntry?: any;
-    resolveRowMeta?: any;
+    processEntry?: ((entry: Record<string, any>) => Record<string, any>) | undefined;
+    resolveRowMeta?: ((entry: Record<string, any> | null) => RowMeta | null) | undefined;
     inlineEdit?: boolean;
     addNewEntry?: boolean;
     isActive?: boolean;
@@ -259,7 +260,7 @@ describe('AdminUserTab', () => {
       mockFetchData.mockReturnValue(promise);
 
       // Create transformation that marks each entry.
-      const transformEntry = vi.fn<(entry: TestEntry) => void>((entry: TestEntry) => ({ ...entry, transformed: true }));
+      const transformEntry = vi.fn<(entry: Record<string, any>) => Record<string, any>>((entry: Record<string, any>) => ({ ...entry, transformed: true }));
       createComponent({
         modelValue: testUser1,
         fetchData: mockFetchData,
@@ -666,7 +667,7 @@ describe('AdminUserTab', () => {
       const { promise: promise2, resolve: resolve2 } = createDeferredPromise<unknown>();
       mockFetchData.mockReturnValue(promise2);
 
-      (wrapper.vm as any).handleReload();
+      (wrapper.vm as AdminUserTabExpose).handleReload();
       await nextTick();
 
       // Assert: ConvertToReq and fetchData were called.

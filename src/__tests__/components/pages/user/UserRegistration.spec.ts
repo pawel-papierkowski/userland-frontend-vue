@@ -1,7 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createPinia, setActivePinia } from 'pinia';
+import type { AxiosResponse } from 'axios';
 
 import i18n from '@/code/lang/i18n.ts';
 import { logger } from '@/code/utils/logger.ts';
@@ -54,7 +55,7 @@ describe('UserRegistration', () => {
       const messageStore = useMessageStore();
 
       // Arrange: Mock successful API response.
-      vi.mocked(backendApiUser.register).mockResolvedValue({ data: {} } as any);
+      vi.mocked(backendApiUser.register).mockResolvedValue({ data: {} } as AxiosResponse);
 
       // Arrange: Fill form fields correctly.
       await userRegistration.find('[data-testid="username"]').setValue('testuser');
