@@ -12,7 +12,9 @@
 ## Development Guidelines
 
 ### General
-- **Types:** We use TypeScript. Use semicolons.
+- **Language:**
+  - We use TypeScript. Use semicolons.
+  - Avoid using type `any` unless neccessary. Use it only when justified.
 - **Placement:**
   - Pure code is in `src/code`.
   - Components are in `src/components`.
