@@ -53,7 +53,7 @@ const reloadTrigger = ref(0);
 // WATCHES
 
 /**
- * React on main user table being reloaded.
+ * React to main user table being reloaded.
  * Forces reload of user tokens table when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger], async () => {

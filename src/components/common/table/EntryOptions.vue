@@ -93,7 +93,7 @@ const optionExecute = async (option: EntryOption, key: string) => {
 };
 
 /**
- * React on key press while we are focused on the given option.
+ * React to key press while we are focused on the given option.
  * @param e Keyboard event.
  * @param option Entry option.
  * @param key Key.

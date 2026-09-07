@@ -1,7 +1,7 @@
 // ////////////////////////////////////////////////////////////////////////////
 // Header Menu Options E2E Tests
 // Tests which options are present in the header navigation (bar + user menu)
-// depending on whether user is logged in. Covers both the standard webpage
+// depending on whether the user is logged in. Covers both the standard webpage
 // header and the administration panel header.
 
 import { locstJwt } from '@/code/data/app/storage.ts';

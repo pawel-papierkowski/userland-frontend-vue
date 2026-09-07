@@ -86,7 +86,7 @@ const createTestToken = (permissions: string[], options: JwtTokenOptions = {}): 
  * @param loginStore Pinia storage with login state.
  */
 const verifyEmptyLoginStore = (loginStore: { loginState: LoginState }) => {
-  // If you are unlogged, login state is always same.
+  // If you are unlogged, login state is always the same.
   expect(loginStore.loginState.isLogged).toBe(false);
   expect(loginStore.loginState.token).toBe('');
   expect(loginStore.loginState.username).toBe('');

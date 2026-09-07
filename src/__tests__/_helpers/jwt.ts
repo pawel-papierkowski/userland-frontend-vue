@@ -21,7 +21,7 @@ export interface JwtOptions {
 
 /**
  * Generate a valid JWT token.
- * Uses base64url encoding and a far-future expiration timestamp. Note it is a simulation, there is no real signature.
+ * Uses base64url encoding and a far-future expiration timestamp. Note: it is a simulation; there is no real signature.
  * @param permissions Optional list of permissions to encode in token. Multiple suffixes of the same prefix
  * are comma-separated in a single claim.
  * Example: `[{ prefix: 'role', suffix: 'admin,operator' }]` will end up as `'role_admin'` and `'role_operator'`.

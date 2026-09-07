@@ -13,20 +13,20 @@ export type ColumnData = {
   defSort: string;
   /** Translation key for column header. */
   translation: string;
-  /** Is column visible? */
+  /** Is the column visible? */
   visible: boolean;
-  /** Is column editable? Applies only to in-place editing. */
+  /** Is the column editable? Applies only to in-place editing. */
   editable: boolean;
   /** Kind of column. */
   kind: EnColumnKind;
 };
 
-/** Metadata for given row. */
+/** Metadata for a given row. */
 export type RowMeta = Record<string, FieldMeta>;
 
-/** Metadata for given field. */
+/** Metadata for a given field. */
 export type FieldMeta = {
-  /** CSS class for field. */
+  /** CSS class for the field. */
   css: string;
 };
 

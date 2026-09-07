@@ -27,7 +27,7 @@ export default {
             backendBody: error.response.data, // The actual JSON from backend
           });
       } else if (error.request) {
-        // Request was made but no response was received (e.g. backend is down).
+        // Request was made but no response was received (e.g., backend is down).
         logger.error(comment, 'Backend is unreachable. No response received.');
       }
     } else {

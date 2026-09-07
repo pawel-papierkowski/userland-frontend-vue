@@ -170,8 +170,8 @@ export class AppLoginer {
   }
 
   /**
-   * Check if user is logged.
-   * @returns True if user is logged, otherwise false.
+   * Check if user is logged in.
+   * @returns True if user is logged in, otherwise false.
    */
   public static isLogged(): boolean {
     const loginStore = useLoginStore();

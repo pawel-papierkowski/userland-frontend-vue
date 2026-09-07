@@ -391,7 +391,7 @@ const onMinuteKeydown = (e: KeyboardEvent) => {
 
 //
 
-/** React on column change via key press. */
+/** React to column change via key press. */
 const keyPressSwitchColumn = () => {
   if (focusedHour.value === null || focusedMinute.value === null) {
     // Just show focus without switching column.
@@ -410,7 +410,7 @@ const keyPressSwitchColumn = () => {
   }
 };
 
-/** React on selecting hour via key press. */
+/** React to selecting hour via key press. */
 const keyPressSelectHour = () => {
   if (focusedHour.value === null) {
     // Just show focus without selecting anything.
@@ -433,7 +433,7 @@ const keyPressSelectHour = () => {
   });
 };
 
-/** React on selecting minute via key press. */
+/** React to selecting minute via key press. */
 const keyPressSelectMinute = () => {
   if (focusedMinute.value === null) {
     // Just show focus without selecting anything.

@@ -581,7 +581,7 @@ const shiftFocus = (days: number) => {
 
 //
 
-/** React on selecting date via key press. */
+/** React to selecting date via key press. */
 const keyPressSelectDate = () => {
   if (focusedDate.value) {
     const prevDateTime = selDateTime.value;

@@ -5,7 +5,7 @@ import type { Message } from '@/code/wrappers/messages/types.ts';
 import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import { defDuration } from '@/stores/messages/const.ts';
 
-/** Soft cap on the number of messages at once. Actual amount can temporarily be above that; it is fine. */
+/** Soft cap on the number of messages at once. The actual amount can temporarily be above that; it is fine. */
 const maxMessages = 20;
 
 /**
@@ -14,7 +14,7 @@ const maxMessages = 20;
 export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
   const messages = ref<Message[]>([]);
-  /** Number of last message. */
+  /** Number of the last message. */
   let lastNo: number = 0;
 
   /**

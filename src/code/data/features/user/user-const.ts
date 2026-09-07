@@ -81,7 +81,7 @@ export const emptyUserHistoryTable: UserHistoryTableResp = {
 
 /** List of values for user history 'who' field. */
 export const enUserHistoryWho: (string | null)[] = [null, 'USER', 'OPERATOR', 'SYSTEM'];
-/** List of user history what values. */
+/** List of values for user history 'what' field. */
 export const enUserHistoryWhat: (string | null)[] = [
   null,
   'CREATE',

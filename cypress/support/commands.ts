@@ -61,9 +61,9 @@ Cypress.Commands.add('visitUserLand', (path: string = '/') => {
 });
 
 /**
- * Log in programmatically without going through the login form and then visit desired page. Setup is same as in
+ * Log in programmatically without going through the login form and then visit the desired page. Setup is the same as in
  * `visitUserLand()`.
- * Login is done by injecting a simulated JWT into local storage (key 'app-jwt', same one the app reads on startup)
+ * Login is done by injecting a simulated JWT into local storage (key 'app-jwt', the same one the app reads on startup)
  * before the page loads.
  * Usage:
  * - cy.login() — logged-in standard user (no permissions) on home page.
@@ -99,7 +99,7 @@ Cypress.Commands.add('waitIfHappens', (alias: string, options?: { timeout?: numb
       const req = interception as unknown as Interception | undefined;
       if (req?.response) return cy.wrap<Interception | null>(req);
       // eslint-disable-next-line cypress/no-unnecessary-waiting
-      return cy.wait(50).then(poll); // yes, we wait arbitrary amount of time
+      return cy.wait(50).then(poll); // yes, we wait an arbitrary amount of time
     });
   };
 

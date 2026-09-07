@@ -365,7 +365,7 @@ describe('Admin User Form', () => {
       // Act: Switch to the history tab first, then select the user.
       cy.getByTestId('usertab_history').click();
       page.selectUserRow(0);
-      cy.waitIfHappens('@userDataRequest', { timeout: 250 }); // User form data won't be loaded because we are on different tab at the time of user selection.
+      cy.waitIfHappens('@userDataRequest', { timeout: 250 }); // User form data won't be loaded because we are on a different tab at the time of user selection.
 
       // Assert: User form data is not loaded.
       cy.get(`@userDataRequest.all`).should('have.length', 0);
@@ -420,7 +420,7 @@ describe('Admin User Form', () => {
       // Assert: Only the active (jwt) sub-tab is loaded, the rest is unchanged.
       expectSubTabCalls(subTableEndpoints, { history: 1, permissions: 1, configs: 1, tokens: 1, jwt: 1 });
 
-      // Act: Switch back to the history tab. Will do nothing because it is still same user and its data is unchanged.
+      // Act: Switch back to the history tab. Will do nothing because it is still the same user and its data is unchanged.
       cy.getByTestId('usertab_history').click();
       cy.waitIfHappens('@subtab_history', { timeout: 250 });
       // Assert: All sub-tabs are unchanged.

@@ -74,7 +74,7 @@ const reloadTrigger = ref(0);
 // WATCHES
 
 /**
- * React on main user table being reloaded.
+ * React to main user table being reloaded.
  * Forces reload of user config table when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger], async () => {
@@ -83,7 +83,7 @@ watch([usersReloadTrigger], async () => {
   else reloadTrigger.value++; // reload later, when we open this tab
 });
 
-/** React on user being (de)selected. */
+/** React to user being (de)selected. */
 watch(selUserRecord, async () => {
   // Deselect anything in subtable.
   await tabRef.value?.selectEntry(null, true);

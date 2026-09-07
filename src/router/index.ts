@@ -175,7 +175,7 @@ router.beforeEach((to) => {
 // ////////////////////////////////////////////////////////////////////////////
 
 /**
- * Check if the currently logged user has access to the given route.
+ * Check if the currently logged-in user has access to the given route.
  * @param meta Metadata about the route.
  * @returns True if the given user has access, otherwise false.
  */

@@ -64,7 +64,7 @@ export default {
   },
 
   /**
-   * Get all data of currently logged user.
+   * Get all data of the currently logged-in user.
    * @returns Result of call.
    */
   view() {
@@ -72,7 +72,7 @@ export default {
   },
 
   /**
-   * Change some or all data of currently logged user.
+   * Change some or all data of the currently logged-in user.
    * @returns Result of call.
    */
   edit(payload: UserEditReq) {

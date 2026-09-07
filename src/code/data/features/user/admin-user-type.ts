@@ -28,7 +28,7 @@ export type UserTableReq = {
 
 /** User table load response: page. */
 export type UserTableResp = {
-  entries: UserTableEntry[]; // All entries for single page from user table.
+  entries: UserTableEntry[]; // All entries for a single page from user table.
   tableMeta: TableMetaResp;
 };
 
@@ -110,7 +110,7 @@ export type UserHistoryTableReq = {
 
 /** User history table load response: page. */
 export type UserHistoryTableResp = {
-  entries: UserHistoryTableEntry[]; // All entries for single page from user history table.
+  entries: UserHistoryTableEntry[]; // All entries for a single page from user history table.
   tableMeta: TableMetaResp;
 };
 
@@ -143,7 +143,7 @@ export type UserPermissionTableReq = {
 
 /** User permission table load response: page. */
 export type UserPermissionTableResp = {
-  entries: UserPermissionTableEntry[]; // All entries for single page from user permission table.
+  entries: UserPermissionTableEntry[]; // All entries for a single page from user permission table.
   tableMeta: TableMetaResp;
 };
 
@@ -190,7 +190,7 @@ export type UserConfigTableReq = {
 
 /** User config table load response: page. */
 export type UserConfigTableResp = {
-  entries: UserConfigTableEntry[]; // All entries for single page from user config table.
+  entries: UserConfigTableEntry[]; // All entries for a single page from user config table.
   tableMeta: TableMetaResp;
 };
 
@@ -237,7 +237,7 @@ export type UserTokenTableReq = {
 
 /** User token table load response: page. */
 export type UserTokenTableResp = {
-  entries: UserTokenTableEntry[]; // All entries for single page from user token table.
+  entries: UserTokenTableEntry[]; // All entries for a single page from user token table.
   tableMeta: TableMetaResp;
 };
 
@@ -270,7 +270,7 @@ export type UserJwtTableReq = {
 
 /** User JWT table load response: page. */
 export type UserJwtTableResp = {
-  /** All entries for single page from user JWT table. */
+  /** All entries for a single page from user JWT table. */
   entries: UserJwtTableEntry[];
   tableMeta: TableMetaResp;
 };

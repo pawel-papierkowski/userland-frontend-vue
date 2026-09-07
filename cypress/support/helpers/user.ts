@@ -23,7 +23,7 @@ const emptyTableMeta: TableMetaResp = { pageCount: 0, entryCount: 0, pageSize: 0
 
 /**
  * Stub the user table API so a single page holds the given dataset.
- * This is a simple version where fake backend is not needed.
+ * This is a simple version where the fake backend is not needed.
  * @param users User table dataset.
  */
 export function stubUserTable(users: UserTableEntry[]) {
@@ -48,7 +48,7 @@ export function stubUserTable(users: UserTableEntry[]) {
 /**
  * Stub the load-user-data API so GET /user/{id} returns the matching full user.
  * @param users Full user dataset to match against.
- * @param overrides Extra fields merged over the resolved user (e.g. to simulate own account).
+ * @param overrides Extra fields merged over the resolved user (e.g. to simulate your own account).
  */
 export function stubUserData(users: UserFullDataResp[]) {
   cy.intercept('GET', '**/api/admin/user/*', (req) => {

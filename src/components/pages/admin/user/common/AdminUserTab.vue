@@ -193,7 +193,7 @@ const maybeReload = () => {
 /** Change in user selection or tab activation requires reload of form (only when tab is active). */
 watch([selUserRecord, () => props.isActive], maybeReload, { immediate: true });
 
-/** React on user data being updated - force reload on next activation of this tab. */
+/** React to user data being updated - force reload on next activation of this tab. */
 watch(
   () => props.reloadTrigger,
   () => {

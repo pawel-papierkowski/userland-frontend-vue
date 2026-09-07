@@ -4,7 +4,7 @@
 
 /* Only imports should be here.
  * It is fine performance-wise, as Vue pre-assembles all CSSs into one file anyway.
- * Assembled file is loaded in main.ts, ensuring it is global CSS.
+ * The assembled file is loaded in main.ts, ensuring it is global CSS.
  */
 
 /* General variables and styles. */

@@ -55,7 +55,7 @@ const reloadTrigger = ref(0);
 // WATCHES
 
 /**
- * React on main user table being reloaded or user data being updated.
+ * React to main user table being reloaded or user data being updated.
  * Forces reload of user history table when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger, userUpdatedTrigger, userUpdatedConfigTrigger, userUpdatedPermissionsTrigger], async () => {

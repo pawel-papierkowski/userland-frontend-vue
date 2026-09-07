@@ -6,14 +6,14 @@ import i18n from '@/code/lang/i18n.ts';
 const { t } = i18n.global;
 
 /**
- * Class for generating user feedback messages, including error messages with special handling that depends on error object.
+ * Class for generating user feedback messages, including error messages with special handling that depends on the error object.
  * Essentially it is a wrapper for the message store.
  */
 export class AppMessager {
   /**
-   * Generates info message from provided translation keys.
-   * @param title Title as i18n key.
-   * @param content Content as i18n key.
+   * Generates an info message from provided translation keys.
+   * @param title Title as an i18n key.
+   * @param content Content as an i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static infoT(title: string, content: string, duration = defDurationInfo) {
@@ -21,7 +21,7 @@ export class AppMessager {
   }
 
   /**
-   * Generates info message.
+   * Generates an info message.
    * @param title Title as a string.
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -33,9 +33,9 @@ export class AppMessager {
   //
 
   /**
-   * Generates success message from provided translation keys.
-   * @param title Title as i18n key.
-   * @param content Content as i18n key.
+   * Generates a success message from provided translation keys.
+   * @param title Title as an i18n key.
+   * @param content Content as an i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static successT(title: string, content: string, duration = defDurationSuccess) {
@@ -43,7 +43,7 @@ export class AppMessager {
   }
 
   /**
-   * Generates success message.
+   * Generates a success message.
    * @param title Title as a string.
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -55,9 +55,9 @@ export class AppMessager {
   //
 
   /**
-   * Generates warning message from provided translation keys.
-   * @param title Title as i18n key.
-   * @param content Content as i18n key.
+   * Generates a warning message from provided translation keys.
+   * @param title Title as an i18n key.
+   * @param content Content as an i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static warningT(title: string, content: string, duration = defDurationWarning) {
@@ -65,7 +65,7 @@ export class AppMessager {
   }
 
   /**
-   * Generates warning message.
+   * Generates a warning message.
    * @param title Title as a string.
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -77,9 +77,9 @@ export class AppMessager {
   //
 
   /**
-   * Generates failure message from provided translation keys.
-   * @param title Title as i18n key.
-   * @param content Content as i18n key.
+   * Generates a failure message from provided translation keys.
+   * @param title Title as an i18n key.
+   * @param content Content as an i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static failureT(title: string, content: string, duration = defDurationFailure) {
@@ -87,7 +87,7 @@ export class AppMessager {
   }
 
   /**
-   * Generates failure message.
+   * Generates a failure message.
    * @param title Title as a string.
    * @param content Content as a string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -99,10 +99,10 @@ export class AppMessager {
   //
 
   /**
-   * Generates error message to show as user feedback on error from provided translation keys.
+   * Generates an error message to show as user feedback on error from provided translation keys.
    * @param error Error object.
-   * @param fallbackTitle Title to use if cannot process error as i18n key.
-   * @param fallbackContent Content to use if cannot process error as i18n key.
+   * @param fallbackTitle Title to use if we cannot process the error as an i18n key.
+   * @param fallbackContent Content to use if we cannot process the error as an i18n key.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static errorT(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
@@ -110,10 +110,10 @@ export class AppMessager {
   }
 
   /**
-   * Generates error message to show as user feedback on error.
+   * Generates an error message to show as user feedback on error.
    * @param error Error object.
-   * @param fallbackTitle Title string to use if cannot process error.
-   * @param fallbackContent Content string to use if cannot process error.
+   * @param fallbackTitle Title string to use if we cannot process the error.
+   * @param fallbackContent Content string to use if we cannot process the error.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   public static error(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
@@ -124,7 +124,7 @@ export class AppMessager {
         return;
       }
       if (error.request) {
-        // Request was made but no response was received (e.g. backend is down).
+        // Request was made but no response was received (e.g., backend is down).
         this.processRequestError(duration);
         return;
       }
@@ -175,7 +175,7 @@ export class AppMessager {
   //
 
   /**
-   * Helper to show info message using store.
+   * Helper to show an info message using the store.
    * @param title Title string.
    * @param content Content string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -186,7 +186,7 @@ export class AppMessager {
   }
 
   /**
-   * Helper to show success message using store.
+   * Helper to show a success message using the store.
    * @param title Title string.
    * @param content Content string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -197,7 +197,7 @@ export class AppMessager {
   }
 
   /**
-   * Helper to show warning message using store.
+   * Helper to show a warning message using the store.
    * @param title Title string.
    * @param content Content string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -208,7 +208,7 @@ export class AppMessager {
   }
 
   /**
-   * Helper to show failure message using store.
+   * Helper to show a failure message using the store.
    * @param title Title string.
    * @param content Content string.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
@@ -219,7 +219,7 @@ export class AppMessager {
   }
 
   /**
-   * Helper to show error message using store.
+   * Helper to show an error message using the store.
    * @param title Title string.
    * @param content Content string.
    * @param errCode Optional error code.

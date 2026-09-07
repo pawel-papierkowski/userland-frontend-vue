@@ -53,7 +53,7 @@ const reloadTrigger = ref(0);
 // WATCHES
 
 /**
- * React on main user table being reloaded or permissions being changed (as it clears JWTs).
+ * React to main user table being reloaded or permissions being changed (as it clears JWTs).
  * Forces reload of user JWT table when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger, userUpdatedPermissionsTrigger], async () => {

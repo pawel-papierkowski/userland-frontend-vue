@@ -84,7 +84,7 @@ export default {
 
   /**
    * Delete user permission entry.
-   * @param id Id of user permission entry.
+   * @param id ID of user permission entry.
    */
   deletePermissionEntry(id: number) {
     return apiClient.delete(`/user/permission/${id}`);
@@ -111,7 +111,7 @@ export default {
 
   /**
    * Delete user config entry.
-   * @param id Id of user config entry.
+   * @param id ID of user config entry.
    */
   deleteConfigEntry(id: number) {
     return apiClient.delete(`/user/config/${id}`);

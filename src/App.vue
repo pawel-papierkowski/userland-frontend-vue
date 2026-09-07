@@ -11,7 +11,7 @@ import AppLayout from '@/components/layout/AppLayout.vue';
 
 const { locale } = useI18n();
 
-/** Find out current language - either from storage, system language or fallback. */
+/** Find out the current language - either from storage, system language or fallback. */
 const refreshLang = () => {
   const systemLanguage = navigator.language.split('-')[0] || fallbackLang;
   const browserLang = localStorage.getItem(locstLang) || systemLanguage;

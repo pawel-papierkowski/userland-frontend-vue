@@ -275,7 +275,7 @@ const isFormDisabled = (): boolean => {
 // WATCHES
 
 /**
- * React on main user table being reloaded.
+ * React to main user table being reloaded.
  * Forces reload of user data when this tab is active or becomes active again.
  */
 watch([usersReloadTrigger], async () => {
@@ -284,7 +284,7 @@ watch([usersReloadTrigger], async () => {
   else forceReload = true; // reload later, when we open this tab
 });
 
-/** React on change to isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
+/** React to change in isActive value. If we enter tab for user main form and forceReload === true, we reload content of form. */
 watch(
   () => props.isActive,
   async () => {

@@ -8,7 +8,7 @@ import type { UserFullDataFormDiff } from '@/code/data/features/user/admin-user-
  */
 export class AppUserEventer {
   /**
-   * Notifies that user table has been reloaded to anyone interested.
+   * Notifies that the user table has been reloaded to anyone interested.
    */
   public static notifyUsersReload() {
     const eventStore = useUserEventStore();
@@ -16,7 +16,7 @@ export class AppUserEventer {
   }
 
   /**
-   * Notifies that user has been (de)selected to anyone interested.
+   * Notifies that the user has been (de)selected to anyone interested.
    */
   public static notifyUserSelected() {
     const eventStore = useUserEventStore();
@@ -24,7 +24,7 @@ export class AppUserEventer {
   }
 
   /**
-   * Notifies that user's config has been updated to anyone interested.
+   * Notifies that the user's config has been updated to anyone interested.
    */
   public static notifyUserUpdatedConfig() {
     const eventStore = useUserEventStore();
@@ -32,7 +32,7 @@ export class AppUserEventer {
   }
 
   /**
-   * Notifies that user's permissions have been updated to anyone interested.
+   * Notifies that the user's permissions have been updated to anyone interested.
    */
   public static notifyUserUpdatedPermissions() {
     const eventStore = useUserEventStore();
@@ -40,7 +40,7 @@ export class AppUserEventer {
   }
 
   /**
-   * Notifies that user data has been updated to anyone interested.
+   * Notifies that the user data has been updated to anyone interested.
    * @param diffData Changed fields.
    */
   public static notifyUserUpdated(diffData: UserFullDataFormDiff) {

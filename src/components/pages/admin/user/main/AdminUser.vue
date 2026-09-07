@@ -144,7 +144,7 @@ const processEntry = (entry: UserTableEntry) => {
 
 //
 
-/** React on user data being updated. */
+/** React to user data being updated. */
 watch(userUpdatedTrigger, async () => {
   // We need to react only to change in username or email, since other editable data is not visible in main user table.
   if (userUpdatedDiff.value.username !== null || userUpdatedDiff.value.email !== null) await handleReload();
