@@ -16,7 +16,7 @@ export class TimeUtils {
 
     if (isNaN(date.getTime())) return dateStr; // If parsing fails, return original.
 
-    // Note that parsing will take timezone in account, so we do not have to do anything else.
+    // Note that parsing will take timezone into account, so we do not have to do anything else.
     // JS automatically applies the offset that was valid ON THAT DATE.
     // In Polish timezone, if date is in Jan, it uses UTC+1. If in June, it uses UTC+2.
     const YYYY = date.getFullYear();
@@ -39,8 +39,8 @@ export class TimeUtils {
    * const date = new Date(Date.UTC(2026, 5, 28, 0, 0, 0, 0));
    * const result = TimeUtils.cnvFull(date);
    * ```
-   * @param date Date/time Javascript class instance.
-   * @returns Date&time as ISO-formatted string without zone.
+   * @param date Date/time JavaScript class instance.
+   * @returns Date and time as ISO-formatted string without zone.
    */
   public static cnvFull(date: Date | null): string | null {
     if (date === null) return null;
@@ -61,8 +61,8 @@ export class TimeUtils {
   /**
    * Converts a Date to a local ISO string describing date only (`YYYY-MM-DD`).
    * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
-   * @param date Date/time Javascript class instance.
-   * @returns Date&time as ISO-formatted string without zone.
+   * @param date Date/time JavaScript class instance.
+   * @returns Date as ISO-formatted string without zone.
    */
   public static cnvDate(date: Date | null): string | null {
     if (date === null) return null;
@@ -77,8 +77,8 @@ export class TimeUtils {
   /**
    * Converts a Date to a local ISO string describing time only (`hh:mm:ss.SSS`).
    * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
-   * @param date Date/time Javascript class instance.
-   * @returns Date&time as ISO-formatted string without zone.
+   * @param date Date/time JavaScript class instance.
+   * @returns Time as ISO-formatted string without zone.
    */
   public static cnvTime(date: Date | null): string | null {
     if (date === null) return null;
@@ -157,7 +157,7 @@ export class TimeUtils {
   /**
    * Calculates week number. Date is UTC.
    * Note: ISO 8601 sometimes gives results that look wrong for edge case "week that belongs to previous and next year", so we don't use that.
-   * Used algo always consider first days of January until Sunday as 1st week of that year.
+   * The used algorithm always considers first days of January until Sunday as 1st week of that year.
    * @param year Year.
    * @param month Month.
    * @param day Day.

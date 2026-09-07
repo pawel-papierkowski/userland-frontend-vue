@@ -53,7 +53,7 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Verify token. Note only verification we do is expiration date.
+   * Verify token. Note that the only verification we do is expiration date.
    * @param decodedJwt Decoded JWT.
    * @returns True if token is valid, otherwise false.
    */

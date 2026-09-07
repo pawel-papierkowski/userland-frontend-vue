@@ -43,7 +43,7 @@ export const useUserEventStore = defineStore('user-events', () => {
   /** Trigger for user permissions update. Increment to notify. */
   const userUpdatedPermissionsTrigger = ref(0);
 
-  /** Notify that user permissions has been updated. */
+  /** Notify that user permissions have been updated. */
   function notifyUserUpdatedPermissions() {
     userUpdatedPermissionsTrigger.value++;
   }

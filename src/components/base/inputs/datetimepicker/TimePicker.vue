@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** Dedicated time picker. Do not use it directly. Use DateTimePicker with attribute mode="time".
- * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
+ * Note it is timezone-agnostic. It is up to you to adjust result to timezone etc. as needed.
  *
  * Features:
  * - Can select time.
@@ -12,7 +12,7 @@
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
- *   You are one to adjust result to timezone etc. when setting or after getting result.
+ *   It is up to you to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.

@@ -112,8 +112,8 @@ const convertFilterToReq = (form: UserConfigTableFilterForm, userId: number): Us
 /**
  * Convert entry edit form data to entry edit request data.
  * @param form Entry edit form data.
- * @param id Entry identificator. Can be null if you want to add new entry.
- * @param userId User identificator.
+ * @param id Entry identifier. Can be null if you want to add new entry.
+ * @param userId User identifier.
  * @returns Entry edit request data.
  */
 const convertEditToReq = (form: UserConfigEntryEditForm, id: number | null, userId: number): UserConfigEntryEditReq => {

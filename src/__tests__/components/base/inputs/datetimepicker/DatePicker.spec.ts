@@ -266,7 +266,7 @@ describe('DatePicker', () => {
       await datePicker.find('[data-testid="datepicker__monthPlus"]').trigger('click');
       await nextTick();
 
-      // Arrange: Data for next assert. Notice that same week that previously was 53th now is 1st, this is correct.
+      // Arrange: Data for next assert. Notice that same week that previously was 53rd now is 1st, this is correct.
       const weekNums2: string[] = ['1', '2', '3', '4', '5', '6'];
       // Assert: Panel shows calendar with correct week numbers.
       verifyPanel(datePicker, '', '2026 January', undefined, weekNums2);

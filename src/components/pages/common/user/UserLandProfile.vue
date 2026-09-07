@@ -12,7 +12,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import type { UserDataResp, UserEditForm, UserEditReq } from '@/code/data/features/user/user-type';
 
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 import SpinnerTorus from '@/components/base/decor/SpinnerTorus.vue';
@@ -44,7 +44,7 @@ const isLoading = ref(true);
 const canSpin = ref(true);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyField(form.username, usedButton.value);
+  return Verifier.verifyField(form.username, usedButton.value);
 });
 
 //

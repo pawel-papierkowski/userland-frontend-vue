@@ -109,7 +109,7 @@ const stopSlideShow = () => {
   delayTimer = setTimeout(() => resumeSlideShow(), props.delay * 1000);
 };
 
-/** Resumes slideshow after delay. Note that means actual delay time is actually delay + normal interval. */
+/** Resumes slideshow after delay. Note that means delay time is actually delay + normal interval. */
 const resumeSlideShow = () => {
   stopped.value = false;
   startAutoplay();
@@ -268,7 +268,7 @@ onUnmounted(() => {
 .slideshow-slot-section {
   margin: var(--spacing-xs);
   padding: var(--spacing-sm);
-  overflow: hidden; /* Prevents layout overflow during translation */
+  overflow: hidden; /* Prevents layout overflow during transition */
 }
 
 .slideshow-slide {

@@ -2,11 +2,11 @@
 /** Component that shows row of table.
  *
  * Models:
- * - v-model - Selected entry for table page where this row exist. Null means nothing is selected.
+ * - v-model - Selected entry for table page where this row exists. Null means nothing is selected.
  * - v-model:formEntry - Form for current entry. Used in in-line edit.
  *
  * Properties:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - rowIndex - Index of row in table. -1 means special row.
  * - columns - Data about columns. First column must be unique key.
  * - entry - Current entry of table for this row. Can be null.
@@ -14,7 +14,7 @@
  * - rowMeta - Row metadata. Contains field metadata keyed by column name. Optional.
  *
  * Slots:
- * - custom slots defined for colums, with name 'column_[column name]'.
+ * - custom slots defined for columns, with name 'column_[column name]'.
  */
 
 import type { ColumnData, FieldMeta, RowMeta } from '@/code/data/features/common/type.ts';

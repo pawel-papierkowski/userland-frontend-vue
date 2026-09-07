@@ -85,7 +85,7 @@ Cypress.Commands.add('login', (path: string = '/', permissions: JwtPerm[] = []) 
 // General helpers
 
 /**
- * Version of `wait()` that do not fail test when request timeouts.
+ * Version of `wait()` that does not fail the test when a request timeouts.
  */
 Cypress.Commands.add('waitIfHappens', (alias: string, options?: { timeout?: number }) => {
   const timeout = options?.timeout ?? 5000;

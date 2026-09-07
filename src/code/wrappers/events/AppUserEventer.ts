@@ -4,7 +4,7 @@ import type { UserFullDataFormDiff } from '@/code/data/features/user/admin-user-
 
 /**
  * Class for notifying about application-wide user-related events.
- * Essentially it is wrapper for user event store.
+ * Essentially it is a wrapper for the user event store.
  */
 export class AppUserEventer {
   /**
@@ -32,7 +32,7 @@ export class AppUserEventer {
   }
 
   /**
-   * Notifies that user's permissions has been updated to anyone interested.
+   * Notifies that user's permissions have been updated to anyone interested.
    */
   public static notifyUserUpdatedPermissions() {
     const eventStore = useUserEventStore();

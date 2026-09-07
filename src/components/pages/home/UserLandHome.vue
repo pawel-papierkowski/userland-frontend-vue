@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** This is home area. Everyone can access it. */
+/** This is the home area. Everyone can access it. */
 import SlideShow from '@/components/base/layout/SlideShow.vue';
 
 import HomeDescr from '@/components/pages/home/HomeDescr.vue';

@@ -6,11 +6,11 @@
  * - FE: Form for entry.
  *
  * Models:
- * - v-model - Selected entry for table page where row with this cell exist. Null means nothing is selected.
+ * - v-model - Selected entry for table page where row with this cell exists. Null means nothing is selected.
  * - v-model:formEntry - Form for current entry. Used in in-line edit.
  *
  * Properties:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - rowIndex - Index of row in table. -1 means special row.
  * - column - Data about column.
  * - entry - Current entry of table for row with this cell. Can be null.

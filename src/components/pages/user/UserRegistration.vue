@@ -10,7 +10,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { durRegistrationSuccess } from '@/stores/messages/const.ts';
 
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import type { UserRegisterForm, UserRegisterReq } from '@/code/data/features/user/user-type';
 
@@ -35,16 +35,16 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const usernameError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyField(form.username, usedButton.value);
+  return Verifier.verifyField(form.username, usedButton.value);
 });
 const emailError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyEmail(form.email, usedButton.value);
+  return Verifier.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyPassword(form.password, usedButton.value);
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
+  return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
 //

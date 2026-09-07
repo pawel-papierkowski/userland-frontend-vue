@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** This is date&time picker. Uses Date class for both input and output.
- * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
+ * Note it is timezone-agnostic. It is up to you to adjust result to timezone etc. as needed.
  *
  * Features:
  * - Can select date, time or both date and time.

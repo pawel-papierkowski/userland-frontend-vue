@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** This is member area. Only logged users can access it, though no other special permissions are needed. */
+/** This is the member area. Only logged-in users can access it, though no other special permissions are needed. */
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();

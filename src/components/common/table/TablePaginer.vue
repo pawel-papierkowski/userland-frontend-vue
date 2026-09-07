@@ -5,7 +5,7 @@
  * - currPage - Number of current page, zero-indexed.
  *
  * Properties:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - meta - Table metadata.
  * - isDisabled - If true, disable paginer. Optional.
  */

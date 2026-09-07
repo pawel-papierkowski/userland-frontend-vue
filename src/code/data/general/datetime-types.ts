@@ -8,7 +8,7 @@ export enum EnCalendarCellType {
 
 /** Dedicated date-only (year, month, day) type. */
 export type CalendarCell = {
-  /** Identificator of cell for data-testid attribute. */
+  /** Identifier of cell for data-testid attribute. */
   testid: string;
 
   /** Type of cell. */

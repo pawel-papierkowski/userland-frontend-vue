@@ -6,7 +6,7 @@
  * - E: Type of table entry.
  *
  * Properties:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - rowIndex - Index of row in table. -1 means options are assigned to special row, -2 means options are for whole table (like adding entry).
  * - meta - Metadata for this entry.
  * - entry - Entry itself.

@@ -7,7 +7,7 @@ const { t } = i18n.global;
 
 /**
  * Class for generating user feedback messages, including error messages with special handling that depends on error object.
- * Essentially it is wrapper for message store.
+ * Essentially it is a wrapper for the message store.
  */
 export class AppMessager {
   /**

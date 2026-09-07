@@ -9,7 +9,7 @@ import { useI18n } from 'vue-i18n';
 import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import type { UserLoginForm, UserLoginReq } from '@/code/data/features/user/user-type';
@@ -34,7 +34,7 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const emailError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyEmail(form.email, usedButton.value);
+  return Verifier.verifyEmail(form.email, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
   if (!form.password) return usedButton.value ? t('form.errFieldEmpty') : null;
@@ -127,7 +127,7 @@ const handleRedirection = () => {
       return;
     }
     // If we are here, it means standard user tried to login to admin panel, ouch.
-    // We do not logout them or show error, we just kick out them to normal webpage.
+    // We do not logout them or show error, we just kick them out to normal webpage.
   }
   router.push({ name: 'home' });
 };

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 /** Dedicated date picker. Do not use it directly. Use DateTimePicker with attribute mode="date".
- * Note it is timezone-agnostic. You are one to adjust result to timezone etc. as needed.
+ * Note it is timezone-agnostic. It is up to you to adjust result to timezone etc. as needed.
  *
  * Features:
  * - Can select date.
- * - Can disable or mark as invalid. You also can constraint selectable dates to specified min/max range.
+ * - Can disable or mark as invalid. You also can constrain selectable dates to specified min/max range.
  * - Accept null (not set) value.
  * - Input field is not editable. You set value via calendar panel.
  * - Keyboard navigation supported via arrows (open panel or change day/month), enter/space (pick date) and esc (close panel).
@@ -12,7 +12,7 @@
  *
  * Models:
  * - v-model - Currently selected date and time. Null means it is unset. Note it is processed as-is.
- *   You are one to adjust result to timezone etc. when setting or after getting result.
+ *   It is up to you to adjust result to timezone etc. when setting or after getting result.
  *
  * Properties:
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
@@ -219,7 +219,7 @@ const calcCalendarCells = (): CalendarCell[] => {
       const dayIx = i * 8; // always at monday, will be used for splicing at end
       const firstDayOfWeek: CalendarCell = cells[dayIx]!;
       // Show week number properly at week common for both years depending on which year is in focus.
-      // For example, last week of December will be (usually) 53th week, while first week of January (exactly same week as last week of December)
+      // For example, last week of December will be (usually) 53rd week, while first week of January (exactly same week as last week of December)
       // is always 1st week.
       const dayOfWeekIx = viewDate.value.getUTCFullYear() === firstDayOfWeek.year ? dayIx : dayIx + 6;
       const lastDayOfWeek: CalendarCell = cells[dayOfWeekIx]!;

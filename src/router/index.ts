@@ -22,7 +22,7 @@ const meta4admin = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operat
 const meta4adminUser = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: ['user_view'] };
 
 // Define all routes for this app. Notes:
-// - Most of pages are lazily loaded.
+// - Most pages are lazily loaded.
 // - Meta is always present.
 const routes = [
   // STANDARD WEBPAGES
@@ -148,7 +148,7 @@ router.beforeEach((to) => {
   }
 
   if (isAuthenticated) {
-    // Is authenicated and on login page?
+    // Is authenticated and on login page?
     if (to.name?.toString() === 'login') {
       return { name: 'home' }; // Redirects to home page.
     }
@@ -156,7 +156,7 @@ router.beforeEach((to) => {
     const hasPermissions = checkAccessPermissions(to.meta);
     // Is authenticated, but not authorized?
     if (!hasPermissions) {
-      return { name: 'home' }; // Redirects to the normal login route.
+      return { name: 'home' }; // Redirects to home page.
     }
 
     // Is on admin login page, but already authenticated? Check if user can access admin panel.

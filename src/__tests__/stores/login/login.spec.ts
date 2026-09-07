@@ -57,7 +57,7 @@ describe('useLoginStore', () => {
 
       // Assert: All fields are at their default values.
       const loginStore = useLoginStore();
-      expect(loginStore.loginState.isLogged).toBe(false); // only to shut up IDE warning about missing assertions, as IDE do not understand verifyEmptyLoginStore() has assertions
+      expect(loginStore.loginState.isLogged).toBe(false); // only to remove IDE warning about missing assertions, as IDE does not understand verifyEmptyLoginStore() has assertions
       verifyEmptyLoginStore(loginStore);
     });
 

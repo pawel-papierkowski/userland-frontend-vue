@@ -20,13 +20,13 @@
  * - v-model:currSortOrder - Current sort order.
  *
  * Properties:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - columns - Data about columns. First column must be unique key.
  * - data - Content of table itself: single page of entries.
  * - meta - Table metadata.
  * - resolveRowMeta - ?.
  * - isLoading - If true, show spinner instead of table content. Used to indicate loading content for table. Optional.
- * - canSpin - If true, spinner can spin. Used to indicate error due loading content for table. Optional.
+ * - canSpin - If true, spinner can spin. Used to indicate error due to loading content for table. Optional.
  * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
@@ -34,7 +34,7 @@
  * - descr: Description of loading state for screen readers and the like. Undefined means no aria will be present.
  *
  * Slots:
- * - custom slots defined for colums, with name 'column_[column name]'.
+ * - custom slots defined for columns, with name 'column_[column name]'.
  */
 import { useSlots, computed, watch, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -122,7 +122,7 @@ const slottedColumns = computed(() => {
 
 // WATCHES
 
-/** If you disable selection abiliy, automatically deselect. */
+/** If you disable selection ability, automatically deselect. */
 watch(
   () => props.canSelect,
   () => {
@@ -236,7 +236,7 @@ const onKeydownSort = (e: KeyboardEvent, column: ColumnData) => {
  * @param rowIndex Row index.
  */
 const rowClass = (entry: E | null, rowIndex: number) => {
-  const key = props.columns[0]?.name || ''; // first column is key uniquely identyfying entry, like id or business key
+  const key = props.columns[0]?.name || ''; // first column is key uniquely identifying entry, like id or business key
   let selected = false;
   if (selRecord.value && entry !== null) selected = selRecord.value[key] === entry[key];
 
@@ -270,10 +270,12 @@ const selectEntry = (entry: E | null, force: boolean) => {
   // Compare by unique key, not by reference: after a table reload the selected record may be a
   // different object instance of the same entry, and highlight logic (rowClass) uses key comparison.
   //const isSelected = selRecord.value === entry;
-  const isSelected = entry !== null && selRecord.value !== null && selRecord.value !== undefined && selRecord.value[key] === entry[key];
+  const isSelected =
+    entry !== null && selRecord.value !== null && selRecord.value !== undefined && selRecord.value[key] === entry[key];
 
   // This automatically emits 'update:modelValue' to the parent.
-  if (entry === null || isSelected) { // deselect
+  if (entry === null || isSelected) {
+    // deselect
     selRecord.value = null;
     focusedRowIndex.value = null;
   } else selRecord.value = entry; // select

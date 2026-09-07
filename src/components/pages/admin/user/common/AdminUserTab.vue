@@ -25,7 +25,7 @@
  * - v-model:formEntry - Form for entry. Used in in-line edit.
  *
  * Props:
- * - tableId - Identificator of table.
+ * - tableId - Identifier of table.
  * - columns - Data about columns.
  * - fetchData - Function that fetches data from backend to table.
  * - convertToReq - Function that converts filter form to API request.

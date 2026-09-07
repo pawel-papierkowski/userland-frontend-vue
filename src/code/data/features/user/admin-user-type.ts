@@ -44,7 +44,7 @@ export type UserTableEntry = {
 
 /** User full data update request. Note: null here means "do not change this field". */
 export type UserFullDataReq = {
-  id: number; // Identificator of user.
+  id: number; // Identifier of user.
   version: number;
   username: string | null;
   email: string | null;
@@ -55,7 +55,7 @@ export type UserFullDataReq = {
 
 /** User full data response. */
 export type UserFullDataResp = {
-  id: number; // Identificator of user.
+  id: number; // Identifier of user.
   createdAt: string;
   modifiedAt: string;
   version: number;
@@ -90,7 +90,7 @@ export type UserFullDataFormDiff = {
 
 /** User history table filter form. */
 export type UserHistoryTableFilterForm = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   who: string | null; // If present, filter by who.
   what: string | null; // If present, filter by what.
   createdFromAt: Date | null; // If present, show records with creation date that is same or later.
@@ -100,7 +100,7 @@ export type UserHistoryTableFilterForm = {
 
 /** User history table filter request. */
 export type UserHistoryTableReq = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   who: string | null; // If present, filter by who.
   what: string | null; // If present, filter by what.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
@@ -127,7 +127,7 @@ export type UserHistoryTableEntry = {
 
 /** User permission table filter form. */
 export type UserPermissionTableFilterForm = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: Date | null; // If present, show records with creation date that is same or later.
   createdToAt: Date | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -135,7 +135,7 @@ export type UserPermissionTableFilterForm = {
 
 /** User permission table filter request. */
 export type UserPermissionTableReq = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -174,7 +174,7 @@ export type UserPermissionEntryEditReq = {
 
 /** User config table filter form. */
 export type UserConfigTableFilterForm = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: Date | null; // If present, show records with creation date that is same or later.
   createdToAt: Date | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -182,7 +182,7 @@ export type UserConfigTableFilterForm = {
 
 /** User config table filter request. */
 export type UserConfigTableReq = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -221,7 +221,7 @@ export type UserConfigEntryEditReq = {
 
 /** User token table filter form. */
 export type UserTokenTableFilterForm = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: Date | null; // If present, show records with creation date that is same or later.
   createdToAt: Date | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -229,7 +229,7 @@ export type UserTokenTableFilterForm = {
 
 /** User token table filter request. */
 export type UserTokenTableReq = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -254,7 +254,7 @@ export type UserTokenTableEntry = {
 
 /** User JWT table filter form. */
 export type UserJwtTableFilterForm = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: Date | null; // If present, show records with creation date that is same or later.
   createdToAt: Date | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.
@@ -262,7 +262,7 @@ export type UserJwtTableFilterForm = {
 
 /** User JWT table filter request. */
 export type UserJwtTableReq = {
-  userId: number; // User identificator.
+  userId: number; // User identifier.
   createdFromAt: string | null; // If present, show records with creation date that is same or later.
   createdToAt: string | null; // If present, show records with creation date that is same or earlier.
   tableMeta: TableMetaReq | null; // Metadata for table result.

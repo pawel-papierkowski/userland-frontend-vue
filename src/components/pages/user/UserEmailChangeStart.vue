@@ -10,7 +10,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { durEmailChange } from '@/stores/messages/const.ts';
 
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import type { UserEmailChangeLinkForm, UserEmailChangeLinkReq } from '@/code/data/features/user/user-type';
 
@@ -31,10 +31,10 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const newEmailError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyEmail(form.newEmail, usedButton.value);
+  return Verifier.verifyEmail(form.newEmail, usedButton.value);
 });
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyPassword(form.password, usedButton.value);
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 
 //

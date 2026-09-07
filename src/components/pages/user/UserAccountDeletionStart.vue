@@ -10,7 +10,7 @@ import apiLogging from '@/services/api-logging.ts';
 import backendApiUser from '@/services/features/api-users.ts';
 import { durAccountDelete } from '@/stores/messages/const.ts';
 
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
 import type { UserAccountDeleteLinkForm, UserAccountDeleteLinkReq } from '@/code/data/features/user/user-type';
 
@@ -19,7 +19,7 @@ import TextBox from '@/components/base/inputs/TextBox.vue';
 const router = useRouter();
 const { t } = useI18n();
 
-/** Email change link form data. */
+/** Account deletion link form data. */
 const form: UserAccountDeleteLinkForm = reactive({
   password: '',
 });
@@ -30,7 +30,7 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyPassword(form.password, usedButton.value);
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 
 //

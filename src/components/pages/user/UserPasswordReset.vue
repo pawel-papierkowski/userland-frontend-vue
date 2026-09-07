@@ -11,7 +11,7 @@ import backendApiUser from '@/services/features/api-users.ts';
 import { durPasswordReset } from '@/stores/messages/const.ts';
 
 import { TokenUtils } from '@/code/utils/TokenUtils.ts';
-import { Verifer } from '@/code/utils/Verifer.ts';
+import { Verifier } from '@/code/utils/Verifier';
 import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 import type { UserPasswordResetForm, UserPasswordResetReq } from '@/code/data/features/user/user-type';
 
@@ -35,10 +35,10 @@ const usedButton = ref(false);
 const isBusy = ref(false);
 
 const passwordError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyPassword(form.password, usedButton.value);
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
-  return Verifer.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
+  return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
 //
@@ -85,9 +85,9 @@ const isFormError = () => {
 };
 
 /**
- * Convert user login form data to user login request data.
- * @param form User login form.
- * @returns User login request.
+ * Convert password reset form data to password reset request data.
+ * @param form Password reset form.
+ * @returns Password reset request.
  */
 const convertToReq = (form: UserPasswordResetForm): UserPasswordResetReq => {
   return {

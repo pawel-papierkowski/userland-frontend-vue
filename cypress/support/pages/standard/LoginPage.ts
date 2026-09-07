@@ -4,7 +4,7 @@ class LoginPage {
   // General.
 
   /**
-   * Visit the login page. This project has two version of login page: standard and for admin panel.
+   * Visit the login page. This project has two versions of login page: standard and for admin panel.
    * @param isAdmin If true, we are on login panel belonging to administration panel. False means standard login page.
    */
   visit(isAdmin: boolean): Cypress.Chainable<Cypress.AUTWindow> {
@@ -35,12 +35,12 @@ class LoginPage {
     return cy.get('.form-text-error');
   }
 
-  /** Get the "I already have an account" navigation link. */
+  /** Get the "I don't have an account" navigation link. */
   getNoAccountLink(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.getByTestId('login_btn_noAccount');
   }
 
-  /** Get the "I already have an account" navigation link. */
+  /** Get the "Forgot password" navigation link. */
   getPasswordResetLink(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.getByTestId('login_btn_passwordReset');
   }

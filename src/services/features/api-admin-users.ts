@@ -1,4 +1,4 @@
-// Handles calling user feature endpoints.
+// Handles calling admin user feature endpoints.
 import backendApi from '@/services/api-common.ts';
 import type {
   UserTableReq,
@@ -36,7 +36,7 @@ export default {
 
   /**
    * Get data (general and profile) of given user.
-   * @param userId User identificator.
+   * @param userId User identifier.
    * @returns Result of call.
    */
   loadUserData(userId: number) {
@@ -76,7 +76,7 @@ export default {
 
   /**
    * Edit user permission entry.
-   * @param payload User config entry edit request.
+   * @param payload User permission entry edit request.
    */
   editPermissionEntry(payload: UserPermissionEntryEditReq) {
     return apiClient.patch(`/user/permission`, payload);

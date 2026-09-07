@@ -49,7 +49,7 @@ export const useMessageStore = defineStore('messages', () => {
 
   /**
    * Remove message with given id from global queue.
-   * @param id Identificator of message.
+   * @param id Identifier of message.
    */
   function removeMessage(id: string) {
     messages.value = messages.value.filter((m) => m.id !== id);

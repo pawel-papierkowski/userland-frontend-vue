@@ -14,7 +14,7 @@ import { AppMessager } from '@/code/wrappers/messages/AppMessager';
 
 /**
  * Class for handling user login, logout and related functionality like checking login state or permissions.
- * Essentially it is wrapper for login store.
+ * Essentially it is a wrapper for the login store.
  */
 export class AppLoginer {
   /** Promise for prolongation. Used to avoid multiple concurrent calls. */
@@ -42,7 +42,7 @@ export class AppLoginer {
 
   /**
    * Log out user. Contains API call.
-   * @package onBackend: If true, call also backend.
+   * @param onBackend If true, also call backend.
    */
   public static async logout(onBackend: boolean = true) {
     const loginStore = useLoginStore();
@@ -189,7 +189,7 @@ export class AppLoginer {
 
   /**
    * Get email.
-   * @returns email or empty string if no email.
+   * @returns Email or empty string if no email.
    */
   public static getEmail(): string {
     const loginStore = useLoginStore();
@@ -213,7 +213,7 @@ export class AppLoginer {
   /**
    * Check if user has given permission.
    * @param permName Name of permission. Example: 'role_operator'.
-   * @returns True if has given permission.
+   * @returns True if user has given permission.
    */
   public static hasPermission(permName: string): boolean {
     const loginStore = useLoginStore();

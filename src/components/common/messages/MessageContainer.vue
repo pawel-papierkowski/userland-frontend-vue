@@ -110,11 +110,7 @@ const messageStore = useMessageStore();
 /* Leaving message container: transformation of state. */
 .msg-list-leave-active {
   transition: all 0.3s ease-in;
-  /* If present, in conjuction with allows smootch sliding up components below if current
-     component is removed. But it causes diagonal movement for component that is leaving.
-     TODO check if we can have both sliding out of current component and sliding up rest
-     of components without undesirable side effects. */
-  /*position: absolute;*/
+  /* If present, allows smooth sliding up components below if current component is removed. But it causes diagonal movement for component that is leaving. */
   left: var(--msg-padding);
   right: var(--msg-padding);
   width: auto;
@@ -128,7 +124,7 @@ const messageStore = useMessageStore();
 
 /* Moving within message container: transformation of state. */
 .msg-list-move {
-  /* TODO: it seems to interfere with sliding out, making it diagonal */
+  /* it seems to interfere with sliding out, making it diagonal */
   /*transition: transform 0.4s ease;*/
 }
 </style>
