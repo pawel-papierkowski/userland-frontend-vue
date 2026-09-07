@@ -11,7 +11,7 @@ const systemLanguage = navigator.language.split('-')[0] || fallbackLang;
 const { t, locale } = useI18n();
 
 onMounted(() => {
-  // Triggered on beginning.
+  // Triggered on mount.
   const savedLang = localStorage.getItem(locstLang) || systemLanguage;
   setLanguage(savedLang);
 });

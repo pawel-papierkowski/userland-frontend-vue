@@ -2,7 +2,7 @@
 // `start-server-and-test`. This is a thin wrapper needed because a plain npm
 // script string cannot substitute a CLI argument into the middle of the test
 // command it passes to start-server-and-test.
-// Note this script does not rebuild the project, do it separately if needed before calling the script.
+// Note this script does not rebuild the project. Do it separately if needed before calling the script.
 //
 // Usage:
 //   npm run test:e2e:one -- cypress/e2e/user/activation.cy.ts

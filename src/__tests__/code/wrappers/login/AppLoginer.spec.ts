@@ -33,7 +33,7 @@ interface JwtTokenOptions {
 
 /**
  * Create a JWT token for tests.
- * Permissions are encoded the same way as on backend: field 'perm' as map where key is prefix and value is string with suffixes separated by comma.
+ * Permissions are encoded the same way as on the backend: field 'perm' as a map where the key is a prefix and the value is a string with suffixes separated by comma.
  * Example: permission 'role_admin' is stored as field 'role' with value 'admin', 'user_edit' is stored as field 'user' with value 'edit', and so on.
  * Note: signature is a dummy, as tests do not verify it.
  * @param permissions List of permissions to encode in token. Example: ['role_admin', 'user_view', 'user_edit'].
@@ -83,7 +83,7 @@ const createTestToken = (permissions: string[], options: JwtTokenOptions = {}): 
 
 /**
  * Verifies that login state is unlogged.
- * @param loginStore Pinia storage with login state.
+ * @param loginStore Pinia store with login state.
  */
 const verifyEmptyLoginStore = (loginStore: { loginState: LoginState }) => {
   // If you are unlogged, login state is always the same.

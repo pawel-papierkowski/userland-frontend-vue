@@ -155,7 +155,7 @@ export class TimeUtils {
 
   /**
    * Calculates week number. Date is UTC.
-   * Note: ISO 8601 sometimes gives results that look wrong for edge case "week that belongs to previous and next year", so we don't use that.
+   * Note: ISO 8601 sometimes gives results that look wrong for the edge case "week that belongs to previous and next year", so we don't use that.
    * The algorithm used always considers the first days of January until Sunday as the 1st week of that year.
    * @param year Year.
    * @param month Month.

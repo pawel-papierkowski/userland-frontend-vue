@@ -18,7 +18,7 @@ const refreshLang = () => {
   locale.value = languages.includes(browserLang) ? browserLang : fallbackLang;
 };
 
-/** If JWT is present in storage, relog user. */
+/** If JWT is present in storage, relog the user. */
 const relogUser = () => {
   const jwt = localStorage.getItem(locstJwt) || null;
   if (jwt !== null) {

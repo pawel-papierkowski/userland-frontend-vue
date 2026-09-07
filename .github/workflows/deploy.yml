@@ -7,14 +7,14 @@ on: # When to run this action?
   #  branches: [ main ]
   workflow_dispatch: # run manually
 
-permissions: # Minimal permissions needed for Pages deploy. Without them action will fail.
+permissions: # Minimal permissions needed for Pages deploy. Without them, the action will fail.
   contents: read
   pages: write
   id-token: write
 
-concurrency: # How to act if someone runs two deploys at same time.
+concurrency: # How to act if someone runs two deploys at the same time.
   group: "pages"
-  cancel-in-progress: true # cancels previous deploy, ensuring only one runs at same time
+  cancel-in-progress: true # cancels previous deploy, ensuring only one runs at the same time
 
 jobs: # Define jobs to run. They will be executed in parallel by default unless 'needs:' is specified.
   build: # First job to run.
