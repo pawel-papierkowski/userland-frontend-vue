@@ -94,7 +94,7 @@
   box-shadow:
     1px 0 0 0 #d8d8d8,
     0 1px 0 0 #d8d8d8,
-    -1px 1px 0 0 #d8d8d8; /* Ensure gap is not visible*/
+    -1px 1px 0 0 #d8d8d8; /* Ensure gap is not visible */
 
   min-width: 0; /* Prevents cell from expanding parent */
   padding: 5px;
@@ -144,7 +144,7 @@
 .table-row.selected .table-cell {
   color: #9a3412;
   background-color: #fff7ed; /* Very light orange */
-  box-shadow: 1px 0 0 0 #fff7ed; /* Ensure gap is not visible*/
+  box-shadow: 1px 0 0 0 #fff7ed; /* Ensure gap is not visible */
 }
 .table-row.selected .table-cell:first-child {
   /* Orange left border effect and gap hiding. */
@@ -155,15 +155,15 @@
 
 .table-row:not(.unselectable):hover .table-cell {
   background-color: #f3f3f3;
-  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible*/
+  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible */
 }
 .table-row:not(.unselectable).odd:hover .table-cell {
   background-color: #f3f3f3;
-  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible*/
+  box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible */
 }
 .table-row:not(.unselectable).selected:hover .table-cell {
   background-color: #ffedd5; /* Slightly darker orange */
-  box-shadow: 1px 0 0 0 #ffedd5; /* Ensure gap is not visible*/
+  box-shadow: 1px 0 0 0 #ffedd5; /* Ensure gap is not visible */
 }
 .table-row.selected:hover .table-cell:first-child {
   /* Orange left border effect and gap hiding. */
@@ -202,7 +202,7 @@
   text-overflow: ellipsis;
 }
 
-/* Table paginer classes. */
+/* Table paginator classes. */
 
 .table-paginer {
   position: relative;

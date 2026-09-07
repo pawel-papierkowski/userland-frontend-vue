@@ -28,8 +28,8 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Apply token to the state and update logged status.
-   * @param jwtToken JWT token from server.
+   * Apply token to the state and update login status.
+   * @param jwtToken JWT token from the server.
    * @returns True if token was used successfully, otherwise false.
    */
   function applyToken(jwtToken: string): boolean {
@@ -53,7 +53,7 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Verify token. Note that the only verification we do is expiration date.
+   * Verify token. Note that the only verification we do is the expiration date.
    * @param decodedJwt Decoded JWT.
    * @returns True if token is valid, otherwise false.
    */
@@ -64,7 +64,7 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Read all data encoded in JWT, including our custom data like permissions.
+   * Read all data encoded in the JWT, including our custom data like permissions.
    * @param decodedJwt Decoded JWT.
    */
   function readToken(decodedJwt: CustomJwtPayload) {
@@ -78,7 +78,7 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Read permissions, if any present in token.
+   * Read permissions, if any are present in the token.
    * @param decodedJwt Decoded JWT.
    */
   function readPermissions(decodedJwt: CustomJwtPayload) {
@@ -99,10 +99,10 @@ export const useLoginStore = defineStore('login', () => {
   }
 
   /**
-   * Retrieve custom value from decoded JWT.
+   * Retrieve a custom value from the decoded JWT.
    * @param obj Object to read from.
    * @param fieldName Name of custom field.
-   * @returns Value of given field or null if field does not exist.
+   * @returns Value of the given field or null if the field does not exist.
    */
   function getValue(obj: object, fieldName: string): string | null {
     const value = (obj as Record<string, unknown>)[fieldName];

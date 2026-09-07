@@ -1,4 +1,4 @@
-// Helper stuff for Cypress tests of admin panel, user.
+// Helper utilities for Cypress tests of admin panel, user.
 
 import type { TableMetaResp } from '@/code/data/features/common/type.ts';
 import type { UserFullDataResp } from '@/code/data/features/user/admin-user-type.ts';
@@ -23,7 +23,7 @@ const emptyTableMeta: TableMetaResp = { pageCount: 0, entryCount: 0, pageSize: 0
 
 /**
  * Stub the user table API so a single page holds the given dataset.
- * This is simple version where fake backend is not needed.
+ * This is a simple version where fake backend is not needed.
  * @param users User table dataset.
  */
 export function stubUserTable(users: UserTableEntry[]) {

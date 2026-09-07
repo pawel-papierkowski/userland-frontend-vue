@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Shows provided components in rotation. You also can click on navigation to show particular component.
+/** Shows provided components in rotation. You can also click on navigation to show a particular component.
  *
  * Features:
  * - Automatic rotation of slots.
@@ -109,7 +109,7 @@ const stopSlideShow = () => {
   delayTimer = setTimeout(() => resumeSlideShow(), props.delay * 1000);
 };
 
-/** Resumes slideshow after delay. Note that means delay time is actually delay + normal interval. */
+/** Resumes slideshow after delay. Note that this means delay time is actually delay + normal interval. */
 const resumeSlideShow = () => {
   stopped.value = false;
   startAutoplay();

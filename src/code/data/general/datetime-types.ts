@@ -20,6 +20,6 @@ export type CalendarCell = {
   month: number;
   /** Year. */
   year: number;
-  /** If true, this date pick is for current month. */
+  /** If true, this date is in the current month. */
   isCurrentMonth: boolean;
 };

@@ -96,7 +96,7 @@ describe('Password Reset', () => {
     });
 
     it('confirms new password from token page and redirects to login', () => {
-      // Arrrange: Stub API call to return success.
+      // Arrange: Stub API call to return success.
       stubPasswordResetConfirm200();
 
       const resetPage = new PasswordResetPage();
@@ -182,7 +182,7 @@ describe('Password Reset', () => {
     });
 
     it('shows error when email is invalid on start page', () => {
-      // Stub API so detect if it is called.
+      // Stub API to detect if it is called.
       stubPasswordResetLink200();
 
       const startPage = new PasswordResetStartPage();

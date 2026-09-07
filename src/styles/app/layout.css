@@ -134,7 +134,7 @@ hr {
 .items-horizontal {
   display: flex;
   flex-direction: row; /* Stacks children horizontally */
-  align-items: top; /* Centers the items horizontally */
+  align-items: top; /* Aligns items to the top */
   gap: 1rem;
 
   padding: 10px;

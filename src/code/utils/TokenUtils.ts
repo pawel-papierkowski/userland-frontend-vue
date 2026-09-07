@@ -15,7 +15,7 @@ export class TokenUtils {
   }
 
   /**
-   * Checks if token is present and is not malformed. Note it does NOT verify if it actually exists on backend.
+   * Checks if token is present and is not malformed. Note it does NOT verify if it actually exists on the backend.
    * @param token Token.
    * @returns True if token seems valid, otherwise false.
    */

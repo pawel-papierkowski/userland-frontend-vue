@@ -232,7 +232,7 @@ const onKeydownSort = (e: KeyboardEvent, column: ColumnData) => {
 
 /**
  * Determine class for table row.
- * @param entry Entry. Can be null if it is row for new entry.
+ * @param entry Entry. Can be null if it is the row for a new entry.
  * @param rowIndex Row index.
  */
 const rowClass = (entry: E | null, rowIndex: number) => {

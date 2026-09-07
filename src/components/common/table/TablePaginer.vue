@@ -25,7 +25,7 @@ const props = withDefaults(
   },
 );
 
-/** Local page number. This is number shown in input (1-indexed). */
+/** Local page number. This is the number shown in the input (1-indexed). */
 const localPage = ref(currPage.value + 1);
 
 //

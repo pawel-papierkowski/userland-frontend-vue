@@ -268,7 +268,7 @@ describe('AdminUserHistory', () => {
   // Deferred reload (user table reload, user update / activation)
 
   describe('deferred reload', () => {
-    it('do not load data when user is selected but tab is inactive', async () => {
+    it('does not load data when user is selected but tab is inactive', async () => {
       // Arrange & Act: Mount with a user selected on an inactive tab.
       createComponent(testUser1, false);
 
@@ -327,7 +327,7 @@ describe('AdminUserHistory', () => {
       resolve2({ data: { entries: [], tableMeta: emptyMeta } });
     });
 
-    it('do not reload immediately when user table is reloaded and tab is inactive', async () => {
+    it('does not reload immediately when user table is reloaded and tab is inactive', async () => {
       const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 
@@ -412,7 +412,7 @@ describe('AdminUserHistory', () => {
       resolve2({ data: { entries: [], tableMeta: emptyMeta } });
     });
 
-    it('do not reload immediately when user data is updated and tab is inactive', async () => {
+    it('does not reload immediately when user data is updated and tab is inactive', async () => {
       const { promise, resolve } = createDeferredPromise<unknown>();
       mockLoadHistoryPage.mockReturnValue(promise);
 

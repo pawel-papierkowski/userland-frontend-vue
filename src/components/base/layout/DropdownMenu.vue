@@ -2,7 +2,7 @@
 /** Dropdown menu.
  *
  * Features:
- * - Contains two slots, one always visible and other shown when first is clicked.
+ * - Contains two slots, one always visible and the other shown when the first is clicked.
  * - Keyboard navigation via Enter/Space to toggle, Escape to close.
  * - Supports WAI-ARIA.
  *

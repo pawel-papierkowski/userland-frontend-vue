@@ -16,7 +16,7 @@ describe('Language Switcher', () => {
   });
 
   it('shows English texts by default', () => {
-    // Arrange&Act: Visit home page with forced English language.
+    // Arrange & Act: Visit home page with forced English language.
     cy.visitUserLand('/');
 
     // Assert: Footer texts are in English.

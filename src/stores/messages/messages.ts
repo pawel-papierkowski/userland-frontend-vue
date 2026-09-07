@@ -5,11 +5,11 @@ import type { Message } from '@/code/wrappers/messages/types.ts';
 import { EnMessageLevel } from '@/code/wrappers/messages/types.ts';
 import { defDuration } from '@/stores/messages/const.ts';
 
-/** Soft cap on number of messages at once. Actual amount can be temporarily above that, it is fine. */
+/** Soft cap on the number of messages at once. Actual amount can temporarily be above that; it is fine. */
 const maxMessages = 20;
 
 /**
- * Stores global message queue. Shown in `MessageContainer` component. Use `AppMessager` to add messages.
+ * Stores the global message queue. Shown in the `MessageContainer` component. Use `AppMessager` to add messages.
  */
 export const useMessageStore = defineStore('messages', () => {
   /** Global message queue. */
@@ -22,7 +22,7 @@ export const useMessageStore = defineStore('messages', () => {
    * @param level Message level (Info, Warning, Error).
    * @param title Optional title.
    * @param content The main message text.
-   * @param errCode Error code. If present, will show separately in message box.
+   * @param errCode Error code. If present, will show separately in the message box.
    * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
    */
   function addMessage(
@@ -33,7 +33,7 @@ export const useMessageStore = defineStore('messages', () => {
     duration = defDuration,
   ) {
     if (messages.value.length >= maxMessages) {
-      // Remove oldest message.
+      // Remove the oldest message.
       const id = messages.value[0]?.id ?? '';
       removeMessage(id);
     }
@@ -48,8 +48,8 @@ export const useMessageStore = defineStore('messages', () => {
   }
 
   /**
-   * Remove message with given id from global queue.
-   * @param id Identifier of message.
+   * Remove the message with the given id from the global queue.
+   * @param id Identifier of the message.
    */
   function removeMessage(id: string) {
     messages.value = messages.value.filter((m) => m.id !== id);

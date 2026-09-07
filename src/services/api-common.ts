@@ -1,7 +1,7 @@
 /**
  * Common code for API handling.
  * Remember to always surround API calls with try-catch, even if you do not care about results. See AppLoginer.logout()
- * for example of such case.
+ * for an example of such a case.
  */
 import axios from 'axios';
 import { isAxiosError } from 'axios';
@@ -30,7 +30,7 @@ export default {
       let token = AppLoginer.getJwt();
       if (token === null) return config; // no token present, nothing to do
 
-      // Check if we should prolong session.
+      // Check if we should prolong the session.
       // We do NOT prolong if we are already in a prolong, login, logout, or register request.
       const isAuthRequest =
         config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
@@ -40,7 +40,7 @@ export default {
           logger.debug('Prolonging session...');
           try {
             const { jwt } = await AppLoginer.prolongSilently();
-            token = jwt; // we need to use new token
+            token = jwt; // we need to use the new token
           } catch (error) {
             logger.error(error, 'Failed to prolong.');
           }

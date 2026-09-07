@@ -5,7 +5,7 @@ class LoginPage {
 
   /**
    * Visit the login page. This project has two versions of login page: standard and for admin panel.
-   * @param isAdmin If true, we are on login panel belonging to administration panel. False means standard login page.
+   * @param isAdmin If true, we are on the login panel belonging to the administration panel. False means standard login page.
    */
   visit(isAdmin: boolean): Cypress.Chainable<Cypress.AUTWindow> {
     const path = isAdmin ? '/admin' : '/login' ;

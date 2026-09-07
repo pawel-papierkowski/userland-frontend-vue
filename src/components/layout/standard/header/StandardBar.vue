@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Main bar in middle of header. */
+/** Main bar in the middle of the header. */
 import { useI18n } from 'vue-i18n';
 
 import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';

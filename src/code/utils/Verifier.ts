@@ -53,7 +53,7 @@ export class Verifier {
    * @param password Password to verify.
    * @param confirmPassword Password confirmation to verify.
    * @param used If true, form was used. Unused form should not show error on empty/null fields.
-   * @returns Null if password is correct and is same as confirmPassword, otherwise error message.
+   * @returns Null if password is correct and is the same as confirmPassword, otherwise error message.
    */
   public static verifyConfirmPassword(password: string, confirmPassword: string, used: boolean): string | null {
     const result = Verifier.verifyFieldInt(confirmPassword, used);

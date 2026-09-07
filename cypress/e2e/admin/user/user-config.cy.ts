@@ -430,7 +430,7 @@ describe('Admin User Config', () => {
       // Act: Click the add button (paginer options).
       page.clickAdd();
 
-      // Assert: New add-new-entry row appear.
+      // Assert: New add-new-entry row appears.
       page.getRow(-1).should('exist');
 
       // Act: Fill the new-entry row.

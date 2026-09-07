@@ -1,6 +1,6 @@
 <script setup lang="ts">
-/** Custom combobox implementation. Needed because <select> and <option> have very bad CSS support for dropdown list
- * for all browsers.
+/** Custom combobox implementation. Needed because <select> and <option> have very poor CSS support for dropdown lists
+ * across all browsers.
  *
  * Component uses CSS variables to set up look&feel of combobox. Variables:
  *   --combobox-color: Text color of combobox field.
@@ -17,7 +17,7 @@
  *
  * Features:
  * - Accept number (so also enums), string or null (not set) value.
- * - You provide list of options. Can use null value as option.
+ * - You provide a list of options. Can use null value as option.
  * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
  * - Keyboard navigation supported via arrows. Enter/space selects option and closes list.

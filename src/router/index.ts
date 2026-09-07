@@ -16,8 +16,8 @@ import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 const meta4unlogged = { layout: 'STANDARD', requiresAuth: false, permAny: [], permAll: [] };
 const meta4logged = { layout: 'STANDARD', requiresAuth: true, permAny: [], permAll: [] };
 // admin panel
-const meta4adminLogin = { layout: 'ADMIN', requiresAuth: false, permAny: [], permAll: [] }; // note this page is available for everyone to make login possible
-const meta4admin = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: [] }; // note individual pages may require additional permissions
+const meta4adminLogin = { layout: 'ADMIN', requiresAuth: false, permAny: [], permAll: [] }; // Note that this page is available for everyone to make login possible.
+const meta4admin = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: [] }; // Note that individual pages may require additional permissions.
 // admin panel: individual features
 const meta4adminUser = { layout: 'ADMIN', requiresAuth: true, permAny: ['role_operator'], permAll: ['user_view'] };
 
@@ -125,7 +125,7 @@ const routes = [
     meta: meta4adminUser,
   },
 
-  // Catch-all 404 route MUST be at the end
+  // Catch-all 404 route MUST be at the end.
   {
     path: '/:pathMatch(.*)*',
     component: () => import('@/components/pages/common/AppNotFound.vue'),
@@ -141,31 +141,31 @@ const router = createRouter({
 router.beforeEach((to) => {
   const isAuthenticated = AppLoginer.isLogged();
 
-  // If the route requires auth and the user isn't logged in, redirect. Target page is different for admin panel and standard pages.
+  // If the route requires auth and the user isn't logged in, redirect. Target page is different for the admin panel and standard pages.
   if (to.meta.requiresAuth && !isAuthenticated) {
     if (to.meta.layout === 'ADMIN') return { name: 'admin-login' }; // Admin panel pages redirect to the admin login route.
     return { name: 'login' }; // Redirects to the normal login route.
   }
 
   if (isAuthenticated) {
-    // Is authenticated and on login page?
+    // Is authenticated and on the login page?
     if (to.name?.toString() === 'login') {
-      return { name: 'home' }; // Redirects to home page.
+      return { name: 'home' }; // Redirects to the home page.
     }
 
     const hasPermissions = checkAccessPermissions(to.meta);
     // Is authenticated, but not authorized?
     if (!hasPermissions) {
-      return { name: 'home' }; // Redirects to home page.
+      return { name: 'home' }; // Redirects to the home page.
     }
 
-    // Is on admin login page, but already authenticated? Check if user can access admin panel.
+    // Is on the admin login page, but already authenticated? Check if the user can access the admin panel.
     if (to.name?.toString() === 'admin-login') {
       const targetMeta = router.resolve({ name: 'admin-main' }).meta;
       if (checkAccessPermissions(targetMeta)) {
-        return { name: 'admin-main' }; // Redirects to main page of administration panel.
+        return { name: 'admin-main' }; // Redirects to the main page of the administration panel.
       }
-      return { name: 'home' }; // Not authorized for admin panel, redirect to home.
+      return { name: 'home' }; // Not authorized for the admin panel, redirect to home.
     }
   }
 
@@ -175,9 +175,9 @@ router.beforeEach((to) => {
 // ////////////////////////////////////////////////////////////////////////////
 
 /**
- * Check if currently logged user has access to given route.
- * @param meta Metadata about route.
- * @returns True if given user has access, otherwise false.
+ * Check if the currently logged user has access to the given route.
+ * @param meta Metadata about the route.
+ * @returns True if the given user has access, otherwise false.
  */
 const checkAccessPermissions = (meta: RouteMeta): boolean => {
   if (AppLoginer.hasPermission('role_admin')) return true; // admin role has unrestricted access anywhere

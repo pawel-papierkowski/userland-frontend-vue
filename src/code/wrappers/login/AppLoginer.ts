@@ -96,7 +96,7 @@ export class AppLoginer {
   }
 
   /**
-   * Prolong user session silently. Contains API call. It is up to you to catch exceptions and react to result.
+   * Prolong user session silently. Contains API call. It is up to you to catch exceptions and react to the result.
    * @returns result: true if successful, otherwise false. jwt: JWT token.
    */
   public static async prolongSilently(): Promise<{ result: boolean; jwt: string }> {
@@ -149,8 +149,8 @@ export class AppLoginer {
   }
 
   /**
-   * Check if user session was idle for long time.
-   * @returns True if session was idle for long time, otherwise false.
+   * Check if user session was idle for a long time.
+   * @returns True if session was idle for a long time, otherwise false.
    */
   private static isIdleTooLong(): boolean {
     const lastCallStr = localStorage.getItem(locstLastApiCall);
@@ -223,7 +223,7 @@ export class AppLoginer {
 
   /**
    * Check if user has at least one of given permissions.
-   * @param permNames Name of permissions. Example: ['role_admin', 'role_operator'].
+   * @param permNames Names of permissions. Example: ['role_admin', 'role_operator'].
    * @returns True if user has at least one of given permissions.
    */
   public static hasPermissionsAny(permNames: string[]): boolean {
@@ -237,7 +237,7 @@ export class AppLoginer {
 
   /**
    * Check if user has all given permissions.
-   * @param permNames Name of permissions. Example: ['role_operator', 'user_view'].
+   * @param permNames Names of permissions. Example: ['role_operator', 'user_view'].
    * @returns True if user has all given permissions.
    */
   public static hasPermissionsAll(permNames: string[]): boolean {

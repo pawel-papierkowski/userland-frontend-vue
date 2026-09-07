@@ -24,7 +24,7 @@ describe('AppMessager', () => {
     expect(messageStore.messages[0]?.content).toBe('testArea.msgButtons.info.content');
   });
 
-  it('adds an translated info message', () => {
+  it('adds a translated info message', () => {
     const messageStore = useMessageStore();
 
     // Arrange&Act: Create translated message.

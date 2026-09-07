@@ -183,7 +183,7 @@ const isInvalid = (msgError: string | null): boolean => {
 
 //
 
-/** Automatically call once user enters page. */
+/** Automatically called once the user enters the page. */
 onMounted(async () => {
   await loadData();
 });

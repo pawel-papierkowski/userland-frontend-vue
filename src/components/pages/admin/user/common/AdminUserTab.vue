@@ -154,7 +154,7 @@ const handleReload = async () => {
     currSortOrder.value = data.value.tableMeta.sortOrder;
     isLoading.value = false;
   } catch (error) {
-    // Note in case of error spinner stays visible. There is no data to show in table (because error happened during load or processing)
+    // Note in case of error the spinner stays visible. There is no data to show in table (because error happened during load or processing)
     // and we want to show feedback for user that there was some issue. So we show spinner, but with spin stopped.
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');

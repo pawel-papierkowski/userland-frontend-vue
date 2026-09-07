@@ -5,7 +5,7 @@
  * - Accept number (so also enums), string or null (not set) value.
  * - Can disable or mark as invalid.
  * - Component is integrated with vue-i18n.
- * - Keyboard navigation supported via arrows (automatically selects option). Enter/space moves to next component.
+ * - Keyboard navigation supported via arrows (automatically selects an option). Enter/Space moves to next component.
  * - Supports WAI-ARIA.
  *
  * Models:
@@ -16,7 +16,7 @@
  * - options - Array of options. Can contain null value for 'unselected'.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
- * - langPrefix - Prefix, used for auto-translating entries in list. If empty, options will be shown as is without translation.
+ * - langPrefix - Prefix, used for auto-translating entries in the list. If empty, options will be shown as is without translation.
  */
 import { nextTick } from 'vue';
 import { NavUtils } from '@/code/utils/NavUtils.ts';
@@ -33,11 +33,11 @@ const props = withDefaults(
     id?: string;
     /** Array of options. Can contain null value for 'unselected'. */
     options: (number | string | null)[];
-    /**  If true, acts as disabled component. Optional, default is false. */
+    /**  If true, acts as a disabled component. Optional, default is false. */
     disabled?: boolean;
     /** If true, shows component as having invalid state. Visual only. Optional, default is false. */
     invalid?: boolean;
-    /** Prefix, used for auto-translating entries in list. If empty, options will be shown as is without translation. */
+    /** Prefix, used for auto-translating entries in the list. If empty, options will be shown as is without translation. */
     langPrefix?: string;
   }>(),
   {
@@ -56,7 +56,7 @@ const optionId = (index: number): string => `radiobox_${props.id}_option_${index
 //
 
 /**
- * Returns selected element or first element if nothing selected.
+ * Returns selected element or first element if nothing is selected.
  * @returns Active element or null if could not find element.
  */
 const findActiveElement = (): HTMLElement | null => {
@@ -134,7 +134,7 @@ const showOption = (option: number | string | null): number | string | null => {
   return option;
 };
 
-/** Move focus to the next focusable element on page. */
+/** Move focus to the next focusable element on the page. */
 const focusNext = () => {
   nextTick(() => {
     const el = findActiveElement();

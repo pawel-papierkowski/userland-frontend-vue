@@ -150,7 +150,7 @@ watch(userUpdatedTrigger, async () => {
   if (userUpdatedDiff.value.username !== null || userUpdatedDiff.value.email !== null) await handleReload();
 });
 
-/** Automatically call once user enters page. */
+/** Automatically called once the user enters the page. */
 onMounted(async () => {
   await handleReload();
 });

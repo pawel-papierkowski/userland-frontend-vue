@@ -132,7 +132,7 @@ export class TimeUtils {
   }
 
   /**
-   * Find out first day of month. Ignores timezone.
+   * Find out the first day of the month. Ignores timezone.
    * @param year Year.
    * @param month Month.
    * @returns Weekday as number. 0 = Monday, 1 = Tuesday, ..., 6 = Sunday.

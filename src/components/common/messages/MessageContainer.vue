@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Floating message container that can show many message boxes. After some time, message boxes are automatically removed. User can also remove them by clicking on them.
+ * Floating message container that can show many message boxes. After some time, message boxes are automatically removed. The user can also remove them by clicking on them.
  * Used as feedback for user after doing various actions.
  *
  * To add new messages, use AppMessager.
@@ -110,7 +110,7 @@ const messageStore = useMessageStore();
 /* Leaving message container: transformation of state. */
 .msg-list-leave-active {
   transition: all 0.3s ease-in;
-  /* If present, allows smooth sliding up of components below if current component is removed. But it causes diagonal movement for component that is leaving. */
+  /* If present, allows smooth sliding up of components below if current component is removed. But it causes diagonal movement for the component that is leaving. */
   left: var(--msg-padding);
   right: var(--msg-padding);
   width: auto;

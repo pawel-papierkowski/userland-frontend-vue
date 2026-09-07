@@ -8,10 +8,10 @@
  *
  * Properties:
  * - id - Used for identification. Optional.
- * - langPrefix - Prefix for language key. Together with slot name will make lang key.
+ * - langPrefix - Prefix for language key. Together with the slot name will make a lang key.
  *
  * Slots:
- * - Any number of slots, each one representing single tab panel.
+ * - Any number of slots, each one representing a single tab panel.
  */
 import { useSlots, computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -23,7 +23,7 @@ const props = withDefaults(
   defineProps<{
     /** Used for identification. */
     id?: string;
-    /** Prefix for language key. Together with slot name will make lang key. */
+    /** Prefix for language key. Together with the slot name will make a lang key. */
     langPrefix: string;
   }>(),
   {

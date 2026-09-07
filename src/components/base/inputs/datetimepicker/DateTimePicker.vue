@@ -1,12 +1,12 @@
 <script setup lang="ts">
-/** This is date&time picker. Uses Date class for both input and output.
+/** This is a date and time picker. Uses Date class for both input and output.
  * Note it is timezone-agnostic. It is up to you to adjust result to timezone etc. as needed.
  *
  * Features:
  * - Can select date, time or both date and time.
  * - Can disable or mark as invalid.
  * - Accept null (not set) value.
- * - Input fields are not editable. You set value via picker panels.
+ * - Input fields are not editable. You set the value via picker panels.
  * - Keyboard navigation supported (moving between subcomponents).
  * - Supports <label>.
  * - Supports WAI-ARIA.

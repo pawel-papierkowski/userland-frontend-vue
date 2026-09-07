@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** Page where you can register new user. */
+/** Page where you can register a new user. */
 import { reactive, ref, computed } from 'vue';
 import type { ComputedRef } from 'vue';
 import { useRouter } from 'vue-router';

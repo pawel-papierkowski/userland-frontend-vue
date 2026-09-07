@@ -60,7 +60,7 @@ const handleAccountDeletion = async () => {
     );
     logger.debug('Deleted user account.');
 
-    // User account ceased to exist, so we log out user on frontend.
+    // User account ceased to exist, so we log the user out on the frontend.
     AppLoginer.logout(false);
     router.push({ name: 'home' }); // go to home page
   } catch (error) {
@@ -72,7 +72,7 @@ const handleAccountDeletion = async () => {
 
 //
 
-/** Automatically call once user enters page. */
+/** Automatically called once the user enters the page. */
 onMounted(() => {
   verifyAll();
 });

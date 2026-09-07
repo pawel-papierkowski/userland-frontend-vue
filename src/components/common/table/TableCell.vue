@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="E extends Record<string, any>, FE extends Record<string, any>">
-/** Component that shows cell of table.
+/** Component that shows a cell of the table.
  *
  * Generics:
  * - E: Type of table entry.
@@ -15,7 +15,7 @@
  * - column - Data about column.
  * - entry - Current entry of table for row with this cell. Can be null.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
- * - fieldMeta - If present, defines additional metadata about cell like custom css applied to inside.
+ * - fieldMeta - If present, defines additional metadata about the cell like custom CSS applied to the inside.
  */
 import { computed } from 'vue';
 import type { VNode } from 'vue';

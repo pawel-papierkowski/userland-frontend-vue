@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** Custom input type="text" implementation.
- * For now it is just wrapper for actual <input>.
+ * For now it is just a wrapper for the actual <input>.
  *
  * Features:
  * - Accept string or null (not set) value.
@@ -13,9 +13,9 @@
  * - id - Used for identification and id attribute in focusable element (so <label> etc. work properly). Optional.
  * - type - Type of input. Optional, default is 'text'.
  * - required - Is required?
- * - allowPaste - If false, this input does not allow pasting text into field. Optional, default is true.
+ * - allowPaste - If false, this input does not allow pasting text into the field. Optional, default is true.
  * - autocomplete - For autocomplete attribute of <input>. Optional.
- * - placeholder - Shows grayed out text in background of input if null/empty. Optional.
+ * - placeholder - Shows grayed out text in the background of input if null/empty. Optional.
  * - disabled - If true, acts as disabled component. Optional, default is false.
  * - invalid - If true, shows component as having invalid state. Visual only. Optional, default is false.
  */

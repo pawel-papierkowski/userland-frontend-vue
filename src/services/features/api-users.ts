@@ -16,7 +16,7 @@ import type {
 
 // Set up a default Axios instance for this feature.
 const apiClient = backendApi.create('/users');
-// Set up fast timeout instance.
+// Set up a fast timeout instance.
 const apiClientFastTimeout = backendApi.create('/users', 5);
 
 export default {

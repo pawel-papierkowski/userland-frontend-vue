@@ -432,7 +432,7 @@ describe('Admin User Permissions', () => {
       // Act: Click the add button (paginer options).
       page.clickAdd();
 
-      // Assert: New add-new-entry row appear.
+      // Assert: New add-new-entry row appears.
       page.getRow(-1).should('exist');
 
       // Act: Pick a name from the combobox and fill the value.

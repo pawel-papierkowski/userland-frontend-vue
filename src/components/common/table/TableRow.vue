@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="E extends Record<string, any>, FE extends Record<string, any>">
-/** Component that shows row of table.
+/** Component that shows a row of the table.
  *
  * Models:
  * - v-model - Selected entry for table page where this row exists. Null means nothing is selected.

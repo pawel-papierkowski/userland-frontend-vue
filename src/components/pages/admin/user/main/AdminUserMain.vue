@@ -226,7 +226,7 @@ const fillFormData = (data: UserFullDataResp) => {
   form.surname = data.profile.surname;
 };
 
-/** Nullifies certain fields of diffForm that are same as form. */
+/** Nullifies certain fields of diffForm that are the same as form. */
 const diffFormData = () => {
   resetDiffField('modifiedAt'); // modifiedAt === null means nothing changed at all
   resetDiffField('username');
@@ -236,7 +236,7 @@ const diffFormData = () => {
 };
 
 /**
- * Compare form and diffForm field. Unchanged field is nulled.
+ * Compare a form and diffForm field. An unchanged field is nulled.
  * @param fieldName Name of field to update.
  */
 const resetDiffField = (fieldName: keyof UserFullDataForm) => {

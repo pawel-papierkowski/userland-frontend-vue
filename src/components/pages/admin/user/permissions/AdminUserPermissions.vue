@@ -145,7 +145,6 @@ const processEntry = (entry: UserPermissionTableEntry): UserPermissionTableEntry
 
 /**
  * Add new entry.
- * @param entry Table entry.
  */
 const addEntry = async () => {
   if (!selUserRecord.value || addNewEntry.value) return; // user must be selected, already in add entry mode

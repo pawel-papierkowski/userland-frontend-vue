@@ -86,7 +86,7 @@ const logBrowser = (level: EnMessageLevel) => {
       break;
   }
 };
-/** Sends message to vue logger. */
+/** Sends message to Vue logger. */
 const logVue = (level: EnMessageLevel) => {
   switch (level) {
     case EnMessageLevel.Info:

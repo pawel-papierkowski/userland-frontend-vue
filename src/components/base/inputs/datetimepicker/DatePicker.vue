@@ -4,7 +4,7 @@
  *
  * Features:
  * - Can select date.
- * - Can disable or mark as invalid. You also can constrain selectable dates to specified min/max range.
+ * - Can disable or mark as invalid. You can also constrain selectable dates to specified min/max range.
  * - Accept null (not set) value.
  * - Input field is not editable. You set value via calendar panel.
  * - Keyboard navigation supported via arrows (open panel or change day/month), enter/space (pick date) and esc (close panel).
@@ -78,7 +78,7 @@ const containerStyle = ref({
 });
 
 onClickOutside(pickerRef, () => {
-  // note we use pickerRef, not calendarContainerRef, as it would cause issues
+  // Note we use pickerRef, not calendarContainerRef, as it would cause issues.
   hidePanel();
 });
 
@@ -121,7 +121,7 @@ const placeholderDateValue = computed(() => {
 
 /** Compute header text (year and name of month). */
 const headerText = computed(() => {
-  const monthIx = viewDate.value.getUTCMonth(); // reminder that for some reason month is zero-indexed
+  const monthIx = viewDate.value.getUTCMonth(); // Reminder that for some reason month is zero-indexed.
   return viewDate.value.getUTCFullYear() + ' ' + t('dateTimePicker.month.' + monthIx);
 });
 
@@ -253,7 +253,7 @@ const calcDays = (): CalendarCell[] => {
   const days: CalendarCell[] = [];
   let ix = 0;
 
-  // Padding for previous month. Note that if a month has first day on monday, the entire previous week will be shown.
+  // Padding for previous month. Note that if a month has the first day on Monday, the entire previous week will be shown.
   for (let i = firstDay - 1; i >= 0; i--) {
     const d = new Date(Date.UTC(year, month, -i));
     days.push({

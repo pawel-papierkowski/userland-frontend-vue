@@ -23,7 +23,7 @@ export const useUserEventStore = defineStore('user-events', () => {
   /** Trigger for user (de)selection. Increment to notify. */
   const userSelectedTrigger = ref(0);
 
-  /** Notify that different user has been selected or deselected. */
+  /** Notify that a different user has been selected or deselected. */
   function notifyUserSelected() {
     userSelectedTrigger.value++;
   }

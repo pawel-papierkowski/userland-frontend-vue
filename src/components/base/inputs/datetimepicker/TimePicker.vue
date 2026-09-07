@@ -90,7 +90,7 @@ const containerStyle = ref({
 });
 
 onClickOutside(pickerRef, () => {
-  // note we use pickerRef, not clockContainerRef, as it would cause issues
+  // Note we use pickerRef, not clockContainerRef, as it would cause issues.
   hidePanel();
 });
 

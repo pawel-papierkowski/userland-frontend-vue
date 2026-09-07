@@ -4,7 +4,7 @@ export class NavUtils {
     'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   /**
-   * Starting from current element, focus on next focusable element on page. Does nothing in case of failure.
+   * Starting from the current element, focus on the next focusable element on the page. Does nothing in case of failure.
    * @param currElement Current element.
    */
   public static FocusNext(currElement: HTMLElement | null) {
@@ -24,7 +24,7 @@ export class NavUtils {
   }
 
   /**
-   * Starting from current element, focus on next focusable element INSIDE current element. If it fails, focus on current element.
+   * Starting from the current element, focus on the next focusable element INSIDE the current element. If it fails, focus on the current element.
    * @param currElement Current element.
    */
   public static FocusNextInside(currElement: HTMLElement | null) {

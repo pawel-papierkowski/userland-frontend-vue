@@ -33,9 +33,9 @@ const props = defineProps<{
 //
 
 /**
- * Check if can use option.
+ * Check if the option can be used.
  * @param option Option.
- * @returns True if can use option, otherwise false.
+ * @returns True if the option can be used, otherwise false.
  */
 const optionCanUse = (option: EntryOption): boolean => {
   if (option == null || props.isBusy) return false;
@@ -43,9 +43,9 @@ const optionCanUse = (option: EntryOption): boolean => {
 };
 
 /**
- * Check if option is visible.
+ * Check if the option is visible.
  * @param option Option.
- * @returns True if can see option, otherwise false.
+ * @returns True if the option can be seen, otherwise false.
  */
 const optionCanSee = (option: EntryOption): boolean => {
   if (option == null) return false;
@@ -53,7 +53,7 @@ const optionCanSee = (option: EntryOption): boolean => {
 };
 
 /**
- * Get dynamic class of option.
+ * Get dynamic class of the option.
  * @param option Option.
  */
 const optionClass = (option: EntryOption) => {
@@ -63,7 +63,7 @@ const optionClass = (option: EntryOption) => {
 };
 
 /**
- * Resolve tooltip for option.
+ * Resolve tooltip for the option.
  * @param option Option.
  */
 const optionTooltip = (option: EntryOption, key: string): string => {
@@ -77,7 +77,7 @@ const optionTooltip = (option: EntryOption, key: string): string => {
 };
 
 /**
- * Execute option.
+ * Execute the option.
  * @param option Entry option.
  * @param key Key.
  */
@@ -93,7 +93,7 @@ const optionExecute = async (option: EntryOption, key: string) => {
 };
 
 /**
- * React on key press while we are focused on given option.
+ * React on key press while we are focused on the given option.
  * @param e Keyboard event.
  * @param option Entry option.
  * @param key Key.

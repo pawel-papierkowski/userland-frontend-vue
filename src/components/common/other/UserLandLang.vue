@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** This subpanel of header allows selecting new language. */
+/** This subpanel of the header allows selecting a new language. */
 
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -17,7 +17,7 @@ onMounted(() => {
 });
 
 watch(currentLanguage, (newVal) => {
-  // Triggered when value of currentLanguage changes.
+  // Triggered when the value of currentLanguage changes.
   applyLanguage(newVal);
 });
 
@@ -28,7 +28,7 @@ const setLanguage = (langKey: string) => {
   currentLanguage.value = langKey;
 };
 
-// Apply given language. Saves language code to storage and updates all texts on page to new language.
+// Apply given language. Saves language code to storage and updates all texts on the page to the new language.
 const applyLanguage = (langKey: string) => {
   localStorage.setItem(locstLang, langKey); // preserve between browser sessions
   locale.value = langKey;
