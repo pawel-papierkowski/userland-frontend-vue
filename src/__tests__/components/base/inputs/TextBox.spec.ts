@@ -61,7 +61,7 @@ describe('TextBox', () => {
     it('has correct presentation for disabled state', async () => {
       // Ensures component shows correctly for disabled state.
 
-      // Arrange&Act: Create textboxx.
+      // Arrange&Act: Create textbox.
       const textBox = createComponent('Text in TextBox', '', '', true, '', true, false);
 
       // Assert: Input state is correct.
@@ -81,7 +81,7 @@ describe('TextBox', () => {
     it('has correct presentation for invalid state', async () => {
       // Ensures component shows correctly for invalid state.
 
-      // Arrange&Act: Create textboxx.
+      // Arrange&Act: Create textbox.
       const textBox = createComponent(null, '', 'on', true, '', false, true);
 
       // Assert: Input state is correct.

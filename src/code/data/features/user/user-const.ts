@@ -79,7 +79,7 @@ export const emptyUserHistoryTable: UserHistoryTableResp = {
   tableMeta: { pageCount: 0, entryCount: 0, pageSize: 0, page: 0, sortBy: '', sortOrder: '' },
 };
 
-/** List of user history who values. */
+/** List of values for user history 'who' field. */
 export const enUserHistoryWho: (string | null)[] = [null, 'USER', 'OPERATOR', 'SYSTEM'];
 /** List of user history what values. */
 export const enUserHistoryWhat: (string | null)[] = [

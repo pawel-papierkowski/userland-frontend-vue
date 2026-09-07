@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /**
  * Torus-shaped spinner for loading states.
- * If it appears, some component is busy doing task (like loading) somewhere.
- * Successful completion of task will usually result in spinner disappearing. Failure is signaled by stop of spin while spinner stays visible.
+ * If it appears, some component is busy doing a task (like loading) somewhere.
+ * Successful completion of a task will usually result in the spinner disappearing. Failure is signaled by stop of spin while spinner stays visible.
  *
  * Properties:
  * - canSpin: True if can spin, false if it cannot spin.

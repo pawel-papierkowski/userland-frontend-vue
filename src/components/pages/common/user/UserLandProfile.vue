@@ -213,7 +213,7 @@ onMounted(async () => {
         </div>
 
         <div class="form-entry">
-          <!-- Note it is read-only field, we change email separately. -->
+          <!-- Note it is a read-only field, we change the email separately. -->
           <label for="email">{{ t('user.profile.form.email') }}:</label>
           <TextBox id="email" type="email" v-model="form.email" autocomplete="email" :disabled="true" />
         </div>

@@ -9,7 +9,7 @@ import UserLandHome from '@/components/pages/home/UserLandHome.vue';
 import UserLandLogin from '@/components/pages/common/user/UserLandLogin.vue';
 import UserRegistration from '@/components/pages/user/UserRegistration.vue';
 
-// Rest is loaded lazily.
+// The rest is loaded lazily.
 
 // Defined metadata sets.
 // standard pages
@@ -83,7 +83,7 @@ const routes = [
     meta: meta4unlogged,
   },
 
-  // These pages are accessible only via email: link with token.
+  // These pages are accessible only via an email link with a token.
   {
     name: 'user-passwordReset',
     path: '/user/passwordReset',

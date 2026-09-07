@@ -190,7 +190,7 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp | null> => {
  * @returns User full edit request.
  */
 const convertLockToReq = (locked: boolean): UserFullDataReq => {
-  // null here means "do not change given value", so we only change field locked
+  // Null here means "do not change the given value", so we only change the locked field.
   return {
     id: selUserRecord.value?.id ?? -1,
     version: form.version,
@@ -232,7 +232,7 @@ const diffFormData = () => {
   resetDiffField('username');
   resetDiffField('email');
   resetDiffField('locked');
-  // We do not care about rest of fields.
+  // We do not care about the rest of the fields.
 };
 
 /**
@@ -250,7 +250,7 @@ const resetDiffField = (fieldName: keyof UserFullDataForm) => {
  * @returns True if selected account is same as currently logged in account, otherwise false.
  */
 const isYourOwnAccount = (): boolean => {
-  // Safe, as we cannot edit our own user and changing email via profile will log you out, invalidating token.
+  // Safe, as we cannot edit our own account and changing email via profile will log us out, invalidating the token.
   return AppLoginer.getEmail() === form.email;
 };
 

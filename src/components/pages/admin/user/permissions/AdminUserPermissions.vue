@@ -188,7 +188,7 @@ const saveEntry = async (entry: UserPermissionTableEntry | null) => {
 
 /** Verify form state. */
 const verifyForm = (): boolean => {
-  // Note we do not check if permission entry with same name/value already exists - error from backend is clear enough.
+  // Note we do not check if a permission entry with the same name/value already exists - the error from the backend is clear enough.
   if (formEntry.name === '') {
     AppMessager.failureT(
       'admin.user.permissions.table.msg.save.badName.title',
@@ -327,7 +327,7 @@ const resolveAdd = (): EntryOption => {
  */
 const metaForEntry = (entry: UserPermissionTableEntry | null): EntryMeta | null => {
   if (entry === null || (selEntryRecord.value !== null && entry.id === selEntryRecord.value?.id)) {
-    // We have new entry to add OR entry selected. We need custom metadata for editing entry.
+    // We have a new entry to add OR an entry selected. We need custom metadata for editing the entry.
     const options: Record<string, EntryOption> = {
       save: {
         access: 'ENABLED',

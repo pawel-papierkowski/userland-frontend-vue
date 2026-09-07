@@ -109,7 +109,7 @@ export class AppLoginer {
         const response = await backendApiUser.prolong(); // API CALL.
         const jwtToken = response.data.jwtToken;
 
-        // Prolong call revoked current token, we need to replace it with new token.
+        // Prolong call revoked the current token; we need to replace it with a new token.
         const result = loginStore.applyToken(jwtToken);
         if (result) localStorage.setItem(locstJwt, jwtToken);
         else localStorage.removeItem(locstJwt);

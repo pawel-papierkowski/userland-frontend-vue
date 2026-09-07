@@ -78,7 +78,7 @@ function verifyPanel(
 function verifyDays(datePicker: VueWrapper, ident: string, calendarState?: { day: string; class: string[] }[]) {
   if (!calendarState) return;
 
-  const calendarSize = 42; // Calendar always have 42 cells (6 rows * 7 days).
+  const calendarSize = 42; // Calendar always has 42 cells (6 rows * 7 days).
   const calendarHeader = datePicker.find('.header-title').text();
   const dayElements = datePicker.findAll('.day');
   expect(dayElements).toHaveLength(calendarSize);

@@ -47,7 +47,7 @@ describe('CheckBox', () => {
 
     it('cycle true/false', async () => {
       // Ensure checkbox properly cycles (true -> false -> true) when null value is not allowed.
-      // Note that programmatically setting null is stil possible even with allowNull === false. This is fine.
+      // Note that programmatically setting null is still possible even with allowNull === false. This is fine.
       // allowNull === false impacts only user actions.
 
       // Arrange&Act: Create check box.

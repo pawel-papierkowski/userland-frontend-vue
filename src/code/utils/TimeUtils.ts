@@ -135,7 +135,7 @@ export class TimeUtils {
    * Find out first day of month. Ignores timezone.
    * @param year Year.
    * @param month Month.
-   * @returns Weekday as number. 0 = Monday, 1 = Tuesday, ..., 6 = Sunday
+   * @returns Weekday as number. 0 = Monday, 1 = Tuesday, ..., 6 = Sunday.
    */
   public static getUTCFirstDayOfMonth(year: number, month: number): number {
     const day = new Date(Date.UTC(year, month, 1)).getUTCDay();
@@ -150,7 +150,6 @@ export class TimeUtils {
    * @returns Week number.
    */
   public static getWeekNumberFromDate(date: Date): number {
-    //return TimeUtils.getWeekNumber(date.getFullYear(), date.getMonth(), date.getDate());
     return TimeUtils.getWeekNumber(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
   }
 

@@ -6,7 +6,7 @@
  * To add new messages, use AppMessager.
  *
  * Example of use:
- * import { AppMessager } from '@/code/messages/AppMessager.ts';
+ * import { AppMessager } from '@/code/wrappers/messages/AppMessager.ts';
  * AppMessager.infoT('user.registration.msg.success.title', 'user.registration.msg.success.content');
  */
 import { useI18n } from 'vue-i18n';
@@ -82,7 +82,7 @@ const messageStore = useMessageStore();
   pointer-events: all;
 }
 
-/*** Animations for message boxes handled by <<TransitionGroup>. ***/
+/*** Animations for message boxes handled by <TransitionGroup>. ***/
 
 /* Entering message container: start state. */
 .msg-list-enter-from {
@@ -110,7 +110,7 @@ const messageStore = useMessageStore();
 /* Leaving message container: transformation of state. */
 .msg-list-leave-active {
   transition: all 0.3s ease-in;
-  /* If present, allows smooth sliding up components below if current component is removed. But it causes diagonal movement for component that is leaving. */
+  /* If present, allows smooth sliding up of components below if current component is removed. But it causes diagonal movement for component that is leaving. */
   left: var(--msg-padding);
   right: var(--msg-padding);
   width: auto;
@@ -124,7 +124,7 @@ const messageStore = useMessageStore();
 
 /* Moving within message container: transformation of state. */
 .msg-list-move {
-  /* it seems to interfere with sliding out, making it diagonal */
+  /* It seems to interfere with sliding out, making it diagonal. */
   /*transition: transform 0.4s ease;*/
 }
 </style>

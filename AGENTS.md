@@ -1,6 +1,6 @@
 # Vue 3 Frontend Project Instructions
 
-**UserLand** is a portfolio project for frontend in Vue. It is part of bigger project that contains frontend and backend.
+**UserLand** is a portfolio project for frontend in Vue. It is part of a bigger project that contains frontend and backend.
 
 ## Tech Stack & Architecture
 - **Language:** JavaScript/TypeScript.
@@ -14,7 +14,7 @@
 ### General
 - **Language:**
   - We use TypeScript. Use semicolons.
-  - Avoid using type `any` unless neccessary. Use it only when justified.
+  - Avoid using type `any` unless necessary. Use it only when justified.
 - **Placement:**
   - Pure code is in `src/code`.
   - Components are in `src/components`.
@@ -24,7 +24,7 @@
   - Pinia state management is in `src/stores`.
   - Global styles are in `src/styles`.
 - **Modifications:**
-  - Do NOT change things that are not related to your task. If it is neccessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
+  - Do NOT change things that are not related to your task. If it is necessary for some reason, ask first. Focus on your task unless you are explicitly told you are allowed to make other changes in code.
   - Do NOT install npm modules, unless explicitly asked. If you think installing new module is necessary, explain what module is needed and why.
 - **Comments:**
   - Preserve comments or update them whenever possible. New code must be properly commented.
@@ -42,7 +42,7 @@
   - File structure (directories, file names and language keys in files) must be identical for all languages. Only difference is translation strings.
   - Emojis cannot be inserted by AI unless explicitly allowed. Existing emojis are ok.
   - If new language keys and translations are needed, always add them for all available languages (even for texts that are used only in tests) for consistency.
-- **Custom components:**:
+- **Custom components:**
   - Must support ARIA where applicable.
   - Must support keyboard navigation inside component where applicable.
   - Must support tabbing into component and `<label>` clicking (usually via hidden `<button>`, as `<div>` is not labelable) where applicable. Tests for these two features must use mount with multiple components (like paired label and tested component itself) whenever possible. See relevant tests in `ComboBox.spec.ts` for how to do it.
@@ -66,11 +66,11 @@
 ### General
 When I ask for review, in order of importance:
 - Analyze general purpose and functionality.
-- Check code for bugs, mistakes and other potential issues. If there are a lot of stuff here, skip rest of steps: we need to fix that stuff first.
+- Check code for bugs, mistakes and other potential issues. If there is a lot of stuff here, skip the rest of the steps: we need to fix that stuff first.
 - Verify algorithm and logic. Is this correct way to do it? Can it be done better?
 - Make sure common programming principles (like DRY) are followed.
 - Find tests for reviewed code and review them too. If tests are missing, note their absence and plan what tests should be added. Do not add them automatically unless explicitly asked.
-- I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as neccessary.
+- I might ask to review same code multiple times (to re-check code after changes implemented from previous review). Re-read files as necessary.
   - You can skip some steps if appropriate (for example, skip purpose/functionality analysis if purpose and functionality is already known).
   - If previously reported issues still exist, inform about them again unless they were explained or rejected.
 

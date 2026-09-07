@@ -49,7 +49,7 @@ export class Verifier {
   }
 
   /**
-   * Verify password&password confirmation field.
+   * Verify password and password confirmation fields.
    * @param password Password to verify.
    * @param confirmPassword Password confirmation to verify.
    * @param used If true, form was used. Unused form should not show error on empty/null fields.

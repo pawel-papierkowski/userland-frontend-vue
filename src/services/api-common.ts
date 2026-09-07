@@ -16,7 +16,7 @@ export default {
   /**
    * Set up a default Axios instance.
    * @param endpointBase Base endpoint.
-   * @param timeout Timeout in seconds. Default is minute since we may need to wait for GCP to spin up.
+   * @param timeout Timeout in seconds. Default is a minute since we may need to wait for GCP to spin up.
    * @returns Axios instance.
    */
   create(endpointBase: string, timeout: number = 60) {
@@ -31,7 +31,7 @@ export default {
       if (token === null) return config; // no token present, nothing to do
 
       // Check if we should prolong session.
-      // We do NOT prolong if we are already in prolong or login/logout/register request.
+      // We do NOT prolong if we are already in a prolong, login, logout, or register request.
       const isAuthRequest =
         config.url === '/prolong' || config.url === '/login' || config.url === '/logout' || config.url === '/register';
 

@@ -1,4 +1,4 @@
-/** Kind of column in table. */
+/** Kind of calendar cell. */
 export enum EnCalendarCellType {
   /** Standard date cell that should show day. */
   Date,

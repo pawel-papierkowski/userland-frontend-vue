@@ -438,7 +438,7 @@ describe('ComboBox', () => {
     });
 
     it('ArrowDown opens and highlights selected option', async () => {
-      // Ensure ArrowUp opens combobox and highlights selected option.
+      // Ensure ArrowDown opens combobox and highlights selected option.
 
       // Arrange&Act: Set up combobox.
       const comboBox = createComponent('c', 'someCombobox', createOptionsNoNull(), false, false, 'test.comboBox');

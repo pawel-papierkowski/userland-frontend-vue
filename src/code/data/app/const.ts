@@ -35,5 +35,5 @@ export const permissions: string[] = ['role', 'user'];
 /** How close to expiration we should be before automatic prolongation in minutes. */
 export const prolongExpiration = 15;
 
-/** For JWT with long validity, if last api call happened in past more than this value, prolong silently. In minutes. */
+/** For a JWT with long validity, if the last API call happened in the past more than this value, prolong silently. In minutes. */
 export const prolongIdleThreshold = 12 * 60; // 12h

@@ -126,8 +126,8 @@ const handleRedirection = () => {
       router.push({ name: 'admin-main' });
       return;
     }
-    // If we are here, it means standard user tried to login to admin panel, ouch.
-    // We do not logout them or show error, we just kick them out to normal webpage.
+    // If we are here, it means a standard user tried to log in to the admin panel, ouch.
+    // We do not log them out or show an error, we just kick them out to the normal web page.
   }
   router.push({ name: 'home' });
 };

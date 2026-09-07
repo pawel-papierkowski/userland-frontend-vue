@@ -365,7 +365,7 @@ describe('Admin User Form', () => {
       // Act: Switch to the history tab first, then select the user.
       cy.getByTestId('usertab_history').click();
       page.selectUserRow(0);
-      cy.waitIfHappens('@userDataRequest', { timeout: 250 }); // User form data wont be loaded because we are on different tab at time of user selection.
+      cy.waitIfHappens('@userDataRequest', { timeout: 250 }); // User form data won't be loaded because we are on different tab at the time of user selection.
 
       // Assert: User form data is not loaded.
       cy.get(`@userDataRequest.all`).should('have.length', 0);

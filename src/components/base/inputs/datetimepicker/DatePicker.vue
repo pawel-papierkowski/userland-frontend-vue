@@ -214,12 +214,12 @@ const calcCalendarCells = (): CalendarCell[] => {
   const cells: CalendarCell[] = calcDays();
 
   if (props.showWeeks) {
-    // insert week number cells, always six weeks
+    // Insert week number cells, always six weeks.
     for (let i = 0; i < 6; i++) {
-      const dayIx = i * 8; // always at monday, will be used for splicing at end
+      const dayIx = i * 8; // Always on monday, will be used for splicing at the end.
       const firstDayOfWeek: CalendarCell = cells[dayIx]!;
       // Show week number properly at week common for both years depending on which year is in focus.
-      // For example, last week of December will be (usually) 53rd week, while first week of January (exactly same week as last week of December)
+      // For example, last week of December will be (usually) 53rd week, while the first week of January (exactly same week as last week of December)
       // is always 1st week.
       const dayOfWeekIx = viewDate.value.getUTCFullYear() === firstDayOfWeek.year ? dayIx : dayIx + 6;
       const lastDayOfWeek: CalendarCell = cells[dayOfWeekIx]!;
@@ -253,7 +253,7 @@ const calcDays = (): CalendarCell[] => {
   const days: CalendarCell[] = [];
   let ix = 0;
 
-  // Padding for previous month. Note that if month has first day on monday, entire previous week will be shown.
+  // Padding for previous month. Note that if a month has first day on monday, the entire previous week will be shown.
   for (let i = firstDay - 1; i >= 0; i--) {
     const d = new Date(Date.UTC(year, month, -i));
     days.push({
