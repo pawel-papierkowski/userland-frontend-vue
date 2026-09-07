@@ -92,6 +92,9 @@
           "content": "To jest wiadomość o błędzie. Numer: {count}."
         }
       },
+      "time": {
+        "label": "Czas"
+      },
       "placeholder": {
         "title": "Wprowadź własny tytuł",
         "content": "Wprowadź własną zawartość"

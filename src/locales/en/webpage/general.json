@@ -92,6 +92,9 @@
           "content": "This is error message. Number: {count}."
         }
       },
+      "time": {
+        "label": "Time"
+      },
       "placeholder": {
         "title": "Enter custom title",
         "content": "Enter custom content"

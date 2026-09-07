@@ -132,6 +132,7 @@ const logVue = (level: EnMessageLevel) => {
         <button @click="genMessage(EnMessageLevel.Error)">{{ t('testArea.messages.msgButtons.error.label') }}</button>
 
         <div class="items-horizontal">
+          <div>{{ t('testArea.messages.time.label') }}</div>
           <input type="range" min="-1" max="100" step="1" v-model="form.time" /> {{ form.time }}
         </div>
         <TextBox

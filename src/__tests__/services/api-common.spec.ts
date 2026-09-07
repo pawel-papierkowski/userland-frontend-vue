@@ -292,7 +292,7 @@ describe('api-common', () => {
     });
 
     it('should NOT call expireSession on 401 when already not logged in', async () => {
-      // Arrange: Ser is not logged in.
+      // Arrange: User is not logged in.
       vi.mocked(AppLoginer.isLogged).mockReturnValue(false);
       const error = {
         isAxiosError: true,

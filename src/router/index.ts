@@ -141,10 +141,9 @@ const router = createRouter({
 router.beforeEach((to) => {
   const isAuthenticated = AppLoginer.isLogged();
 
-  // If the route requires auth and the user isn't logged in, redirect.
+  // If the route requires auth and the user isn't logged in, redirect. Target page is different for admin panel and standard pages.
   if (to.meta.requiresAuth && !isAuthenticated) {
-    // Admin panel routes always start with 'admin-'.
-    if (to.name?.toString().includes('admin-')) return { name: 'admin-login' }; // Redirects to the admin login route.
+    if (to.meta.layout === 'ADMIN') return { name: 'admin-login' }; // Admin panel pages redirect to the admin login route.
     return { name: 'login' }; // Redirects to the normal login route.
   }
 
