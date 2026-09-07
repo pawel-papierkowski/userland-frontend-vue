@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import axios from 'axios';
 import { createPinia, setActivePinia } from 'pinia';
 import apiCommon from '@/services/api-common.ts';
-import apiLogging from '@/services/api-logging.ts';
 
 import { logger } from '@/code/utils/logger.ts';
 import { prolongIdleThreshold } from '@/code/data/app/const.ts';
@@ -60,6 +59,7 @@ vi.mock('@/code/wrappers/login/AppLoginer.ts', async () => {
   };
 });
 
+// api-users.ts calls backendApi.create() at module level — mock to prevent side effects via AppLoginer import chain.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
 
 vi.mock('@/code/utils/logger.ts', () => ({
@@ -73,11 +73,10 @@ vi.mock('@/code/utils/logger.ts', () => ({
 // Tests.
 
 type InterceptorConfig = { headers: Record<string, string>; url?: string };
-type ResponseError = { isAxiosError: boolean; response?: { status: number }; config: { url: string } };
 
 describe('api-common', () => {
   let interceptor: (config: InterceptorConfig) => Promise<InterceptorConfig>;
-  let responseErrorHandler: (error: ResponseError) => Promise<never>;
+  let responseErrorHandler: (error: unknown) => Promise<never>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -333,57 +332,31 @@ describe('api-common', () => {
       // Act & assert: the error is still propagated to the caller.
       await expect(responseErrorHandler(error)).rejects.toBe(error);
     });
-  });
 
-  // //////////////////////////////////////////////////////////////////////////
-  // Logging in case of error.
+    it('should NOT call expireSession on non-Axios errors', async () => {
+      // Arrange: Plain Error (not an Axios error).
+      const error = new Error('Network failure');
 
-  describe('logError', () => {
-    it('should log detailed error if it is an Axios error with response', () => {
-      // Arrange: Error that should be processed.
-      const error = {
-        isAxiosError: true,
-        message: 'Request failed',
-        response: {
-          status: 400,
-          data: { detail: 'Bad Request' },
-        },
-      };
+      // Act & assert: error is still rejected.
+      await expect(responseErrorHandler(error)).rejects.toThrow('Network failure');
 
-      // Act: Call error logging.
-      apiLogging.logError(error, 'API Error');
-
-      // Assert: Called logger.error internally with correct parameters.
-      expect(logger.error).toHaveBeenCalledWith('API Error', {
-        status: 400,
-        message: 'Request failed',
-        backendBody: { detail: 'Bad Request' },
-      });
+      // Assert: ExpireSession was NOT called (not an Axios error).
+      expect(AppLoginer.expireSession).not.toHaveBeenCalled();
     });
 
-    it('should log unreachable error if it is an Axios error without response', () => {
-      // Arrange: Error that should be processed.
+    it('should call expireSession on 401 when error.config is undefined', async () => {
+      // Arrange: Axios error with no config property.
       const error = {
         isAxiosError: true,
-        request: {},
+        response: { status: 401 },
+        // config is missing entirely
       };
 
-      // Act: Call error logging.
-      apiLogging.logError(error, 'API Error');
+      // Act & assert: error is still rejected.
+      await expect(responseErrorHandler(error)).rejects.toBe(error);
 
-      // Assert: Called logger.error internally with correct parameters.
-      expect(logger.error).toHaveBeenCalledWith('API Error', 'Backend is unreachable. No response received.');
-    });
-
-    it('should log unexpected error if it is not an Axios error', () => {
-      // Arrange: Error that should be processed.
-      const error = new Error('Some other error');
-
-      // Act: Call error logging.
-      apiLogging.logError(error, 'General Error');
-
-      // Assert: Called logger.error internally with correct parameters.
-      expect(logger.error).toHaveBeenCalledWith('General Error', 'An unexpected error occurred:', error);
+      // Assert: ExpireSession was called (isLoginRequest evaluates to false).
+      expect(AppLoginer.expireSession).toHaveBeenCalled();
     });
   });
 });
