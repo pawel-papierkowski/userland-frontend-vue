@@ -159,9 +159,13 @@ router.beforeEach((to) => {
       return { name: 'home' }; // Redirects to the normal login route.
     }
 
-    // Is on admin login page, but already authenticated AND authorized?
-    if (hasPermissions && to.name?.toString() === 'admin-login') {
-      return { name: 'admin-main' }; // Redirects to main page of administration panel.
+    // Is on admin login page, but already authenticated? Check if user can access admin panel.
+    if (to.name?.toString() === 'admin-login') {
+      const targetMeta = router.resolve({ name: 'admin-main' }).meta;
+      if (checkAccessPermissions(targetMeta)) {
+        return { name: 'admin-main' }; // Redirects to main page of administration panel.
+      }
+      return { name: 'home' }; // Not authorized for admin panel, redirect to home.
     }
   }
 
