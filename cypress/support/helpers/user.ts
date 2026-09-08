@@ -48,7 +48,6 @@ export function stubUserTable(users: UserTableEntry[]) {
 /**
  * Stub the load-user-data API so GET /user/{id} returns the matching full user.
  * @param users Full user dataset to match against.
- * @param overrides Extra fields merged over the resolved user (e.g. to simulate your own account).
  */
 export function stubUserData(users: UserFullDataResp[]) {
   cy.intercept('GET', '**/api/admin/user/*', (req) => {

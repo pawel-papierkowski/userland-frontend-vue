@@ -115,7 +115,7 @@ describe('UserAccountDeletion', () => {
           status: 404,
           data: {
             detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-            instance: '/api/users/password/confirm',
+            instance: '/api/users/delete/confirm',
             status: 404,
             title: 'User token is missing.',
             type: 'https://api.userland.org/errors/user/token/missing',

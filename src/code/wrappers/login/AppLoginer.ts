@@ -144,7 +144,7 @@ export class AppLoginer {
     const nowAt = new Date().getTime();
     const diff = expiresAt - nowAt;
 
-    // If less than 5 minutes left, prolong.
+    // If close to expiration, prolong.
     return diff > 0 && diff < prolongExpiration * 60 * 1000;
   }
 

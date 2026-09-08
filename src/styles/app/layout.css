@@ -134,12 +134,8 @@ hr {
 .items-horizontal {
   display: flex;
   flex-direction: row; /* Stacks children horizontally */
-  align-items: top; /* Aligns items to the top */
+  align-items: flex-start; /* Aligns items to the top */
   gap: 1rem;
 
   padding: 10px;
 }
-
-/*** Layout components. ***/
-
-/* Tab group. */

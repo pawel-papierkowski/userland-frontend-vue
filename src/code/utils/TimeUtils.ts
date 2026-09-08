@@ -2,8 +2,8 @@
 export class TimeUtils {
   /**
    * Convert UTC date to date with local timezone applied.
-   * @param dateStr Date as string in format `YYYY-MM-DDThh:mm:ss` without timezone. Accepts `.SSS` if present.
-   * @returns Date as string with timezone applied in format `YYYY-MM-DD hh:mm:ss`.
+   * @param dateStr Date as string in format `YYYY-MM-DDTHH:mm:ss` without timezone. Accepts `.SSS` if present.
+   * @returns Date as string with timezone applied in format `YYYY-MM-DD HH:mm:ss`.
    */
   public static zoned(dateStr: string | null | undefined): string {
     if (dateStr === undefined || dateStr === null) return '';
@@ -33,14 +33,14 @@ export class TimeUtils {
   //
 
   /**
-   * Converts a Date to a local ISO string describing full date and time (`YYYY-MM-DDThh:mm:ss.SSS`).
+   * Converts a Date to an UTC ISO string describing full date and time (`YYYY-MM-DDTHH:mm:ss.SSS` or `YYYY-MM-DDTHH:mm:ss` if ms is zero).
    * Ignores timezone. You will need to initialize `Date` using `Date.UTC`. Example:
    * ```
    * const date = new Date(Date.UTC(2026, 5, 28, 0, 0, 0, 0));
    * const result = TimeUtils.cnvFull(date);
    * ```
    * @param date Date/time JavaScript class instance.
-   * @returns Date and time as ISO-formatted string without zone.
+   * @returns Date and time as ISO-formatted string without zone. Returns null if given date is null.
    */
   public static cnvFull(date: Date | null): string | null {
     if (date === null) return null;
@@ -59,10 +59,10 @@ export class TimeUtils {
   }
 
   /**
-   * Converts a Date to a local ISO string describing date only (`YYYY-MM-DD`).
+   * Converts a Date to an UTC ISO string describing date only (`YYYY-MM-DD`).
    * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
    * @param date Date/time JavaScript class instance.
-   * @returns Date as ISO-formatted string without zone.
+   * @returns Date as ISO-formatted string without zone. Returns null if given date is null.
    */
   public static cnvDate(date: Date | null): string | null {
     if (date === null) return null;
@@ -75,10 +75,10 @@ export class TimeUtils {
   }
 
   /**
-   * Converts a Date to a local ISO string describing time only (`hh:mm:ss.SSS`).
+   * Converts a Date to an UTC ISO string describing time only (`HH:mm:ss.SSS` or `HH:mm:ss` if ms is zero).
    * Ignores timezone. You will need to initialize `Date` using `Date.UTC`.
    * @param date Date/time JavaScript class instance.
-   * @returns Time as ISO-formatted string without zone.
+   * @returns Time as ISO-formatted string without zone. Returns null if given date is null.
    */
   public static cnvTime(date: Date | null): string | null {
     if (date === null) return null;
@@ -98,7 +98,7 @@ export class TimeUtils {
   /**
    * Format date. Ignores timezone.
    * @param date Date. Can be null.
-   * @returns Formatted date as string. If null, will return empty string.
+   * @returns Formatted date (`YYYY-MM-DD`) as string. If given Date is null, will return empty string.
    */
   public static formatUTCDate(date: Date | null): string {
     if (!date) return '';

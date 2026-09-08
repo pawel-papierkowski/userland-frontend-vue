@@ -64,7 +64,8 @@ const optionClass = (option: EntryOption) => {
 
 /**
  * Resolve tooltip for the option.
- * @param option Option.
+ * @param option Entry option data.
+ * @param key Key to use.
  */
 const optionTooltip = (option: EntryOption, key: string): string => {
   const reason = option?.reason ? option.reason : 'action';

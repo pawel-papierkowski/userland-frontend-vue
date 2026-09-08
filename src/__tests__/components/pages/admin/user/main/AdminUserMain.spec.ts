@@ -375,7 +375,7 @@ describe('AdminUserMain', () => {
   // Lock toggle
 
   describe('lock toggle', () => {
-    it('sends locked=true when unlocking user', async () => {
+    it('unlocked user, sends locked=true to lock', async () => {
       // Arrange: Load unlocked user.
       const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
@@ -405,7 +405,7 @@ describe('AdminUserMain', () => {
       expect(payload.profile).toBeNull();
     });
 
-    it('sends locked=false when locking user', async () => {
+    it('locked user, sends locked=false to unlock', async () => {
       // Arrange: Load locked user.
       const { promise: loadPromise, resolve: loadResolve } = createDeferredPromise<unknown>();
       mockLoadUserData.mockReturnValue(loadPromise);
@@ -643,7 +643,7 @@ describe('AdminUserMain', () => {
       await flushPromises();
       await nextTick();
 
-      // Assert: Reload of subtable was called (tab is active).
+      // Assert: Reload of table was called (tab is active).
       expect(mockLoadUserData).toHaveBeenCalledTimes(1);
       vi.clearAllMocks();
 
@@ -652,7 +652,7 @@ describe('AdminUserMain', () => {
       userEventStore.notifyUsersReload();
       await nextTick();
 
-      // Assert: Reload of subtable was called (tab is active).
+      // Assert: Reload of table was called (tab is active).
       expect(mockLoadUserData).toHaveBeenCalledTimes(1);
 
       // Act: Deactivate and reactivate the tab.
@@ -680,7 +680,7 @@ describe('AdminUserMain', () => {
       await flushPromises();
       await nextTick();
 
-      // Assert: Reload of subtable was NOT called yet (tab is not active).
+      // Assert: Reload of table was NOT called yet (tab is not active).
       expect(mockLoadUserData).not.toHaveBeenCalled();
       vi.clearAllMocks();
 
@@ -689,7 +689,7 @@ describe('AdminUserMain', () => {
       userEventStore.notifyUsersReload();
       await nextTick();
 
-      // Assert: Reload of subtable was NOT called yet (deferred until tab activation).
+      // Assert: Reload of table was NOT called yet (deferred until tab activation).
       expect(mockLoadUserData).not.toHaveBeenCalled();
 
       // Act: Deactivate and reactivate the tab.

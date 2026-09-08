@@ -14,7 +14,7 @@ export class AppMessager {
    * Generates an info message from provided translation keys.
    * @param title Title as an i18n key.
    * @param content Content as an i18n key.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static infoT(title: string, content: string, duration = defDurationInfo) {
     this.info(t(title), t(content), duration);
@@ -24,7 +24,7 @@ export class AppMessager {
    * Generates an info message.
    * @param title Title as a string.
    * @param content Content as a string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static info(title: string, content: string, duration = defDurationInfo) {
     this.showInfo(title, content, duration);
@@ -36,7 +36,7 @@ export class AppMessager {
    * Generates a success message from provided translation keys.
    * @param title Title as an i18n key.
    * @param content Content as an i18n key.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static successT(title: string, content: string, duration = defDurationSuccess) {
     this.success(t(title), t(content), duration);
@@ -46,7 +46,7 @@ export class AppMessager {
    * Generates a success message.
    * @param title Title as a string.
    * @param content Content as a string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static success(title: string, content: string, duration = defDurationSuccess) {
     this.showSuccess(title, content, duration);
@@ -58,7 +58,7 @@ export class AppMessager {
    * Generates a warning message from provided translation keys.
    * @param title Title as an i18n key.
    * @param content Content as an i18n key.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static warningT(title: string, content: string, duration = defDurationWarning) {
     this.warning(t(title), t(content), duration);
@@ -68,7 +68,7 @@ export class AppMessager {
    * Generates a warning message.
    * @param title Title as a string.
    * @param content Content as a string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static warning(title: string, content: string, duration = defDurationWarning) {
     this.showWarning(title, content, duration);
@@ -80,7 +80,7 @@ export class AppMessager {
    * Generates a failure message from provided translation keys.
    * @param title Title as an i18n key.
    * @param content Content as an i18n key.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static failureT(title: string, content: string, duration = defDurationFailure) {
     this.failure(t(title), t(content), duration);
@@ -90,7 +90,7 @@ export class AppMessager {
    * Generates a failure message.
    * @param title Title as a string.
    * @param content Content as a string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   public static failure(title: string, content: string, duration = defDurationFailure) {
     this.showFailure(title, content, duration);
@@ -101,20 +101,20 @@ export class AppMessager {
   /**
    * Generates an error message to show as user feedback on error from provided translation keys.
    * @param error Error object.
-   * @param fallbackTitle Title to use if we cannot process the error as an i18n key.
-   * @param fallbackContent Content to use if we cannot process the error as an i18n key.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param fallbackTitle Title string as i18n key to use if we failed to determine proper error title.
+   * @param fallbackContent Content string as i18n key to use if we failed to determine proper error content.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep error message forever on screen.
    */
   public static errorT(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     this.error(error, t(fallbackTitle), t(fallbackContent), duration);
   }
 
   /**
-   * Generates an error message to show as user feedback on error.
+   * Generates an error message to show as feedback for user on error. Uses fallback texts if we could not determine proper error texts for given error object.
    * @param error Error object.
-   * @param fallbackTitle Title string to use if we cannot process the error.
-   * @param fallbackContent Content string to use if we cannot process the error.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param fallbackTitle Title string to use if we failed to determine proper error title.
+   * @param fallbackContent Content string to use if we failed to determine proper error content.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep error message forever on screen.
    */
   public static error(error: unknown, fallbackTitle: string, fallbackContent: string, duration = defDurationError) {
     if (isAxiosError(error)) {
@@ -134,11 +134,14 @@ export class AppMessager {
   }
 
   /**
-   * Process error with response from server.
+   * Process error containing response from server. Order:
+   * - We will try to determine error message based on error code first.
+   * - If that fails, try to determine error message based on HTTP status code.
+   * - If all else fails, use fallback texts.
    * @param error Axios error.
-   * @param fallbackTitle Fallback title.
-   * @param fallbackContent Fallback content.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param fallbackTitle Title string to use if we failed to determine proper error title.
+   * @param fallbackContent Content string to use if we failed to determine proper error content.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep error message forever on screen.
    */
   private static processResponseError(error: AxiosError, fallbackTitle: string, fallbackContent: string, duration: number) {
     if (!error.response) return; // guard, should never happen as caller checks this
@@ -166,7 +169,7 @@ export class AppMessager {
 
   /**
    * Process error without response from server (network issue).
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep error message forever on screen.
    */
   private static processRequestError(duration: number) {
     this.showError(t('msgs.networkError.title'), t('msgs.networkError.content'), '', duration);
@@ -178,7 +181,7 @@ export class AppMessager {
    * Helper to show an info message using the store.
    * @param title Title string.
    * @param content Content string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   private static showInfo(title: string, content: string, duration: number) {
     const messageStore = useMessageStore();
@@ -189,7 +192,7 @@ export class AppMessager {
    * Helper to show a success message using the store.
    * @param title Title string.
    * @param content Content string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   private static showSuccess(title: string, content: string, duration: number) {
     const messageStore = useMessageStore();
@@ -200,7 +203,7 @@ export class AppMessager {
    * Helper to show a warning message using the store.
    * @param title Title string.
    * @param content Content string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   private static showWarning(title: string, content: string, duration: number) {
     const messageStore = useMessageStore();
@@ -211,7 +214,7 @@ export class AppMessager {
    * Helper to show a failure message using the store.
    * @param title Title string.
    * @param content Content string.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   private static showFailure(title: string, content: string, duration: number) {
     const messageStore = useMessageStore();
@@ -222,8 +225,8 @@ export class AppMessager {
    * Helper to show an error message using the store.
    * @param title Title string.
    * @param content Content string.
-   * @param errCode Optional error code.
-   * @param duration Time in seconds before auto-removal. Set to 0 to keep forever.
+   * @param errCode Error code.
+   * @param duration Time in seconds before auto-removal. Set to 0 to keep message forever on screen.
    */
   private static showError(title: string, content: string, errCode: string, duration: number) {
     const messageStore = useMessageStore();

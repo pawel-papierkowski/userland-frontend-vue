@@ -73,6 +73,7 @@ export default {
 
   /**
    * Change some or all data of the currently logged-in user.
+   * @param payload User edit request.
    * @returns Result of call.
    */
   edit(payload: UserEditReq) {

@@ -98,7 +98,7 @@ describe('UserEmailChangeStart', () => {
             instance: '/api/users/email/link',
             status: 409,
             title: 'Required token already exists.',
-            type: 'https://api.userland.org/errors/user/doesNotExist',
+            type: 'https://api.userland.org/errors/user/tokenExists',
             errCode: 'user_0013',
           },
         },

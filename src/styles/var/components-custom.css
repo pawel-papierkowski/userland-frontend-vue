@@ -14,8 +14,6 @@
   --dropdown-border: var(--header-border);
   --dropdown-box-shadow: var(--header-box-shadow);
 
-  /* SlideShow specific vars. */
-
   /** Custom input components. **/
 
   /* ComboBox specific vars. */
@@ -46,7 +44,7 @@
   --combobox-selected-padding: 0px 4px;
 
   --combobox-selected-padding-small: 1px 1px;
-  --combobox-color-small: 0.8em;
+  --combobox-font-size-small: 0.8em;
 
   /* CheckBox specific vars. */
   --checkbox-color: var(--input-color);

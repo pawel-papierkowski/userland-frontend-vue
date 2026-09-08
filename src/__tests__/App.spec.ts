@@ -6,6 +6,8 @@ import { createPinia, setActivePinia } from 'pinia';
 import i18n from '@/code/lang/i18n';
 import { logger } from '@/code/utils/logger';
 import realRouter from '@/router';
+
+import { genJwt } from '@/__tests__/_helpers/jwt.ts';
 import { locstJwt } from '@/code/data/app/storage.ts';
 import { useLoginStore } from '@/stores/login.ts';
 import { useMessageStore } from '@/stores/messages/messages.ts';
@@ -36,27 +38,6 @@ async function createWrapper() {
   return wrapper;
 }
 
-//
-
-/**
- * Create a fake JWT with a given expiration offset from now.
- * @param expiresInSeconds Positive = valid, negative = expired.
- */
-function createFakeJwt(expiresInSeconds: number): string {
-  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-  const nowSec = Math.floor(Date.now() / 1000);
-  const payload = btoa(
-    JSON.stringify({
-      sub: 'test@example.com',
-      name: 'testuser',
-      iat: nowSec,
-      exp: nowSec + expiresInSeconds,
-      perms: { role: 'user' },
-    }),
-  );
-  return `${header}.${payload}.fakesignature`;
-}
-
 // ////////////////////////////////////////////////////////////////////////////
 
 describe('App', () => {
@@ -78,7 +59,7 @@ describe('App', () => {
 
     it('shows session expired warning when stored JWT has expired', async () => {
       // Arrange: Seed localStorage with an expired JWT.
-      localStorage.setItem(locstJwt, createFakeJwt(-3600));
+      localStorage.setItem(locstJwt, genJwt([], { expiresAt: new Date(Date.now() - 3600 * 1000), name: 'testuser' }));
 
       // Act: Mount triggers relogUser in <script setup>.
       await createWrapper();
@@ -97,7 +78,7 @@ describe('App', () => {
 
     it('logs in successfully when stored JWT is valid', async () => {
       // Arrange: Seed localStorage with a valid JWT.
-      localStorage.setItem(locstJwt, createFakeJwt(3600));
+      localStorage.setItem(locstJwt, genJwt([], { expiresAt: new Date(Date.now() + 3600 * 1000), name: 'testuser' }));
 
       // Act: Mount triggers relogUser in <script setup>.
       await createWrapper();

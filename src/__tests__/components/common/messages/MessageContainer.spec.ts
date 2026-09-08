@@ -50,7 +50,7 @@ describe('MessageContainer', () => {
 
       await nextTick(); // Wait for DOM to update.
 
-      // Assert: Check that there is single element with class '.message-box'.
+      // Assert: Check that there is a single element with class '.message-box'.
       expect(messageContainer.findAll('.message-box')).toHaveLength(1);
     });
 

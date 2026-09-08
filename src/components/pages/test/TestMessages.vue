@@ -90,13 +90,13 @@ const logBrowser = (level: EnMessageLevel) => {
 const logVue = (level: EnMessageLevel) => {
   switch (level) {
     case EnMessageLevel.Info:
-      logger.info('Log info data via browser console.');
+      logger.info('Log info data via Vue logger.');
       break;
     case EnMessageLevel.Warning:
-      logger.warn('Log warn data via browser console.');
+      logger.warn('Log warn data via Vue logger.');
       break;
     case EnMessageLevel.Error:
-      logger.error('Log error data via browser console.');
+      logger.error('Log error data via Vue logger.');
       break;
   }
 };

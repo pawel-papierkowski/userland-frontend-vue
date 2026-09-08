@@ -66,10 +66,10 @@ export class Verifier {
   //
 
   /**
-   * Verify general string field internally.
+   * Verify any string field.
    * @param fieldValue Field to verify.
    * @param used If true, form was used. Unused form should not show error on empty/null fields.
-   * @returns Null if field is correct, empty string if further verification should be done, otherwise error message.
+   * @returns Null if field is falsy and form is unused, error message if empty value, otherwise empty string if further verification should be done.
    */
   public static verifyFieldInt(fieldValue: string, used: boolean): string | null {
     if (!fieldValue) return used ? t('form.errFieldEmpty') : null;

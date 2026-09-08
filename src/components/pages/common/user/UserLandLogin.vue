@@ -33,20 +33,17 @@ const usedButton = ref(false);
 /** True if we are busy (submission is in progress), otherwise false. Used to disable form fields and submit button. */
 const isBusy = ref(false);
 
+// COMPUTATIONS
+
 const emailError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyEmail(form.email, usedButton.value);
 });
+
 const passwordError: ComputedRef<string | null> = computed(() => {
-  if (!form.password) return usedButton.value ? t('form.errFieldEmpty') : null;
-  if (form.password === '') return t('form.errFieldEmpty');
-  if (form.password.length < 8) return t('form.errPasswordTooShort', { count: 8 });
-  if (form.password.length > 100) return t('form.errPasswordTooLong', { count: 100 });
-  const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,?!]).*$/;
-  if (!passwordRegex.test(form.password)) return t('form.errPasswordWeak');
-  return null;
+  return Verifier.verifyPassword(form.password, usedButton.value);
 });
 
-//
+// FUNCTIONS
 
 /** Handle login of user. */
 const handleLogin = async () => {

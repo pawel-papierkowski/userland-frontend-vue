@@ -1,16 +1,21 @@
 import { createI18n } from 'vue-i18n';
 
+/** Defines deep record. */
 type DeepRecord = { [key: string]: string | string[] | DeepRecord };
 
+// Language modules are defined here. Note that result needs further processing (deep merging).
+
+/** Defines all module files for English. */
 const enModules = import.meta.glob('@/locales/en/**/*.json', { eager: true });
+/** Defines all module files for Polish. */
 const plModules = import.meta.glob('@/locales/pl/**/*.json', { eager: true });
 // Add other language directories here as needed...
 
 /**
- * Recursively merge `source` into `target`. Arrays are not merged (source wins).
- * Both are treated as immutable — a new object is returned.
+ * Recursively merge `source` into `target`. Arrays are not merged (source wins). Both are treated as immutable — a new object is returned.
  * @param target Target of merge.
  * @param source Source that should merge into target.
+ * @returns Merged record.
  */
 export function deepMerge(target: DeepRecord, source: DeepRecord): DeepRecord {
   const result = { ...target };
@@ -25,9 +30,9 @@ export function deepMerge(target: DeepRecord, source: DeepRecord): DeepRecord {
 }
 
 /**
- * Iterates over Vite `import.meta.glob` result and deep-merges all default
- * exports into a single plain object.
+ * Iterates over Vite `import.meta.glob` result and deep-merges all default exports into a single plain object.
  * @param modules Content loaded via `import.meta.glob`. Must be eager.
+ * @returns Content of all modules merged into single record.
  */
 export function loadMessages(modules: Record<string, { default: DeepRecord }>): DeepRecord {
   let messages: DeepRecord = {};

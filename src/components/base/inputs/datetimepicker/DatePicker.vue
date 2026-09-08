@@ -106,6 +106,9 @@ const handleInputFocus = () => {
   focusFromClick = false;
 };
 
+/** Shortcuts for days of week used in lang keys. */
+const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
 // COMPUTATIONS
 
 /** Compute currently displayed date value in date input. */
@@ -124,11 +127,6 @@ const headerText = computed(() => {
   const monthIx = viewDate.value.getUTCMonth(); // Reminder that for some reason month is zero-indexed.
   return viewDate.value.getUTCFullYear() + ' ' + t('dateTimePicker.month.' + monthIx);
 });
-
-/** Shortcuts for days of week used in lang keys. */
-const daysOfWeek = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-
-// COMPUTED
 
 /** Find out amount of columns needed for calendar. */
 const gridColumns = computed(() => (props.showWeeks ? 8 : 7));
@@ -165,7 +163,7 @@ watch(
   },
 );
 
-// FUNCTIONS.
+// FUNCTIONS
 
 /** Handle click. */
 const handleClick = async (viaKeyboard: boolean) => {
@@ -241,7 +239,7 @@ const calcCalendarCells = (): CalendarCell[] => {
 
 /**
  * Calculate days for calendar.
- * @returns Array of cells for entire calendar.
+ * @returns Array of day cells.
  */
 const calcDays = (): CalendarCell[] => {
   const year = viewDate.value.getUTCFullYear();
@@ -321,12 +319,12 @@ const changeYear = (delta: number) => {
 //
 
 /**
- * Converts pickable day to Date (only year, month, day).
- * @param pickableDay Pickable day.
+ * Converts pickable calendar cell to Date (only year, month, day).
+ * @param pickableCell Pickable calendar cell.
  * @returns Date.
  */
-const calendarCellToDate = (pickableDay: CalendarCell): Date => {
-  return new Date(Date.UTC(pickableDay.year, pickableDay.month, pickableDay.day, 0, 0, 0, 0));
+const calendarCellToDate = (pickableCell: CalendarCell): Date => {
+  return new Date(Date.UTC(pickableCell.year, pickableCell.month, pickableCell.day, 0, 0, 0, 0));
 };
 
 /**
@@ -372,6 +370,11 @@ const selectCell = (calendarCell: CalendarCell) => {
   selectDate(calendarCellToDate(calendarCell));
 };
 
+/**
+ * Check if can pick given date.
+ * @param date Date.
+ * @returns True if can pick, otherwise false.
+ */
 const canPick = (date: Date): boolean => {
   if (props.dateTimeMin != null && date < props.dateTimeMin) return false;
   if (props.dateTimeMax != null && date > props.dateTimeMax) return false;
@@ -383,6 +386,7 @@ const canPick = (date: Date): boolean => {
 /**
  * Find out class of calendar cell in calendar grid.
  * @param calendarCell Calendar cell.
+ * @returns Data about calendar cell.
  */
 const resolveCellClass = (calendarCell: CalendarCell) => {
   if (calendarCell.type === EnCalendarCellType.Week) return { weekNum: true };
@@ -398,7 +402,8 @@ const resolveCellClass = (calendarCell: CalendarCell) => {
 
 /**
  * Check if given date is today.
- * @param calendarCell Calendar cell. Must be Date.
+ * @param calendarCell Calendar cell. Should be Date.
+ * @returns True if given calendar cell is date and is for today.
  */
 const isToday = (calendarCell: CalendarCell): boolean => {
   if (calendarCell.type !== EnCalendarCellType.Date) return false;
@@ -412,7 +417,8 @@ const isToday = (calendarCell: CalendarCell): boolean => {
 
 /**
  * Check if given date is selected.
- * @param calendarCell Calendar cell. Must be Date.
+ * @param calendarCell Calendar cell. Should be Date.
+ * @returns True if given calendar cell is date and is selected.
  */
 const isDaySelected = (calendarCell: CalendarCell): boolean => {
   if (calendarCell.type !== EnCalendarCellType.Date) return false;
@@ -426,7 +432,8 @@ const isDaySelected = (calendarCell: CalendarCell): boolean => {
 
 /**
  * Check if given date cannot be picked.
- * @param calendarCell Calendar cell. Must be Date.
+ * @param calendarCell Calendar cell. Should be Date.
+ * @returns True if given calendar cell is date and is disabled.
  */
 const isDayDisabled = (calendarCell: CalendarCell): boolean => {
   if (calendarCell.type !== EnCalendarCellType.Date) return false;
@@ -436,7 +443,8 @@ const isDayDisabled = (calendarCell: CalendarCell): boolean => {
 
 /**
  * Check if given date is keyboard-focused.
- * @param calendarCell Calendar cell. Must be Date.
+ * @param calendarCell Calendar cell. Should be Date.
+ * @returns True if given calendar cell is date and is focused.
  */
 const isFocused = (calendarCell: CalendarCell): boolean => {
   if (!focusedDate.value || calendarCell.type !== EnCalendarCellType.Date) return false;
@@ -595,9 +603,8 @@ const keyPressSelectDate = () => {
 
 // UTILITIES.
 
-/** Flip panel. Used by parent (DateTimePicker) for label clicking. */
+/** Flip panel. */
 const flipPanel = () => {
-  console.warn('DatePicker.flipPanel() called.');
   toggleDatePickerVisibility(false);
 };
 

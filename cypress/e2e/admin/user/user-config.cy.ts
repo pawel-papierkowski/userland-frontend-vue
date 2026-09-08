@@ -143,7 +143,7 @@ const subTableEndpoints: string[] = ['history', 'permissions', 'tokens', 'jwt'] 
  * @param allUsers All users in table.
  * @param user User table entry to show.
  * @param permissions Permissions.
- * @returns Nothing.
+ * @returns Page object.
  */
 function setupSelectedUser(
   allUsers: UserFullDataResp[],

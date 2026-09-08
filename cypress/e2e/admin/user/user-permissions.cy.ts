@@ -135,8 +135,6 @@ function stubUserPermissions(initialEntries: UserPermissionTableEntry[]) {
 /** All user sub-tab table endpoints that we do not care about (except permissions). */
 const subTableEndpoints: string[] = ['history', 'configs', 'tokens', 'jwt'] as const;
 
-//
-
 /**
  * Set up the common stubs needed to select a user and open its editor, then visit the page and select
  * the given user row.
@@ -145,7 +143,7 @@ const subTableEndpoints: string[] = ['history', 'configs', 'tokens', 'jwt'] as c
  * @param allUsers All users in table.
  * @param user User table entry to show.
  * @param permissions Permissions.
- * @returns Nothing.
+ * @returns Page object.
  */
 function setupSelectedUser(
   allUsers: UserFullDataResp[],

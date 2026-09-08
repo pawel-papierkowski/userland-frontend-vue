@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** User menu in header. Different depending on your login status. */
+/** Admin panel user menu in header. Different depending on your login status. */
 import { computed, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter, useRoute } from 'vue-router';

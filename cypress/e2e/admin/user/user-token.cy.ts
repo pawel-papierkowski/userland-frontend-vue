@@ -88,8 +88,6 @@ function stubUserTokens(entries: UserTokenTableEntry[] = tokenEntries, pageSize:
 /** All user sub-tab table endpoints that we do not care about (except tokens). */
 const subTableEndpoints: string[] = ['history', 'permissions', 'configs', 'jwt'] as const;
 
-//
-
 /**
  * Set up the common stubs needed to select a user and open its editor, then visit the page and select
  * the given user row.
@@ -97,7 +95,7 @@ const subTableEndpoints: string[] = ['history', 'permissions', 'configs', 'jwt']
  * the corresponding tab is activated, so callers open the desired tab themselves.
  * @param allUsers All users in table.
  * @param user User table entry to show.
- * @returns Nothing.
+ * @returns Page object.
  */
 function setupSelectedUser(allUsers: UserFullDataResp[], user: UserTableEntry): AdminUserTokensPage {
   stubUserTable([user]);

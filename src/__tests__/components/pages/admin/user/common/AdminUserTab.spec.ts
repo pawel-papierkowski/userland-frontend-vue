@@ -25,7 +25,7 @@ vi.mock('@/services/api-logging.ts', () => ({
   },
 }));
 vi.mock('@/code/wrappers/messages/AppMessager.ts');
-// api-users.ts calls backendApi.create() at module level, so mock it to prevent side effects.
+// api-users.ts calls backendApi.create('/users') at module level, so mock it to prevent side effects.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
 // AppLoginer imports api-users.ts at module level, so mock to prevent side effects.
 vi.mock('@/code/wrappers/login/AppLoginer.ts', () => ({}));

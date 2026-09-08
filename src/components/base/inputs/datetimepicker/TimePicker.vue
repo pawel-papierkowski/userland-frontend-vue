@@ -102,7 +102,7 @@ const handleFocusOut = (e: FocusEvent) => {
   }
 };
 
-// COMPUTED
+// COMPUTATIONS
 
 /** Compute currently displayed time value in time input. */
 const displayTimeValue = computed(() => {
@@ -447,9 +447,8 @@ const keyPressSelectMinute = () => {
 
 // UTILITIES.
 
-/** Flip panel. Used by parent (DateTimePicker) for label clicking. */
+/** Flip panel. */
 const flipPanel = () => {
-  console.warn('TimePicker.flipPanel() called.');
   toggleTimePickerVisibility(false);
 };
 

@@ -19,12 +19,10 @@ export class NavUtils {
       nextElement = allFocusable[idx + 1] || null;
       nextElement!.focus();
     }
-    // DEBUG
-    //console.warn(`FocusNext() called. Result count: ${allFocusable.length}, currElement idx=${idx}, nextElement: ${nextElement === null ? 'null' : nextElement.tagName}`);
   }
 
   /**
-   * Starting from the current element, focus on the next focusable element INSIDE the current element. If it fails, focus on the current element.
+   * Starting from the current element, focus on the first focusable element INSIDE the current element. If it fails, focus on the current element.
    * @param currElement Current element.
    */
   public static FocusNextInside(currElement: HTMLElement | null) {

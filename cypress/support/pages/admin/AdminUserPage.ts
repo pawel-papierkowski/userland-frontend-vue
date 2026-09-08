@@ -1,4 +1,4 @@
-import { type JwtPerm } from '@/../cypress/support/helpers/general.ts';
+import { type JwtPerm } from '@/__tests__/_helpers/jwt.ts';
 
 /**
  * Page Object for the Admin User page (`/admin/user`). Common functions like visiting page.
@@ -12,10 +12,7 @@ class AdminUserPage {
     return cy.login('/admin/user', permissions);
   }
 
-  /**
-   * Log in as admin and visit the admin user page.
-   * @param permissions If present, set custom permissions.
-   */
+  /** Log in as admin and visit the admin user page. */
   visitAsAdmin(): Cypress.Chainable<Cypress.AUTWindow> {
     return cy.login('/admin/user', [{ prefix: 'role', suffix: 'admin' }]);
   }

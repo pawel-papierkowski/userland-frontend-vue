@@ -88,7 +88,7 @@ onClickOutside(comboboxRef, () => {
   hidePanel();
 });
 
-// COMPUTED
+// COMPUTATIONS
 
 /** Class of decorative arrow on right. */
 const arrowClass = computed(() => ({ open: isOpen.value }));

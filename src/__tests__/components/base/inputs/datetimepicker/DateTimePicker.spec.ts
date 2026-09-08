@@ -99,7 +99,7 @@ describe('DateTimePicker', () => {
     });
 
     it('mode date', () => {
-      // Ensure component shows DatePicker and TimePicker with correct params for 'date' mode.
+      // Ensure component shows DatePicker with correct params for 'date' mode.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
@@ -126,7 +126,7 @@ describe('DateTimePicker', () => {
     });
 
     it('mode time', () => {
-      // Ensure component shows DatePicker and TimePicker with correct params for 'time' mode.
+      // Ensure component shows TimePicker with correct params for 'time' mode.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));
@@ -380,7 +380,7 @@ describe('DateTimePicker', () => {
           template: `
           <div>
             <input id="prevField" type="text" />
-            <DateTimePicker id="testDt" mode="datetime" v-model="value" />
+            <DateTimePicker id="testDt" mode="date" v-model="value" />
           </div>
         `,
           components: { DateTimePicker },
@@ -616,7 +616,7 @@ describe('DateTimePicker', () => {
     });
 
     it('opens correct panel in "time" mode when paired <label> is clicked', async () => {
-      // Verifies that clicking a <label for="id"> opens the calendar panel.
+      // Verifies that clicking a <label for="id"> opens the clock panel.
 
       // Arrange: Set up date/time.
       vi.setSystemTime(new Date('2026-05-21T04:07:00Z'));

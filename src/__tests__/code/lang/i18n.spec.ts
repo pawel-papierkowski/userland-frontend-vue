@@ -180,7 +180,7 @@ describe('i18n instance', () => {
   it('loads english translations', () => {
     // Translations are loaded and accessible via the i18n instance.
 
-    // Assert: A known key from en.json resolves.
+    // Assert: A known key from english language files resolves.
     expect(i18n.global.t('app.title')).toBe('UserLand');
   });
 

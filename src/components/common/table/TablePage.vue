@@ -24,14 +24,14 @@
  * - columns - Data about columns. First column must be unique key.
  * - data - Content of table itself: single page of entries.
  * - meta - Table metadata.
- * - resolveRowMeta - ?.
+ * - resolveRowMeta - Row metadata. Optional.
  * - isLoading - If true, show spinner instead of table content. Used to indicate loading content for table. Optional.
  * - canSpin - If true, spinner can spin. Used to indicate error due to loading content for table. Optional.
  * - canSelect - If true, can select row in table. Optional, defaults to true. Note you still can select programmatically.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - empty - I18n key to show when table is empty. Optional.
- * - descr: Description of loading state for screen readers and the like. Undefined means no aria will be present.
+ * - descr - Description of loading state for screen readers and the like. Undefined means no aria will be present.
  *
  * Slots:
  * - custom slots defined for columns, with name 'column_[column name]'.
@@ -249,7 +249,6 @@ const rowClass = (entry: E | null, rowIndex: number) => {
 
 /**
  * Determine tab index.
- * @param entry Entry for given row.
  * @returns Tab index attribute value.
  */
 const getTabIndex = (): number => {

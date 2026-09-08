@@ -79,13 +79,13 @@ describe('TimeUtils', () => {
       expect(result).toBe(null);
     });
 
-    it('date should fully convert to ISO string', () => {
+    it('date should fully convert to date ISO string', () => {
       const date = new Date(Date.UTC(2010, 0, 13, 0, 0, 0, 0)); // note month is zero-indexed
       const result = TimeUtils.cnvDate(date);
       expect(result).toBe('2010-01-13');
     });
 
-    it('date&time should fully convert to ISO string', () => {
+    it('date and time should fully convert to date ISO string', () => {
       const date = new Date(Date.UTC(2020, 9, 20, 11, 22, 33, 456)); // note month is zero-indexed
       const result = TimeUtils.cnvDate(date);
       expect(result).toBe('2020-10-20');
@@ -98,13 +98,13 @@ describe('TimeUtils', () => {
       expect(result).toBe(null);
     });
 
-    it('date should fully convert to ISO string', () => {
+    it('date should fully convert to time ISO string', () => {
       const date = new Date(Date.UTC(2026, 5, 28, 0, 0, 0, 0)); // note month is zero-indexed
       const result = TimeUtils.cnvTime(date);
       expect(result).toBe('00:00:00');
     });
 
-    it('date&time should fully convert to ISO string', () => {
+    it('date and time should fully convert to time ISO string', () => {
       const date = new Date(Date.UTC(2025, 11, 8, 11, 22, 33, 456)); // note month is zero-indexed
       const result = TimeUtils.cnvTime(date);
       expect(result).toBe('11:22:33.456');
@@ -146,25 +146,27 @@ describe('TimeUtils', () => {
       expect(result2).toBe(23);
     });
 
-    it('weeks of January 2025', () => {
+    it('weeks of January for multiple years', () => {
       const result53b = TimeUtils.getWeekNumber(2024, 11, 31);
       expect(result53b).toBe(53);
+
       const result1a = TimeUtils.getWeekNumber(2025, 0, 1);
       expect(result1a).toBe(1);
       const result1b = TimeUtils.getWeekNumber(2025, 0, 5);
       expect(result1b).toBe(1);
-      const result2a = TimeUtils.getWeekNumber(2026, 0, 6);
-      expect(result2a).toBe(2);
       const result2b = TimeUtils.getWeekNumber(2025, 0, 12);
       expect(result2b).toBe(2);
-      const result3a = TimeUtils.getWeekNumber(2026, 0, 13);
-      expect(result3a).toBe(3);
       const result3b = TimeUtils.getWeekNumber(2025, 0, 19);
       expect(result3b).toBe(3);
-      const result4a = TimeUtils.getWeekNumber(2026, 0, 20);
-      expect(result4a).toBe(4);
       const result4b = TimeUtils.getWeekNumber(2025, 0, 26);
       expect(result4b).toBe(4);
+
+      const result2a = TimeUtils.getWeekNumber(2026, 0, 6);
+      expect(result2a).toBe(2);
+      const result3a = TimeUtils.getWeekNumber(2026, 0, 13);
+      expect(result3a).toBe(3);
+      const result4a = TimeUtils.getWeekNumber(2026, 0, 20);
+      expect(result4a).toBe(4);
       const result5a = TimeUtils.getWeekNumber(2026, 0, 27);
       expect(result5a).toBe(5);
       const result5b = TimeUtils.getWeekNumber(2026, 0, 31);

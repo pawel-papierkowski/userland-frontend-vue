@@ -1,7 +1,7 @@
 <script setup lang="ts">
-/** View/edit of single, selected user.
+/** Tab wrapper for selected user that allows viewing/editing user data.
  *
- * Properties:
+ * Models:
  * - v-model - Holds selected user.
  */
 import { watch } from 'vue';

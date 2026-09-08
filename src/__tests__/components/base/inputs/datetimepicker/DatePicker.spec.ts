@@ -235,7 +235,7 @@ describe('DatePicker', () => {
         { day: '8', class: ['day', 'not-current'] },
       ];
 
-      // Assert: TimePicker has correct data-testid attribute.
+      // Assert: DatePicker has correct data-testid attribute.
       expect(datePicker.find('input').attributes('data-testid')).toBe('datepicker_someDatePicker');
       // Assert: Panel shows calendar with all days for given month (February).
       verifyPanel(datePicker, 'someDatePicker', '2026 February', calendarState);
@@ -476,7 +476,7 @@ describe('DatePicker', () => {
         { day: '6', class: ['day', 'not-current', 'disabled'] },
         { day: '7', class: ['day', 'not-current', 'disabled'] },
       ];
-      // Assert: Panel shows calendar with all days for given month (June).
+      // Assert: Panel shows calendar with all days for given month.
       verifyPanel(datePicker, '', '2027 January', calendarState);
     });
 

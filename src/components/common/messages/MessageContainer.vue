@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * Floating message container that can show many message boxes. After some time, message boxes are automatically removed. The user can also remove them by clicking on them.
- * Used as feedback for user after doing various actions.
+ * Used as feedback for the user after doing various actions.
  *
  * To add new messages, use AppMessager.
  *
@@ -52,7 +52,7 @@ const messageStore = useMessageStore();
   width: 300px; /* Constant width needed, otherwise last message will glitch out when removed. */
 
   scrollbar-width: none; /* Hide scrollbar in Firefox. */
-  -ms-overflow-style: none; /* Hide scrollbar in older IE/Edge. */
+  -ms-overflow-style: none; /* Hide scrollbar in older browsers. */
 
   /* Allow clicks to pass through to elements underneath when this is empty. */
   pointer-events: none;
@@ -120,11 +120,5 @@ const messageStore = useMessageStore();
 .msg-list-leave-to {
   opacity: 0.5;
   transform: translateX(100%);
-}
-
-/* Moving within message container: transformation of state. */
-.msg-list-move {
-  /* It seems to interfere with sliding out, making it diagonal. */
-  /*transition: transform 0.4s ease;*/
 }
 </style>

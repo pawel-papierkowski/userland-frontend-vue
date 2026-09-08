@@ -105,7 +105,7 @@
             },
             "delete": {
               "button": "🗑️",
-              "action": "Delete configuration entry.",
+              "action": "Delete permission entry.",
               "notYourself": "You cannot delete your own permissions.",
               "adminOnly": "You need user edit permissions to delete permission entry."
             }
@@ -118,7 +118,7 @@
               },
               "fail": {
                 "title": "Failure",
-                "content": "Failed to saved user permission entry!"
+                "content": "Failed to save user permission entry!"
               },
               "badName": {
                 "title": "Failed to save",

@@ -35,6 +35,6 @@
 /* ComboBox. */
 
 .table-cell .combobox {
-  font-size: var(--combobox-color-small);
+  font-size: var(--combobox-font-size-small);
   padding: var(--combobox-selected-padding-small);
 }

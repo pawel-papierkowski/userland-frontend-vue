@@ -4,7 +4,7 @@ import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router';
 export class TokenUtils {
   /**
    * Resolve token from route query. This will get token from URL's parameter.
-   * Example: https://some.backend.com/api/some/action?token=EXAMPLE_TOKEN
+   * Example: /user/activate?token=EXAMPLE_TOKEN
    * @param route Route data.
    * @returns Token as string.
    */

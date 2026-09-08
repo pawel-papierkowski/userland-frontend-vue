@@ -16,7 +16,7 @@ let pinia: ReturnType<typeof createPinia>;
 // Mocking dependencies.
 vi.mock('@/services/features/api-users', () => ({
   default: {
-    passwordResetLink: vi.fn<typeof backendApiUser.register>(),
+    passwordResetLink: vi.fn<typeof backendApiUser.passwordResetLink>(),
   },
 }));
 

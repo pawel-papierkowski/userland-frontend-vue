@@ -2,8 +2,11 @@
 /**
  * View of user's tokens.
  *
- * Properties:
+ * Models:
  * - v-model - Holds selected user.
+ *
+ * Properties:
+ * - isActive - True if this tab is currently the active tab in the tab group.
  */
 import { ref, reactive, watch } from 'vue';
 import { storeToRefs } from 'pinia';

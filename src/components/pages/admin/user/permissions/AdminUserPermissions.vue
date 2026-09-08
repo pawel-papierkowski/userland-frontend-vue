@@ -4,6 +4,9 @@
  *
  * Models:
  * - v-model - Holds selected user.
+ *
+ * Properties:
+ * - isActive - True if this tab is currently the active tab in the tab group.
  */
 import { ref, reactive, shallowRef, watch } from 'vue';
 import { storeToRefs } from 'pinia';
@@ -266,7 +269,7 @@ const actions: Record<string, (entry: UserPermissionTableEntry | null) => Promis
 
 /**
  * Check if current entry is considered busy, therefore its options should be disabled.
- * @param paginer If true, we ask about paginer options.
+ * @param paginer If true, this is a paginer-level (table-wide) check rather than an individual entry check.
  * @param entry Entry.
  */
 const isBusyForEntry = (paginer: boolean, entry: UserPermissionTableEntry | null): boolean => {
@@ -350,7 +353,6 @@ const metaForEntry = (entry: UserPermissionTableEntry | null): EntryMeta | null 
 /**
  * Provide row metadata for given entry. Mark inputs that are empty as invalid.
  * @param entry Entry or null if new entry.
- * @param rowIndex Row index.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null => {
@@ -401,7 +403,7 @@ const resolveRowMeta = (entry: UserPermissionTableEntry | null): RowMeta | null 
         langPrefix="admin.user.permissions.table.texts"
       />
     </template>
-    <!-- Custom slots: name and options. -->
+    <!-- Custom slots: options and name. -->
     <template #column_options="{ entry, rowIndex }">
       <EntryOptions
         tableId="userPermissions"

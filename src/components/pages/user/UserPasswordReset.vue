@@ -34,20 +34,22 @@ const usedButton = ref(false);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isBusy = ref(false);
 
+// COMPUTATIONS
+
 const passwordError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyPassword(form.password, usedButton.value);
 });
+
 const passwordConfirmError: ComputedRef<string | null> = computed(() => {
   return Verifier.verifyConfirmPassword(form.password, form.confirmPassword, usedButton.value);
 });
 
-//
+// FUNCTIONS
 
 /**
- * Verifies state: token must be present.
- * @returns True if verification was successful, otherwise false.
+ * Checks token presence. If it is not present, will show failure message and redirect.
  */
-const verifyToken = () => {
+const enforceToken = () => {
   if (!TokenUtils.verify(tokenStr)) {
     AppMessager.failureT('token.invalid.title', 'token.invalid.content');
     router.push({ name: 'home' });
@@ -124,7 +126,7 @@ const isInvalid = (msgError: string | null): boolean => {
 
 /** Automatically called once the user enters the page. */
 onMounted(() => {
-  verifyToken();
+  enforceToken();
 });
 </script>
 

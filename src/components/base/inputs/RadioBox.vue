@@ -90,7 +90,7 @@ const selectOption = (option: number | string | null, index?: number) => {
 
 /**
  * Handle keyboard events for accessibility.
- * Arrow keys navigate between options, Space selects the focused option.
+ * Arrow keys selects next/previous options, Space/Enter moves to next focusable component (so user can leave this component).
  */
 const handleKeydown = (e: KeyboardEvent) => {
   if (props.disabled) return;

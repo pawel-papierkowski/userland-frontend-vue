@@ -7,7 +7,7 @@
  * The assembled file is loaded in main.ts, ensuring it is global CSS.
  */
 
-/* General variables and styles. */
+/* General styles. */
 @import url('general/reset.css');
 @import url('general/style.css');
 

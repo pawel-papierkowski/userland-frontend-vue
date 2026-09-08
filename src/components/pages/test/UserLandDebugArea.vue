@@ -118,7 +118,7 @@ const callProlong = async () => {
     );
     apiLogging.logError(error, 'Failed to prolong user session!');
   } finally {
-    isOptionBusy.value = false; // Enable checks buttons.
+    isOptionBusy.value = false; // Enable option buttons.
   }
 };
 </script>

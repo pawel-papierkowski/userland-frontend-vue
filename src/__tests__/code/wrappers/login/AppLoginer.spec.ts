@@ -33,7 +33,7 @@ interface JwtTokenOptions {
 
 /**
  * Create a JWT token for tests.
- * Permissions are encoded the same way as on the backend: field 'perm' as a map where the key is a prefix and the value is a string with suffixes separated by comma.
+ * Permissions are encoded the same way as on the backend: field 'perms' as a map where the key is a prefix and the value is a string with suffixes separated by comma.
  * Example: permission 'role_admin' is stored as field 'role' with value 'admin', 'user_edit' is stored as field 'user' with value 'edit', and so on.
  * Note: signature is a dummy, as tests do not verify it.
  * @param permissions List of permissions to encode in token. Example: ['role_admin', 'user_view', 'user_edit'].
@@ -413,7 +413,7 @@ describe('AppLoginer', () => {
       // Assert: Prolong endpoint was called.
       expect(backendApiUser.prolong).toHaveBeenCalled();
 
-      // Assert: AppLoginer returns correct results (still logged in, but time of expiration updated).
+      // Assert: AppLoginer returns correct results (still logged in).
       expect(AppLoginer.isLogged()).toBe(true);
       expect(AppLoginer.hasPermission('role_operator')).toBe(false);
 

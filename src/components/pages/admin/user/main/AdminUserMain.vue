@@ -2,8 +2,11 @@
 /**
  * View/edit of single, selected user.
  *
- * Properties:
+ * Models:
  * - v-model - Holds selected user.
+ *
+ * Properties:
+ * - isActive - True if this tab is currently the active tab in the tab group.
  */
 import { ref, reactive, watch } from 'vue';
 import type { Ref } from 'vue';
@@ -185,12 +188,12 @@ const flipLock = async (locked: boolean): Promise<UserFullDataResp | null> => {
 };
 
 /**
- * Convert user edit form data to user edit request data.
+ * Creates user edit request data for lock change request.
  * @param locked New value of 'locked' field.
  * @returns User full edit request.
  */
 const convertLockToReq = (locked: boolean): UserFullDataReq => {
-  // Null here means "do not change the given value", so we only change the locked field.
+  // Null here means "do not change the current value", so we only change the locked field and fill obligatory fields.
   return {
     id: selUserRecord.value?.id ?? -1,
     version: form.version,
@@ -255,12 +258,12 @@ const isYourOwnAccount = (): boolean => {
 };
 
 /**
- * Check if we have permission to edit users in general.
+ * Check if we have permission to edit users in general. You need to be either admin or operator with user_edit permission.
  * @returns True if we can edit users, otherwise false.
  */
 const canEditUsers = (): boolean => {
   if (AppLoginer.hasPermission('role_admin')) return true;
-  return AppLoginer.hasPermissionsAll(['role_admin', 'user_edit']);
+  return AppLoginer.hasPermissionsAll(['role_operator', 'user_edit']);
 };
 
 /**

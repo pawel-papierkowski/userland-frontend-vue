@@ -59,7 +59,7 @@ vi.mock('@/code/wrappers/login/AppLoginer.ts', async () => {
   };
 });
 
-// api-users.ts calls backendApi.create() at module level — mock to prevent side effects via AppLoginer import chain.
+// api-users.ts calls backendApi.create('/users') at module level — mock to prevent side effects via AppLoginer import chain.
 vi.mock('@/services/features/api-users.ts', () => ({ default: {} }));
 
 vi.mock('@/code/utils/logger.ts', () => ({
@@ -138,7 +138,8 @@ describe('api-common', () => {
     });
 
     it('should NOT prolong session for auth requests even if prolong is needed', async () => {
-      // Arrange: Token present.
+      // Arrange: Token present and shouldProlong returns true (expiry).
+      vi.spyOn(AppLoginer, 'shouldProlong').mockReturnValueOnce(true);
       vi.mocked(AppLoginer.getJwt).mockReturnValue('old-token');
 
       for (const url of authUrls) {

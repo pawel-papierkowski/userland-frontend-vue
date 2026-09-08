@@ -19,7 +19,7 @@ export const useMessageStore = defineStore('messages', () => {
 
   /**
    * Adds a message to the global queue.
-   * @param level Message level (Info, Warning, Error).
+   * @param level Message level (Info, Success, Warning, Failure, Error).
    * @param title Optional title.
    * @param content The main message text.
    * @param errCode Error code. If present, will show separately in the message box.

@@ -49,7 +49,7 @@ const usernameError: ComputedRef<string | null> = computed(() => {
 
 //
 
-/** Fill form. */
+/** Load user data and fill form. */
 const loadData = async () => {
   clearForm();
   const data = await resolveUserData();

@@ -1,4 +1,4 @@
-// Handles calling admin user feature endpoints.
+/** Handles calling admin user feature endpoints. */
 import backendApi from '@/services/api-common.ts';
 import type {
   UserTableReq,
@@ -77,6 +77,7 @@ export default {
   /**
    * Edit user permission entry.
    * @param payload User permission entry edit request.
+   * @returns Result of call.
    */
   editPermissionEntry(payload: UserPermissionEntryEditReq) {
     return apiClient.patch(`/user/permission`, payload);
@@ -85,12 +86,13 @@ export default {
   /**
    * Delete user permission entry.
    * @param id ID of user permission entry.
+   * @returns Result of call.
    */
   deletePermissionEntry(id: number) {
     return apiClient.delete(`/user/permission/${id}`);
   },
 
-  // USER CONFIGS TABLE
+  // USER CONFIG TABLE
 
   /**
    * Get page from user config table.
@@ -104,6 +106,7 @@ export default {
   /**
    * Edit user config entry.
    * @param payload User config entry edit request.
+   * @returns Result of call.
    */
   editConfigEntry(payload: UserConfigEntryEditReq) {
     return apiClient.patch(`/user/config`, payload);
@@ -112,6 +115,7 @@ export default {
   /**
    * Delete user config entry.
    * @param id ID of user config entry.
+   * @returns Result of call.
    */
   deleteConfigEntry(id: number) {
     return apiClient.delete(`/user/config/${id}`);

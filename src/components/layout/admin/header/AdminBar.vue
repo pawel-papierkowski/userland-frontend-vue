@@ -7,7 +7,8 @@ import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 const { t } = useI18n();
 
 const canShowUser = () => {
-  return AppLoginer.hasPermissionsAny(['role_admin', 'user_view']);
+  if (AppLoginer.hasPermission('role_admin')) return true;
+  return AppLoginer.hasPermissionsAll(['role_operator', 'user_view']);
 };
 </script>
 

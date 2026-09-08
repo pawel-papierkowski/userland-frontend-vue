@@ -21,7 +21,7 @@ export type CustomJwtPayload = JwtPayload & {
 export type LoginState = {
   /** True if logged in, otherwise false. */
   isLogged: boolean;
-  /** Raw token from /api/users/login endpoint. */
+  /** Raw token from either local storage or endpoints like /api/users/login or /api/users/prolong. */
   token: string;
 
   /** User name. Can be shown on frontend. */
@@ -32,6 +32,6 @@ export type LoginState = {
   issuedAt: Date;
   /** Expires at. */
   expiresAt: Date;
-  /** Permissions. Example: ["ROLE_ADMIN", "USER_EDIT"] */
+  /** Permissions. Example: ["role_admin", "user_edit"] */
   permissions: string[];
 };

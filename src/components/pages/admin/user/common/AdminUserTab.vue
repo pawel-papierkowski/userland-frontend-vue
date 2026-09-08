@@ -24,12 +24,13 @@
  * - v-model:formFilter - Filter form state.
  * - v-model:formEntry - Form for entry. Used in in-line edit.
  *
- * Props:
+ * Properties:
  * - tableId - Identifier of table.
  * - columns - Data about columns.
  * - fetchData - Function that fetches data from backend to table.
  * - convertToReq - Function that converts filter form to API request.
  * - processEntry - Function that processes given entry for showing in table. Optional.
+ * - resolveRowMeta - Row metadata. Optional.
  * - inlineEdit - If true, selecting entry will cause it to be editable in-place. Optional.
  * - addNewEntry - If true, shows additional row where you add new entry. Only when inlineEdit === true. Optional.
  * - emptyText - Text to show when table is empty.
@@ -154,8 +155,8 @@ const handleReload = async () => {
     currSortOrder.value = data.value.tableMeta.sortOrder;
     isLoading.value = false;
   } catch (error) {
-    // Note in case of error the spinner stays visible. There is no data to show in table (because error happened during load or processing)
-    // and we want to show feedback for user that there was some issue. So we show spinner, but with spin stopped.
+    // Note: in case of error the spinner stays visible. There is no data to show in the table (because error happened during load or processing)
+    // and we want to show feedback for the user that there was some issue. So we show the spinner, but with the spin stopped.
     canSpin.value = false;
     AppMessager.errorT(error, 'admin.user.msg.errorLoadTable.title', 'admin.user.msg.errorLoadTable.content');
     apiLogging.logError(error, 'User tab table reload failed!');
@@ -234,7 +235,7 @@ watch([currSortBy, currSortOrder], (_, [oldSortBy, oldSortOrder]) => {
 /**
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select or null if you want to deselect.
- * @param force If true, ignore props.canSelect.
+ * @param force If true, force selection even when the table is not selectable.
  * @returns Promise.
  */
 const selectEntry = (entry: E | null, force: boolean): Promise<void> => {

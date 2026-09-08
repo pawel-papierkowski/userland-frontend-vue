@@ -5,10 +5,10 @@
  * Successful completion of a task will usually result in the spinner disappearing. Failure is signaled by stopping of the spin while the spinner stays visible.
  *
  * Properties:
- * - canSpin: True if it can spin, false if it cannot spin.
- * - descr: Description of spinner for screen readers and the like. Undefined means no aria will be present.
- * - display: You can set CSS display property directly.
- * - size: Size of the spinner (e.g., "1rem", "100px").
+ * - canSpin - True if it can spin, false if it cannot spin.
+ * - descr - Description of spinner for screen readers and the like. Undefined means no aria will be present.
+ * - display - You can set CSS display property directly.
+ * - size - Size of the spinner (e.g., "1rem", "100px").
  *
  * Examples:
  * - Standalone big spinner: <SpinnerTorus display="block" size="100px" />

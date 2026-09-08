@@ -113,7 +113,7 @@ describe('UserEmailChange', () => {
           status: 404,
           data: {
             detail: "Token 'eYPpy5aSWA9Rfvz8563gtCUj0nHkuwWs' does not exist.",
-            instance: '/api/users/activate',
+            instance: '/api/users/email/confirm',
             status: 404,
             title: 'User token is missing.',
             type: 'https://api.userland.org/errors/user/token/missing',

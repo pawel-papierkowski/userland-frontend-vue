@@ -48,7 +48,7 @@ export const useLoginStore = defineStore('login', () => {
       return true;
     }
 
-    logger.warn('Failed to decode JWT.');
+    logger.warn('Failed to find JWT.');
     return false;
   }
 

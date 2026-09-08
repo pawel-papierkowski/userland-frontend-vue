@@ -47,8 +47,8 @@ export type TableMetaResp = {
 
   pageSize: number; // Size of page.
   page: number; // Page number. Zero-indexed.
-  sortBy: string; // Name of field to sort by. If null/empty, will sort by default field (usually createdAt).
-  sortOrder: string; // Sort order for sortBy. If null/empty, will use descending order.
+  sortBy: string; // Name of field to sort by. If empty, will sort by default field (usually createdAt).
+  sortOrder: string; // Sort order for sortBy. If empty, will use descending order.
 };
 
 /** Entry metadata response. */

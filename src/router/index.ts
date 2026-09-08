@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory, type RouteMeta } from 'vue-router';
 
-//import { logger } from '@/code/utils/logger.ts';
-
 import { AppLoginer } from '@/code/wrappers/login/AppLoginer.ts';
 
 // Certain pages are loaded eagerly.
@@ -177,7 +175,7 @@ router.beforeEach((to) => {
 /**
  * Check if the currently logged-in user has access to the given route.
  * @param meta Metadata about the route.
- * @returns True if the given user has access, otherwise false.
+ * @returns True if the user has access, otherwise false.
  */
 const checkAccessPermissions = (meta: RouteMeta): boolean => {
   if (AppLoginer.hasPermission('role_admin')) return true; // admin role has unrestricted access anywhere

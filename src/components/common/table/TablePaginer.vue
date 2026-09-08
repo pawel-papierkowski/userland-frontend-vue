@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /** Bar that contains paging options like arrows, page number etc.
  *
- * Model:
+ * Models:
  * - currPage - Number of current page, zero-indexed.
  *
  * Properties:
