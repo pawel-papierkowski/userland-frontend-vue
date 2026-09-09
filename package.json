@@ -64,5 +64,9 @@
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
+  },
+  "allowScripts": {
+    "cypress@15.18.1": true,
+    "esbuild@0.28.1": true
   }
 }
