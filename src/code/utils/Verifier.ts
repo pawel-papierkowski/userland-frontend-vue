@@ -26,6 +26,7 @@ export class Verifier {
     const result = Verifier.verifyFieldInt(email, used);
     if (result !== '') return result;
 
+    // we need further verification
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) return t('form.errEmailBad');
     return null;
@@ -41,6 +42,7 @@ export class Verifier {
     const result = Verifier.verifyFieldInt(password, used);
     if (result !== '') return result;
 
+    // we need further verification
     if (password.length < 8) return t('form.errPasswordTooShort', { count: 8 });
     if (password.length > 100) return t('form.errPasswordTooLong', { count: 100 });
     const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.,?!]).*$/;
@@ -59,6 +61,7 @@ export class Verifier {
     const result = Verifier.verifyFieldInt(confirmPassword, used);
     if (result !== '') return result;
 
+    // we need further verification
     if (password !== confirmPassword) return t('form.errPasswordMatch');
     return null;
   }

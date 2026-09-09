@@ -13,7 +13,7 @@
  *   --combobox-option-background: Color of background.
  *   --combobox-option-background-hover: Background color of dropdown option when mouse hovers over it.
  *   --combobox-option-color-hover: Text color of dropdown option when mouse hovers over it.
- * See /styles/var/components-custom.css for full list.
+ * See @/styles/var/components-custom.css for full list.
  *
  * Features:
  * - Accept number (so also enums), string or null (not set) value.

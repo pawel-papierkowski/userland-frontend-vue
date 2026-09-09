@@ -151,7 +151,7 @@ const addEntry = async () => {
 
 /**
  * Save given entry. Both for new entry and editing existing entry.
- * @param entry Table entry.
+ * @param entry Table entry. Can be null for new entry.
  */
 const saveEntry = async (entry: UserConfigTableEntry | null) => {
   if (!verifyForm()) return;
@@ -202,7 +202,7 @@ const verifyForm = (): boolean => {
 
 /**
  * Cancel editing given entry.
- * @param entry Table entry.
+ * @param entry Table entry. Can be null for new entry.
  */
 const cancelEntry = async (entry: UserConfigTableEntry | null) => {
   addNewEntry.value = false;
@@ -211,7 +211,7 @@ const cancelEntry = async (entry: UserConfigTableEntry | null) => {
 
 /**
  * Edit given entry.
- * @param entry Table entry.
+ * @param entry Table entry. Can be null for new entry.
  */
 const editEntry = async (entry: UserConfigTableEntry | null) => {
   if (entry === null) return;
@@ -222,7 +222,7 @@ const editEntry = async (entry: UserConfigTableEntry | null) => {
 
 /**
  * Delete given entry.
- * @param entry Table entry.
+ * @param entry Table entry. Can be null for new entry.
  */
 const deleteEntry = async (entry: UserConfigTableEntry | null) => {
   if (entry === null) return;
@@ -262,7 +262,7 @@ const actions: Record<string, (entry: UserConfigTableEntry | null) => Promise<vo
 /**
  * Check if current entry is considered busy, therefore its options should be disabled.
  * @param paginer If true, this is a paginer-level (table-wide) check rather than an individual entry check.
- * @param entry Entry.
+ * @param entry Entry. Can be null for new entry.
  */
 const isBusyForEntry = (paginer: boolean, entry: UserConfigTableEntry | null): boolean => {
   if (!selUserRecord.value) return true; // no user is selected
@@ -278,7 +278,7 @@ const isBusyForEntry = (paginer: boolean, entry: UserConfigTableEntry | null): b
 
 /**
  * Determine available general options.
- * @returns Entry meta.
+ * @returns Entry meta or null if no user is selected.
  */
 const metaGeneral = (): EntryMeta | null => {
   if (!selUserRecord.value) return null; // hide options completely if no user is selected
@@ -317,7 +317,7 @@ const resolveAdd = (): EntryOption => {
 
 /**
  * Determine available options for given entry.
- * @param entry Entry.
+ * @param entry Entry. Can be null for new entry.
  */
 const metaForEntry = (entry: UserConfigTableEntry | null): EntryMeta | null => {
   if (entry === null || (selEntryRecord.value !== null && entry.id === selEntryRecord.value?.id)) {
@@ -343,8 +343,9 @@ const metaForEntry = (entry: UserConfigTableEntry | null): EntryMeta | null => {
 //
 
 /**
- * Provide row metadata for given entry. Mark inputs that are empty as invalid.
- * @param entry Entry or null if new entry.
+ * Provide row metadata for the current edit form. Mark inputs that are empty as invalid.
+ * Note: entry parameter is part of the interface but not used in this implementation.
+ * @param entry Entry. Can be null for new entry.
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const resolveRowMeta = (entry: UserConfigTableEntry | null): RowMeta | null => {

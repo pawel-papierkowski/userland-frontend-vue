@@ -108,7 +108,7 @@ const showMessage = () => {
   logger.debug('Successfully set new password.');
 };
 
-/** Clear entire form. */
+/** Clear entire form and reset button state. */
 const clearForm = () => {
   usedButton.value = false;
   form.password = '';

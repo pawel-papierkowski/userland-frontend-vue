@@ -109,10 +109,10 @@ const showMessage = (success: boolean) => {
   logger.error('Login failed!');
 };
 
-/** Clear entire form. */
+/** Clear password and reset button state. */
 const clearForm = () => {
   usedButton.value = false;
-  //form.email = '';
+  // email is preserved
   form.password = '';
 };
 

@@ -85,7 +85,7 @@ const showMessage = () => {
   logger.debug('Successfully sent account deletion request.');
 };
 
-/** Clear entire form. */
+/** Clear entire form and reset button state. */
 const clearForm = () => {
   usedButton.value = false;
   form.password = '';

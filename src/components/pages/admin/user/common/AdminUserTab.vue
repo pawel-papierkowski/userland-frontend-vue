@@ -100,7 +100,7 @@ const currSortBy: Ref<string | null> = ref(null);
 /** Current sort order. Null means default sort order. */
 const currSortOrder: Ref<string | null> = ref(null);
 
-/** Reference to tab component. */
+/** Reference to table page component. */
 const tablePageRef = ref<TablePageExpose | null>(null);
 /** True if submission is in progress, otherwise false. Used to disable submit button. */
 const isBusy = ref(false);
@@ -236,16 +236,16 @@ watch([currSortBy, currSortOrder], (_, [oldSortBy, oldSortOrder]) => {
  * Select entry. If this entry is already selected, it is deselected.
  * @param entry Entry to select or null if you want to deselect.
  * @param force If true, force selection even when the table is not selectable.
- * @returns Promise.
+ * @returns Promise that resolves when selection is complete.
  */
 const selectEntry = (entry: E | null, force: boolean): Promise<void> => {
   if (!tablePageRef.value) return Promise.resolve();
-  return tablePageRef.value.selectEntry(entry, force);
+  return Promise.resolve(tablePageRef.value.selectEntry(entry, force));
 };
 
 //
 
-/** Allow calling handleReload from outside. */
+/** Allow calling certain functions from outside. */
 defineExpose({
   handleReload,
   selectEntry,

@@ -90,7 +90,7 @@ const showMessage = () => {
   logger.debug('Successfully sent email change request.');
 };
 
-/** Clear entire form. */
+/** Clear entire form and reset button state. */
 const clearForm = () => {
   usedButton.value = false;
   form.newEmail = '';
