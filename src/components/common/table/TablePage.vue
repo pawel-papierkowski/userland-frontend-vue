@@ -1,5 +1,7 @@
 <script setup lang="ts" generic="E extends Record<string, any>, FE extends Record<string, any>">
 /** Component that shows any table.
+ * If you want to get reference to this component, use this:
+ * const tablePageRef = ref<TablePageExpose | null>(null);
  *
  * Features:
  * - Selecting/deselecting record.
@@ -231,7 +233,7 @@ const onKeydownSort = (e: KeyboardEvent, column: ColumnData) => {
 // Table row.
 
 /**
- * Determine class for table row.
+ * Determine class for table row. Marks column as unselectable, selected or even.
  * @param entry Entry. Can be null if it is the row for a new entry.
  * @param rowIndex Row index.
  */
@@ -243,7 +245,7 @@ const rowClass = (entry: E | null, rowIndex: number) => {
   return {
     unselectable: !props.canSelect,
     selected: selected,
-    odd: rowIndex % 2 === 0,
+    even: rowIndex % 2 === 0,
   };
 };
 
@@ -321,7 +323,7 @@ const onKeydownEntry = (e: KeyboardEvent, entry: E | null) => {
 
 //
 
-/** Allow calling selectEntry from outside. */
+/** Allow calling certain functions from outside. If you change something here, update TablePageExpose. */
 defineExpose({
   selectEntry,
 });

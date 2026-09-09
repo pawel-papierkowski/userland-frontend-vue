@@ -321,7 +321,7 @@ describe('TablePage', () => {
       // Assert: Two rows with correct classes.
       const rows = wrapper.findAll('.table-row');
       expect(rows).toHaveLength(2);
-      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row']);
 
       // Assert: Row components have correct props.
@@ -393,7 +393,7 @@ describe('TablePage', () => {
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(data[1]);
 
       // Assert: Second row has 'selected' class.
-      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row', 'selected']);
 
       // Assert: Row components reflect new selection.
@@ -461,7 +461,7 @@ describe('TablePage', () => {
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBeNull();
 
       // Assert: No row has 'selected' class.
-      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row']);
     });
 
@@ -509,7 +509,7 @@ describe('TablePage', () => {
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toBeNull();
 
       // Assert: No row has 'selected' class.
-      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row']);
     });
 
@@ -555,7 +555,7 @@ describe('TablePage', () => {
       expect(wrapper.emitted('update:modelValue')?.[0]?.[0]).toStrictEqual(reloadedData[1]);
 
       // Assert: Second row has 'selected' class.
-      expect(rows[0]?.classes()).toEqual(['table-row', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row', 'selected']);
     });
 
@@ -592,7 +592,7 @@ describe('TablePage', () => {
       expect(wrapper.emitted('update:modelValue')).toBeUndefined();
 
       // Assert: Rows have 'unselectable' class.
-      expect(rows[0]?.classes()).toEqual(['table-row', 'unselectable', 'odd']);
+      expect(rows[0]?.classes()).toEqual(['table-row', 'unselectable', 'even']);
       expect(rows[1]?.classes()).toEqual(['table-row', 'unselectable']);
 
       // Assert: Row components are present and in valid state.

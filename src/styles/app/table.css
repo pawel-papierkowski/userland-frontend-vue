@@ -137,7 +137,7 @@
   cursor: default;
 }
 
-.table-row.odd .table-cell {
+.table-row.even .table-cell {
   background-color: #fafafa;
 }
 
@@ -157,7 +157,7 @@
   background-color: #f3f3f3;
   box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible */
 }
-.table-row:not(.unselectable).odd:hover .table-cell {
+.table-row:not(.unselectable).even:hover .table-cell {
   background-color: #f3f3f3;
   box-shadow: 1px 0 0 0 #f3f3f3; /* Ensure gap is not visible */
 }
