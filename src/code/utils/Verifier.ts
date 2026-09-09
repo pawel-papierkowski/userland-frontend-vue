@@ -73,7 +73,6 @@ export class Verifier {
    */
   public static verifyFieldInt(fieldValue: string, used: boolean): string | null {
     if (!fieldValue) return used ? t('form.errFieldEmpty') : null;
-    if (fieldValue === '') return t('form.errFieldEmpty');
     return '';
   }
 }

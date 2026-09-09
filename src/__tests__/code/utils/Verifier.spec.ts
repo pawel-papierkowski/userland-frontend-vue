@@ -71,6 +71,18 @@ describe('Verifier', () => {
       // Assert: Null — field is considered valid.
       expect(result).toBeNull();
     });
+
+    it('returns null for empty field when form is not used', () => {
+      // Arrange: Form not used, field empty.
+      const fieldValue = '';
+      const used = false;
+
+      // Act: Verify field.
+      const result = Verifier.verifyField(fieldValue, used);
+
+      // Assert: Null — no error for unused form with empty field.
+      expect(result).toBeNull();
+    });
   });
 
   // ////////////////////////////////////////////////////////////////////////////
@@ -146,6 +158,18 @@ describe('Verifier', () => {
       const result = Verifier.verifyEmail(email, used);
 
       // Assert: No error.
+      expect(result).toBeNull();
+    });
+
+    it('returns null for empty email when form is not used', () => {
+      // Arrange: Form not used, email empty.
+      const email = '';
+      const used = false;
+
+      // Act: Verify email.
+      const result = Verifier.verifyEmail(email, used);
+
+      // Assert: Null — no error for unused form with empty field.
       expect(result).toBeNull();
     });
   });
@@ -255,6 +279,32 @@ describe('Verifier', () => {
       // Assert: No error.
       expect(result).toBeNull();
     });
+
+    it('returns null for empty password when form is not used', () => {
+      // Arrange: Form not used, password empty.
+      const password = '';
+      const used = false;
+
+      // Act: Verify password.
+      const result = Verifier.verifyPassword(password, used);
+
+      // Assert: Null — no error for unused form with empty field.
+      expect(result).toBeNull();
+    });
+
+    it('returns weak error when password lacks lowercase letter', () => {
+      // Arrange: Password without lowercase.
+      const password = 'ABCDEF1@';
+      const used = true;
+
+      // Act: Verify password.
+      const result = Verifier.verifyPassword(password, used);
+
+      // Assert: Weak password error.
+      expect(result).toBe(
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+      );
+    });
   });
 
   // ////////////////////////////////////////////////////////////////////////////
@@ -310,6 +360,19 @@ describe('Verifier', () => {
       const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
 
       // Assert: No error.
+      expect(result).toBeNull();
+    });
+
+    it('returns null for empty confirmation when form is not used', () => {
+      // Arrange: Form not used, confirmation empty.
+      const password = 'Abcdef1@';
+      const confirmPassword = '';
+      const used = false;
+
+      // Act: Verify confirmation.
+      const result = Verifier.verifyConfirmPassword(password, confirmPassword, used);
+
+      // Assert: Null — no error for unused form with empty field.
       expect(result).toBeNull();
     });
   });
