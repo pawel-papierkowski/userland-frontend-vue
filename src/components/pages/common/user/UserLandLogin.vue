@@ -154,6 +154,8 @@ const isInvalid = (msgError: string | null): boolean => {
     <h2>{{ isAdminPanel ? t('user.login.formAdmin.title') : t('user.login.form.title') }}</h2>
 
     <form @submit.prevent="handleLogin" novalidate>
+      <div v-if="isAdminPanel" class="onpage-msg info" v-html="t('notify.adminLogin')" />
+
       <div class="form-group">
         <div class="form-entry">
           <label for="email">{{ t('user.login.form.email') }}:</label>
@@ -183,7 +185,7 @@ const isInvalid = (msgError: string | null): boolean => {
           <span v-if="passwordError" class="form-text-error">{{ passwordError }}</span>
         </div>
 
-        <div class="onpage-msg info" v-html="t('test.notify')" />
+        <div class="onpage-msg info" v-html="t('notify.firstConn')" />
       </div>
 
       <button type="submit" :disabled="isBusy" data-testid="login_btn_submit">

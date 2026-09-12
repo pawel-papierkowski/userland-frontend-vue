@@ -182,7 +182,7 @@ const isInvalid = (msgError: string | null): boolean => {
           <CheckBox id="isAdmin" v-model="form.isAdmin" :disabled="isBusy" />
         </div>
 
-        <div class="onpage-msg info" v-html="t('test.notify')" />
+        <div class="onpage-msg info" v-html="t('notify.firstConn')" />
       </div>
 
       <button type="submit" :disabled="isBusy" data-testid="registration_btn_submit">

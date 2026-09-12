@@ -1,6 +1,5 @@
 {
   "test": {
-    "notify": "Pierwsze połączenie z serwerem może potrwać trochę dłużej. Proszę zaczekać.",
     "msg": {
       "fallback": {
         "title": "Fallback title",

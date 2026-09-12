@@ -10,6 +10,11 @@
     }
   },
 
+  "notify": {
+    "adminLogin": "Musisz mieć konto użytkownika z uprawnieniami administratora/operatora, by się tutaj zalogować.",
+    "firstConn": "Pierwsze połączenie z serwerem może potrwać trochę dłużej. Proszę zaczekać."
+  },
+
   "token": {
     "invalid": {
       "title": "Zły token",

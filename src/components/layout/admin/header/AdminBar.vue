@@ -21,6 +21,11 @@ const canShowUser = () => {
       t('admin.header.user')
     }}</router-link>
   </template>
+  <template v-else>
+    <router-link class="nav-major" data-testid="header_link_back" :to="{ name: 'home' }">{{
+      t('admin.header.home')
+    }}</router-link>
+  </template>
 </template>
 
 <style scoped></style>

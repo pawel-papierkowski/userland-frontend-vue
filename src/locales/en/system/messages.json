@@ -10,6 +10,11 @@
     }
   },
 
+  "notify": {
+    "adminLogin": "You need to have user account with admin/operator permissions to successfully login here.",
+    "firstConn": "First connection with server might take more time, please wait."
+  },
+
   "token": {
     "invalid": {
       "title": "Invalid token",

@@ -3,7 +3,8 @@
     "header": {
       "login": "🚪 Strona logowania",
       "main": "🏁 Strona główna",
-      "user": "👥 Użytkownicy"
+      "user": "👥 Użytkownicy",
+      "home": "🏠 Strona główna"
     },
     "user": {
       "tabs": {

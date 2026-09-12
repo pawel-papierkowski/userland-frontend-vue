@@ -24,6 +24,9 @@ const { t } = useI18n();
   <router-link class="nav-major" data-testid="header_link_debug" :to="{ name: 'debugArea' }">{{
     t('general.header.debug')
   }}</router-link>
+  <router-link class="nav-major" data-testid="header_link_admin" :to="{ name: 'admin-login' }">{{
+    t('general.header.admin')
+  }}</router-link>
 </template>
 
 <style scoped></style>
